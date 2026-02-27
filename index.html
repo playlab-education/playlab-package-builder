@@ -10,7 +10,8 @@
 
     :root {
       --sky-50: #f0f9ff; --sky-100: #e0f2fe; --sky-200: #bae6fd;
-      --sky-400: #38bdf8; --sky-500: #0EA5E9; --sky-600: #0284c7; --sky-700: #0369a1;
+      --sky-300: #7dd3fc; --sky-400: #38bdf8; --sky-500: #0EA5E9;
+      --sky-600: #0284c7; --sky-700: #0369a1;
       --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
       --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
       --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
@@ -19,643 +20,168 @@
       --rose-500: #f43f5e;
     }
 
-    body {
-      font-family: 'Lexend', sans-serif;
-      background: var(--slate-50);
-      color: var(--slate-800);
-      line-height: 1.5;
-      min-height: 100vh;
-    }
+    body { font-family: 'Lexend', sans-serif; background: var(--slate-50); color: var(--slate-800); line-height: 1.5; min-height: 100vh; }
 
     /* ── Header ── */
     .app-header {
-      background: white;
-      border-bottom: 1px solid var(--slate-200);
-      padding: 14px 28px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+      background: white; border-bottom: 1px solid var(--slate-200);
+      padding: 14px 28px; display: flex; align-items: center; gap: 14px;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
-
-    .logo {
-      display: flex;
-      gap: 1px;
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      flex-shrink: 0;
-    }
-    .logo span:nth-child(1) { color: #0EA5E9; }
-    .logo span:nth-child(2) { color: #f43f5e; }
-    .logo span:nth-child(3) { color: #f59e0b; }
-    .logo span:nth-child(4) { color: #0EA5E9; }
-    .logo span:nth-child(5) { color: #10b981; }
-    .logo span:nth-child(6) { color: #0EA5E9; }
-    .logo span:nth-child(7) { color: #f43f5e; }
-
+    .logo { display: flex; gap: 1px; font-size: 19px; font-weight: 700; letter-spacing: -0.3px; flex-shrink: 0; }
+    .logo span:nth-child(1){color:#0EA5E9} .logo span:nth-child(2){color:#f43f5e}
+    .logo span:nth-child(3){color:#f59e0b} .logo span:nth-child(4){color:#0EA5E9}
+    .logo span:nth-child(5){color:#10b981} .logo span:nth-child(6){color:#0EA5E9}
+    .logo span:nth-child(7){color:#f43f5e}
     .header-sep { width: 1px; height: 18px; background: var(--slate-200); }
-
-    .header-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--slate-600);
-    }
-
-    .header-subtitle {
-      font-size: 12px;
-      color: var(--slate-400);
-      margin-left: auto;
-    }
+    .header-title { font-size: 14px; font-weight: 600; color: var(--slate-600); }
+    .header-subtitle { font-size: 12px; color: var(--slate-400); margin-left: auto; }
 
     /* ── Layout ── */
-    .builder {
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      min-height: calc(100vh - 53px);
-    }
+    .builder { display: grid; grid-template-columns: 1fr 420px; min-height: calc(100vh - 53px); }
 
     /* ── Left: Blocks ── */
-    .blocks-col {
-      padding: 20px 24px 48px;
-      overflow-y: auto;
-      border-right: 1px solid var(--slate-200);
-    }
-
-    .blocks-col-header {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: var(--slate-400);
-      margin-bottom: 12px;
-    }
+    .blocks-col { padding: 20px 24px 48px; overflow-y: auto; border-right: 1px solid var(--slate-200); }
+    .blocks-col-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate-400); margin-bottom: 12px; }
 
     /* ── Rates Panel ── */
-    .rates-panel {
-      background: white;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 11px;
-      padding: 12px 14px;
-      margin-bottom: 20px;
-    }
-
-    .rates-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .rates-panel-label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: var(--slate-500);
-    }
-
-    .rates-reset {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--sky-600);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      font-family: 'Lexend', sans-serif;
-    }
-
+    .rates-panel { background: white; border: 1.5px solid var(--slate-200); border-radius: 11px; padding: 12px 14px; margin-bottom: 20px; }
+    .rates-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .rates-panel-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate-500); }
+    .rates-reset { font-size: 10px; font-weight: 600; color: var(--sky-600); background: none; border: none; cursor: pointer; padding: 0; font-family: 'Lexend', sans-serif; }
     .rates-reset:hover { text-decoration: underline; }
-
-    .rates-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .rate-field {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .rate-field label {
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--slate-400);
-    }
-
-    .rate-input-wrap {
-      display: flex;
-      align-items: center;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 7px;
-      background: var(--slate-50);
-      overflow: hidden;
-      transition: border-color 0.15s;
-    }
-
-    .rate-input-wrap:focus-within {
-      border-color: var(--sky-500);
-      background: white;
-    }
-
-    .rate-input-wrap .prefix {
-      padding: 0 5px 0 8px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--slate-400);
-      flex-shrink: 0;
-    }
-
-    .rate-input-wrap input {
-      flex: 1;
-      padding: 7px 0;
-      border: none;
-      background: transparent;
-      font-family: 'Lexend', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--slate-800);
-      width: 0;
-      min-width: 0;
-    }
-
+    .rates-row { display: flex; gap: 8px; }
+    .rate-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .rate-field label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-400); }
+    .rate-input-wrap { display: flex; align-items: center; border: 1.5px solid var(--slate-200); border-radius: 7px; background: var(--slate-50); overflow: hidden; transition: border-color 0.15s; }
+    .rate-input-wrap:focus-within { border-color: var(--sky-500); background: white; }
+    .rate-input-wrap .prefix { padding: 0 4px 0 8px; font-size: 11px; font-weight: 700; color: var(--slate-400); flex-shrink: 0; }
+    .rate-input-wrap input { flex: 1; padding: 7px 0; border: none; background: transparent; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700; color: var(--slate-800); width: 0; min-width: 0; }
     .rate-input-wrap input:focus { outline: none; }
+    .rate-input-wrap .suffix { padding: 0 7px 0 2px; font-size: 10px; font-weight: 600; color: var(--slate-400); flex-shrink: 0; }
+    .rates-note { margin-top: 8px; font-size: 9.5px; color: var(--slate-400); line-height: 1.4; }
 
-    .rate-input-wrap .suffix {
-      padding: 0 7px 0 2px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--slate-400);
-      flex-shrink: 0;
-    }
-
-    .rates-note {
-      margin-top: 8px;
-      font-size: 9.5px;
-      color: var(--slate-400);
-      line-height: 1.4;
-    }
-
-    /* ── Categories ── */
+    /* ── Category + Block Cards ── */
     .category-section { margin-bottom: 24px; }
+    .category-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--slate-200); }
+    .cat-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .category-header h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--slate-700); }
+    .blocks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
 
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--slate-200);
-    }
-
-    .cat-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .category-header h3 {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--slate-700);
-    }
-
-    .blocks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 8px;
-    }
-
-    /* ── Block Card ── */
-    .block-card {
-      background: white;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 11px;
-      padding: 12px 14px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    .block-card:hover {
-      border-color: #7dd3fc;
-      box-shadow: 0 2px 8px rgba(14,165,233,.08);
-    }
-
-    .block-card.in-quote {
-      border-color: var(--sky-400);
-      background: var(--sky-50);
-    }
-
-    .block-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-    }
-
-    .block-name {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--slate-800);
-      line-height: 1.3;
-    }
-
-    .block-price {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--sky-700);
-      background: var(--sky-100);
-      padding: 2px 7px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .block-card.in-quote .block-price {
-      background: var(--sky-200);
-    }
-
-    .block-desc {
-      font-size: 10.5px;
-      color: var(--slate-500);
-      line-height: 1.4;
-    }
-
-    .block-note {
-      font-size: 10px;
-      color: #92400e;
-      background: var(--amber-50);
-      border: 1px solid #fde68a;
-      padding: 3px 7px;
-      border-radius: 5px;
-      line-height: 1.4;
-    }
-
-    .add-btn {
-      margin-top: 3px;
-      padding: 5px 0;
-      width: 100%;
-      background: var(--sky-500);
-      color: white;
-      border: none;
-      border-radius: 7px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-      letter-spacing: 0.2px;
-    }
-
+    .block-card { background: white; border: 1.5px solid var(--slate-200); border-radius: 11px; padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 5px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .block-card:hover { border-color: var(--sky-300); box-shadow: 0 2px 8px rgba(14,165,233,.08); }
+    .block-card.in-quote { border-color: var(--sky-400); background: var(--sky-50); }
+    .block-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+    .block-name { font-size: 12px; font-weight: 600; color: var(--slate-800); line-height: 1.3; }
+    .block-price { font-size: 11px; font-weight: 700; color: var(--sky-700); background: var(--sky-100); padding: 2px 7px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .block-card.in-quote .block-price { background: var(--sky-200); }
+    .block-desc { font-size: 10.5px; color: var(--slate-500); line-height: 1.4; }
+    .block-note { font-size: 10px; color: #92400e; background: var(--amber-50); border: 1px solid #fde68a; padding: 3px 7px; border-radius: 5px; line-height: 1.4; }
+    .add-btn { margin-top: 3px; padding: 5px 0; width: 100%; background: var(--sky-500); color: white; border: none; border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
     .add-btn:hover { background: var(--sky-600); }
     .add-btn.multi { background: var(--emerald-500); }
     .add-btn.multi:hover { background: var(--emerald-600); }
 
     /* ── Right: Quote ── */
-    .quote-col {
-      background: white;
-      padding: 20px 20px 28px;
-      position: sticky;
-      top: 53px;
-      height: calc(100vh - 53px);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .q-label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: var(--slate-400);
-      margin-bottom: 6px;
-    }
-
-    .partner-input {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 9px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--slate-800);
-      transition: border-color 0.15s;
-    }
-
+    .quote-col { background: white; padding: 20px 20px 28px; position: sticky; top: 53px; height: calc(100vh - 53px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .q-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate-400); margin-bottom: 6px; }
+    .partner-input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--slate-200); border-radius: 9px; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 500; color: var(--slate-800); transition: border-color 0.15s; }
     .partner-input:focus { outline: none; border-color: var(--sky-500); }
     .partner-input::placeholder { color: var(--slate-400); font-weight: 400; }
 
-    /* ── Line Items ── */
-    .line-items-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-height: 60px;
-    }
+    /* ── Package Contents header row ── */
+    .contents-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .add-bundle-btn { font-size: 10px; font-weight: 700; color: var(--sky-600); background: none; border: none; cursor: pointer; font-family: 'Lexend', sans-serif; padding: 3px 8px; border-radius: 20px; transition: background 0.15s; }
+    .add-bundle-btn:hover { background: var(--sky-50); }
 
-    .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 16px;
-      border: 2px dashed var(--slate-200);
-      border-radius: 10px;
-      color: var(--slate-400);
-      font-size: 12px;
-      text-align: center;
-      gap: 6px;
-    }
+    /* ── Bundles list ── */
+    .bundles-wrap { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 80px; }
 
-    .empty-icon { font-size: 22px; opacity: 0.5; }
+    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; border: 2px dashed var(--slate-200); border-radius: 10px; color: var(--slate-400); font-size: 12px; text-align: center; gap: 6px; }
+    .empty-icon { font-size: 24px; opacity: 0.4; }
 
-    .q-cat-label {
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: var(--slate-400);
-      margin-top: 4px;
-      margin-bottom: 2px;
-      padding-left: 2px;
-    }
+    /* ── Bundle section ── */
+    .bundle-section { border: 1.5px solid var(--slate-200); border-radius: 10px; overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; }
+    .bundle-section.active { border-color: var(--sky-400); box-shadow: 0 0 0 3px rgba(14,165,233,.08); }
 
-    .line-item {
-      background: var(--slate-50);
-      border-radius: 9px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .bundle-header { display: flex; align-items: center; gap: 7px; padding: 8px 10px; background: var(--slate-50); cursor: pointer; border-bottom: 1px solid var(--slate-200); transition: background 0.15s; }
+    .bundle-section.active .bundle-header { background: var(--sky-50); border-bottom-color: var(--sky-100); }
+    .bundle-header:hover { background: var(--slate-100); }
+    .bundle-section.active .bundle-header:hover { background: #e0f2fe; }
 
+    .bundle-dot { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--slate-300); flex-shrink: 0; transition: all 0.15s; }
+    .bundle-section.active .bundle-dot { background: var(--sky-500); border-color: var(--sky-500); }
+
+    .bundle-name-input { flex: 1; border: none; background: transparent; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600; color: var(--slate-800); padding: 0; min-width: 0; cursor: text; }
+    .bundle-name-input:focus { outline: none; }
+    .bundle-name-input::placeholder { color: var(--slate-400); font-weight: 400; }
+
+    .bundle-subtotal-badge { font-size: 11px; font-weight: 700; color: var(--slate-400); flex-shrink: 0; white-space: nowrap; }
+    .bundle-section.active .bundle-subtotal-badge { color: var(--sky-700); }
+
+    .bundle-delete { width: 18px; height: 18px; border: none; background: none; color: var(--slate-300); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; line-height: 1; border-radius: 3px; transition: all 0.1s; }
+    .bundle-delete:hover { color: var(--rose-500); background: #fff1f2; }
+
+    .bundle-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
+    .bundle-empty { font-size: 11px; color: var(--slate-400); text-align: center; padding: 10px 0; font-style: italic; }
+
+    /* ── Category label inside bundle ── */
+    .q-cat-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-top: 4px; margin-bottom: 2px; padding-left: 2px; }
+
+    /* ── Line item ── */
+    .line-item { background: var(--slate-50); border-radius: 8px; padding: 7px 9px; display: flex; align-items: center; gap: 6px; }
     .item-info { flex: 1; min-width: 0; }
+    .item-name { font-size: 11px; font-weight: 600; color: var(--slate-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
 
-    .item-name {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--slate-800);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .qty-row {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      margin-top: 3px;
-    }
-
-    .qty-btn {
-      width: 20px;
-      height: 20px;
-      border: 1.5px solid var(--slate-300);
-      border-radius: 5px;
-      background: white;
-      color: var(--slate-600);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      transition: all 0.1s;
-      flex-shrink: 0;
-      padding: 0;
-    }
-
-    .qty-btn:hover:not(:disabled) {
-      border-color: var(--sky-500);
-      color: var(--sky-600);
-      background: var(--sky-50);
-    }
-
+    /* ── Qty controls ── */
+    .qty-row { display: flex; align-items: center; gap: 3px; }
+    .qty-btn { width: 20px; height: 20px; border: 1.5px solid var(--slate-300); border-radius: 5px; background: white; color: var(--slate-600); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: all 0.1s; flex-shrink: 0; padding: 0; }
+    .qty-btn:hover:not(:disabled) { border-color: var(--sky-500); color: var(--sky-600); background: var(--sky-50); }
     .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    .qty-val {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--slate-700);
-      min-width: 46px;
-      text-align: center;
-    }
+    .qty-input { width: 44px; text-align: center; padding: 3px 2px; border: 1.5px solid var(--slate-200); border-radius: 5px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--slate-800); background: white; -moz-appearance: textfield; }
+    .qty-input::-webkit-inner-spin-button, .qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .qty-input:focus { outline: none; border-color: var(--sky-500); }
+    .qty-unit { font-size: 10px; font-weight: 600; color: var(--slate-500); white-space: nowrap; }
 
-    .item-total {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--slate-900);
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .remove-btn {
-      width: 18px;
-      height: 18px;
-      border: none;
-      background: none;
-      color: var(--slate-300);
-      font-size: 15px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      transition: all 0.1s;
-      flex-shrink: 0;
-      padding: 0;
-      line-height: 1;
-    }
-
+    .item-total { font-size: 12px; font-weight: 700; color: var(--slate-900); text-align: right; flex-shrink: 0; min-width: 48px; }
+    .remove-btn { width: 18px; height: 18px; border: none; background: none; color: var(--slate-300); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: all 0.1s; flex-shrink: 0; padding: 0; line-height: 1; }
     .remove-btn:hover { color: var(--rose-500); background: #fff1f2; }
 
     /* ── Smart Alert ── */
-    .smart-alert {
-      background: var(--amber-50);
-      border: 1.5px solid var(--amber-400);
-      border-radius: 8px;
-      padding: 8px 11px;
-      font-size: 11px;
-      color: #78350f;
-      line-height: 1.4;
-      display: none;
-    }
-
+    .smart-alert { background: var(--amber-50); border: 1.5px solid var(--amber-400); border-radius: 8px; padding: 8px 11px; font-size: 11px; color: #78350f; line-height: 1.4; display: none; }
     .smart-alert.show { display: block; }
 
     /* ── Totals ── */
-    .totals-section {
-      border-top: 1.5px solid var(--slate-100);
-      padding-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .t-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-    }
-
+    .totals-section { border-top: 1.5px solid var(--slate-100); padding-top: 14px; display: flex; flex-direction: column; gap: 9px; }
+    .t-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
     .t-label { color: var(--slate-500); font-weight: 500; }
     .t-value { font-weight: 700; color: var(--slate-800); }
-
     .discount-row { display: flex; align-items: center; gap: 7px; }
-
-    .disc-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--slate-500);
-      flex-shrink: 0;
-    }
-
+    .disc-label { font-size: 12px; font-weight: 500; color: var(--slate-500); flex-shrink: 0; }
     .disc-inputs { display: flex; gap: 4px; flex: 1; }
-
-    .disc-num {
-      flex: 1;
-      padding: 6px 9px;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 7px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--slate-800);
-      min-width: 0;
-    }
-
+    .disc-num { flex: 1; padding: 6px 9px; border: 1.5px solid var(--slate-200); border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600; color: var(--slate-800); min-width: 0; }
     .disc-num:focus { outline: none; border-color: var(--sky-500); }
-
-    .disc-type {
-      padding: 6px 8px;
-      border: 1.5px solid var(--slate-200);
-      border-radius: 7px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--slate-700);
-      background: white;
-      cursor: pointer;
-    }
-
-    .disc-amt {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--emerald-600);
-      flex-shrink: 0;
-      min-width: 48px;
-      text-align: right;
-    }
-
-    .total-final {
-      background: var(--slate-900);
-      padding: 11px 14px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    .disc-type { padding: 6px 8px; border: 1.5px solid var(--slate-200); border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600; color: var(--slate-700); background: white; cursor: pointer; }
+    .disc-amt { font-size: 12px; font-weight: 700; color: var(--emerald-600); flex-shrink: 0; min-width: 48px; text-align: right; }
+    .total-final { background: var(--slate-900); padding: 11px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
     .total-final .t-label { color: rgba(255,255,255,0.65); font-size: 12px; }
     .total-final .t-value { color: white; font-size: 18px; font-weight: 800; }
-
-    .savings-note {
-      text-align: center;
-      font-size: 10.5px;
-      color: var(--emerald-600);
-      font-weight: 600;
-      display: none;
-    }
-
+    .savings-note { text-align: center; font-size: 10.5px; color: var(--emerald-600); font-weight: 600; display: none; }
     .savings-note.show { display: block; }
 
     /* ── Actions ── */
     .actions { display: flex; flex-direction: column; gap: 7px; }
-
-    .btn-copy {
-      width: 100%;
-      padding: 11px;
-      background: var(--sky-500);
-      color: white;
-      border: none;
-      border-radius: 9px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
+    .btn-copy { width: 100%; padding: 11px; background: var(--sky-500); color: white; border: none; border-radius: 9px; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
     .btn-copy:hover { background: var(--sky-600); }
     .btn-copy:active { transform: scale(0.98); }
     .btn-copy.copied { background: var(--emerald-500); }
-
-    .btn-clear {
-      width: 100%;
-      padding: 8px;
-      background: transparent;
-      color: var(--slate-400);
-      border: 1.5px solid var(--slate-200);
-      border-radius: 9px;
-      font-family: 'Lexend', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .btn-clear:hover {
-      color: var(--rose-500);
-      border-color: var(--rose-500);
-      background: #fff1f2;
-    }
-
-    .footnote {
-      font-size: 10px;
-      color: var(--slate-400);
-      line-height: 1.5;
-      padding-top: 8px;
-      border-top: 1px solid var(--slate-100);
-    }
+    .btn-clear { width: 100%; padding: 8px; background: transparent; color: var(--slate-400); border: 1.5px solid var(--slate-200); border-radius: 9px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .btn-clear:hover { color: var(--rose-500); border-color: var(--rose-500); background: #fff1f2; }
+    .footnote { font-size: 10px; color: var(--slate-400); line-height: 1.5; padding-top: 8px; border-top: 1px solid var(--slate-100); }
 
     /* ── Toast ── */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--slate-900);
-      color: white;
-      padding: 9px 20px;
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
-      z-index: 1000;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--slate-900); color: white; padding: 9px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); z-index: 1000; white-space: nowrap; pointer-events: none; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 900px) {
@@ -668,9 +194,7 @@
 <body>
 
 <header class="app-header">
-  <div class="logo">
-    <span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span>
-  </div>
+  <div class="logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
   <div class="header-sep"></div>
   <div class="header-title">Package Builder</div>
   <div class="header-subtitle">Build custom partner quotes from service building blocks</div>
@@ -682,7 +206,6 @@
   <div class="blocks-col">
     <div class="blocks-col-header">Service Building Blocks</div>
 
-    <!-- Rates Panel -->
     <div class="rates-panel">
       <div class="rates-panel-header">
         <span class="rates-panel-label">Hourly Rates</span>
@@ -728,14 +251,12 @@
       <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District">
     </div>
 
-    <div style="display:flex; flex-direction:column; flex:1; gap:6px;">
-      <div class="q-label">Package Contents</div>
-      <div class="line-items-wrap" id="lineItemsWrap">
-        <div class="empty-state" id="emptyState">
-          <span class="empty-icon">📦</span>
-          <span>Select services from the left to build a package</span>
-        </div>
+    <div style="display:flex; flex-direction:column; flex:1; gap:0; min-height:0;">
+      <div class="contents-header">
+        <div class="q-label" style="margin-bottom:0">Package Contents</div>
+        <button class="add-bundle-btn" id="addBundleBtn">+ New Bundle</button>
       </div>
+      <div class="bundles-wrap" id="bundlesWrap"></div>
     </div>
 
     <div class="smart-alert" id="comboAlert">
@@ -747,7 +268,6 @@
         <span class="t-label">Standard Total</span>
         <span class="t-value" id="standardTotal">—</span>
       </div>
-
       <div class="discount-row">
         <span class="disc-label">Discount</span>
         <div class="disc-inputs">
@@ -759,12 +279,10 @@
         </div>
         <span class="disc-amt" id="discountDisplay"></span>
       </div>
-
       <div class="total-final">
         <span class="t-label">Partner Price</span>
         <span class="t-value" id="partnerPrice">—</span>
       </div>
-
       <div class="savings-note" id="savingsNote"></div>
     </div>
 
@@ -774,20 +292,16 @@
     </div>
 
     <p class="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
-
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── Default Rates ───────────────────────────────────────────────────────────
+// ─── Rates ───────────────────────────────────────────────────────────────────
 const DEFAULT_RATES = { lp: 250, dev: 185, travel: 125 };
 let rates = { ...DEFAULT_RATES };
 
-// ─── Price Formula ───────────────────────────────────────────────────────────
-// Prices recalculate from hourly rates + overhead/revenue baked into each formula.
-// Formulas derived from spreadsheet breakdowns; rounded to nearest clean step.
 function roundPrice(n) {
   if (n >= 2000) return Math.round(n / 500) * 500;
   if (n >= 500)  return Math.round(n / 100) * 100;
@@ -797,96 +311,71 @@ function roundPrice(n) {
 function getBlockPrice(blockId) {
   const { lp, dev, travel: tr } = rates;
   switch (blockId) {
-    // ── Learning Partner (per delivered hour; includes prep time + 15% overhead + 5% revenue) ──
-    case 'office-hours':   return roundPrice(lp * 1.0 * 1.15 * 1.05);   // 1 hr
-    case 'coaching':       return roundPrice(lp * 1.5 * 1.15 * 1.05);   // 1 hr + 0.5 hr prep
-    case 'admin-meetings': return roundPrice(lp * 1.5 * 1.15 * 1.05);   // 1 hr + 0.5 hr prep
-    case 'facilitation':   return roundPrice(lp * 2.0 * 1.15 * 1.05);   // 1 hr + 1 hr prep
-
-    // ── Developer (per delivered unit; 15% overhead, no revenue markup) ──
-    case 'dev-hourly':         return roundPrice(dev * 1.0  * 1.15);        // 1 hr
-    case 'app-support-light':  return roundPrice(dev * 5.0  * 1.15 * 0.95); // 5 hrs/mo, -5% volume
-    case 'app-support-medium': return roundPrice(dev * 10.0 * 1.15 * 0.95); // 10 hrs/mo
-    case 'app-support-full':   return roundPrice(dev * 20.0 * 1.15 * 0.95); // 20 hrs/mo
-
-    // ── Travel (base component scales with travel rate; fixed components: miles, per diem, hotel) ──
-    case 'travel-local':    return roundPrice((tr + 99.5)  * 1.15 * 0.98); // +35mi($25)+perdiem($75), -2%
-    case 'travel-flight':   return roundPrice((tr * 8 + 575) * 1.15 * 0.99); // +flight($400)+ground($100)+perdiem($75), -1%
-    case 'travel-addl-day': return roundPrice((tr + 375)   * 1.15 * 1.04); // +hotel($200)+ground($100)+perdiem($75), +4%
-    case 'site-visit-half': return roundPrice((lp * 3 + tr + lp * 2) * 1.15); // 3hr visit + 1hr travel + 2hr prep
-    case 'site-visit-full': return roundPrice((lp * 6 + tr + lp * 2) * 1.15); // 6hr visit + 1hr travel + 2hr prep
-
-    // ── Targeted AI (LP + Dev combos; overhead factored into multipliers) ──
-    case 'ai-crash-course':     return roundPrice(lp * 10);                     // 8 LP hrs × ~1.25 factor
-    case 'ideation-lp':         return roundPrice(lp * 10);                     // 6hr facilitation + 2hr prep × ~1.25
-    case 'ideation-lp-le':      return roundPrice(lp * 16);                     // 6hr LP + 6hr LE + 2hr prep × ~1.14
-    case 'tool-build-initial':  return roundPrice((lp + dev) * 10 * 1.15);      // 10 LP hrs + 10 dev hrs + overhead
-    case 'tool-build-addl':     return roundPrice((lp + dev) *  5 * 1.15);      // 5 LP hrs + 5 dev hrs + overhead
-    case 'tool-pilot':          return roundPrice((lp * 16 + dev * 8) * 1.095); // 16 LP hrs + 8 dev hrs + overhead
-    case 'tool-revision-light': return roundPrice(dev *  7 * 1.15);             // ~7 dev hrs + overhead
-    case 'tool-revision-medium':return roundPrice(dev * 14 * 1.15);             // ~14 dev hrs + overhead
-    case 'tool-revision-full':  return roundPrice(dev * 21 * 1.15);             // ~21 dev hrs + overhead
+    case 'office-hours':      return roundPrice(lp * 1.0 * 1.15 * 1.05);
+    case 'coaching':          return roundPrice(lp * 1.5 * 1.15 * 1.05);
+    case 'admin-meetings':    return roundPrice(lp * 1.5 * 1.15 * 1.05);
+    case 'facilitation':      return roundPrice(lp * 2.0 * 1.15 * 1.05);
+    case 'dev-hourly':        return roundPrice(dev * 1.0 * 1.15);
+    case 'app-support-light': return roundPrice(dev * 5.0  * 1.15 * 0.95);
+    case 'app-support-medium':return roundPrice(dev * 10.0 * 1.15 * 0.95);
+    case 'app-support-full':  return roundPrice(dev * 20.0 * 1.15 * 0.95);
+    case 'travel-local':      return roundPrice((tr + 99.5)   * 1.15 * 0.98);
+    case 'travel-flight':     return roundPrice((tr * 8 + 575) * 1.15 * 0.99);
+    case 'travel-addl-day':   return roundPrice((tr + 375)    * 1.15 * 1.04);
+    case 'site-visit-half':   return roundPrice((lp * 3 + tr + lp * 2) * 1.15);
+    case 'site-visit-full':   return roundPrice((lp * 6 + tr + lp * 2) * 1.15);
+    case 'ai-crash-course':   return roundPrice(lp * 10);
+    case 'ideation-lp':       return roundPrice(lp * 10);
+    case 'ideation-lp-le':    return roundPrice(lp * 16);
+    case 'tool-build-initial':return roundPrice((lp + dev) * 10 * 1.15);
+    case 'tool-build-addl':   return roundPrice((lp + dev) *  5 * 1.15);
+    case 'tool-pilot':        return roundPrice((lp * 16 + dev * 8) * 1.095);
+    case 'tool-revision-light': return roundPrice(dev *  7 * 1.15);
+    case 'tool-revision-medium':return roundPrice(dev * 14 * 1.15);
+    case 'tool-revision-full':  return roundPrice(dev * 21 * 1.15);
     default: return 0;
   }
 }
 
-// ─── Building Block Data ─────────────────────────────────────────────────────
+// ─── Block Data ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
-  {
-    id: 'lp',
-    label: 'Learning Partner',
-    color: '#0EA5E9',
-    blocks: [
-      { id: 'office-hours',   name: 'Office Hours',   unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min', note: '' },
-      { id: 'coaching',       name: 'Coaching',       unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: 'Typically 25% of PD time (e.g., 8 hrs PD → 2 hrs coaching)' },
-      { id: 'admin-meetings', name: 'Admin Meetings', unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: '' },
-      { id: 'facilitation',   name: 'Facilitation',   unit: 'hr',    minQty: 1.5, step: 0.5, defaultQty: 4,   desc: 'Starting at 1.5 hrs · Up to 50 participants',   note: '' }
-    ]
-  },
-  {
-    id: 'dev',
-    label: 'Developer',
-    color: '#8b5cf6',
-    blocks: [
-      { id: 'dev-hourly',         name: 'Dev Hourly Rate',        unit: 'hr', minQty: 0.5, step: 0.5, defaultQty: 1, desc: 'Minimum 30 min', note: '' },
-      { id: 'app-support-light',  name: 'App Support — Light',   unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~5 hrs/month of ongoing support',  note: '' },
-      { id: 'app-support-medium', name: 'App Support — Medium',  unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~10 hrs/month of ongoing support', note: '' },
-      { id: 'app-support-full',   name: 'App Support — Full',    unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~20 hrs/month of ongoing support', note: '' }
-    ]
-  },
-  {
-    id: 'travel',
-    label: 'Travel',
-    color: '#f97316',
-    blocks: [
-      { id: 'travel-local',    name: 'Travel — Local',          unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Day min · ~35 mi ($25) + $75/day per diem + 15% overhead',         note: 'Add hotel (~$200/night) and additional per diem as needed' },
-      { id: 'travel-flight',   name: 'Travel — Flight',         unit: 'trip',  minQty: 1, step: 1, defaultQty: 1, desc: 'Trip min · 8 hrs travel + flight + ground + per diem',             note: '50% fee if cancelled within 14 days; 100% within 7' },
-      { id: 'travel-addl-day', name: 'Travel — Additional Day', unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Hotel + ground ($100/day) + per diem ($75/day)',                   note: 'Adjust based on hotel actual cost' },
-      { id: 'site-visit-half', name: 'Site Visit — Half Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '1–4 hour visit · Visit time + travel + prep/follow-up',            note: '' },
-      { id: 'site-visit-full', name: 'Site Visit — Full Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '4–8 hour visit · Visit time + travel + prep/follow-up',            note: '' }
-    ]
-  },
-  {
-    id: 'ai',
-    label: 'Targeted AI',
-    color: '#10b981',
-    blocks: [
-      { id: 'ai-crash-course',     name: 'AI Agency Crash Course',      unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '4 hrs facilitation + 4 hrs prep + 15% overhead',              note: '' },
-      { id: 'ideation-lp',         name: 'Ideation — w/ LP only',       unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs facilitation + 2 hrs prep + 15% overhead',              note: 'Surface use cases and evaluate their fit for AI solutions' },
-      { id: 'ideation-lp-le',      name: 'Ideation — w/ LP & LE',       unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs LP + 6 hrs LE + 2 hrs prep + 15% overhead',             note: 'Recommended when technical builds are likely' },
-      { id: 'tool-build-initial',  name: 'Tool Build — Initial',        unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '10 hrs LP + 10 hrs dev + 15% overhead',                       note: 'Requirements → Build → Testing & Iteration' },
-      { id: 'tool-build-addl',     name: 'Tool Build — Additional',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '5 hrs LP + 5 hrs dev + 15% overhead',                        note: '' },
-      { id: 'tool-pilot',          name: 'Tool Pilot',                  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '16 hrs facilitation + 8 hrs dev + 15% overhead',              note: 'Combo w/ Tool Build: $10K initial or $8K additional (vs. $11K/$8.5K separately)' },
-      { id: 'tool-revision-light', name: 'Tool Revision — Light',       unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~7 hrs dev + 15% overhead',                                  note: '' },
-      { id: 'tool-revision-medium',name: 'Tool Revision — Medium',      unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~14 hrs dev + 15% overhead',                                 note: '' },
-      { id: 'tool-revision-full',  name: 'Tool Revision — Full',        unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~21 hrs dev + 15% overhead',                                 note: '' }
-    ]
-  }
+  { id: 'lp',     label: 'Learning Partner', color: '#0EA5E9', blocks: [
+    { id: 'office-hours',   name: 'Office Hours',   unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min', note: '' },
+    { id: 'coaching',       name: 'Coaching',       unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: 'Typically 25% of PD time (e.g., 8 hrs PD → 2 hrs coaching)' },
+    { id: 'admin-meetings', name: 'Admin Meetings', unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: '' },
+    { id: 'facilitation',   name: 'Facilitation',   unit: 'hr',    minQty: 1.5, step: 0.5, defaultQty: 4,   desc: 'Starting at 1.5 hrs · Up to 50 participants', note: '' }
+  ]},
+  { id: 'dev',    label: 'Developer',        color: '#8b5cf6', blocks: [
+    { id: 'dev-hourly',         name: 'Dev Hourly Rate',       unit: 'hr', minQty: 0.5, step: 0.5, defaultQty: 1, desc: 'Minimum 30 min', note: '' },
+    { id: 'app-support-light',  name: 'App Support — Light',  unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~5 hrs/month of ongoing support', note: '' },
+    { id: 'app-support-medium', name: 'App Support — Medium', unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~10 hrs/month of ongoing support', note: '' },
+    { id: 'app-support-full',   name: 'App Support — Full',   unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~20 hrs/month of ongoing support', note: '' }
+  ]},
+  { id: 'travel', label: 'Travel',           color: '#f97316', blocks: [
+    { id: 'travel-local',    name: 'Travel — Local',          unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Day min · ~35 mi ($25) + $75/day per diem + 15% overhead', note: 'Add hotel (~$200/night) and additional per diem as needed' },
+    { id: 'travel-flight',   name: 'Travel — Flight',         unit: 'trip',  minQty: 1, step: 1, defaultQty: 1, desc: 'Trip min · 8 hrs travel + flight + ground + per diem', note: '50% fee if cancelled within 14 days; 100% within 7' },
+    { id: 'travel-addl-day', name: 'Travel — Additional Day', unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Hotel + ground ($100/day) + per diem ($75/day)', note: 'Adjust based on hotel actual cost' },
+    { id: 'site-visit-half', name: 'Site Visit — Half Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '1–4 hour visit · Visit time + travel + prep/follow-up', note: '' },
+    { id: 'site-visit-full', name: 'Site Visit — Full Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '4–8 hour visit · Visit time + travel + prep/follow-up', note: '' }
+  ]},
+  { id: 'ai',     label: 'Targeted AI',      color: '#10b981', blocks: [
+    { id: 'ai-crash-course',     name: 'AI Agency Crash Course',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '4 hrs facilitation + 4 hrs prep + 15% overhead', note: '' },
+    { id: 'ideation-lp',         name: 'Ideation — w/ LP only',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs facilitation + 2 hrs prep + 15% overhead', note: 'Surface use cases and evaluate their fit for AI solutions' },
+    { id: 'ideation-lp-le',      name: 'Ideation — w/ LP & LE',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs LP + 6 hrs LE + 2 hrs prep + 15% overhead', note: 'Recommended when technical builds are likely' },
+    { id: 'tool-build-initial',  name: 'Tool Build — Initial',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '10 hrs LP + 10 hrs dev + 15% overhead', note: 'Requirements → Build → Testing & Iteration' },
+    { id: 'tool-build-addl',     name: 'Tool Build — Additional',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '5 hrs LP + 5 hrs dev + 15% overhead', note: '' },
+    { id: 'tool-pilot',          name: 'Tool Pilot',               unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '16 hrs facilitation + 8 hrs dev + 15% overhead', note: 'Combo w/ Tool Build: $10K initial or $8K additional (vs. $11K/$8.5K separately)' },
+    { id: 'tool-revision-light', name: 'Tool Revision — Light',    unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~7 hrs dev + 15% overhead', note: '' },
+    { id: 'tool-revision-medium',name: 'Tool Revision — Medium',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~14 hrs dev + 15% overhead', note: '' },
+    { id: 'tool-revision-full',  name: 'Tool Revision — Full',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~21 hrs dev + 15% overhead', note: '' }
+  ]}
 ];
 
-// ─── State ───────────────────────────────────────────────────────────────────
-let items = [];   // [{ itemId, blockId, catId, qty }]
-let nextId = 1;
+// ─── State ────────────────────────────────────────────────────────────────────
+let bundles = [{ bundleId: 1, name: '', items: [] }];
+let activeBundleId = 1;
+let nextBundleId = 2;
+let nextItemId = 1;
 
 function getBlock(blockId) {
   for (const cat of CATEGORIES) {
@@ -896,74 +385,68 @@ function getBlock(blockId) {
   return null;
 }
 
-// ─── Formatters ──────────────────────────────────────────────────────────────
+function allItems() { return bundles.flatMap(b => b.items); }
+function isBlockInAnyBundle(blockId) { return allItems().some(i => i.blockId === blockId); }
+
+// ─── Formatters ───────────────────────────────────────────────────────────────
 function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
 
-function fmtQty(qty, unit) {
-  if (unit === 'hr')    return qty + (qty === 1 ? ' hr' : ' hrs');
-  if (unit === 'mo')    return qty + (qty === 1 ? ' mo' : ' mos');
-  if (unit === 'day')   return qty + (qty === 1 ? ' day' : ' days');
-  if (unit === 'trip')  return qty + (qty === 1 ? ' trip' : ' trips');
-  if (unit === 'visit') return qty + (qty === 1 ? ' visit' : ' visits');
-  if (unit === 'flat')  return qty === 1 ? '' : '×' + qty;
-  return qty + '';
+function unitShort(unit) {
+  if (unit === 'hr')    return 'hr';
+  if (unit === 'mo')    return 'mo';
+  if (unit === 'day')   return 'day';
+  if (unit === 'trip')  return 'trip';
+  if (unit === 'visit') return 'visit';
+  if (unit === 'flat')  return '×';
+  return unit;
 }
 
 function fmtQtyVerbose(qty, unit) {
   if (unit === 'flat') return qty === 1 ? '' : ' ×' + qty;
-  return ' (' + fmtQty(qty, unit) + ')';
+  const u = unitShort(unit);
+  return ` (${qty} ${u}${qty !== 1 && unit !== 'flat' ? 's' : ''})`;
 }
 
-// ─── Calculations ─────────────────────────────────────────────────────────────
-function calcStandardTotal() {
-  return items.reduce((sum, item) => {
-    const found = getBlock(item.blockId);
-    return found ? sum + getBlockPrice(item.blockId) * item.qty : sum;
-  }, 0);
+// ─── Calculations ──────────────────────────────────────────────────────────────
+function bundleTotal(bundle) {
+  return bundle.items.reduce((s, item) => s + getBlockPrice(item.blockId) * item.qty, 0);
 }
 
-function calcDiscount(standardTotal) {
+function calcStandardTotal() { return bundles.reduce((s, b) => s + bundleTotal(b), 0); }
+
+function calcDiscount(std) {
   const val = parseFloat(document.getElementById('discountVal').value) || 0;
   const type = document.getElementById('discountType').value;
   if (val <= 0) return 0;
-  if (type === 'pct') return standardTotal * (Math.min(val, 100) / 100);
-  return Math.min(val, standardTotal);
+  return type === 'pct' ? std * (Math.min(val, 100) / 100) : Math.min(val, std);
 }
 
-// ─── Render: Block Cards ──────────────────────────────────────────────────────
+// ─── Render: Block Cards ───────────────────────────────────────────────────────
 function renderBlocks() {
   const container = document.getElementById('blocksContainer');
   container.innerHTML = '';
-
   for (const cat of CATEGORIES) {
     const section = document.createElement('div');
     section.className = 'category-section';
-
     section.innerHTML = `
       <div class="category-header">
         <div class="cat-dot" style="background:${cat.color}"></div>
         <h3>${cat.label}</h3>
       </div>
-      <div class="blocks-grid" id="grid-${cat.id}"></div>
-    `;
+      <div class="blocks-grid" id="grid-${cat.id}"></div>`;
     container.appendChild(section);
-
     const grid = section.querySelector('#grid-' + cat.id);
-    for (const block of cat.blocks) {
-      grid.appendChild(buildBlockCard(block));
-    }
+    for (const block of cat.blocks) grid.appendChild(buildBlockCard(block));
   }
 }
 
 function buildBlockCard(block) {
-  const isAdded = items.some(i => i.blockId === block.id);
+  const isAdded = isBlockInAnyBundle(block.id);
   const price = getBlockPrice(block.id);
   const card = document.createElement('div');
   card.className = 'block-card' + (isAdded ? ' in-quote' : '');
   card.id = 'card-' + block.id;
-
   const priceLabel = block.unit === 'flat' ? fmt(price) : fmt(price) + '/' + block.unit;
-
   card.innerHTML = `
     <div class="block-top">
       <div class="block-name">${block.name}</div>
@@ -973,8 +456,7 @@ function buildBlockCard(block) {
     ${block.note ? `<div class="block-note">${block.note}</div>` : ''}
     <button class="add-btn ${isAdded ? 'multi' : ''}" onclick="addBlock('${block.id}')">
       ${isAdded ? '+ Add Another' : '+ Add'}
-    </button>
-  `;
+    </button>`;
   return card;
 }
 
@@ -982,162 +464,272 @@ function refreshBlockCard(blockId) {
   const card = document.getElementById('card-' + blockId);
   if (!card) return;
   const found = getBlock(blockId);
-  if (!found) return;
-  card.replaceWith(buildBlockCard(found.block));
+  if (found) card.replaceWith(buildBlockCard(found.block));
 }
 
-// ─── Render: Quote Panel ──────────────────────────────────────────────────────
+// ─── Render: Quote Panel ───────────────────────────────────────────────────────
 function renderQuote() {
-  const wrap = document.getElementById('lineItemsWrap');
-  const empty = document.getElementById('emptyState');
+  const wrap = document.getElementById('bundlesWrap');
+  const totalItems = allItems().length;
 
-  if (items.length === 0) {
-    wrap.innerHTML = '';
-    wrap.appendChild(empty);
+  if (totalItems === 0 && bundles.length === 1 && !bundles[0].name) {
+    wrap.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-icon">📦</span>
+        <span>Select services from the left to build a package</span>
+      </div>`;
     return;
   }
 
   wrap.innerHTML = '';
-
-  const catOrder = CATEGORIES.map(c => c.id);
-  const byCat = {};
-  for (const item of items) {
-    if (!byCat[item.catId]) byCat[item.catId] = [];
-    byCat[item.catId].push(item);
-  }
-
-  for (const catId of catOrder) {
-    if (!byCat[catId]) continue;
-    const cat = CATEGORIES.find(c => c.id === catId);
-
-    const label = document.createElement('div');
-    label.className = 'q-cat-label';
-    label.style.color = cat.color;
-    label.textContent = cat.label;
-    wrap.appendChild(label);
-
-    for (const item of byCat[catId]) {
-      wrap.appendChild(buildLineItem(item));
-    }
+  for (const bundle of bundles) {
+    wrap.appendChild(buildBundleSection(bundle));
   }
 }
 
-function buildLineItem(item) {
+function buildBundleSection(bundle) {
+  const isActive = bundle.bundleId === activeBundleId;
+  const subtotal = bundleTotal(bundle);
+
+  const section = document.createElement('div');
+  section.className = 'bundle-section' + (isActive ? ' active' : '');
+  section.dataset.bundleId = bundle.bundleId;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'bundle-header';
+  header.innerHTML = `
+    <div class="bundle-dot"></div>
+    <input class="bundle-name-input"
+           type="text"
+           value="${escHtml(bundle.name)}"
+           placeholder="Bundle name (e.g. Phase 1 — Discovery)"
+           onchange="renameBundle(${bundle.bundleId}, this.value)"
+           onclick="setActiveBundle(${bundle.bundleId})">
+    <span class="bundle-subtotal-badge" id="bst-${bundle.bundleId}">${subtotal > 0 ? fmt(subtotal) : ''}</span>
+    ${bundles.length > 1 ? `<button class="bundle-delete" onclick="deleteBundle(${bundle.bundleId}); event.stopPropagation();" title="Remove bundle">×</button>` : ''}`;
+  header.addEventListener('click', () => setActiveBundle(bundle.bundleId));
+  section.appendChild(header);
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'bundle-body';
+  body.id = 'bbody-' + bundle.bundleId;
+
+  if (bundle.items.length === 0) {
+    body.innerHTML = `<div class="bundle-empty">No services added — click a block on the left</div>`;
+  } else {
+    // Group by category
+    for (const cat of CATEGORIES) {
+      const catItems = bundle.items.filter(i => i.catId === cat.id);
+      if (!catItems.length) continue;
+      const label = document.createElement('div');
+      label.className = 'q-cat-label';
+      label.style.color = cat.color;
+      label.textContent = cat.label;
+      body.appendChild(label);
+      for (const item of catItems) body.appendChild(buildLineItem(bundle.bundleId, item));
+    }
+  }
+
+  section.appendChild(body);
+  return section;
+}
+
+function buildLineItem(bundleId, item) {
   const found = getBlock(item.blockId);
   if (!found) return document.createElement('div');
   const { block } = found;
-
   const price = getBlockPrice(item.blockId);
   const subtotal = price * item.qty;
   const atMin = item.qty <= block.minQty;
+  const unit = unitShort(block.unit);
 
   const div = document.createElement('div');
   div.className = 'line-item';
-  div.id = 'li-' + item.itemId;
-
+  div.id = `li-${bundleId}-${item.itemId}`;
   div.innerHTML = `
     <div class="item-info">
       <div class="item-name">${block.name}</div>
       <div class="qty-row">
-        <button class="qty-btn" onclick="changeQty(${item.itemId}, -1)" ${atMin ? 'disabled' : ''}>−</button>
-        <span class="qty-val">${fmtQty(item.qty, block.unit) || '1×'}</span>
-        <button class="qty-btn" onclick="changeQty(${item.itemId}, 1)">+</button>
+        <button class="qty-btn" onclick="changeQty(${bundleId}, ${item.itemId}, -1)" ${atMin ? 'disabled' : ''}>−</button>
+        <input class="qty-input" type="number"
+               value="${item.qty}"
+               min="${block.minQty}"
+               step="${block.step}"
+               onchange="setQty(${bundleId}, ${item.itemId}, this)"
+               onclick="event.stopPropagation()">
+        <span class="qty-unit">${unit}</span>
+        <button class="qty-btn" onclick="changeQty(${bundleId}, ${item.itemId}, 1)">+</button>
       </div>
     </div>
-    <div class="item-total">${fmt(subtotal)}</div>
-    <button class="remove-btn" onclick="removeItem(${item.itemId})" title="Remove">×</button>
-  `;
+    <div class="item-total" id="itotal-${bundleId}-${item.itemId}">${fmt(subtotal)}</div>
+    <button class="remove-btn" onclick="removeItem(${bundleId}, ${item.itemId})" title="Remove">×</button>`;
   return div;
 }
 
-// ─── Render: Totals ───────────────────────────────────────────────────────────
+// ─── Render: Totals ────────────────────────────────────────────────────────────
 function renderTotals() {
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partner = std - disc;
+  const hasItems = allItems().length > 0;
 
-  document.getElementById('standardTotal').textContent = items.length ? fmt(std) : '—';
+  document.getElementById('standardTotal').textContent = hasItems ? fmt(std) : '—';
   document.getElementById('discountDisplay').textContent = disc > 0 ? '−' + fmt(disc) : '';
-  document.getElementById('partnerPrice').textContent = items.length ? fmt(partner) : '—';
+  document.getElementById('partnerPrice').textContent = hasItems ? fmt(partner) : '—';
 
-  const savingsNote = document.getElementById('savingsNote');
-  if (disc > 0 && items.length) {
-    const pct = Math.round((disc / std) * 100);
-    savingsNote.textContent = `Partner saves ${fmt(disc)} — ${pct}% off standard`;
-    savingsNote.classList.add('show');
-  } else {
-    savingsNote.classList.remove('show');
-  }
+  const sn = document.getElementById('savingsNote');
+  if (disc > 0 && hasItems) {
+    sn.textContent = `Partner saves ${fmt(disc)} — ${Math.round(disc / std * 100)}% off standard`;
+    sn.classList.add('show');
+  } else { sn.classList.remove('show'); }
 }
 
-// ─── Smart Alerts ─────────────────────────────────────────────────────────────
 function renderAlerts() {
-  const hasBuild = items.some(i => i.blockId === 'tool-build-initial' || i.blockId === 'tool-build-addl');
-  const hasPilot = items.some(i => i.blockId === 'tool-pilot');
+  const blockIds = allItems().map(i => i.blockId);
+  const hasBuild = blockIds.some(id => id === 'tool-build-initial' || id === 'tool-build-addl');
+  const hasPilot = blockIds.includes('tool-pilot');
   document.getElementById('comboAlert').classList.toggle('show', hasBuild && hasPilot);
 }
 
-// ─── Full Render ──────────────────────────────────────────────────────────────
-function render() {
-  renderQuote();
-  renderTotals();
-  renderAlerts();
+function render() { renderQuote(); renderTotals(); renderAlerts(); }
+
+// ─── Targeted updates (avoid full re-render on qty change) ────────────────────
+function updateBundleSubtotal(bundleId) {
+  const bundle = bundles.find(b => b.bundleId === bundleId);
+  if (!bundle) return;
+  const total = bundleTotal(bundle);
+  const el = document.getElementById('bst-' + bundleId);
+  if (el) el.textContent = total > 0 ? fmt(total) : '';
 }
 
-// ─── Actions ─────────────────────────────────────────────────────────────────
+// ─── Actions ──────────────────────────────────────────────────────────────────
 function addBlock(blockId) {
   const found = getBlock(blockId);
   if (!found) return;
-  items.push({ itemId: nextId++, blockId, catId: found.cat.id, qty: found.block.defaultQty });
+  let bundle = bundles.find(b => b.bundleId === activeBundleId);
+  if (!bundle) { bundle = bundles[0]; activeBundleId = bundle.bundleId; }
+  bundle.items.push({ itemId: nextItemId++, blockId, catId: found.cat.id, qty: found.block.defaultQty });
   refreshBlockCard(blockId);
   render();
 }
 
-function removeItem(itemId) {
-  const item = items.find(i => i.itemId === itemId);
-  if (!item) return;
-  const blockId = item.blockId;
-  items = items.filter(i => i.itemId !== itemId);
-  refreshBlockCard(blockId);
+function removeItem(bundleId, itemId) {
+  const bundle = bundles.find(b => b.bundleId === bundleId);
+  if (!bundle) return;
+  const blockId = bundle.items.find(i => i.itemId === itemId)?.blockId;
+  bundle.items = bundle.items.filter(i => i.itemId !== itemId);
+  if (blockId) refreshBlockCard(blockId);
   render();
 }
 
-function changeQty(itemId, dir) {
-  const item = items.find(i => i.itemId === itemId);
+function changeQty(bundleId, itemId, dir) {
+  const bundle = bundles.find(b => b.bundleId === bundleId);
+  if (!bundle) return;
+  const item = bundle.items.find(i => i.itemId === itemId);
   if (!item) return;
   const found = getBlock(item.blockId);
   if (!found) return;
   const { block } = found;
-  const newQty = Math.round((item.qty + dir * block.step) * 10) / 10;
+  const newQty = Math.round((item.qty + dir * block.step) * 100) / 100;
   if (newQty < block.minQty) return;
   item.qty = newQty;
-  const el = document.getElementById('li-' + itemId);
-  if (el) el.replaceWith(buildLineItem(item));
+
+  // Patch DOM
+  const inputEl = document.querySelector(`#li-${bundleId}-${itemId} .qty-input`);
+  if (inputEl) {
+    inputEl.value = newQty;
+    const minusBtn = inputEl.closest('.qty-row').querySelector('.qty-btn');
+    if (minusBtn) minusBtn.disabled = newQty <= block.minQty;
+  }
+  const totalEl = document.getElementById(`itotal-${bundleId}-${itemId}`);
+  if (totalEl) totalEl.textContent = fmt(getBlockPrice(item.blockId) * newQty);
+  updateBundleSubtotal(bundleId);
   renderTotals();
 }
 
+function setQty(bundleId, itemId, inputEl) {
+  const bundle = bundles.find(b => b.bundleId === bundleId);
+  if (!bundle) return;
+  const item = bundle.items.find(i => i.itemId === itemId);
+  if (!item) return;
+  const found = getBlock(item.blockId);
+  if (!found) return;
+  const { block } = found;
+
+  let val = parseFloat(inputEl.value);
+  if (isNaN(val) || val < block.minQty) val = block.minQty;
+  val = Math.round(Math.round(val / block.step) * block.step * 100) / 100;
+  item.qty = val;
+  inputEl.value = val;
+
+  const minusBtn = inputEl.closest('.qty-row').querySelector('.qty-btn');
+  if (minusBtn) minusBtn.disabled = val <= block.minQty;
+  const totalEl = document.getElementById(`itotal-${bundleId}-${itemId}`);
+  if (totalEl) totalEl.textContent = fmt(getBlockPrice(item.blockId) * val);
+  updateBundleSubtotal(bundleId);
+  renderTotals();
+}
+
+function addBundle() {
+  const newBundle = { bundleId: nextBundleId++, name: '', items: [] };
+  bundles.push(newBundle);
+  activeBundleId = newBundle.bundleId;
+  render();
+  // Focus the new bundle's name input
+  setTimeout(() => {
+    const input = document.querySelector(`[data-bundle-id="${newBundle.bundleId}"] .bundle-name-input`);
+    if (input) input.focus();
+  }, 50);
+}
+
+function deleteBundle(bundleId) {
+  if (bundles.length <= 1) return;
+  const blockIds = bundles.find(b => b.bundleId === bundleId)?.items.map(i => i.blockId) || [];
+  bundles = bundles.filter(b => b.bundleId !== bundleId);
+  if (activeBundleId === bundleId) activeBundleId = bundles[0].bundleId;
+  // Refresh block cards that might have changed state
+  const affectedBlocks = [...new Set(blockIds)].filter(id => !isBlockInAnyBundle(id));
+  affectedBlocks.forEach(refreshBlockCard);
+  render();
+}
+
+function setActiveBundle(bundleId) {
+  activeBundleId = bundleId;
+  document.querySelectorAll('.bundle-section').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.bundleId) === bundleId);
+  });
+}
+
+function renameBundle(bundleId, name) {
+  const bundle = bundles.find(b => b.bundleId === bundleId);
+  if (bundle) bundle.name = name;
+}
+
 function clearAll() {
-  if (!items.length) return;
-  const blockIds = [...new Set(items.map(i => i.blockId))];
-  items = [];
+  const blockIds = [...new Set(allItems().map(i => i.blockId))];
+  bundles = [{ bundleId: 1, name: '', items: [] }];
+  activeBundleId = 1;
+  nextBundleId = 2;
   document.getElementById('discountVal').value = '';
   blockIds.forEach(refreshBlockCard);
   render();
 }
 
-// ─── Rate Changes ─────────────────────────────────────────────────────────────
+// ─── Rate Changes ──────────────────────────────────────────────────────────────
 function onRateChange() {
   rates.lp     = Math.max(50, parseFloat(document.getElementById('rateLp').value)     || DEFAULT_RATES.lp);
   rates.dev    = Math.max(50, parseFloat(document.getElementById('rateDev').value)    || DEFAULT_RATES.dev);
   rates.travel = Math.max(50, parseFloat(document.getElementById('rateTravel').value) || DEFAULT_RATES.travel);
-
-  // Re-render all block cards (prices update)
   renderBlocks();
-
-  // Re-render any in-quote line items (prices update)
-  for (const item of items) {
-    const el = document.getElementById('li-' + item.itemId);
-    if (el) el.replaceWith(buildLineItem(item));
+  // Patch all in-quote prices
+  for (const bundle of bundles) {
+    for (const item of bundle.items) {
+      const totalEl = document.getElementById(`itotal-${bundle.bundleId}-${item.itemId}`);
+      if (totalEl) totalEl.textContent = fmt(getBlockPrice(item.blockId) * item.qty);
+    }
+    updateBundleSubtotal(bundle.bundleId);
   }
   renderTotals();
 }
@@ -1147,29 +739,22 @@ function resetRates() {
   document.getElementById('rateLp').value     = DEFAULT_RATES.lp;
   document.getElementById('rateDev').value    = DEFAULT_RATES.dev;
   document.getElementById('rateTravel').value = DEFAULT_RATES.travel;
-  renderBlocks();
-  for (const item of items) {
-    const el = document.getElementById('li-' + item.itemId);
-    if (el) el.replaceWith(buildLineItem(item));
-  }
-  renderTotals();
+  onRateChange();
 }
 
 // ─── Copy for Proposal ────────────────────────────────────────────────────────
 function copyForProposal() {
-  if (!items.length) { showToast('Add services first'); return; }
+  if (!allItems().length) { showToast('Add services first'); return; }
 
   const partner      = document.getElementById('partnerName').value.trim() || '[Partner]';
   const today        = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const std          = calcStandardTotal();
   const disc         = calcDiscount(std);
   const partnerTotal = std - disc;
+  const multiBundle  = bundles.filter(b => b.items.length > 0).length > 1;
 
-  const W = 46;
-  const padLine = (left, right) => {
-    const dots = Math.max(2, W - left.length - right.length - 1);
-    return left + ' ' + '.'.repeat(dots) + ' ' + right;
-  };
+  const W = 48;
+  const padLine = (left, right) => left + ' ' + '.'.repeat(Math.max(2, W - left.length - right.length - 1)) + ' ' + right;
 
   const lines = [];
   lines.push('Playlab — Package Quote');
@@ -1179,19 +764,31 @@ function copyForProposal() {
   lines.push('SERVICES');
   lines.push('─'.repeat(W));
 
-  for (const cat of CATEGORIES) {
-    const catItems = items.filter(i => i.catId === cat.id);
-    if (!catItems.length) continue;
+  for (const bundle of bundles) {
+    if (!bundle.items.length) continue;
     lines.push('');
-    lines.push(cat.label);
-    for (const item of catItems) {
-      const found = getBlock(item.blockId);
-      if (!found) continue;
-      const { block } = found;
-      const price = getBlockPrice(item.blockId);
-      const subtotal = price * item.qty;
-      const qtyStr = fmtQtyVerbose(item.qty, block.unit);
-      lines.push(padLine(`  • ${block.name}${qtyStr}`, fmt(subtotal)));
+    if (multiBundle) {
+      const bundleLabel = bundle.name || `Bundle ${bundle.bundleId}`;
+      lines.push(`[ ${bundleLabel} ]`);
+    }
+    for (const cat of CATEGORIES) {
+      const catItems = bundle.items.filter(i => i.catId === cat.id);
+      if (!catItems.length) continue;
+      if (multiBundle) lines.push(`  ${cat.label}`);
+      else lines.push(cat.label);
+      for (const item of catItems) {
+        const found = getBlock(item.blockId);
+        if (!found) continue;
+        const { block } = found;
+        const subtotal = getBlockPrice(item.blockId) * item.qty;
+        const qtyStr = fmtQtyVerbose(item.qty, block.unit);
+        const indent = multiBundle ? '    • ' : '  • ';
+        lines.push(padLine(`${indent}${block.name}${qtyStr}`, fmt(subtotal)));
+      }
+    }
+    if (multiBundle) {
+      const bTotal = bundleTotal(bundle);
+      lines.push(padLine('  Bundle Total', fmt(bTotal)));
     }
   }
 
@@ -1210,7 +807,7 @@ function copyForProposal() {
   lines.push(padLine('Partner Price', fmt(partnerTotal)));
 
   if (disc > 0) {
-    const pct = Math.round((disc / std) * 100);
+    const pct = Math.round(disc / std * 100);
     lines.push('');
     lines.push(`Total Partner Savings: ${fmt(disc)} (${pct}% off standard rate)`);
   }
@@ -1219,47 +816,40 @@ function copyForProposal() {
   lines.push('* AI model usage costs are covered by Playlab and not passed on to partners.');
 
   const text = lines.join('\n');
-
   navigator.clipboard.writeText(text).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
+    const ta = Object.assign(document.createElement('textarea'), { value: text, style: 'position:fixed;opacity:0' });
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
   }).finally(() => {
     const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
+    btn.textContent = '✓ Copied!'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copy for Proposal'; btn.classList.remove('copied'); }, 2200);
     showToast('Copied to clipboard!');
   });
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+// ─── Util ──────────────────────────────────────────────────────────────────────
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ─── Event Listeners ──────────────────────────────────────────────────────────
+// ─── Events ────────────────────────────────────────────────────────────────────
 document.getElementById('copyBtn').addEventListener('click', copyForProposal);
 document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('addBundleBtn').addEventListener('click', addBundle);
 document.getElementById('discountVal').addEventListener('input', renderTotals);
 document.getElementById('discountType').addEventListener('change', renderTotals);
 document.getElementById('ratesReset').addEventListener('click', resetRates);
-
-['rateLp', 'rateDev', 'rateTravel'].forEach(id => {
+['rateLp','rateDev','rateTravel'].forEach(id => {
   document.getElementById(id).addEventListener('input', onRateChange);
   document.getElementById(id).addEventListener('change', onRateChange);
 });
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+// ─── Init ──────────────────────────────────────────────────────────────────────
 renderBlocks();
-renderTotals();
+render();
 </script>
 </body>
 </html>
