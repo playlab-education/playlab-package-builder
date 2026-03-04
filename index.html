@@ -224,7 +224,7 @@
           <label>Developer</label>
           <div class="rate-input-wrap">
             <span class="prefix">$</span>
-            <input type="number" id="rateDev" value="185" min="50" max="2000" step="5">
+            <input type="number" id="rateDev" value="200" min="50" max="2000" step="5">
             <span class="suffix">/hr</span>
           </div>
         </div>
@@ -260,7 +260,7 @@
     </div>
 
     <div class="smart-alert" id="comboAlert">
-      💡 <strong>Combo tip:</strong> Tool Build + Tool Pilot together = $10K (initial) or $8K (additional) — vs. $11K/$8.5K when priced separately.
+      💡 <strong>Combo tip:</strong> Tool Build + Tool Pilot together = $10K (initial) or $8K (additional) — vs. $11.5K/$9K when priced separately.
     </div>
 
     <div class="totals-section">
@@ -299,40 +299,41 @@
 
 <script>
 // ─── Rates ───────────────────────────────────────────────────────────────────
-const DEFAULT_RATES = { lp: 250, dev: 185, travel: 125 };
+const DEFAULT_RATES = { lp: 250, dev: 200, travel: 125 };
 let rates = { ...DEFAULT_RATES };
 
 function roundPrice(n) {
-  if (n >= 2000) return Math.round(n / 500) * 500;
-  if (n >= 500)  return Math.round(n / 100) * 100;
-  return Math.round(n / 50) * 50;
+  if (n >= 10000) return Math.round(n / 1000) * 1000;
+  if (n >= 1000)  return Math.round(n / 100) * 100;
+  if (n >= 500)   return Math.round(n / 50) * 50;
+  return Math.round(n / 25) * 25;
 }
 
 function getBlockPrice(blockId) {
   const { lp, dev, travel: tr } = rates;
   switch (blockId) {
-    case 'office-hours':      return roundPrice(lp * 1.0 * 1.15 * 1.05);
-    case 'coaching':          return roundPrice(lp * 1.5 * 1.15 * 1.05);
-    case 'admin-meetings':    return roundPrice(lp * 1.5 * 1.15 * 1.05);
-    case 'facilitation':      return roundPrice(lp * 2.0 * 1.15 * 1.05);
-    case 'dev-hourly':        return roundPrice(dev * 1.0 * 1.15);
-    case 'app-support-light': return roundPrice(dev * 5.0  * 1.15 * 0.95);
-    case 'app-support-medium':return roundPrice(dev * 10.0 * 1.15 * 0.95);
-    case 'app-support-full':  return roundPrice(dev * 20.0 * 1.15 * 0.95);
+    case 'office-hours':      return roundPrice(lp * 1.0 * 1.2);
+    case 'coaching':          return roundPrice(lp * 1.5 * 1.2);
+    case 'admin-meetings':    return roundPrice(lp * 1.5 * 1.2);
+    case 'facilitation':      return roundPrice(lp * 2.0 * 1.2);
+    case 'dev-hourly':        return roundPrice(dev * 1.0);
+    case 'app-support-light': return roundPrice(dev * 5.0);
+    case 'app-support-medium':return roundPrice(dev * 10.0);
+    case 'app-support-full':  return roundPrice(dev * 20.0);
     case 'travel-local':      return roundPrice((tr + 99.5)   * 1.15 * 0.98);
-    case 'travel-flight':     return roundPrice((tr * 8 + 575) * 1.15 * 0.99);
+    case 'travel-flight':     return roundPrice((tr * 8 + 600) * 1.25);
     case 'travel-addl-day':   return roundPrice((tr + 375)    * 1.15 * 1.04);
-    case 'site-visit-half':   return roundPrice((lp * 3 + tr + lp * 2) * 1.15);
-    case 'site-visit-full':   return roundPrice((lp * 6 + tr + lp * 2) * 1.15);
-    case 'ai-crash-course':   return roundPrice(lp * 10);
+    case 'site-visit-half':   return roundPrice((lp * 3 + tr + lp * 2) * 1.09);
+    case 'site-visit-full':   return roundPrice((lp * 6 + tr + lp * 2) * 1.16);
+    case 'ai-crash-course':   return roundPrice(lp * 8 * 1.15);
     case 'ideation-lp':       return roundPrice(lp * 10);
-    case 'ideation-lp-le':    return roundPrice(lp * 16);
-    case 'tool-build-initial':return roundPrice((lp + dev) * 10 * 1.15);
-    case 'tool-build-addl':   return roundPrice((lp + dev) *  5 * 1.15);
-    case 'tool-pilot':        return roundPrice((lp * 16 + dev * 8) * 1.095);
-    case 'tool-revision-light': return roundPrice(dev *  7 * 1.15);
-    case 'tool-revision-medium':return roundPrice(dev * 14 * 1.15);
-    case 'tool-revision-full':  return roundPrice(dev * 21 * 1.15);
+    case 'ideation-lp-le':    return roundPrice(lp * 14 * 1.15);
+    case 'tool-build-initial':return roundPrice((lp + dev) * 10 * 1.1);
+    case 'tool-build-addl':   return roundPrice(lp * 2 + dev * 10);
+    case 'tool-pilot':        return roundPrice((lp * 16 + dev * 8) * 1.16);
+    case 'tool-revision-light': return roundPrice(dev * 6 * 1.25);
+    case 'tool-revision-medium':return roundPrice(dev * 14);
+    case 'tool-revision-full':  return roundPrice(dev * 22 * 1.15 * 0.99);
     default: return 0;
   }
 }
