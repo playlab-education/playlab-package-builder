@@ -195,6 +195,40 @@
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--slate-900); color: white; padding: 9px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); z-index: 1000; white-space: nowrap; pointer-events: none; }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ── Template Selector ── */
+    .template-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 10px 14px; background: white; border: 1.5px solid var(--sky-200); border-radius: 10px; }
+    .template-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--sky-600); white-space: nowrap; }
+    .template-select { flex: 1; padding: 7px 10px; border: 1.5px solid var(--slate-200); border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 500; color: var(--slate-700); background: white; cursor: pointer; }
+    .template-select:focus { outline: none; border-color: var(--sky-500); }
+    .template-desc { font-size: 10.5px; color: var(--slate-500); line-height: 1.35; margin-top: 4px; padding: 0 2px; display: none; }
+    .template-desc.show { display: block; }
+
+    /* ── Per-unit cost & Multi-year ── */
+    .insights-section { border-top: 1.5px solid var(--slate-100); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .insight-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+    .insight-label { color: var(--slate-500); font-weight: 500; display: flex; align-items: center; gap: 4px; }
+    .insight-value { font-weight: 700; color: var(--sky-700); }
+    .insight-input { width: 72px; padding: 4px 7px; border: 1.5px solid var(--slate-200); border-radius: 6px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; color: var(--slate-800); text-align: right; -moz-appearance: textfield; }
+    .insight-input::-webkit-inner-spin-button, .insight-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .insight-input:focus { outline: none; border-color: var(--sky-500); }
+    .multiyear-toggle { font-size: 10px; font-weight: 700; color: var(--sky-600); background: none; border: none; cursor: pointer; font-family: 'Lexend', sans-serif; padding: 3px 8px; border-radius: 20px; transition: background 0.15s; }
+    .multiyear-toggle:hover { background: var(--sky-50); }
+    .multiyear-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .multiyear-table th, .multiyear-table td { padding: 5px 8px; font-size: 10.5px; text-align: right; border-bottom: 1px solid var(--slate-100); }
+    .multiyear-table th { font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.5px; font-size: 9.5px; text-align: right; }
+    .multiyear-table th:first-child, .multiyear-table td:first-child { text-align: left; }
+    .multiyear-table td { color: var(--slate-700); font-weight: 500; }
+    .multiyear-table td.highlight { font-weight: 700; color: var(--slate-900); }
+    .multiyear-wrap { display: none; }
+    .multiyear-wrap.show { display: block; }
+
+    /* ── Copy format selector ── */
+    .copy-row { display: flex; gap: 6px; }
+    .copy-row .btn-copy { flex: 1; }
+    .btn-copy-md { padding: 11px 14px; background: var(--slate-700); color: white; border: none; border-radius: 9px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .btn-copy-md:hover { background: var(--slate-800); }
+    .btn-copy-md.copied { background: var(--emerald-500); }
+
     /* ── Software License Section ── */
     .software-section { margin-bottom: 24px; }
     .software-section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--slate-200); }
@@ -238,10 +272,14 @@
     .tier-card.tier-selected .tier-count-input { border-color: var(--sky-300); background: white; }
     .tier-count-computed { font-size: 10px; font-weight: 700; color: var(--emerald-600); white-space: nowrap; }
 
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
       .builder { grid-template-columns: 1fr; }
       .quote-col { position: static; height: auto; }
       .header-subtitle { display: none; }
+      .template-bar { flex-wrap: wrap; }
+    }
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .builder { grid-template-columns: 1fr 360px; }
     }
   </style>
 </head>
@@ -259,6 +297,14 @@
   <!-- ── LEFT: Building Blocks ── -->
   <div class="blocks-col">
     <div class="blocks-col-header">Service Building Blocks</div>
+
+    <div class="template-bar">
+      <span class="template-bar-label">Start from template</span>
+      <select class="template-select" id="templateSelect">
+        <option value="">— Build from scratch —</option>
+      </select>
+    </div>
+    <div class="template-desc" id="templateDesc"></div>
 
     <div class="software-section">
       <div class="software-section-header">
@@ -351,8 +397,36 @@
       <div class="savings-note" id="savingsNote"></div>
     </div>
 
+    <div class="insights-section" id="insightsSection" style="display:none">
+      <div class="insight-row">
+        <span class="insight-label">Students served
+          <input class="insight-input" id="studentCount" type="number" min="0" placeholder="0">
+        </span>
+        <span class="insight-value" id="perStudentCost">—</span>
+      </div>
+      <div class="insight-row">
+        <span class="insight-label">Educators served
+          <input class="insight-input" id="educatorCount" type="number" min="0" placeholder="0">
+        </span>
+        <span class="insight-value" id="perEducatorCost">—</span>
+      </div>
+      <div class="insight-row" style="margin-top:4px">
+        <span class="insight-label">Investment projection</span>
+        <button class="multiyear-toggle" id="multiyearToggle">Show 3-year view</button>
+      </div>
+      <div class="multiyear-wrap" id="multiyearWrap">
+        <table class="multiyear-table">
+          <thead><tr><th></th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>3-Yr Total</th></tr></thead>
+          <tbody id="multiyearBody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="actions">
-      <button class="btn-copy" id="copyBtn">Copy for Proposal</button>
+      <div class="copy-row">
+        <button class="btn-copy" id="copyBtn">Copy for Proposal</button>
+        <button class="btn-copy-md" id="copyMdBtn" title="Copy as Markdown">MD</button>
+      </div>
       <button class="btn-clear" id="clearBtn">Clear All</button>
     </div>
 
@@ -557,35 +631,132 @@ function renderLicenseSummary() {
 // ─── Block Data ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
   { id: 'lp',     label: 'Learning Partner', color: '#0EA5E9', blocks: [
-    { id: 'office-hours',   name: 'Office Hours',   unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min', note: '' },
-    { id: 'coaching',       name: 'Coaching',       unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: 'Typically 25% of PD time (e.g., 8 hrs PD → 2 hrs coaching)' },
-    { id: 'admin-meetings', name: 'Admin Meetings', unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', note: '' },
-    { id: 'facilitation',   name: 'Facilitation',   unit: 'hr',    minQty: 1.5, step: 0.5, defaultQty: 4,   desc: 'Starting at 1.5 hrs · Up to 50 participants', note: '' }
+    { id: 'office-hours',   name: 'Office Hours',   unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min', partnerDesc: 'Drop-in support for questions, troubleshooting, and guidance', note: '' },
+    { id: 'coaching',       name: 'Coaching',       unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', partnerDesc: '1-on-1 implementation coaching for educators deploying AI tools', note: 'Typically 25% of PD time (e.g., 8 hrs PD → 2 hrs coaching)' },
+    { id: 'admin-meetings', name: 'Admin Meetings', unit: 'hr',    minQty: 0.5, step: 0.5, defaultQty: 1,   desc: 'Starting at 30 min · Prep + follow-up included', partnerDesc: 'Strategic planning and check-ins with leadership', note: '' },
+    { id: 'facilitation',   name: 'Facilitation',   unit: 'hr',    minQty: 1.5, step: 0.5, defaultQty: 4,   desc: 'Starting at 1.5 hrs · Up to 50 participants', partnerDesc: 'Hands-on professional learning — educators build AI tools with expert guidance', note: '' }
   ]},
   { id: 'dev',    label: 'Developer',        color: '#8b5cf6', blocks: [
-    { id: 'dev-hourly',         name: 'Dev Hourly Rate',       unit: 'hr', minQty: 0.5, step: 0.5, defaultQty: 1, desc: 'Minimum 30 min', note: '' },
-    { id: 'app-support-light',  name: 'App Support — Light',  unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~5 hrs/month of ongoing support', note: '' },
-    { id: 'app-support-medium', name: 'App Support — Medium', unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~10 hrs/month of ongoing support', note: '' },
-    { id: 'app-support-full',   name: 'App Support — Full',   unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~20 hrs/month of ongoing support', note: '' }
+    { id: 'dev-hourly',         name: 'Dev Hourly Rate',       unit: 'hr', minQty: 0.5, step: 0.5, defaultQty: 1, desc: 'Minimum 30 min', partnerDesc: 'Engineering support for custom builds and integrations', note: '' },
+    { id: 'app-support-light',  name: 'App Support — Light',  unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~5 hrs/month of ongoing support', partnerDesc: 'Ongoing technical support and app maintenance', note: '' },
+    { id: 'app-support-medium', name: 'App Support — Medium', unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~10 hrs/month of ongoing support', partnerDesc: 'Dedicated app support with regular iteration cycles', note: '' },
+    { id: 'app-support-full',   name: 'App Support — Full',   unit: 'mo', minQty: 1,   step: 1,   defaultQty: 1, desc: '~20 hrs/month of ongoing support', partnerDesc: 'Comprehensive engineering partnership with continuous development', note: '' }
   ]},
   { id: 'travel', label: 'Travel',           color: '#f97316', blocks: [
-    { id: 'travel-local',    name: 'Travel — Local',          unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Day min · ~35 mi ($25) + $75/day per diem + 15% overhead', note: 'Add hotel (~$200/night) and additional per diem as needed' },
-    { id: 'travel-flight',   name: 'Travel — Flight',         unit: 'trip',  minQty: 1, step: 1, defaultQty: 1, desc: 'Trip min · 8 hrs travel + flight + ground + per diem', note: '50% fee if cancelled within 14 days; 100% within 7' },
-    { id: 'travel-addl-day', name: 'Travel — Additional Day', unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Hotel + ground ($100/day) + per diem ($75/day)', note: 'Adjust based on hotel actual cost' },
-    { id: 'site-visit-half', name: 'Site Visit — Half Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '1–4 hour visit · Visit time + travel + prep/follow-up', note: '' },
-    { id: 'site-visit-full', name: 'Site Visit — Full Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '4–8 hour visit · Visit time + travel + prep/follow-up', note: '' }
+    { id: 'travel-local',    name: 'Travel — Local',          unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Day min · ~35 mi ($25) + $75/day per diem + 15% overhead', partnerDesc: 'Local travel for on-site facilitation and support', note: 'Add hotel (~$200/night) and additional per diem as needed' },
+    { id: 'travel-flight',   name: 'Travel — Flight',         unit: 'trip',  minQty: 1, step: 1, defaultQty: 1, desc: 'Trip min · 8 hrs travel + flight + ground + per diem', partnerDesc: 'Flight travel for on-site engagement', note: '50% fee if cancelled within 14 days; 100% within 7' },
+    { id: 'travel-addl-day', name: 'Travel — Additional Day', unit: 'day',   minQty: 1, step: 1, defaultQty: 1, desc: 'Hotel + ground ($100/day) + per diem ($75/day)', partnerDesc: 'Extended on-site presence for multi-day engagements', note: 'Adjust based on hotel actual cost' },
+    { id: 'site-visit-half', name: 'Site Visit — Half Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '1–4 hour visit · Visit time + travel + prep/follow-up', partnerDesc: 'On-site observation, coaching, and debrief (1–4 hours)', note: '' },
+    { id: 'site-visit-full', name: 'Site Visit — Full Day',   unit: 'visit', minQty: 1, step: 1, defaultQty: 1, desc: '4–8 hour visit · Visit time + travel + prep/follow-up', partnerDesc: 'Full-day on-site facilitation, observation, and coaching', note: '' }
   ]},
   { id: 'ai',     label: 'Targeted AI',      color: '#10b981', blocks: [
-    { id: 'ai-crash-course',     name: 'AI Agency Crash Course',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '4 hrs facilitation + 4 hrs prep + 15% overhead', note: '' },
-    { id: 'ideation-lp',         name: 'Ideation — w/ LP only',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs facilitation + 2 hrs prep + 15% overhead', note: 'Surface use cases and evaluate their fit for AI solutions' },
-    { id: 'ideation-lp-le',      name: 'Ideation — w/ LP & LE',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs LP + 6 hrs LE + 2 hrs prep + 15% overhead', note: 'Recommended when technical builds are likely' },
-    { id: 'tool-build-initial',  name: 'Tool Build — Initial',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '10 hrs LP + 10 hrs dev + 15% overhead', note: 'Requirements → Build → Testing & Iteration' },
-    { id: 'tool-build-addl',     name: 'Tool Build — Additional',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '5 hrs LP + 5 hrs dev + 15% overhead', note: '' },
-    { id: 'tool-pilot',          name: 'Tool Pilot',               unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '16 hrs facilitation + 8 hrs dev + 15% overhead', note: 'Combo w/ Tool Build: $10K initial or $8K additional (vs. $11K/$8.5K separately)' },
-    { id: 'tool-revision-light', name: 'Tool Revision — Light',    unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~7 hrs dev + 15% overhead', note: '' },
-    { id: 'tool-revision-medium',name: 'Tool Revision — Medium',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~14 hrs dev + 15% overhead', note: '' },
-    { id: 'tool-revision-full',  name: 'Tool Revision — Full',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~21 hrs dev + 15% overhead', note: '' }
+    { id: 'ai-crash-course',     name: 'AI Agency Crash Course',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '4 hrs facilitation + 4 hrs prep + 15% overhead', partnerDesc: '4-hour workshop: educators explore AI and build their first custom AI tool', note: '' },
+    { id: 'ideation-lp',         name: 'Ideation — w/ LP only',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs facilitation + 2 hrs prep + 15% overhead', partnerDesc: 'Facilitated session to surface high-impact AI use cases aligned to your priorities', note: 'Surface use cases and evaluate their fit for AI solutions' },
+    { id: 'ideation-lp-le',      name: 'Ideation — w/ LP & LE',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '6 hrs LP + 6 hrs LE + 2 hrs prep + 15% overhead', partnerDesc: 'Strategic ideation with both learning and engineering expertise to assess technical feasibility', note: 'Recommended when technical builds are likely' },
+    { id: 'tool-build-initial',  name: 'Tool Build — Initial',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '10 hrs LP + 10 hrs dev + 15% overhead', partnerDesc: 'Custom AI tool: requirements discovery, development, testing & iteration', note: 'Requirements → Build → Testing & Iteration' },
+    { id: 'tool-build-addl',     name: 'Tool Build — Additional',  unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '5 hrs LP + 5 hrs dev + 15% overhead', partnerDesc: 'Additional custom AI tool build (streamlined after initial)', note: '' },
+    { id: 'tool-pilot',          name: 'Tool Pilot',               unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '16 hrs facilitation + 8 hrs dev + 15% overhead', partnerDesc: 'Structured pilot: deploy tool with users, gather feedback, iterate, and measure impact', note: 'Combo w/ Tool Build: $10K initial or $8K additional (vs. $11K/$8.5K separately)' },
+    { id: 'tool-revision-light', name: 'Tool Revision — Light',    unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~7 hrs dev + 15% overhead', partnerDesc: 'Minor updates and refinements to an existing AI tool', note: '' },
+    { id: 'tool-revision-medium',name: 'Tool Revision — Medium',   unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~14 hrs dev + 15% overhead', partnerDesc: 'Significant feature additions or workflow changes to an existing tool', note: '' },
+    { id: 'tool-revision-full',  name: 'Tool Revision — Full',     unit: 'flat', minQty: 1, step: 1, defaultQty: 1, desc: '~21 hrs dev + 15% overhead', partnerDesc: 'Major rebuild or transformation of an existing AI tool', note: '' }
   ]}
+];
+
+// ─── Package Templates ───────────────────────────────────────────────────────
+const TEMPLATES = [
+  {
+    id: 'discovery',
+    name: 'Discovery / Pilot',
+    desc: 'Single campus or small team getting started. PLC series + basic support. Typical range: $10K–$15K.',
+    tier: 'play',
+    bundles: [
+      { name: 'Discovery', items: [
+        { blockId: 'facilitation', qty: 6 },
+        { blockId: 'coaching', qty: 2 },
+        { blockId: 'admin-meetings', qty: 2 },
+        { blockId: 'office-hours', qty: 2 }
+      ]}
+    ]
+  },
+  {
+    id: 'single-campus',
+    name: 'Single-Campus Implementation',
+    desc: 'One school going deep — PD for all staff, coaching, site visits. Typical range: $25K–$35K.',
+    tier: 'enterprise',
+    tierCount: 5000,
+    bundles: [
+      { name: 'Phase 1 — Launch', items: [
+        { blockId: 'facilitation', qty: 8 },
+        { blockId: 'ai-crash-course', qty: 1 },
+        { blockId: 'admin-meetings', qty: 3 }
+      ]},
+      { name: 'Phase 2 — Sustain', items: [
+        { blockId: 'coaching', qty: 8 },
+        { blockId: 'site-visit-full', qty: 3 },
+        { blockId: 'office-hours', qty: 4 },
+        { blockId: 'admin-meetings', qty: 4 }
+      ]}
+    ]
+  },
+  {
+    id: 'multi-campus',
+    name: 'Multi-Campus / Network',
+    desc: 'Deploy across 5+ campuses with central team PD, custom tool builds, and site visits. Typical range: $30K–$40K.',
+    tier: 'enterprise',
+    tierCount: 15000,
+    bundles: [
+      { name: 'Kickoff & Strategy', items: [
+        { blockId: 'ideation-lp-le', qty: 1 },
+        { blockId: 'facilitation', qty: 4 },
+        { blockId: 'admin-meetings', qty: 2 }
+      ]},
+      { name: 'Build & Deploy', items: [
+        { blockId: 'tool-build-initial', qty: 1 },
+        { blockId: 'tool-build-addl', qty: 1 },
+        { blockId: 'tool-pilot', qty: 1 }
+      ]},
+      { name: 'Ongoing Support', items: [
+        { blockId: 'coaching', qty: 6 },
+        { blockId: 'site-visit-full', qty: 4 },
+        { blockId: 'office-hours', qty: 4 },
+        { blockId: 'admin-meetings', qty: 4 }
+      ]}
+    ]
+  },
+  {
+    id: 'cohort',
+    name: 'Multi-District Cohort',
+    desc: 'Intermediary-led engagement across multiple orgs. Shared PLC + per-org coaching + custom tools. Typical range: $5K–$10K per org.',
+    tier: 'play',
+    bundles: [
+      { name: 'Shared PLC', items: [
+        { blockId: 'facilitation', qty: 8 },
+        { blockId: 'travel-flight', qty: 2 }
+      ]},
+      { name: 'Per-Org Support', items: [
+        { blockId: 'coaching', qty: 10 },
+        { blockId: 'admin-meetings', qty: 4 },
+        { blockId: 'office-hours', qty: 4 }
+      ]},
+      { name: 'Custom Tools', items: [
+        { blockId: 'tool-build-initial', qty: 1 },
+        { blockId: 'tool-build-addl', qty: 2 }
+      ]}
+    ]
+  },
+  {
+    id: 'quick-start',
+    name: 'Quick Start',
+    desc: 'Lightweight entry point — AI Crash Course + coaching follow-up. Typical range: $5K–$8K.',
+    tier: 'play',
+    bundles: [
+      { name: 'Quick Start', items: [
+        { blockId: 'ai-crash-course', qty: 1 },
+        { blockId: 'coaching', qty: 4 },
+        { blockId: 'office-hours', qty: 2 }
+      ]}
+    ]
+  }
 ];
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -1055,6 +1226,15 @@ function copyForProposal() {
     lines.push(`Total Partner Savings: ${fmt(disc)} (${pct}% off standard rate)`);
   }
 
+  // Per-unit costs
+  const students = parseInt(document.getElementById('studentCount').value) || 0;
+  const educators = parseInt(document.getElementById('educatorCount').value) || 0;
+  if (students > 0 || educators > 0) {
+    lines.push('');
+    if (students > 0) lines.push(`Per-student cost: ${fmt(Math.round(partnerTotal / students))}/student/year (${students.toLocaleString()} students)`);
+    if (educators > 0) lines.push(`Per-educator cost: ${fmt(Math.round(partnerTotal / educators))}/educator/year (${educators.toLocaleString()} educators)`);
+  }
+
   lines.push('');
   lines.push('* AI model usage costs are covered by Playlab and not passed on to partners.');
 
@@ -1078,19 +1258,282 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+// ─── Template Loading ─────────────────────────────────────────────────────────
+function renderTemplateOptions() {
+  const sel = document.getElementById('templateSelect');
+  for (const tpl of TEMPLATES) {
+    const opt = document.createElement('option');
+    opt.value = tpl.id;
+    opt.textContent = tpl.name;
+    sel.appendChild(opt);
+  }
+}
+
+function loadTemplate(templateId) {
+  if (!templateId) return;
+  const tpl = TEMPLATES.find(t => t.id === templateId);
+  if (!tpl) return;
+
+  // Clear current state
+  const oldBlockIds = [...new Set(allItems().map(i => i.blockId))];
+
+  // Set tier
+  selectedTierId = tpl.tier || 'free';
+  if (tpl.tierCount && tpl.tier === 'enterprise') tierCounts.enterprise = tpl.tierCount;
+  if (tpl.tierCount && tpl.tier === 'adopt') tierCounts.adopt = tpl.tierCount;
+
+  // Build bundles
+  bundles = [];
+  nextItemId = 1;
+  nextBundleId = 1;
+  for (const tplBundle of tpl.bundles) {
+    const bundle = { bundleId: nextBundleId++, name: tplBundle.name, items: [] };
+    for (const tplItem of tplBundle.items) {
+      const found = getBlock(tplItem.blockId);
+      if (found) {
+        bundle.items.push({ itemId: nextItemId++, blockId: tplItem.blockId, catId: found.cat.id, qty: tplItem.qty });
+      }
+    }
+    bundles.push(bundle);
+  }
+  activeBundleId = bundles[0]?.bundleId || 1;
+  if (!bundles.length) bundles = [{ bundleId: 1, name: '', items: [] }];
+
+  // Reset discount
+  document.getElementById('discountVal').value = '';
+
+  // Re-render everything
+  renderTierCards();
+  renderLicenseSummary();
+  renderBlocks();
+  render();
+  saveToUrl();
+
+  // Show template description
+  const descEl = document.getElementById('templateDesc');
+  descEl.textContent = tpl.desc;
+  descEl.classList.add('show');
+
+  showToast(`Loaded: ${tpl.name}`);
+}
+
+// ─── URL State ────────────────────────────────────────────────────────────────
+function saveToUrl() {
+  const state = {
+    t: selectedTierId,
+    tc: tierCounts,
+    p: document.getElementById('partnerName').value,
+    b: bundles.map(b => ({ n: b.name, i: b.items.map(it => ({ b: it.blockId, q: it.qty })) })),
+    d: { v: document.getElementById('discountVal').value, t: document.getElementById('discountType').value },
+    sc: document.getElementById('studentCount').value,
+    ec: document.getElementById('educatorCount').value
+  };
+  try {
+    const encoded = btoa(JSON.stringify(state));
+    history.replaceState(null, '', '#' + encoded);
+  } catch (e) { /* ignore */ }
+}
+
+function loadFromUrl() {
+  const hash = location.hash.slice(1);
+  if (!hash) return false;
+  try {
+    const state = JSON.parse(atob(hash));
+    selectedTierId = state.t || 'free';
+    if (state.tc) { tierCounts.adopt = state.tc.adopt || 5; tierCounts.enterprise = state.tc.enterprise || 1000; }
+    if (state.p) document.getElementById('partnerName').value = state.p;
+    if (state.d) {
+      document.getElementById('discountVal').value = state.d.v || '';
+      document.getElementById('discountType').value = state.d.t || 'pct';
+    }
+    if (state.sc) document.getElementById('studentCount').value = state.sc;
+    if (state.ec) document.getElementById('educatorCount').value = state.ec;
+
+    bundles = [];
+    nextItemId = 1;
+    nextBundleId = 1;
+    for (const sb of (state.b || [])) {
+      const bundle = { bundleId: nextBundleId++, name: sb.n || '', items: [] };
+      for (const si of (sb.i || [])) {
+        const found = getBlock(si.b);
+        if (found) {
+          bundle.items.push({ itemId: nextItemId++, blockId: si.b, catId: found.cat.id, qty: si.q });
+        }
+      }
+      bundles.push(bundle);
+    }
+    if (!bundles.length) bundles = [{ bundleId: 1, name: '', items: [] }];
+    activeBundleId = bundles[0].bundleId;
+    return true;
+  } catch (e) { return false; }
+}
+
+// ─── Per-student / Per-educator Cost ──────────────────────────────────────────
+function renderInsights() {
+  const std = calcStandardTotal();
+  const disc = calcDiscount(std);
+  const partner = std - disc;
+  const hasItems = allItems().length > 0 || calcTierCost() > 0;
+
+  const section = document.getElementById('insightsSection');
+  section.style.display = hasItems ? '' : 'none';
+  if (!hasItems) return;
+
+  const students = parseInt(document.getElementById('studentCount').value) || 0;
+  const educators = parseInt(document.getElementById('educatorCount').value) || 0;
+
+  document.getElementById('perStudentCost').textContent = students > 0
+    ? fmt(Math.round(partner / students)) + '/student/yr'
+    : '—';
+  document.getElementById('perEducatorCost').textContent = educators > 0
+    ? fmt(Math.round(partner / educators)) + '/educator/yr'
+    : '—';
+
+  renderMultiYear(partner);
+}
+
+function renderMultiYear(partnerPrice) {
+  const body = document.getElementById('multiyearBody');
+  const tierCost = calcTierCost();
+  const servicesCost = partnerPrice - tierCost;
+
+  // Year 1: full; Year 2: license + 40% services; Year 3: license + 20% services
+  const y1 = partnerPrice;
+  const y2 = tierCost + Math.round(servicesCost * 0.4);
+  const y3 = tierCost + Math.round(servicesCost * 0.2);
+  const total = y1 + y2 + y3;
+
+  body.innerHTML = `
+    <tr><td>Software License</td><td>${fmt(tierCost)}</td><td>${fmt(tierCost)}</td><td>${fmt(tierCost)}</td><td class="highlight">${fmt(tierCost * 3)}</td></tr>
+    <tr><td>Learning Services</td><td>${fmt(servicesCost)}</td><td>${fmt(Math.round(servicesCost * 0.4))}</td><td>${fmt(Math.round(servicesCost * 0.2))}</td><td class="highlight">${fmt(servicesCost + Math.round(servicesCost * 0.4) + Math.round(servicesCost * 0.2))}</td></tr>
+    <tr style="border-top:2px solid var(--slate-200)"><td><strong>Total</strong></td><td class="highlight">${fmt(y1)}</td><td class="highlight">${fmt(y2)}</td><td class="highlight">${fmt(y3)}</td><td class="highlight">${fmt(total)}</td></tr>`;
+}
+
+// ─── Copy as Markdown ─────────────────────────────────────────────────────────
+function copyAsMarkdown() {
+  if (!allItems().length) { showToast('Add services first'); return; }
+
+  const partner      = document.getElementById('partnerName').value.trim() || '[Partner]';
+  const today        = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const std          = calcStandardTotal();
+  const disc         = calcDiscount(std);
+  const partnerTotal = std - disc;
+  const tier         = getSelectedTier();
+  const tierCost     = calcTierCost();
+
+  const lines = [];
+  lines.push(`# Playlab — Package Quote`);
+  lines.push(`**Partner:** ${partner}  `);
+  lines.push(`**Date:** ${today}`);
+  lines.push('');
+
+  // Software
+  lines.push('## Software License');
+  let tierDetail = tier.priceLabel;
+  if (tier.id === 'adopt') tierDetail = `${tier.priceLabel} × ${tierCounts.adopt} users`;
+  else if (tier.id === 'enterprise') tierDetail = `${tier.priceLabel} × ${tierCounts.enterprise.toLocaleString()} students`;
+  lines.push(`- **Playlab ${tier.name}** — ${tierDetail} — **${fmt(tierCost)}**`);
+  lines.push('');
+
+  // Services
+  if (allItems().length > 0) {
+    lines.push('## Learning Services');
+    lines.push('');
+    lines.push('| Service | Description | Qty | Price |');
+    lines.push('|---------|-------------|-----|-------|');
+
+    for (const bundle of bundles) {
+      if (!bundle.items.length) continue;
+      if (bundles.filter(b => b.items.length).length > 1) {
+        const label = bundle.name || `Bundle ${bundle.bundleId}`;
+        lines.push(`| **${label}** | | | **${fmt(bundleTotal(bundle))}** |`);
+      }
+      for (const item of bundle.items) {
+        const found = getBlock(item.blockId);
+        if (!found) continue;
+        const { block } = found;
+        const subtotal = getBlockPrice(item.blockId) * item.qty;
+        const qtyStr = block.unit === 'flat' ? (item.qty === 1 ? '—' : `×${item.qty}`) : `${item.qty} ${unitShort(block.unit)}${item.qty !== 1 ? 's' : ''}`;
+        const desc = block.partnerDesc || block.desc;
+        lines.push(`| ${block.name} | ${desc} | ${qtyStr} | ${fmt(subtotal)} |`);
+      }
+    }
+    lines.push('');
+  }
+
+  // Totals
+  lines.push('## Investment Summary');
+  lines.push(`| | |`);
+  lines.push(`|---|---|`);
+  lines.push(`| Standard Total | **${fmt(std)}** |`);
+  if (disc > 0) {
+    const discVal  = document.getElementById('discountVal').value;
+    const discType = document.getElementById('discountType').value;
+    const discLabel = discType === 'pct' ? `Discount (${discVal}%)` : `Discount (${fmt(parseFloat(discVal))})`;
+    lines.push(`| ${discLabel} | −${fmt(disc)} |`);
+  }
+  lines.push(`| **Partner Price** | **${fmt(partnerTotal)}** |`);
+
+  // Per-unit costs
+  const students = parseInt(document.getElementById('studentCount').value) || 0;
+  const educators = parseInt(document.getElementById('educatorCount').value) || 0;
+  if (students > 0 || educators > 0) {
+    lines.push('');
+    if (students > 0) lines.push(`- **Per-student cost:** ${fmt(Math.round(partnerTotal / students))}/student/year`);
+    if (educators > 0) lines.push(`- **Per-educator cost:** ${fmt(Math.round(partnerTotal / educators))}/educator/year`);
+  }
+
+  lines.push('');
+  lines.push('*AI model usage costs are covered by Playlab and not passed on to partners.*');
+
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = Object.assign(document.createElement('textarea'), { value: text, style: 'position:fixed;opacity:0' });
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }).finally(() => {
+    const btn = document.getElementById('copyMdBtn');
+    btn.textContent = '✓'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'MD'; btn.classList.remove('copied'); }, 2200);
+    showToast('Markdown copied!');
+  });
+}
+
+// ─── Auto-save on changes ─────────────────────────────────────────────────────
+const _origRender = render;
+render = function() { _origRender(); renderInsights(); saveToUrl(); };
+
+const _origRenderTotals = renderTotals;
+renderTotals = function() { _origRenderTotals(); renderInsights(); saveToUrl(); };
+
 // ─── Events ────────────────────────────────────────────────────────────────────
 document.getElementById('copyBtn').addEventListener('click', copyForProposal);
-document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('copyMdBtn').addEventListener('click', copyAsMarkdown);
+document.getElementById('clearBtn').addEventListener('click', () => { clearAll(); history.replaceState(null, '', location.pathname); });
 document.getElementById('addBundleBtn').addEventListener('click', addBundle);
 document.getElementById('discountVal').addEventListener('input', renderTotals);
 document.getElementById('discountType').addEventListener('change', renderTotals);
 document.getElementById('ratesReset').addEventListener('click', resetRates);
+document.getElementById('partnerName').addEventListener('change', saveToUrl);
+document.getElementById('studentCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
+document.getElementById('educatorCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
+document.getElementById('multiyearToggle').addEventListener('click', () => {
+  const wrap = document.getElementById('multiyearWrap');
+  const btn = document.getElementById('multiyearToggle');
+  const showing = wrap.classList.toggle('show');
+  btn.textContent = showing ? 'Hide 3-year view' : 'Show 3-year view';
+});
+document.getElementById('templateSelect').addEventListener('change', function() {
+  if (this.value) loadTemplate(this.value);
+  else document.getElementById('templateDesc').classList.remove('show');
+});
 ['rateLp','rateDev','rateTravel'].forEach(id => {
   document.getElementById(id).addEventListener('input', onRateChange);
   document.getElementById(id).addEventListener('change', onRateChange);
 });
 
 // ─── Init ──────────────────────────────────────────────────────────────────────
+renderTemplateOptions();
+const loadedFromUrl = loadFromUrl();
 renderTierCards();
 renderLicenseSummary();
 renderBlocks();
