@@ -534,22 +534,29 @@ function getSelectedTier() {
 }
 
 function selectTier(tierId) {
+  const changed = selectedTierId !== tierId;
   selectedTierId = tierId;
-  renderTierCards();
+  if (changed) renderTierCards();
   renderLicenseSummary();
   renderTotals();
 }
 
-function updateTierCount(tierId, input) {
+function updateTierCount(tierId, input, clamp) {
   let val = parseInt(input.value);
   if (tierId === 'adopt') {
-    if (isNaN(val) || val < 1) val = 1;
-    tierCounts.adopt = val;
+    if (clamp && (isNaN(val) || val < 1)) val = 1;
+    if (!isNaN(val) && val >= 1) tierCounts.adopt = val;
   } else if (tierId === 'enterprise') {
-    if (isNaN(val) || val < 1000) val = 1000;
-    tierCounts.enterprise = val;
+    if (clamp && (isNaN(val) || val < 1000)) val = 1000;
+    if (!isNaN(val) && val >= 1) tierCounts.enterprise = val;
   }
-  input.value = tierCounts[tierId];
+  if (clamp) input.value = tierCounts[tierId];
+  // Update computed price inline without rebuilding DOM
+  const computedEl = input.closest('.tier-count')?.querySelector('.tier-count-computed');
+  if (computedEl) {
+    if (tierId === 'adopt') computedEl.textContent = fmt(tierCounts.adopt * 200) + '/yr';
+    else if (tierId === 'enterprise') computedEl.textContent = fmt(tierCounts.enterprise * 3) + '/yr';
+  }
   renderLicenseSummary();
   renderTotals();
 }
@@ -571,9 +578,9 @@ function renderTierCards() {
       <div class="tier-count" onclick="event.stopPropagation()">
         <span class="tier-count-label">User seats</span>
         <input class="tier-count-input" type="number" min="1" value="${tierCounts.adopt}"
-               onclick="event.stopPropagation(); selectTier('adopt')"
-               oninput="updateTierCount('adopt', this)"
-               onchange="updateTierCount('adopt', this)">
+               onclick="event.stopPropagation(); if(selectedTierId!=='adopt') selectTier('adopt')"
+               oninput="updateTierCount('adopt', this, false)"
+               onchange="updateTierCount('adopt', this, true)">
         <span class="tier-count-computed">${computed}/yr</span>
       </div>`;
     } else if (tier.id === 'enterprise') {
@@ -582,9 +589,9 @@ function renderTierCards() {
       <div class="tier-count" onclick="event.stopPropagation()">
         <span class="tier-count-label">Student licenses</span>
         <input class="tier-count-input" type="number" min="1000" step="100" value="${tierCounts.enterprise}"
-               onclick="event.stopPropagation(); selectTier('enterprise')"
-               oninput="updateTierCount('enterprise', this)"
-               onchange="updateTierCount('enterprise', this)">
+               onclick="event.stopPropagation(); if(selectedTierId!=='enterprise') selectTier('enterprise')"
+               oninput="updateTierCount('enterprise', this, false)"
+               onchange="updateTierCount('enterprise', this, true)">
         <span class="tier-count-computed">${computed}/yr</span>
       </div>`;
     }
