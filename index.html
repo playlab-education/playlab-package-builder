@@ -408,52 +408,52 @@ const SOFTWARE_TIERS = [
   {
     id: 'free',
     name: 'Free',
-    tagline: 'Play and explore what\'s possible',
+    tagline: 'For individuals to play and explore',
     priceLabel: 'Free, always',
     annualCost: 0,
     educators: '1 educator',
-    students: 'Anonymous student use'
+    students: '—'
   },
   {
     id: 'pro',
     name: 'Pro',
-    tagline: 'Use Playlab for your class or work',
-    priceLabel: '$100/year',
+    tagline: 'For individuals to implement widely',
+    priceLabel: '$100/year or $10/month',
     annualCost: 100,
     educators: '1 educator',
-    students: 'Up to 150 student licenses'
+    students: '150 students'
   },
   {
     id: 'play',
     name: 'Play',
-    tagline: 'Trial: Learn about AI and explore Playlab',
-    priceLabel: '$1,500/6-month pilot',
+    tagline: '6 month trial for any organization',
+    priceLabel: '$1,500/6-mo per org',
     annualCost: 1500,
-    educators: 'Up to 100 educators',
-    students: 'Up to 500 student licenses (pilot)'
+    educators: '100 educators',
+    students: '1,000 students'
   },
   {
-    id: 'team',
-    name: 'Team',
-    tagline: 'Use Playlab across your team or school',
-    priceLabel: '$150/user/year',
+    id: 'adopt',
+    name: 'Adopt & Scale',
+    tagline: 'For non-school organizations',
+    priceLabel: '$200/user/year',
     annualCost: null,
-    educators: '2–20 educators',
-    students: 'Up to 1,000 student licenses'
+    educators: '—',
+    students: '150 students/user'
   },
   {
     id: 'enterprise',
-    name: 'Enterprise',
-    tagline: 'Adopt across system or organization',
-    priceLabel: 'Starting at $3/student/year',
+    name: 'Adopt & Scale (Schools)',
+    tagline: 'For schools and universities',
+    priceLabel: '$3/year per student',
     annualCost: null,
     educators: 'All educators',
-    students: 'All students (min. 1,000)'
+    students: 'All students'
   }
 ];
 
 let selectedTierId = 'free';
-let tierCounts = { team: 5, enterprise: 1000 };
+let tierCounts = { adopt: 5, enterprise: 1000 };
 
 function getSelectedTier() {
   return SOFTWARE_TIERS.find(t => t.id === selectedTierId) || SOFTWARE_TIERS[0];
@@ -468,10 +468,9 @@ function selectTier(tierId) {
 
 function updateTierCount(tierId, input) {
   let val = parseInt(input.value);
-  if (tierId === 'team') {
-    if (isNaN(val) || val < 2) val = 2;
-    if (val > 20) val = 20;
-    tierCounts.team = val;
+  if (tierId === 'adopt') {
+    if (isNaN(val) || val < 1) val = 1;
+    tierCounts.adopt = val;
   } else if (tierId === 'enterprise') {
     if (isNaN(val) || val < 1000) val = 1000;
     tierCounts.enterprise = val;
@@ -492,15 +491,15 @@ function renderTierCards() {
     card.onclick = () => selectTier(tier.id);
 
     let countInput = '';
-    if (tier.id === 'team') {
-      const computed = fmt(tierCounts.team * 150);
+    if (tier.id === 'adopt') {
+      const computed = fmt(tierCounts.adopt * 200);
       countInput = `
       <div class="tier-count" onclick="event.stopPropagation()">
-        <span class="tier-count-label">Educator seats</span>
-        <input class="tier-count-input" type="number" min="2" max="20" value="${tierCounts.team}"
-               onclick="event.stopPropagation(); selectTier('team')"
-               oninput="updateTierCount('team', this)"
-               onchange="updateTierCount('team', this)">
+        <span class="tier-count-label">User seats</span>
+        <input class="tier-count-input" type="number" min="1" value="${tierCounts.adopt}"
+               onclick="event.stopPropagation(); selectTier('adopt')"
+               oninput="updateTierCount('adopt', this)"
+               onchange="updateTierCount('adopt', this)">
         <span class="tier-count-computed">${computed}/yr</span>
       </div>`;
     } else if (tier.id === 'enterprise') {
@@ -538,7 +537,7 @@ function renderLicenseSummary() {
   const cost = calcTierCost();
   let priceStr;
   if (tier.id === 'free') priceStr = 'Included (Free)';
-  else if (tier.id === 'team') priceStr = `${fmt(cost)}/yr · ${tierCounts.team} seats`;
+  else if (tier.id === 'adopt') priceStr = `${fmt(cost)}/yr · ${tierCounts.adopt} users`;
   else if (tier.id === 'enterprise') priceStr = `${fmt(cost)}/yr · ${tierCounts.enterprise.toLocaleString()} students`;
   else priceStr = fmt(cost) + '/yr';
   wrap.innerHTML = `
@@ -633,7 +632,7 @@ function bundleTotal(bundle) {
 function calcTierCost() {
   const tier = getSelectedTier();
   if (tier.annualCost !== null) return tier.annualCost;
-  if (tier.id === 'team') return tierCounts.team * 150;
+  if (tier.id === 'adopt') return tierCounts.adopt * 200;
   if (tier.id === 'enterprise') return tierCounts.enterprise * 3;
   return 0;
 }
@@ -999,7 +998,7 @@ function copyForProposal() {
   lines.push('─'.repeat(W));
   const tierCost = calcTierCost();
   let tierDetail = tier.priceLabel;
-  if (tier.id === 'team') tierDetail = `${tier.priceLabel} × ${tierCounts.team} seats`;
+  if (tier.id === 'adopt') tierDetail = `${tier.priceLabel} × ${tierCounts.adopt} users`;
   else if (tier.id === 'enterprise') tierDetail = `${tier.priceLabel} × ${tierCounts.enterprise.toLocaleString()} students`;
   lines.push(padLine(`  • Playlab ${tier.name} — ${tierDetail}`, fmt(tierCost)));
   lines.push('');
