@@ -35,7 +35,11 @@
     .logo span:nth-child(7){color:#f43f5e}
     .header-sep { width: 1px; height: 18px; background: var(--slate-200); }
     .header-title { font-size: 14px; font-weight: 600; color: var(--slate-600); }
-    .header-subtitle { font-size: 12px; color: var(--slate-400); margin-left: auto; }
+    .header-subtitle { font-size: 12px; color: var(--slate-400); flex: 1; text-align: right; }
+    .header-tabs { display: flex; gap: 2px; background: var(--slate-100); border-radius: 8px; padding: 2px; }
+    .header-tab { font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; padding: 5px 14px; border: none; border-radius: 6px; cursor: pointer; background: transparent; color: var(--slate-500); transition: all 0.15s; white-space: nowrap; }
+    .header-tab.active { background: white; color: var(--slate-800); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .header-tab:hover:not(.active) { color: var(--slate-700); }
 
     /* ── Layout ── */
     .builder { display: grid; grid-template-columns: 1fr 420px; min-height: calc(100vh - 53px); }
@@ -45,21 +49,6 @@
     .blocks-col-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate-400); margin-bottom: 12px; }
 
     /* ── Rates Panel ── */
-    .rates-panel { display: none; }
-    .rates-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .rates-panel-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--slate-500); }
-    .rates-reset { font-size: 10px; font-weight: 600; color: var(--sky-600); background: none; border: none; cursor: pointer; padding: 0; font-family: 'Lexend', sans-serif; }
-    .rates-reset:hover { text-decoration: underline; }
-    .rates-row { display: flex; gap: 8px; }
-    .rate-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-    .rate-field label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-400); }
-    .rate-input-wrap { display: flex; align-items: center; border: 1.5px solid var(--slate-200); border-radius: 7px; background: var(--slate-50); overflow: hidden; transition: border-color 0.15s; }
-    .rate-input-wrap:focus-within { border-color: var(--sky-500); background: white; }
-    .rate-input-wrap .prefix { padding: 0 4px 0 8px; font-size: 11px; font-weight: 700; color: var(--slate-400); flex-shrink: 0; }
-    .rate-input-wrap input { flex: 1; padding: 7px 0; border: none; background: transparent; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 700; color: var(--slate-800); width: 0; min-width: 0; }
-    .rate-input-wrap input:focus { outline: none; }
-    .rate-input-wrap .suffix { padding: 0 7px 0 2px; font-size: 10px; font-weight: 600; color: var(--slate-400); flex-shrink: 0; }
-    .rates-note { margin-top: 8px; font-size: 9.5px; color: var(--slate-400); line-height: 1.4; }
 
     /* ── Category + Block Cards ── */
     .category-section { margin-bottom: 24px; }
@@ -191,6 +180,46 @@
     .license-summary-sub { font-size: 10px; color: var(--slate-500); margin-top: 1px; }
     .license-summary-price { font-size: 12px; font-weight: 700; color: var(--sky-700); flex-shrink: 0; }
 
+    /* ── Examples Page ── */
+    .examples-page { display: none; padding: 24px 28px 48px; max-width: 1200px; margin: 0 auto; }
+    .examples-page.active { display: block; }
+    .builder.active { display: grid; }
+    .builder { display: none; }
+    .examples-intro { margin-bottom: 24px; }
+    .examples-intro h2 { font-size: 16px; font-weight: 700; color: var(--slate-800); margin-bottom: 6px; }
+    .examples-intro p { font-size: 12px; color: var(--slate-500); line-height: 1.5; }
+    .examples-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+    .example-card { background: white; border: 1.5px solid var(--slate-200); border-radius: 12px; overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; }
+    .example-card:hover { border-color: var(--sky-300); box-shadow: 0 4px 16px rgba(14,165,233,.08); }
+    .example-card-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--slate-100); }
+    .example-card-header h3 { font-size: 13px; font-weight: 700; color: var(--slate-800); margin-bottom: 2px; }
+    .example-card-header .example-subtitle { font-size: 10.5px; color: var(--slate-500); line-height: 1.4; }
+    .example-card-header .example-badge { display: inline-block; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 20px; margin-top: 6px; }
+    .example-card-body { padding: 12px 16px; }
+    .example-cat-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-top: 8px; margin-bottom: 4px; }
+    .example-cat-label:first-child { margin-top: 0; }
+    .example-line { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; gap: 8px; }
+    .example-line-left { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+    .example-line-name { font-size: 11px; font-weight: 500; color: var(--slate-700); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .example-line-price { font-size: 11px; font-weight: 700; color: var(--slate-800); flex-shrink: 0; min-width: 50px; text-align: right; }
+    .example-line-edit { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+    .example-qty-btn { width: 18px; height: 18px; border: 1px solid var(--slate-200); border-radius: 4px; background: white; color: var(--slate-500); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; transition: all 0.1s; }
+    .example-qty-btn:hover { border-color: var(--sky-500); color: var(--sky-600); }
+    .example-qty-input { width: 32px; text-align: center; padding: 1px; border: 1px solid var(--slate-200); border-radius: 4px; font-family: 'Lexend', sans-serif; font-size: 10px; font-weight: 700; color: var(--slate-800); -moz-appearance: textfield; }
+    .example-qty-input::-webkit-inner-spin-button, .example-qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .example-qty-input:focus { outline: none; border-color: var(--sky-500); }
+    .example-card-footer { padding: 10px 16px 14px; border-top: 1px solid var(--slate-100); display: flex; flex-direction: column; gap: 8px; }
+    .example-totals { display: flex; flex-direction: column; gap: 4px; }
+    .example-total-row { display: flex; justify-content: space-between; align-items: center; }
+    .example-total-label { font-size: 11px; color: var(--slate-500); font-weight: 500; }
+    .example-total-value { font-size: 13px; font-weight: 700; color: var(--slate-800); }
+    .example-total-row.final { background: var(--slate-900); margin: 4px -16px 0; padding: 8px 16px; }
+    .example-total-row.final .example-total-label { color: rgba(255,255,255,.6); }
+    .example-total-row.final .example-total-value { color: white; font-size: 15px; font-weight: 800; }
+    .example-actions { display: flex; gap: 6px; }
+    .btn-load { flex: 1; padding: 8px; background: var(--sky-500); color: white; border: none; border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .btn-load:hover { background: var(--sky-600); }
+
     /* ── Toast ── */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--slate-900); color: white; padding: 9px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); z-index: 1000; white-space: nowrap; pointer-events: none; }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -289,10 +318,14 @@
   <div class="logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
   <div class="header-sep"></div>
   <div class="header-title">Package Builder</div>
+  <div class="header-tabs">
+    <button class="header-tab active" data-tab="builder">Builder</button>
+    <button class="header-tab" data-tab="examples">Examples</button>
+  </div>
   <div class="header-subtitle">Build custom partner quotes from service building blocks</div>
 </header>
 
-<div class="builder">
+<div class="builder active">
 
   <!-- ── LEFT: Building Blocks ── -->
   <div class="blocks-col">
@@ -315,39 +348,6 @@
       <div class="tier-grid" id="tierGrid"></div>
     </div>
 
-    <div class="rates-panel">
-      <div class="rates-panel-header">
-        <span class="rates-panel-label">Hourly Rates</span>
-        <button class="rates-reset" id="ratesReset">Reset to defaults</button>
-      </div>
-      <div class="rates-row">
-        <div class="rate-field">
-          <label>Learning Partner</label>
-          <div class="rate-input-wrap">
-            <span class="prefix">$</span>
-            <input type="number" id="rateLp" value="250" min="50" max="2000" step="5">
-            <span class="suffix">/hr</span>
-          </div>
-        </div>
-        <div class="rate-field">
-          <label>Developer</label>
-          <div class="rate-input-wrap">
-            <span class="prefix">$</span>
-            <input type="number" id="rateDev" value="200" min="50" max="2000" step="5">
-            <span class="suffix">/hr</span>
-          </div>
-        </div>
-        <div class="rate-field">
-          <label>Travel</label>
-          <div class="rate-input-wrap">
-            <span class="prefix">$</span>
-            <input type="number" id="rateTravel" value="125" min="50" max="2000" step="5">
-            <span class="suffix">/hr</span>
-          </div>
-        </div>
-      </div>
-      <div class="rates-note">Block prices recalculate automatically. Overhead (15%) and revenue adjustments are built into each formula.</div>
-    </div>
 
     <div id="blocksContainer"></div>
   </div>
@@ -432,6 +432,14 @@
 
     <p class="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
   </div>
+</div>
+
+<div class="examples-page" id="examplesPage">
+  <div class="examples-intro">
+    <h2>Example Packages</h2>
+    <p>Complete proposal examples showing how building blocks combine into real partnership packages. Edit quantities directly, then load into the Builder to customize further.</p>
+  </div>
+  <div class="examples-grid" id="examplesGrid"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1085,30 +1093,6 @@ function clearAll() {
   render();
 }
 
-// ─── Rate Changes ──────────────────────────────────────────────────────────────
-function onRateChange() {
-  rates.lp     = Math.max(50, parseFloat(document.getElementById('rateLp').value)     || DEFAULT_RATES.lp);
-  rates.dev    = Math.max(50, parseFloat(document.getElementById('rateDev').value)    || DEFAULT_RATES.dev);
-  rates.travel = Math.max(50, parseFloat(document.getElementById('rateTravel').value) || DEFAULT_RATES.travel);
-  renderBlocks();
-  // Patch all in-quote prices
-  for (const bundle of bundles) {
-    for (const item of bundle.items) {
-      const totalEl = document.getElementById(`itotal-${bundle.bundleId}-${item.itemId}`);
-      if (totalEl) totalEl.textContent = fmt(getBlockPrice(item.blockId) * item.qty);
-    }
-    updateBundleSubtotal(bundle.bundleId);
-  }
-  renderTotals();
-}
-
-function resetRates() {
-  rates = { ...DEFAULT_RATES };
-  document.getElementById('rateLp').value     = DEFAULT_RATES.lp;
-  document.getElementById('rateDev').value    = DEFAULT_RATES.dev;
-  document.getElementById('rateTravel').value = DEFAULT_RATES.travel;
-  onRateChange();
-}
 
 // ─── Copy for Proposal ────────────────────────────────────────────────────────
 function copyForProposal() {
@@ -1471,6 +1455,197 @@ render = function() { _origRender(); renderInsights(); saveToUrl(); };
 const _origRenderTotals = renderTotals;
 renderTotals = function() { _origRenderTotals(); renderInsights(); saveToUrl(); };
 
+// ─── Tab Switching ────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.header-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelector('.builder').classList.toggle('active', tab === 'builder');
+  document.getElementById('examplesPage').classList.toggle('active', tab === 'examples');
+  if (tab === 'examples') renderExamples();
+}
+
+// ─── Software Options (for examples) ──────────────────────────────────────────
+const SW_OPTIONS = [
+  { id: 'none',             label: 'None',                blockId: null,              defaultQty: 0,     unit: '',        pilotDiscount: 0 },
+  { id: 'sw-play',          label: 'Play License (6-mo)', blockId: 'sw-play',         defaultQty: 1,     unit: 'flat',    pilotDiscount: 0.5 },
+  { id: 'sw-team',          label: 'Team License',        blockId: 'sw-team',         defaultQty: 20,    unit: 'user',    pilotDiscount: 0.5 },
+  { id: 'sw-enterprise-t1', label: 'Enterprise — Tier 1', blockId: 'sw-enterprise-t1',defaultQty: 5000,  unit: 'student', pilotDiscount: 0 },
+  { id: 'sw-enterprise-t2', label: 'Enterprise — Tier 2', blockId: 'sw-enterprise-t2',defaultQty: 15000, unit: 'student', pilotDiscount: 0 },
+  { id: 'sw-enterprise-t3', label: 'Enterprise — Tier 3', blockId: 'sw-enterprise-t3',defaultQty: 30000, unit: 'student', pilotDiscount: 0 },
+];
+
+function getSwOption(id) { return SW_OPTIONS.find(o => o.id === id) || SW_OPTIONS[0]; }
+
+function calcSwPrice(swId, qty) {
+  if (!swId || swId === 'none') return 0;
+  const prices = { 'sw-play': 1500, 'sw-team': 200, 'sw-enterprise-t1': 4.00, 'sw-enterprise-t2': 3.50, 'sw-enterprise-t3': 3.00 };
+  return (prices[swId] || 0) * qty;
+}
+
+// ─── Example Scenarios ──────────────────────────────────────────────────────
+const EXAMPLES = [
+  { id: 'scenario-a', title: 'Scenario A: AI Literacy PLC Series', subtitle: 'Most common entry-point — ~40% of partnerships', color: '#0EA5E9', badgeText: 'Most Common', badgeBg: '#e0f2fe', badgeColor: '#0369a1',
+    items: [{ blockId: 'facilitation', qty: 6 }, { blockId: 'coaching', qty: 1.5 }],
+    sw: { optionId: 'sw-team', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  { id: 'scenario-b', title: 'Scenario B: PLC + Custom App Creation', subtitle: 'Highest-value service offering — ~25% of partnerships', color: '#8b5cf6', badgeText: 'Highest Value', badgeBg: '#ede9fe', badgeColor: '#6d28d9',
+    items: [{ blockId: 'facilitation', qty: 18 }, { blockId: 'coaching', qty: 4.5 }, { blockId: 'ideation-lp-le', qty: 1 }, { blockId: 'tool-build-initial', qty: 1 }, { blockId: 'tool-build-addl', qty: 1 }, { blockId: 'site-visit-full', qty: 1 }],
+    sw: { optionId: 'sw-team', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  { id: 'scenario-c', title: 'Scenario C: AI Design Fellows Program', subtitle: 'Deep cohort-based engagement — ~10%', color: '#10b981', badgeText: 'Deep Engagement', badgeBg: '#ecfdf5', badgeColor: '#047857',
+    items: [{ blockId: 'facilitation', qty: 12 }, { blockId: 'ideation-lp', qty: 1 }, { blockId: 'admin-meetings', qty: 3 }, { blockId: 'coaching', qty: 3 }],
+    sw: { optionId: 'sw-team', qty: 15 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  { id: 'scenario-d', title: 'Scenario D: Student AI Literacy & Hackathon', subtitle: 'Student-facing with educator prep — ~15%', color: '#f97316', badgeText: 'Student-Facing', badgeBg: '#fff7ed', badgeColor: '#c2410c',
+    items: [{ blockId: 'facilitation', qty: 3.5 }, { blockId: 'coaching', qty: 1 }],
+    sw: { optionId: 'sw-team', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  { id: 'scenario-e', title: 'Scenario E: Entry Workshop / Single Session', subtitle: 'First engagement — generates champions — ~20%', color: '#f43f5e', badgeText: 'Entry Point', badgeBg: '#fff1f2', badgeColor: '#be123c',
+    items: [{ blockId: 'ai-crash-course', qty: 1 }],
+    sw: { optionId: 'sw-play', qty: 1 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: null },
+  { id: 'scenario-f', title: 'Scenario F: Enterprise Software License', subtitle: 'Platform-only — ~5% standalone; Year 2 upgrade path', color: '#64748b', badgeText: 'Software Only', badgeBg: '#f1f5f9', badgeColor: '#334155',
+    items: [],
+    sw: { optionId: 'sw-enterprise-t1', qty: 5000 }, discountLabel: null, renewalLabel: null }
+];
+
+let examplesState = JSON.parse(JSON.stringify(EXAMPLES));
+
+function calcExampleServiceTotal(ex) {
+  return ex.items.reduce((sum, item) => sum + getBlockPrice(item.blockId) * item.qty, 0);
+}
+function calcExampleSwTotal(ex) { return calcSwPrice(ex.sw.optionId, ex.sw.qty); }
+function calcExampleStandardTotal(ex) { return calcExampleServiceTotal(ex) + calcExampleSwTotal(ex); }
+function calcExamplePilotTotal(ex) {
+  const services = ex.items.reduce((sum, item) => item.blockId === 'coaching' ? sum : sum + getBlockPrice(item.blockId) * item.qty, 0);
+  const swOpt = getSwOption(ex.sw.optionId);
+  return services + calcExampleSwTotal(ex) * (1 - swOpt.pilotDiscount);
+}
+function calcExampleRenewalTotal(ex) {
+  return Math.round(calcExampleServiceTotal(ex) * 0.7) + calcExampleSwTotal(ex);
+}
+
+function renderExamples() {
+  const grid = document.getElementById('examplesGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < examplesState.length; i++) grid.appendChild(buildExampleCard(examplesState[i], i));
+}
+
+function buildExampleCard(ex, idx) {
+  const card = document.createElement('div');
+  card.className = 'example-card';
+  const stdTotal = calcExampleStandardTotal(ex);
+  const pilotTotal = calcExamplePilotTotal(ex);
+  const renewalTotal = calcExampleRenewalTotal(ex);
+  const discount = stdTotal - pilotTotal;
+  const swOpt = getSwOption(ex.sw.optionId);
+  const swTotal = calcExampleSwTotal(ex);
+  const showSwQty = swOpt.unit && swOpt.unit !== 'flat';
+
+  let bodyHtml = '';
+  if (ex.items.length > 0) {
+    for (const cat of CATEGORIES) {
+      const catItems = ex.items.filter(item => { const f = getBlock(item.blockId); return f && f.cat.id === cat.id; });
+      if (!catItems.length) continue;
+      bodyHtml += `<div class="example-cat-label" style="color:${cat.color}">${cat.label}</div>`;
+      for (const item of catItems) {
+        const f = getBlock(item.blockId); if (!f) continue;
+        const itemIdx = ex.items.indexOf(item);
+        bodyHtml += `<div class="example-line"><div class="example-line-left"><span class="example-line-name">${f.block.name}</span></div>
+          <div class="example-line-edit">
+            <button class="example-qty-btn" onclick="changeExampleQty(${idx},${itemIdx},-1)">−</button>
+            <input class="example-qty-input" type="number" value="${item.qty}" min="${f.block.minQty}" step="${f.block.step}" onchange="setExampleQty(${idx},${itemIdx},this)">
+            <span style="font-size:9px;color:var(--slate-400);width:24px">${unitShort(f.block.unit)}</span>
+            <button class="example-qty-btn" onclick="changeExampleQty(${idx},${itemIdx},1)">+</button>
+          </div><div class="example-line-price">${fmt(getBlockPrice(item.blockId) * item.qty)}</div></div>`;
+      }
+    }
+  }
+
+  // Software dropdown + qty
+  bodyHtml += `<div class="example-cat-label" style="color:#6366f1">Software</div>`;
+  bodyHtml += `<div class="example-line" style="flex-wrap:wrap;gap:4px"><div style="flex:1;min-width:140px">
+    <select onchange="changeExampleSw(${idx},this.value)" style="width:100%;padding:4px 6px;border:1px solid var(--slate-200);border-radius:5px;font-family:'Lexend',sans-serif;font-size:10px;font-weight:600;color:var(--slate-700);background:white;cursor:pointer">
+      ${SW_OPTIONS.map(o => `<option value="${o.id}" ${o.id === ex.sw.optionId ? 'selected' : ''}>${o.label}</option>`).join('')}
+    </select></div>`;
+  if (showSwQty) {
+    bodyHtml += `<div class="example-line-edit">
+      <button class="example-qty-btn" onclick="changeExampleSwQty(${idx},-1)">−</button>
+      <input class="example-qty-input" type="number" value="${ex.sw.qty}" style="width:48px" onchange="setExampleSwQty(${idx},this)">
+      <span style="font-size:9px;color:var(--slate-400);width:40px">${swOpt.unit}s</span>
+      <button class="example-qty-btn" onclick="changeExampleSwQty(${idx},1)">+</button>
+    </div>`;
+  }
+  bodyHtml += `<div class="example-line-price">${ex.sw.optionId === 'none' ? '—' : fmt(swTotal)}</div></div>`;
+
+  let footerHtml = `<div class="example-total-row"><span class="example-total-label">Standard Total</span><span class="example-total-value">${fmt(stdTotal)}</span></div>`;
+  if (ex.discountLabel && discount > 0) footerHtml += `<div class="example-total-row"><span class="example-total-label">${ex.discountLabel}</span><span class="example-total-value" style="color:var(--emerald-600)">−${fmt(discount)}</span></div>`;
+  footerHtml += `<div class="example-total-row final"><span class="example-total-label">Pilot Partner Price</span><span class="example-total-value">${fmt(pilotTotal)}</span></div>`;
+  if (ex.renewalLabel) footerHtml += `<div class="example-total-row" style="margin-top:2px"><span class="example-total-label" style="font-size:10px">${ex.renewalLabel}</span><span class="example-total-value" style="font-size:11px;color:var(--slate-500)">${fmt(renewalTotal)}</span></div>`;
+
+  card.innerHTML = `
+    <div class="example-card-header">
+      <h3>${ex.title}</h3>
+      <div class="example-subtitle">${ex.subtitle}</div>
+      <span class="example-badge" style="background:${ex.badgeBg};color:${ex.badgeColor}">${ex.badgeText}</span>
+    </div>
+    <div class="example-card-body">${bodyHtml}</div>
+    <div class="example-card-footer">
+      <div class="example-totals">${footerHtml}</div>
+      <div class="example-actions"><button class="btn-load" onclick="loadExampleIntoBuilder(${idx})">Load into Builder</button></div>
+    </div>`;
+  return card;
+}
+
+function changeExampleQty(exIdx, itemIdx, dir) {
+  const item = examplesState[exIdx].items[itemIdx];
+  const f = getBlock(item.blockId); if (!f) return;
+  const nq = Math.round((item.qty + dir * f.block.step) * 100) / 100;
+  if (nq < f.block.minQty) return;
+  item.qty = nq; renderExamples();
+}
+function setExampleQty(exIdx, itemIdx, el) {
+  const item = examplesState[exIdx].items[itemIdx];
+  const f = getBlock(item.blockId); if (!f) return;
+  let v = parseFloat(el.value);
+  if (isNaN(v) || v < f.block.minQty) v = f.block.minQty;
+  item.qty = Math.round(Math.round(v / f.block.step) * f.block.step * 100) / 100;
+  renderExamples();
+}
+function changeExampleSw(exIdx, optionId) {
+  const opt = getSwOption(optionId);
+  examplesState[exIdx].sw = { optionId, qty: opt.defaultQty };
+  renderExamples();
+}
+function changeExampleSwQty(exIdx, dir) {
+  const sw = examplesState[exIdx].sw;
+  const steps = { 'sw-team': 1, 'sw-enterprise-t1': 500, 'sw-enterprise-t2': 1000, 'sw-enterprise-t3': 1000 };
+  const mins = { 'sw-team': 2, 'sw-enterprise-t1': 1000, 'sw-enterprise-t2': 10000, 'sw-enterprise-t3': 25000 };
+  const step = steps[sw.optionId] || 1;
+  const nq = sw.qty + dir * step;
+  if (nq < (mins[sw.optionId] || 1)) return;
+  sw.qty = nq; renderExamples();
+}
+function setExampleSwQty(exIdx, el) {
+  const sw = examplesState[exIdx].sw;
+  const mins = { 'sw-team': 2, 'sw-enterprise-t1': 1000, 'sw-enterprise-t2': 10000, 'sw-enterprise-t3': 25000 };
+  let v = parseInt(el.value);
+  if (isNaN(v) || v < (mins[sw.optionId] || 1)) v = mins[sw.optionId] || 1;
+  sw.qty = v; renderExamples();
+}
+function loadExampleIntoBuilder(exIdx) {
+  const ex = examplesState[exIdx];
+  bundles = [{ bundleId: 1, name: ex.title.replace(/^Scenario [A-F]: /, ''), items: [] }];
+  activeBundleId = 1; nextBundleId = 2; nextItemId = 1;
+  document.getElementById('discountVal').value = '';
+  for (const item of ex.items) {
+    const f = getBlock(item.blockId); if (!f) continue;
+    bundles[0].items.push({ itemId: nextItemId++, blockId: item.blockId, catId: f.cat.id, qty: item.qty });
+  }
+  // Map example software to builder tier
+  const swMap = { 'sw-play': 'play', 'sw-team': 'team', 'sw-enterprise-t1': 'enterprise', 'sw-enterprise-t2': 'enterprise', 'sw-enterprise-t3': 'enterprise', 'none': 'free' };
+  selectedTierId = swMap[ex.sw.optionId] || 'free';
+  if (selectedTierId === 'team') tierCounts.team = ex.sw.qty;
+  if (selectedTierId === 'enterprise') tierCounts.enterprise = ex.sw.qty;
+  switchTab('builder');
+  renderBlocks(); renderTierCards(); renderLicenseSummary(); render();
+  showToast('Loaded: ' + ex.title);
+}
+
 // ─── Events ────────────────────────────────────────────────────────────────────
 document.getElementById('copyBtn').addEventListener('click', copyForProposal);
 document.getElementById('copyMdBtn').addEventListener('click', copyAsMarkdown);
@@ -1478,7 +1653,6 @@ document.getElementById('clearBtn').addEventListener('click', () => { clearAll()
 document.getElementById('addBundleBtn').addEventListener('click', addBundle);
 document.getElementById('discountVal').addEventListener('input', renderTotals);
 document.getElementById('discountType').addEventListener('change', renderTotals);
-document.getElementById('ratesReset').addEventListener('click', resetRates);
 document.getElementById('partnerName').addEventListener('change', saveToUrl);
 document.getElementById('studentCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
 document.getElementById('educatorCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
@@ -1492,9 +1666,8 @@ document.getElementById('templateSelect').addEventListener('change', function() 
   if (this.value) loadTemplate(this.value);
   else document.getElementById('templateDesc').classList.remove('show');
 });
-['rateLp','rateDev','rateTravel'].forEach(id => {
-  document.getElementById(id).addEventListener('input', onRateChange);
-  document.getElementById(id).addEventListener('change', onRateChange);
+document.querySelectorAll('.header-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 });
 
 // ─── Init ──────────────────────────────────────────────────────────────────────
