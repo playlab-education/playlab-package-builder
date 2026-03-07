@@ -345,6 +345,8 @@
       <option value="SEK">SEK (kr)</option>
       <option value="NOK">NOK (kr)</option>
       <option value="DKK">DKK (kr)</option>
+      <option value="GHS">GHS (GH&#x20B5;)</option>
+      <option value="INR">INR (&#x20B9;)</option>
     </select>
   </div>
   <div class="header-subtitle">Build custom partner quotes from service building blocks</div>
@@ -473,7 +475,9 @@ const CURRENCIES = {
   CHF: { symbol: 'Fr\u00A0', prefix: true, rate: 0.88 },
   SEK: { symbol: '\u00A0kr', prefix: false, rate: 10.5 },
   NOK: { symbol: '\u00A0kr', prefix: false, rate: 10.8 },
-  DKK: { symbol: '\u00A0kr', prefix: false, rate: 6.85 }
+  DKK: { symbol: '\u00A0kr', prefix: false, rate: 6.85 },
+  GHS: { symbol: 'GH\u20B5', prefix: true, rate: 10.8 },
+  INR: { symbol: '\u20B9', prefix: true, rate: 91.83 }
 };
 let selectedCurrency = 'USD';
 let ratesLastUpdated = null;
@@ -494,7 +498,7 @@ function fetchLiveRates() {
       }
     } catch (e) { /* ignore bad cache */ }
   }
-  fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,CHF,SEK,NOK,DKK')
+  fetch('https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,CHF,SEK,NOK,DKK,INR')
     .then(r => r.json())
     .then(data => {
       if (data.rates) {
@@ -503,15 +507,36 @@ function fetchLiveRates() {
       }
     })
     .catch(() => { /* keep fallback rates */ });
+
+  // GHS not in ECB — fetch from open.er-api.com (free, no key)
+  const ghsCacheKey = 'playlab_fx_ghs';
+  const ghsCached = sessionStorage.getItem(ghsCacheKey);
+  if (ghsCached) {
+    try {
+      const d = JSON.parse(ghsCached);
+      if (Date.now() - d.fetchedAt < 24 * 60 * 60 * 1000 && d.rate) {
+        CURRENCIES.GHS.rate = d.rate;
+        return;
+      }
+    } catch (e) { /* ignore */ }
+  }
+  fetch('https://open.er-api.com/v6/latest/USD')
+    .then(r => r.json())
+    .then(data => {
+      if (data.rates && data.rates.GHS) {
+        CURRENCIES.GHS.rate = data.rates.GHS;
+        sessionStorage.setItem(ghsCacheKey, JSON.stringify({ rate: data.rates.GHS, fetchedAt: Date.now() }));
+        if (selectedCurrency === 'GHS') {
+          renderBlocks(); renderTierCards(); renderLicenseSummary(); render();
+        }
+      }
+    })
+    .catch(() => { /* keep fallback rate */ });
 }
 
 function applyLiveRates(rates, date) {
-  if (rates.EUR) CURRENCIES.EUR.rate = rates.EUR;
-  if (rates.GBP) CURRENCIES.GBP.rate = rates.GBP;
-  if (rates.CHF) CURRENCIES.CHF.rate = rates.CHF;
-  if (rates.SEK) CURRENCIES.SEK.rate = rates.SEK;
-  if (rates.NOK) CURRENCIES.NOK.rate = rates.NOK;
-  if (rates.DKK) CURRENCIES.DKK.rate = rates.DKK;
+  const keys = ['EUR', 'GBP', 'CHF', 'SEK', 'NOK', 'DKK', 'INR'];
+  for (const k of keys) { if (rates[k]) CURRENCIES[k].rate = rates[k]; }
   ratesLastUpdated = date;
   // Re-render if a non-USD currency is active
   if (selectedCurrency !== 'USD') {
