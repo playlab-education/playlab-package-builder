@@ -1539,16 +1539,20 @@ function copyAsMarkdown() {
 
 // ─── Google Doc Export ─────────────────────────────────────────────────────────
 const GOOGLE_CLIENT_ID = '250408974404-nvnm9m62vc2g8gsn0u0k1t8gt0h0caa2';
-const TEMPLATE_DOC_ID = '1CR1wVXGYLWjZYshsdtvfNwgXx7kivzql34GhIFbYfjU';
-const PROPOSALS_FOLDER_ID = '1JhBbiJuizy41xAJs2e-8JuqLiKBWVWgx';
 let gToken = null;
+let gTokenExpiry = 0;
 
-async function gApiFetch(url, opts = {}) {
+async function gApiFetch(url, opts = {}, retry = true) {
   const res = await fetch(url, {
     ...opts,
     headers: { 'Authorization': 'Bearer ' + gToken, 'Content-Type': 'application/json', ...(opts.headers || {}) }
   });
   const data = await res.json();
+  if (res.status === 401 && retry) {
+    gToken = null;
+    await requestGoogleToken();
+    return gApiFetch(url, opts, false);
+  }
   if (!res.ok) throw new Error(data.error?.message || 'Google API error');
   return data;
 }
@@ -1565,6 +1569,7 @@ function requestGoogleToken() {
       callback: (resp) => {
         if (resp.error) return reject(resp);
         gToken = resp.access_token;
+        gTokenExpiry = Date.now() + (resp.expires_in || 3600) * 1000 - 60000;
         resolve();
       }
     });
@@ -1582,36 +1587,41 @@ async function exportToGoogleDoc() {
   btn.disabled = true;
   btn.innerHTML = '<span>Signing in...</span>';
 
+  // Open tab immediately (before async work) to avoid popup blocker
+  const docTab = window.open('about:blank', '_blank');
+
   try {
-    if (!gToken) await requestGoogleToken();
+    if (!gToken || Date.now() > gTokenExpiry) {
+      gToken = null;
+      await requestGoogleToken();
+    }
 
     btn.innerHTML = '<span>Creating proposal...</span>';
 
     const partner = document.getElementById('partnerName').value.trim() || '[Partner]';
 
-    // 1. Create new doc in Proposals folder
+    // 1. Create new doc in user's own Drive
     const createRes = await gApiFetch('https://www.googleapis.com/drive/v3/files', {
       method: 'POST',
       body: JSON.stringify({
         name: partner + ' \u2014 Playlab Partnership Proposal',
-        mimeType: 'application/vnd.google-apps.document',
-        parents: [PROPOSALS_FOLDER_ID]
+        mimeType: 'application/vnd.google-apps.document'
       })
     });
     const docId = createRes.id;
 
     btn.innerHTML = '<span>Populating content...</span>';
 
-    // 4. Build content
+    // 2. Build content
     const { text, formats } = buildProposalDoc();
 
-    // 5. Insert text
+    // 3. Insert text
     await gApiFetch('https://docs.googleapis.com/v1/documents/' + docId + ':batchUpdate', {
       method: 'POST',
       body: JSON.stringify({ requests: [{ insertText: { location: { index: 1 }, text: text } }] })
     });
 
-    // 6. Apply formatting + set font to Lexend
+    // 4. Apply formatting + set font to Lexend
     const fontReq = {
       updateTextStyle: {
         range: { startIndex: 1, endIndex: 1 + text.length },
@@ -1625,11 +1635,13 @@ async function exportToGoogleDoc() {
       body: JSON.stringify({ requests: allFormats })
     });
 
-    // 7. Open doc
-    window.open('https://docs.google.com/document/d/' + docId + '/edit', '_blank');
+    // 5. Navigate pre-opened tab to the doc
+    if (docTab) docTab.location.href = 'https://docs.google.com/document/d/' + docId + '/edit';
+    else window.open('https://docs.google.com/document/d/' + docId + '/edit', '_blank');
     showToast('Proposal created!');
   } catch (err) {
     console.error('Export failed:', err);
+    if (docTab) docTab.close();
     if (err.error === 'popup_closed_by_user') showToast('Sign-in cancelled');
     else { showToast('Export failed \u2014 see console'); gToken = null; }
   } finally {
