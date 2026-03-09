@@ -348,7 +348,7 @@
 </head>
 <body>
 
-<div class="auth-gate" id="authGate">
+<div class="auth-gate hidden" id="authGate">
   <div class="auth-logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
   <div class="auth-subtitle">Package Builder</div>
   <div id="g_id_signin"></div>
@@ -552,7 +552,7 @@ function initAuthGate() {
     theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular'
   });
 }
-initAuthGate();
+// initAuthGate(); // TODO: re-enable once GCP OAuth is configured
 
 // ─── Currency ──────────────────────────────────────────────────────────────────
 const CURRENCIES = {
