@@ -1915,24 +1915,31 @@ function calcSwPrice(swId, qty) {
 
 // ─── Example Scenarios ──────────────────────────────────────────────────────
 const EXAMPLES = [
-  { id: 'scenario-a', title: 'Scenario A: AI Literacy PLC Series', subtitle: 'Most common entry-point — ~40% of partnerships', color: '#0EA5E9', badgeText: 'Most Common', badgeBg: '#e0f2fe', badgeColor: '#0369a1',
-    items: [{ blockId: 'facilitation', qty: 6 }, { blockId: 'coaching', qty: 1.5 }],
+  // ── AI Agency for Educators ──
+  { id: 'edu-starter', title: 'AI Agency for Educators — Starter', subtitle: '3 hrs · Foundational intro — learn how AI works and build a first tool', color: '#0EA5E9', badgeText: 'Recommended Start', badgeBg: '#e0f2fe', badgeColor: '#0369a1',
+    items: [{ blockId: 'facilitation', qty: 3 }, { blockId: 'admin-meetings', qty: 1 }],
+    sw: { optionId: 'sw-play', qty: 1 }, discountLabel: null, renewalLabel: null },
+  { id: 'edu-core', title: 'AI Agency for Educators — Core', subtitle: '6 hrs · Deeper learning — intentional design with advanced features', color: '#0EA5E9', badgeText: 'Most Popular', badgeBg: '#e0f2fe', badgeColor: '#0369a1',
+    items: [{ blockId: 'facilitation', qty: 6 }, { blockId: 'admin-meetings', qty: 1.5 }, { blockId: 'office-hours', qty: 2 }],
     sw: { optionId: 'sw-impact', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
-  { id: 'scenario-b', title: 'Scenario B: PLC + Custom App Creation', subtitle: 'Highest-value service offering — ~25% of partnerships', color: '#8b5cf6', badgeText: 'Highest Value', badgeBg: '#ede9fe', badgeColor: '#6d28d9',
-    items: [{ blockId: 'facilitation', qty: 18 }, { blockId: 'coaching', qty: 4.5 }, { blockId: 'ideation-lp-le', qty: 1 }, { blockId: 'tool-build-initial', qty: 1 }, { blockId: 'tool-build-addl', qty: 1 }, { blockId: 'site-visit-full', qty: 1 }],
-    sw: { optionId: 'sw-impact', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
-  { id: 'scenario-c', title: 'Scenario C: AI Design Fellows Program', subtitle: 'Deep cohort-based engagement — ~10%', color: '#10b981', badgeText: 'Deep Engagement', badgeBg: '#ecfdf5', badgeColor: '#047857',
-    items: [{ blockId: 'facilitation', qty: 12 }, { blockId: 'ideation-lp', qty: 1 }, { blockId: 'admin-meetings', qty: 3 }, { blockId: 'coaching', qty: 3 }],
-    sw: { optionId: 'sw-impact', qty: 15 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
-  { id: 'scenario-d', title: 'Scenario D: Student AI Literacy & Hackathon', subtitle: 'Student-facing with educator prep — ~15%', color: '#f97316', badgeText: 'Student-Facing', badgeBg: '#fff7ed', badgeColor: '#c2410c',
-    items: [{ blockId: 'facilitation', qty: 3.5 }, { blockId: 'coaching', qty: 1 }],
-    sw: { optionId: 'sw-impact', qty: 20 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
-  { id: 'scenario-e', title: 'Scenario E: Entry Workshop / Single Session', subtitle: 'First engagement — generates champions — ~20%', color: '#f43f5e', badgeText: 'Entry Point', badgeBg: '#fff1f2', badgeColor: '#be123c',
-    items: [{ blockId: 'ai-crash-course', qty: 1 }],
-    sw: { optionId: 'sw-play', qty: 1 }, discountLabel: 'Pilot Phase Incentive', renewalLabel: null },
-  { id: 'scenario-f', title: 'Scenario F: Enterprise Software License', subtitle: 'Platform-only — ~5% standalone; Year 2 upgrade path', color: '#64748b', badgeText: 'Software Only', badgeBg: '#f1f5f9', badgeColor: '#334155',
-    items: [],
-    sw: { optionId: 'sw-impact-schools', qty: 5000 }, discountLabel: null, renewalLabel: null }
+  { id: 'edu-full', title: 'AI Agency for Educators — Full Agency', subtitle: '9 hrs · Gold standard — build, evaluate, and showcase AI tools', color: '#0EA5E9', badgeText: 'Gold Standard', badgeBg: '#e0f2fe', badgeColor: '#0369a1',
+    items: [{ blockId: 'facilitation', qty: 9 }, { blockId: 'admin-meetings', qty: 2 }, { blockId: 'office-hours', qty: 3 }, { blockId: 'coaching', qty: 2 }],
+    sw: { optionId: 'sw-impact', qty: 20 }, discountLabel: 'Full Series Discount (20%)', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  // ── AI Agency for Students ──
+  { id: 'stu-sprint', title: 'Student AI Design Sprint — Core', subtitle: '6 hrs · Playlab-facilitated student event + educator PD', color: '#f97316', badgeText: 'Student-Facing', badgeBg: '#fff7ed', badgeColor: '#c2410c',
+    items: [{ blockId: 'facilitation', qty: 6 }, { blockId: 'facilitation', qty: 7 }, { blockId: 'admin-meetings', qty: 1 }],
+    sw: { optionId: 'sw-impact-schools', qty: 5000 }, discountLabel: null, renewalLabel: null },
+  // ── Solutions for AI Impact ──
+  { id: 'impact-build', title: 'Solutions for AI Impact — Tool Build', subtitle: 'Ideation + custom AI tool build for a priority challenge', color: '#8b5cf6', badgeText: 'Tool Build', badgeBg: '#ede9fe', badgeColor: '#6d28d9',
+    items: [{ blockId: 'ideation-lp-le', qty: 1 }, { blockId: 'tool-build-initial', qty: 1 }],
+    sw: { optionId: 'sw-impact', qty: 20 }, discountLabel: null, renewalLabel: null },
+  { id: 'impact-full', title: 'Solutions for AI Impact — Full Pathway', subtitle: 'Ideation → 3 tool builds → pilot → scaling support', color: '#8b5cf6', badgeText: 'Highest Value', badgeBg: '#ede9fe', badgeColor: '#6d28d9',
+    items: [{ blockId: 'ideation-lp-le', qty: 1 }, { blockId: 'tool-build-initial', qty: 1 }, { blockId: 'tool-build-addl', qty: 2 }, { blockId: 'tool-pilot', qty: 1 }, { blockId: 'admin-meetings', qty: 4 }],
+    sw: { optionId: 'sw-impact', qty: 50 }, discountLabel: 'Full Pathway Discount (20%)', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' },
+  // ── Comprehensive Partnership ──
+  { id: 'comprehensive', title: 'Comprehensive Partnership', subtitle: 'Full Agency for Educators + Full AI Impact Pathway + site visit', color: '#10b981', badgeText: 'Enterprise', badgeBg: '#ecfdf5', badgeColor: '#047857',
+    items: [{ blockId: 'facilitation', qty: 9 }, { blockId: 'coaching', qty: 2 }, { blockId: 'ideation-lp-le', qty: 1 }, { blockId: 'tool-build-initial', qty: 1 }, { blockId: 'tool-build-addl', qty: 2 }, { blockId: 'tool-pilot', qty: 1 }, { blockId: 'admin-meetings', qty: 4 }, { blockId: 'office-hours', qty: 4 }, { blockId: 'site-visit-full', qty: 1 }],
+    sw: { optionId: 'sw-impact-schools', qty: 5000 }, discountLabel: 'Full Series Discount (20%)', renewalLabel: 'Year 2 Renewal (30% loyalty off services)' }
 ];
 
 let examplesState = JSON.parse(JSON.stringify(EXAMPLES));
@@ -2061,7 +2068,7 @@ function setExampleSwQty(exIdx, el) {
 }
 function loadExampleIntoBuilder(exIdx) {
   const ex = examplesState[exIdx];
-  bundles = [{ bundleId: 1, name: ex.title.replace(/^Scenario [A-F]: /, ''), items: [] }];
+  bundles = [{ bundleId: 1, name: ex.title, items: [] }];
   activeBundleId = 1; nextBundleId = 2; nextItemId = 1;
   document.getElementById('discountVal').value = '';
   for (const item of ex.items) {
