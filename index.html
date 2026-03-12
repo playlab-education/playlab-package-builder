@@ -625,6 +625,7 @@ function unitShort(unit) {
 
 // ─── Software Tiers (Enterprise only) ───────────────────────────────────────
 const SOFTWARE_TIERS = [
+  { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', flat: true, educators: '100 educators', students: '1,000 students' },
   { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5 },
   { id: 'impact-schools', name: 'Impact (Schools)', tagline: 'For schools and universities', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 1000 }
 ];
@@ -1283,32 +1284,42 @@ function renderSwCards() {
     card.id = 'sw-' + tier.id;
     const defaultCount = tier.defaultCount;
     const cost = tier.pricePerUnit * defaultCount;
-    card.innerHTML = `
-      <div class="sw-card-name">${tier.name}</div>
-      <div class="sw-card-tagline">${tier.tagline}</div>
-      <div class="sw-card-price">$${tier.pricePerUnit}/${tier.unitLabel}/year</div>
-      <div class="sw-card-row">
-        <label>${tier.unitLabel === 'user' ? 'Users' : 'Students'}:</label>
+    const priceLabel = tier.priceNote || `$${tier.pricePerUnit}/${tier.unitLabel}/year`;
+    const countLabel = tier.unitLabel === 'user' ? 'Users' : tier.unitLabel === 'student' ? 'Students' : 'Qty';
+    const countRow = tier.flat
+      ? `<div class="sw-card-row"><span class="sw-card-computed">${fmt(cost)}${tier.id === 'play' ? '/6-mo' : '/yr'}</span></div>`
+      : `<div class="sw-card-row">
+        <label>${countLabel}:</label>
         <input class="sw-count-input" type="number" min="${tier.minCount}" value="${defaultCount}" id="sw-input-${tier.id}"
                ${tier.minCount === 1000 ? 'step="100"' : ''}>
         <span class="sw-card-computed">${fmt(cost)}/yr</span>
-      </div>
+      </div>`;
+    const metaRow = tier.educators ? `<div style="font-size:10px;color:var(--slate-400);margin-top:2px">${tier.educators} · ${tier.students}</div>` : '';
+    card.innerHTML = `
+      <div class="sw-card-name">${tier.name}</div>
+      <div class="sw-card-tagline">${tier.tagline}</div>
+      <div class="sw-card-price">${priceLabel}</div>
+      ${metaRow}
+      ${countRow}
       <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">+ Add License</button>`;
     grid.appendChild(card);
 
-    // Add input listener for computed price
-    const input = card.querySelector('.sw-count-input');
-    const computed = card.querySelector('.sw-card-computed');
-    input.addEventListener('input', () => {
-      const v = parseInt(input.value) || tier.defaultCount;
-      computed.textContent = fmt(tier.pricePerUnit * v) + '/yr';
-    });
+    // Add input listener for computed price (skip for flat-price tiers)
+    if (!tier.flat) {
+      const input = card.querySelector('.sw-count-input');
+      const computed = card.querySelector('.sw-card-computed');
+      input.addEventListener('input', () => {
+        const v = parseInt(input.value) || tier.defaultCount;
+        computed.textContent = fmt(tier.pricePerUnit * v) + '/yr';
+      });
+    }
   }
 }
 
 function addLicenseFromCard(tierId) {
-  const input = document.getElementById('sw-input-' + tierId);
   const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
+  if (tier.flat) { addLicense(tierId, 1); return; }
+  const input = document.getElementById('sw-input-' + tierId);
   let count = parseInt(input.value) || tier.defaultCount;
   if (count < tier.minCount) count = tier.minCount;
   addLicense(tierId, count);
