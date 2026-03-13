@@ -2516,6 +2516,7 @@ function generateTabId() {
 function loadTabState(state) {
   resetBuilderState();
   if (!state) { renderAll(); return; }
+  try {
   if (state.partner) document.getElementById('partnerName').value = state.partner;
   if (state.currency && CURRENCIES[state.currency]) selectedCurrency = state.currency;
   if (state.rates) {
@@ -2608,6 +2609,7 @@ function loadTabState(state) {
   }
 
   document.getElementById('currencySelect').value = selectedCurrency;
+  } catch (e) { console.error('loadTabState error:', e); }
   renderAll();
 }
 
@@ -2741,6 +2743,7 @@ initTabs();
 const urlLoaded = loadFromUrl();
 if (urlLoaded) {
   // URL hash takes priority — load into the active tab
+  renderAll();
   saveActiveTab();
   renderTabBar();
 } else {
