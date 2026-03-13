@@ -320,6 +320,19 @@
     @media (min-width: 769px) and (max-width: 1100px) {
       .builder { grid-template-columns: 1fr 460px; }
     }
+    /* Tab Bar */
+    .tab-bar { display: flex; gap: 0; background: white; border-bottom: 1px solid var(--slate-200); padding: 0 28px; }
+    .tab-btn { padding: 10px 20px; font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600; color: var(--slate-500); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
+    .tab-btn:hover { color: var(--slate-700); }
+    .tab-btn.active { color: var(--sky-600); border-bottom-color: var(--sky-500); }
+
+    /* Pricing Reference */
+    .pricing-view { background: var(--slate-50); min-height: calc(100vh - 95px); }
+    .pricing-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--slate-200); border-radius: 10px; overflow: hidden; margin-bottom: 20px; font-size: 12px; }
+    .pricing-table th { background: var(--slate-100); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-600); border-bottom: 1px solid var(--slate-200); }
+    .pricing-table td { padding: 8px 14px; border-bottom: 1px solid var(--slate-100); color: var(--slate-700); }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table tr.section-header td { background: var(--sky-50); font-weight: 700; color: var(--sky-700); font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; padding: 8px 14px; }
   </style>
 </head>
 <body>
@@ -351,6 +364,83 @@
     </select>
   </div>
 </header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('builder')">Builder</button>
+  <button class="tab-btn" onclick="switchTab('pricing')">Pricing Reference</button>
+</div>
+
+<div class="pricing-view" id="pricingView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Software Pricing</h2>
+
+    <div style="margin-bottom:12px">
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Software Tiers</h3>
+      <table class="pricing-table">
+        <thead><tr><th>Free</th><th>Pro</th><th>Play</th><th>Impact</th></tr></thead>
+        <tbody><tr>
+          <td>Free<br>always</td>
+          <td>$100/year<br>or $10/month</td>
+          <td>$1,500/6-mo<br>per organization</td>
+          <td>$200/year<br>per user</td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Enrollment-Based Pricing (Schools)</h3>
+      <table class="pricing-table">
+        <thead><tr><th>Tier</th><th>Student Enrollment</th><th>Price/Student/Year</th><th>Monthly Credits</th></tr></thead>
+        <tbody>
+          <tr><td>Tier 1</td><td>1–9,999</td><td>$4.00</td><td>2M Tokens</td></tr>
+          <tr><td>Tier 2</td><td>10,000–24,999</td><td>$3.50</td><td>4M Tokens</td></tr>
+          <tr><td>Tier 3</td><td>25,000–49,999</td><td>$3.00</td><td>6M Tokens</td></tr>
+          <tr><td>Tier 4</td><td>50,000+</td><td>Custom</td><td>Custom</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Building Blocks</h2>
+    <table class="pricing-table">
+      <thead><tr><th>Building Block</th><th>Cost</th><th>Unit</th></tr></thead>
+      <tbody>
+        <tr class="section-header"><td colspan="3">Base Rates</td></tr>
+        <tr><td>Learning Partner Hourly Rate</td><td>$250</td><td></td></tr>
+        <tr><td>Learning Engineer Hourly Rate</td><td>$200</td><td></td></tr>
+        <tr><td>Travel Hourly Rate</td><td>$125</td><td></td></tr>
+        <tr class="section-header"><td colspan="3">Learning Partner Blocks</td></tr>
+        <tr><td>Office Hours</td><td>$300</td><td>hour</td></tr>
+        <tr><td>Coaching</td><td>$450</td><td>hour</td></tr>
+        <tr><td>Admin Meetings</td><td>$450</td><td>hour</td></tr>
+        <tr><td>Facilitation</td><td>$600</td><td>hour</td></tr>
+        <tr class="section-header"><td colspan="3">Developer Blocks</td></tr>
+        <tr><td>Dev Hourly Rate</td><td>$200</td><td>hour</td></tr>
+        <tr><td>App Support — Light</td><td>$1,000</td><td>month</td></tr>
+        <tr><td>App Support — Medium</td><td>$2,000</td><td>month</td></tr>
+        <tr><td>App Support — Full</td><td>$4,000</td><td>month</td></tr>
+        <tr class="section-header"><td colspan="3">Travel Blocks</td></tr>
+        <tr><td>Travel — Local</td><td>$250</td><td>day minimum</td></tr>
+        <tr><td>Travel — Flight</td><td>$2,000</td><td>trip minimum</td></tr>
+        <tr><td>Travel — Additional Day</td><td>$600</td><td>day minimum</td></tr>
+        <tr><td>Site Visit — Half Day</td><td>$1,500</td><td>half day</td></tr>
+        <tr><td>Site Visit — Full Day</td><td>$2,500</td><td>full day</td></tr>
+        <tr class="section-header"><td colspan="3">Targeted AI Blocks</td></tr>
+        <tr><td>AI Agency Crash Course</td><td>$2,300</td><td></td></tr>
+        <tr><td>Ideation — w/LP only</td><td>$2,500</td><td></td></tr>
+        <tr><td>Ideation — w/LP &amp; LE</td><td>$4,000</td><td></td></tr>
+        <tr><td>Tool Build — Initial</td><td>$5,000</td><td></td></tr>
+        <tr><td>Tool Build — Additional</td><td>$2,500</td><td></td></tr>
+        <tr><td>Tool Pilot</td><td>$6,500</td><td></td></tr>
+        <tr><td>Tool Revision — Light</td><td>$1,500</td><td>monthly</td></tr>
+        <tr><td>Tool Revision — Medium</td><td>$2,800</td><td>monthly</td></tr>
+        <tr><td>Tool Revision — Full</td><td>$5,000</td><td>monthly</td></tr>
+        <tr class="section-header"><td colspan="3">Other</td></tr>
+        <tr><td>AI Usage Costs</td><td>$300</td><td>monthly</td></tr>
+        <tr><td>Knowledge Graph</td><td>$1,500</td><td>per curricula</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <div class="builder">
   <!-- LEFT: Package Options -->
@@ -656,7 +746,10 @@ function unitShort(unit) {
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students' },
   { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5 },
-  { id: 'impact-schools', name: 'Impact (Schools)', tagline: 'For schools and universities', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 1000 }
+  { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1–9,999 students', pricePerUnit: 4, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1, defaultCount: 5000, priceNote: '$4.00/student/year', enrollmentRange: '1–9,999', monthlyCredits: '2M Tokens' },
+  { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 3.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$3.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens' },
+  { id: 'schools-t3', name: 'Schools — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$3.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens' },
+  { id: 'schools-t4', name: 'Schools — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true }
 ];
 
 // Software licenses in quote (multiple allowed)
@@ -666,6 +759,7 @@ let nextLicenseId = 1;
 function calcLicenseCost(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
   if (!tier) return 0;
+  if (tier.isCustom) return 0; // Custom pricing — show as "Custom"
   return tier.pricePerUnit * lic.count;
 }
 
@@ -1427,13 +1521,16 @@ function renderSwCards() {
     const priceLabel = tier.priceNote || `$${tier.pricePerUnit}/${tier.unitLabel}/year`;
     const countLabel = tier.unitLabel === 'user' ? 'Users' : tier.unitLabel === 'student' ? 'Students' : 'Qty';
     const period = tier.periodLabel || '/yr';
+    const computedText = tier.isCustom ? 'Custom' : `${fmt(cost)}${period}`;
     const countRow = `<div class="sw-card-row">
         <label>${countLabel}:</label>
         <input class="sw-count-input" type="number" min="${tier.minCount}" value="${defaultCount}" id="sw-input-${tier.id}"
-               ${tier.minCount === 1000 ? 'step="100"' : ''}>
-        <span class="sw-card-computed">${fmt(cost)}${period}</span>
+               ${tier.minCount >= 1000 ? 'step="100"' : ''}>
+        <span class="sw-card-computed">${computedText}</span>
       </div>`;
-    const metaRow = tier.educators ? `<div style="font-size:10px;color:var(--slate-400);margin-top:2px">${tier.educators} · ${tier.students}</div>` : '';
+    let metaRow = '';
+    if (tier.educators) metaRow = `<div style="font-size:10px;color:var(--slate-400);margin-top:2px">${tier.educators} · ${tier.students}</div>`;
+    if (tier.monthlyCredits) metaRow = `<div style="font-size:10px;color:var(--slate-400);margin-top:2px">${tier.enrollmentRange} enrollment · ${tier.monthlyCredits}</div>`;
     card.innerHTML = `
       <div class="sw-card-name">${tier.name}</div>
       <div class="sw-card-tagline">${tier.tagline}</div>
@@ -1448,7 +1545,7 @@ function renderSwCards() {
     const computed = card.querySelector('.sw-card-computed');
     input.addEventListener('input', () => {
       const v = parseInt(input.value) || tier.defaultCount;
-      computed.textContent = fmt(tier.pricePerUnit * v) + (tier.periodLabel || '/yr');
+      computed.textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + (tier.periodLabel || '/yr');
     });
   }
 }
@@ -1476,21 +1573,23 @@ function renderLicenseList() {
     const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
     if (!tier) continue;
     const cost = calcLicenseCost(lic);
+    const priceDisplay = tier.isCustom ? 'Custom' : `${fmt(cost)}/yr`;
+    const detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} — Custom pricing` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
     div.innerHTML = `
       <div class="comp-info">
         <div class="license-name">${tier.name}</div>
-        <div class="license-detail">${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr</div>
+        <div class="license-detail">${detailDisplay}</div>
       </div>
       <div class="comp-qty">
         <input class="comp-qty-input" type="number" min="${tier.minCount}" value="${lic.count}" style="width:60px"
-               ${tier.minCount === 1000 ? 'step="100"' : ''}
+               ${tier.minCount >= 1000 ? 'step="100"' : ''}
                onchange="updateLicenseCount(${lic.licenseId}, this, true)"
                oninput="updateLicenseCount(${lic.licenseId}, this, false)">
       </div>
-      <span class="license-price">${fmt(cost)}/yr</span>
+      <span class="license-price">${priceDisplay}</span>
       <button class="qpkg-delete" onclick="removeLicense(${lic.licenseId})" title="Remove" style="width:18px;height:18px;font-size:14px">\u00D7</button>`;
     list.appendChild(div);
   }
@@ -1795,6 +1894,21 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ─── Tab Switching ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  if (tab === 'builder') {
+    btns[0].classList.add('active');
+    document.querySelector('.builder').style.display = 'grid';
+    document.getElementById('pricingView').style.display = 'none';
+  } else {
+    btns[1].classList.add('active');
+    document.querySelector('.builder').style.display = 'none';
+    document.getElementById('pricingView').style.display = '';
+  }
 }
 
 // ─── Render All ──────────────────────────────────────────────────────────────
