@@ -1047,11 +1047,11 @@ function buildInlineConfig(pkg) {
                onchange="updateConfigSessionHours('${pkg.id}', ${i}, this)"
                oninput="updateConfigSessionHours('${pkg.id}', ${i}, this)">
         <span class="session-hours-unit">hrs</span>
-        <div class="delivery-pills-sm">
-          <button class="delivery-pill-sm ${s.delivery === 'virtual' ? 'active' : ''}" onclick="updateConfigSessionDelivery('${pkg.id}',${i},'virtual')">Virtual</button>
-          <button class="delivery-pill-sm ${s.delivery === 'local' ? 'active' : ''}" onclick="updateConfigSessionDelivery('${pkg.id}',${i},'local')">Local<span class="pill-cost">+${fmt(localCost)}</span></button>
-          <button class="delivery-pill-sm ${s.delivery === 'travel' ? 'active' : ''}" onclick="updateConfigSessionDelivery('${pkg.id}',${i},'travel')">Travel<span class="pill-cost">+${fmt(flightCost)}</span></button>
-        </div>
+        <select class="config-select" style="font-size:10px;padding:4px 6px;min-width:0" onchange="updateConfigSessionDelivery('${pkg.id}',${i},this.value)">
+          <option value="virtual" ${s.delivery === 'virtual' ? 'selected' : ''}>Virtual</option>
+          <option value="local" ${s.delivery === 'local' ? 'selected' : ''}>Local (+${fmt(localCost)})</option>
+          <option value="travel" ${s.delivery === 'travel' ? 'selected' : ''}>Travel (+${fmt(flightCost)})</option>
+        </select>
       </div>`).join('')}
     </div>`;
   } else {
