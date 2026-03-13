@@ -1037,8 +1037,7 @@ function buildInlineConfig(pkg) {
     sessionsHtml = `<div class="pkg-config-row">
       <span class="pkg-config-label">Sessions</span>
       <input class="num-sessions-input" type="number" min="1" max="${maxSessions}" value="${numSessions}"
-             onchange="updateConfigNumSessions('${pkg.id}', this)"
-             oninput="updateConfigNumSessions('${pkg.id}', this)">
+             onchange="updateConfigNumSessions('${pkg.id}', this)">
       <span style="font-size:10px;color:var(--slate-400)">session${numSessions > 1 ? 's' : ''} (${pkg.facilitationHours} hrs total)</span>
     </div>
     <div class="session-config-rows">
@@ -1162,6 +1161,19 @@ function ensureConfigState(pkgId) {
   return configState[pkgId];
 }
 
+function rerenderConfigOnly(pkgId) {
+  const pkg = PACKAGES.find(p => p.id === pkgId);
+  if (!pkg) return;
+  const card = document.getElementById('pkgcard-' + pkgId);
+  if (!card) return;
+  const oldConfig = card.querySelector('.pkg-config');
+  if (!oldConfig) return;
+  const newHtml = buildInlineConfig(pkg);
+  const temp = document.createElement('div');
+  temp.innerHTML = newHtml;
+  oldConfig.replaceWith(temp.firstElementChild);
+}
+
 function updateConfigNumSessions(pkgId, input) {
   const cs = ensureConfigState(pkgId);
   const pkg = PACKAGES.find(p => p.id === pkgId);
@@ -1171,35 +1183,34 @@ function updateConfigNumSessions(pkgId, input) {
   if (isNaN(val) || val < 1) val = 1;
   if (val > maxS) val = maxS;
   cs.numSessions = val;
-  // Redistribute hours, preserving delivery modes where possible
   const oldSessions = cs.sessions || [];
   const newSessions = distributeHours(totalHours, val);
   for (let i = 0; i < newSessions.length; i++) {
     if (i < oldSessions.length) newSessions[i].delivery = oldSessions[i].delivery;
   }
   cs.sessions = newSessions;
-  renderCatalog();
+  rerenderConfigOnly(pkgId);
 }
 
 function updateConfigSessionHours(pkgId, idx, input) {
   const cs = ensureConfigState(pkgId);
   let val = parseFloat(input.value);
   if (isNaN(val) || val < 0.5) val = 0.5;
-  val = Math.round(val * 2) / 2; // round to 0.5
+  val = Math.round(val * 2) / 2;
   cs.sessions[idx].hours = val;
-  renderCatalog();
+  rerenderConfigOnly(pkgId);
 }
 
 function updateConfigSessionDelivery(pkgId, idx, mode) {
   const cs = ensureConfigState(pkgId);
   cs.sessions[idx].delivery = mode;
-  renderCatalog();
+  rerenderConfigOnly(pkgId);
 }
 
 function updateConfigImpactDelivery(pkgId, mode) {
   const cs = ensureConfigState(pkgId);
   cs.sessions = [{ hours: 0, delivery: mode }];
-  renderCatalog();
+  rerenderConfigOnly(pkgId);
 }
 
 function updateConfigParticipants(pkgId, input) {
@@ -1207,7 +1218,7 @@ function updateConfigParticipants(pkgId, input) {
   let val = parseInt(input.value);
   if (isNaN(val) || val < 1) val = 1;
   cs.participants = val;
-  renderCatalog();
+  rerenderConfigOnly(pkgId);
 }
 
 function confirmAddPackage(pkgId) {
