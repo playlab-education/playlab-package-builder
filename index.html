@@ -995,14 +995,19 @@ function calcQuotePkgNet(qpkg) {
   return gross * (1 - pathwayDisc);
 }
 
-function calcTravelCost(qpkg) {
-  if (!qpkg.sessions || qpkg.sessions.length === 0) return 0;
-  let cost = 0;
-  for (const s of qpkg.sessions) {
-    if (s.delivery === 'local') cost += getBlockPrice('travel-local');
-    if (s.delivery === 'travel') cost += getBlockPrice('travel-flight');
+function getDefaultTravelCounts(sessions) {
+  let localDays = 0, flightTrips = 0;
+  for (const s of (sessions || [])) {
+    if (s.delivery === 'local') localDays++;
+    if (s.delivery === 'travel') flightTrips++;
   }
-  return cost;
+  return { localDays, flightTrips };
+}
+
+function calcTravelCost(qpkg) {
+  const localDays = qpkg.travelLocalDays ?? getDefaultTravelCounts(qpkg.sessions).localDays;
+  const flightTrips = qpkg.travelFlightTrips ?? getDefaultTravelCounts(qpkg.sessions).flightTrips;
+  return localDays * getBlockPrice('travel-local') + flightTrips * getBlockPrice('travel-flight');
 }
 
 function calcAddonTotal(addon) {
@@ -1344,12 +1349,15 @@ function confirmAddPackage(pkgId) {
   let compId = 1;
   const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
 
+  const travelCounts = getDefaultTravelCounts(sessions);
   const qpkg = {
     pkgId: nextPkgId++,
     packageId: pkgId,
     participants,
     facilitators,
     sessions,
+    travelLocalDays: travelCounts.localDays,
+    travelFlightTrips: travelCounts.flightTrips,
     launchMeetingQty: hasFacilitation ? 1 : 0,
     officeHoursQty: hasFacilitation ? Math.max(0, sessions.length - 1) : 0,
     components
@@ -1413,6 +1421,10 @@ function updateQuoteSessionDelivery(pkgId, idx, mode) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg || !qpkg.sessions[idx]) return;
   qpkg.sessions[idx].delivery = mode;
+  // Recalculate default travel counts from updated sessions
+  const counts = getDefaultTravelCounts(qpkg.sessions);
+  qpkg.travelLocalDays = counts.localDays;
+  qpkg.travelFlightTrips = counts.flightTrips;
   renderQuote();
   renderTotals();
 }
@@ -1459,6 +1471,26 @@ function setAutoQty(pkgId, field, input) {
   let val = parseFloat(input.value);
   if (isNaN(val) || val < 0) val = 0;
   qpkg[field] = Math.round(val * 2) / 2;
+  renderQuote();
+  renderTotals();
+}
+
+function changeTravelQty(pkgId, field, dir) {
+  const qpkg = quotePackages.find(q => q.pkgId === pkgId);
+  if (!qpkg) return;
+  const newVal = (qpkg[field] || 0) + dir;
+  if (newVal < 0) return;
+  qpkg[field] = newVal;
+  renderQuote();
+  renderTotals();
+}
+
+function setTravelQty(pkgId, field, input) {
+  const qpkg = quotePackages.find(q => q.pkgId === pkgId);
+  if (!qpkg) return;
+  let val = parseInt(input.value);
+  if (isNaN(val) || val < 0) val = 0;
+  qpkg[field] = val;
   renderQuote();
   renderTotals();
 }
@@ -1714,15 +1746,35 @@ function buildQuotePkg(qpkg) {
     </div>`;
   }
 
-  // Travel cost line (total across all sessions)
-  const travelCost = calcTravelCost(qpkg);
-  if (travelCost > 0) {
-    const travelSummary = sessions.filter(s => s.delivery !== 'virtual').map(s => {
-      return s.delivery === 'local' ? 'Local' : 'Travel';
-    }).join(', ');
+  // Travel cost lines (editable)
+  const localDays = qpkg.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays;
+  const flightTrips = qpkg.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips;
+  if (localDays > 0 || sessions.some(s => s.delivery === 'local')) {
+    const localTotal = localDays * getBlockPrice('travel-local');
     bodyHtml += `<div class="comp-line travel-line">
-      <div class="comp-info"><div class="comp-name">Travel <span style="font-size:9px;color:var(--slate-400)">${sessions.filter(s => s.delivery !== 'virtual').length} session${sessions.filter(s => s.delivery !== 'virtual').length > 1 ? 's' : ''} w/ travel</span></div></div>
-      <div class="comp-total">${fmt(travelCost)}</div>
+      <div class="comp-info"><div class="comp-name">Travel (Local) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-local'))}/day</span></div></div>
+      <div class="comp-qty">
+        <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelLocalDays',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" value="${localDays}" min="0" step="1"
+               onchange="setTravelQty(${qpkg.pkgId},'travelLocalDays',this)">
+        <span class="comp-unit">day</span>
+        <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelLocalDays',1)">+</button>
+      </div>
+      <div class="comp-total">${fmt(localTotal)}</div>
+    </div>`;
+  }
+  if (flightTrips > 0 || sessions.some(s => s.delivery === 'travel')) {
+    const flightTotal = flightTrips * getBlockPrice('travel-flight');
+    bodyHtml += `<div class="comp-line travel-line">
+      <div class="comp-info"><div class="comp-name">Travel (Flight) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-flight'))}/trip</span></div></div>
+      <div class="comp-qty">
+        <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" value="${flightTrips}" min="0" step="1"
+               onchange="setTravelQty(${qpkg.pkgId},'travelFlightTrips',this)">
+        <span class="comp-unit">trip</span>
+        <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',1)">+</button>
+      </div>
+      <div class="comp-total">${fmt(flightTotal)}</div>
     </div>`;
   }
 
@@ -1939,6 +1991,8 @@ function saveToUrl() {
       customName: qp.customName || undefined,
       participants: qp.participants,
       sessions: qp.sessions.map(s => ({ hours: s.hours, delivery: s.delivery })),
+      travelLocalDays: qp.travelLocalDays,
+      travelFlightTrips: qp.travelFlightTrips,
       launchMeetingQty: qp.launchMeetingQty,
       officeHoursQty: qp.officeHoursQty,
       components: qp.components.map(c => ({ id: c.id, qty: c.qty }))
@@ -2026,6 +2080,8 @@ function loadFromUrl() {
           participants,
           facilitators: Math.max(1, Math.ceil(participants / 30)),
           sessions,
+          travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
+          travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
           launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : (hasFac ? 1 : 0),
           officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
           components
