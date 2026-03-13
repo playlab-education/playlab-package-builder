@@ -744,6 +744,7 @@ function getBlockPrice(blockId) {
     case 'tool-revision-medium':return roundPrice(dev * 14);
     case 'tool-revision-full':  return roundPrice(dev * 22 * 1.15 * 0.99);
     case 'knowledge-graph':     return 1500;
+    case 'ai-usage-costs':      return 300;
     default: return 0;
   }
 }
@@ -965,7 +966,8 @@ const ADDONS = [
   { blockId: 'knowledge-graph', label: 'Knowledge Graph', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$1,500/curricula' },
   { blockId: 'tool-revision-light', label: 'Tool Revision \u2014 Light', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$1,500/mo \u00B7 6 hrs LE' },
   { blockId: 'tool-revision-medium', label: 'Tool Revision \u2014 Medium', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$2,800/mo \u00B7 12 hrs LE' },
-  { blockId: 'tool-revision-full', label: 'Tool Revision \u2014 Full', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$5,000/mo \u00B7 22 hrs LE' }
+  { blockId: 'tool-revision-full', label: 'Tool Revision \u2014 Full', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$5,000/mo \u00B7 22 hrs LE' },
+  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '$300/mo \u00B7 for non-school partners' }
 ];
 
 // ─── Session Helpers ──────────────────────────────────────────────────────────
