@@ -239,7 +239,10 @@
     .participants-input { width: 56px; padding: 3px 6px; border: 1px solid var(--amber-400); border-radius: 5px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--slate-800); text-align: center; background: white; -moz-appearance: textfield; }
     .participants-input::-webkit-inner-spin-button, .participants-input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .participants-input:focus { outline: none; border-color: var(--sky-500); }
-    .facilitator-count { font-weight: 700; flex-shrink: 0; }
+    .facilitator-input { width: 40px; padding: 3px 4px; border: 1px solid var(--amber-400); border-radius: 5px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--slate-800); text-align: center; background: white; -moz-appearance: textfield; }
+    .facilitator-input::-webkit-inner-spin-button, .facilitator-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .facilitator-input:focus { outline: none; border-color: var(--sky-500); }
+    .facilitator-count { font-weight: 700; flex-shrink: 0; font-size: 11px; }
 
     /* Component line */
     .comp-line { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: var(--slate-50); border-radius: 7px; }
@@ -1395,6 +1398,7 @@ function confirmAddPackage(pkgId) {
     packageId: pkgId,
     participants,
     facilitators,
+    facilitatorsManual: false,
     sessions,
     travelLocalDays: travelCounts.localDays,
     travelFlightTrips: travelCounts.flightTrips,
@@ -1446,7 +1450,9 @@ function setParticipants(pkgId, input, commit) {
   }
   if (!isNaN(val) && val >= 1) {
     qpkg.participants = val;
-    qpkg.facilitators = Math.max(1, Math.ceil(val / 30));
+    if (!qpkg.facilitatorsManual) {
+      qpkg.facilitators = Math.max(1, Math.ceil(val / 30));
+    }
   }
   renderTotals();
   if (commit) {
@@ -1455,6 +1461,32 @@ function setParticipants(pkgId, input, commit) {
     if (hadFocus) {
       const card = document.querySelector(`.qpkg[data-pkg-id="${pkgId}"]`);
       const newInput = card?.querySelector('.participants-input');
+      if (newInput) { newInput.focus(); newInput.select(); }
+    }
+  }
+  saveToUrl();
+}
+
+function setFacilitators(pkgId, input, commit) {
+  const qpkg = quotePackages.find(q => q.pkgId === pkgId);
+  if (!qpkg) return;
+  let val = parseInt(input.value);
+  if (commit) {
+    if (isNaN(val) || val < 1) val = 1;
+    input.value = val;
+  }
+  if (!isNaN(val) && val >= 1) {
+    qpkg.facilitators = val;
+    const autoVal = Math.max(1, Math.ceil(qpkg.participants / 30));
+    qpkg.facilitatorsManual = (val !== autoVal);
+  }
+  renderTotals();
+  if (commit) {
+    const hadFocus = document.activeElement === input;
+    renderQuote();
+    if (hadFocus) {
+      const card = document.querySelector(`.qpkg[data-pkg-id="${pkgId}"]`);
+      const newInput = card?.querySelector('.facilitator-input');
       if (newInput) { newInput.focus(); newInput.select(); }
     }
   }
@@ -1834,8 +1866,10 @@ function buildQuotePkg(qpkg) {
       <input class="participants-input" type="number" min="1" value="${qpkg.participants}"
              onchange="setParticipants(${qpkg.pkgId}, this, true)" oninput="setParticipants(${qpkg.pkgId}, this, false)">
       <span>\u2192</span>
-      <span class="facilitator-count">${qpkg.facilitators} facilitator${qpkg.facilitators > 1 ? 's' : ''}</span>
-      <span style="font-size:9px;color:#92400e">(1 per 30)</span>
+      <input class="facilitator-input" type="number" min="1" value="${qpkg.facilitators}"
+             onchange="setFacilitators(${qpkg.pkgId}, this, true)" oninput="setFacilitators(${qpkg.pkgId}, this, false)">
+      <span class="facilitator-count">facilitator${qpkg.facilitators > 1 ? 's' : ''}</span>
+      <span style="font-size:9px;color:#92400e">${qpkg.facilitatorsManual ? '(manual)' : '(1 per 30)'}</span>
     </div>`;
   }
 
@@ -2113,6 +2147,7 @@ function getTabState() {
       packageId: qp.packageId,
       customName: qp.customName || undefined,
       participants: qp.participants,
+      facilitators: qp.facilitatorsManual ? qp.facilitators : undefined,
       sessions: qp.sessions.map(s => ({ hours: s.hours, delivery: s.delivery })),
       travelLocalDays: qp.travelLocalDays,
       travelFlightTrips: qp.travelFlightTrips,
@@ -2201,12 +2236,14 @@ function loadFromUrl() {
           }
         }
 
+        const autoFac = Math.max(1, Math.ceil(participants / 30));
         const qpkg = {
           pkgId: nextPkgId++,
           packageId: sp.packageId,
           customName: sp.customName || null,
           participants,
-          facilitators: Math.max(1, Math.ceil(participants / 30)),
+          facilitators: sp.facilitators || autoFac,
+          facilitatorsManual: sp.facilitators ? (sp.facilitators !== autoFac) : false,
           sessions,
           travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
           travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
@@ -2660,12 +2697,14 @@ function loadTabState(state) {
           sessions.push({ hours: sessionDuration, delivery });
         }
       }
+      const autoFac = Math.max(1, Math.ceil(participants / 30));
       const qpkg = {
         pkgId: nextPkgId++,
         packageId: sp.packageId,
         customName: sp.customName || null,
         participants,
-        facilitators: Math.max(1, Math.ceil(participants / 30)),
+        facilitators: sp.facilitators || autoFac,
+        facilitatorsManual: sp.facilitators ? (sp.facilitators !== autoFac) : false,
         sessions,
         travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
         travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
