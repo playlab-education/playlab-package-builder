@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playlab — Package Builder v3</title>
+  <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
@@ -362,7 +362,7 @@
 
 <div class="auth-gate hidden" id="authGate">
   <div class="auth-logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
-  <div class="auth-subtitle" data-i18n="packageBuilder">Package Builder</div>
+  <div class="auth-subtitle">Sales Hub</div>
   <div id="g_id_signin"></div>
   <div class="auth-error" id="authError" data-i18n="authError">Access is restricted to @playlab.ai accounts. Please sign in with your Playlab Google account.</div>
 </div>
@@ -370,7 +370,7 @@
 <header class="app-header">
   <div class="logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
   <div class="header-sep"></div>
-  <div class="header-title" data-i18n="packageBuilderV3">Package Builder v3</div>
+  <div class="header-title">Sales Hub</div>
   <div class="header-spacer"></div>
   <div class="lang-toggle">
     <label>&#x1F310;</label>
@@ -398,8 +398,134 @@
 </header>
 
 <div class="tab-bar">
-  <button class="tab-btn active" onclick="switchMainTab('builder')" data-i18n="tabBuilder">Builder</button>
+  <button class="tab-btn active" onclick="switchMainTab('welcome')">Welcome</button>
+  <button class="tab-btn" onclick="switchMainTab('builder')" data-i18n="tabBuilder">Builder</button>
   <button class="tab-btn" onclick="switchMainTab('pricing')" data-i18n="tabPricingSheet">Pricing Sheet</button>
+  <button class="tab-btn" onclick="switchMainTab('resources')">Key Resources</button>
+</div>
+
+<!-- Welcome View -->
+<div class="welcome-view" id="welcomeView">
+  <div style="max-width:800px;margin:0 auto;padding:48px 28px">
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="display:flex;gap:2px;font-size:36px;font-weight:700;letter-spacing:-0.5px;justify-content:center;margin-bottom:8px">
+        <span style="color:#0EA5E9">P</span><span style="color:#f43f5e">l</span><span style="color:#f59e0b">a</span><span style="color:#0EA5E9">y</span><span style="color:#10b981">l</span><span style="color:#0EA5E9">a</span><span style="color:#f43f5e">b</span>
+      </div>
+      <h1 style="font-size:28px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Sales Hub</h1>
+      <p style="font-size:14px;color:var(--slate-500);max-width:500px;margin:0 auto">Welcome to the internal Playlab Sales Hub!</p>
+      <p style="font-size:11px;color:var(--slate-400);margin-top:6px">This is an internal website for Playlab employees' eyes only.</p>
+    </div>
+
+    <!-- Build a Proposal workflow -->
+    <div style="background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:24px 28px;margin-bottom:32px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+      <h2 style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:16px">Build a Proposal</h2>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Get a package recommendation <span style="font-size:11px;color:var(--slate-400);font-weight:400">(optional)</span></div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Use the <em>package recommender skill</em> in Claude Cowork &mdash; give your meeting notes to Claude, have it recommend pricing components</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Build a package</div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Go to the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);text-decoration:none;font-weight:600">Package Builder</a> tab to configure services and pricing</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Generate the proposal</div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Go to <strong>#proposal-bot in Slack</strong> &mdash; share your package URL and any context (Granola notes, bullet points, email thread) with the proposal bot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div onclick="switchMainTab('builder')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4E6;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Package Builder</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Build and customize service packages and quotes for partners</p>
+      </div>
+
+      <div onclick="switchMainTab('pricing')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 4px 12px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4B0;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Pricing Sheet</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Reference software tiers, building block rates, and enrollment pricing</p>
+      </div>
+
+      <div onclick="switchMainTab('resources')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--violet-500)';this.style.boxShadow='0 4px 12px rgba(139,92,246,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4C1;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Key Resources</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Access pitch deck, partnership offerings, and essential sales documents</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Resources View -->
+<div class="resources-view" id="resourcesView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Key Resources</h2>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:24px">Essential documents and files for sales conversations. Click to open or use the embed to preview.</p>
+
+    <div style="display:grid;gap:16px">
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F3AC;</span>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Pitch Deck</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Playlab overview presentation for partner conversations</p>
+          </div>
+          <a href="https://docs.google.com/presentation/d/1nozF2k0Eh-1NVOpTnlQBlilFPA3cYfJPBgQsFhI5um4/edit" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50)">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/presentation/d/1nozF2k0Eh-1NVOpTnlQBlilFPA3cYfJPBgQsFhI5um4/embed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="400" allowfullscreen="true" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F4CA;</span>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Partnership Offerings</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Overview of Playlab partnership packages and services</p>
+          </div>
+          <a href="https://docs.google.com/document/d/1sSbkiILWzPRO_HXH_6S62-44DG_HDvivS4Q7R9imVrM/edit?tab=t.7ks51gpaizjf" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50)">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/document/d/1sSbkiILWzPRO_HXH_6S62-44DG_HDvivS4Q7R9imVrM/preview" frameborder="0" width="100%" height="400" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F4B5;</span>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Services Pricing Building Blocks</h3>
+            <p style="font-size:11px;color:var(--slate-500)">FY 26-27 learning services building block rates</p>
+          </div>
+          <a href="https://docs.google.com/spreadsheets/d/1npo03Oih0S9AEkoCW5baGDWIPQN3gKVIJS_02CSc5iU/edit?gid=1348894078#gid=1348894078" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50)">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/spreadsheets/d/1npo03Oih0S9AEkoCW5baGDWIPQN3gKVIJS_02CSc5iU/preview?gid=1348894078" frameborder="0" width="100%" height="400" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F4D6;</span>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Sales Hub &mdash; Rules & Pricing</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Source of truth for all pricing, business rules, and requirements</p>
+          </div>
+          <a href="https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/edit" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50)">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/preview" frameborder="0" width="100%" height="400" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+    </div>
+
+    <p style="font-size:11px;color:var(--slate-400);margin-top:20px;text-align:center">To add resources, update the Key Resources section in the <a href="https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/edit" target="_blank" style="color:var(--slate-400)">Rules & Pricing doc</a> and run <code>/saleshub</code>.</p>
+  </div>
 </div>
 
 <div class="pricing-view" id="pricingView" style="display:none">
@@ -473,7 +599,7 @@
   </div>
 </div>
 
-<div class="builder">
+<div class="builder" style="display:none">
   <!-- LEFT: Package Options -->
   <div class="catalog-col">
     <div class="section-title" data-i18n="packageOptions">Package Options</div>
@@ -2716,16 +2842,21 @@ function showToast(msg) {
 
 // ─── Tab Switching ──────────────────────────────────────────────────────────
 function switchMainTab(tab) {
-  const btns = document.querySelectorAll('.tab-btn');
+  const btns = document.querySelectorAll('.tab-bar > .tab-btn');
   btns.forEach(b => b.classList.remove('active'));
+  const views = {
+    welcome: document.getElementById('welcomeView'),
+    builder: document.querySelector('.builder'),
+    pricing: document.getElementById('pricingView'),
+    resources: document.getElementById('resourcesView')
+  };
+  Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
+  const tabIndex = { welcome: 0, builder: 1, pricing: 2, resources: 3 };
+  if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
   if (tab === 'builder') {
-    btns[0].classList.add('active');
-    document.querySelector('.builder').style.display = 'grid';
-    document.getElementById('pricingView').style.display = 'none';
-  } else {
-    btns[1].classList.add('active');
-    document.querySelector('.builder').style.display = 'none';
-    document.getElementById('pricingView').style.display = '';
+    views.builder.style.display = 'grid';
+  } else if (views[tab]) {
+    views[tab].style.display = '';
   }
 }
 
