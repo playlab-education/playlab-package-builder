@@ -365,7 +365,7 @@
   <div class="auth-logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
   <div class="auth-subtitle">Sales Hub</div>
   <div id="g_id_signin"></div>
-  <div class="auth-error" id="authError" data-i18n="authError">Access is restricted to @playlab.ai accounts. Please sign in with your Playlab Google account.</div>
+  <div class="auth-error" id="authError">Access is restricted to @playlab.ai accounts. Please sign in with your Playlab Google account.</div>
 </div>
 
 <header class="app-header">
@@ -400,8 +400,8 @@
 
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchMainTab('welcome')">Welcome</button>
-  <button class="tab-btn" onclick="switchMainTab('builder')" data-i18n="tabBuilder">Builder</button>
-  <button class="tab-btn" onclick="switchMainTab('pricing')" data-i18n="tabPricingSheet">Pricing Sheet</button>
+  <button class="tab-btn" onclick="switchMainTab('builder')">Builder</button>
+  <button class="tab-btn" onclick="switchMainTab('pricing')">Pricing Sheet</button>
   <button class="tab-btn" onclick="switchMainTab('resources')">Key Resources</button>
 </div>
 
@@ -424,7 +424,7 @@
         <div style="display:flex;gap:14px;align-items:flex-start">
           <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
           <div>
-            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Get a package recommendation <span style="font-size:11px;color:var(--slate-400);font-weight:400">(optional)</span></div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)"><span>Get a package recommendation</span> <span style="font-size:11px;color:var(--slate-400);font-weight:400">(optional)</span></div>
             <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Use the <em>package recommender skill</em> in Claude Cowork &mdash; give your meeting notes to Claude, have it recommend pricing components</div>
           </div>
         </div>
@@ -525,16 +525,16 @@
 
     </div>
 
-    <p style="font-size:11px;color:var(--slate-400);margin-top:20px;text-align:center">To add resources, update the Key Resources section in the <a href="https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/edit" target="_blank" style="color:var(--slate-400)">Rules & Pricing doc</a> and run <code>/saleshub</code>.</p>
+    <p style="font-size:11px;color:var(--slate-400);margin-top:20px;text-align:center">To add resources, update the Key Resources section in the Rules & Pricing doc and run <code>/saleshub</code>.</p>
   </div>
 </div>
 
 <div class="pricing-view" id="pricingView" style="display:none">
   <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
-    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px" data-i18n="softwarePricing">Software Pricing</h2>
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Software Pricing</h2>
 
     <div style="margin-bottom:12px">
-      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px" data-i18n="softwareTiers">Software Tiers</h3>
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Software Tiers</h3>
       <table class="pricing-table">
         <thead><tr><th>Free</th><th>Pro</th><th>Play</th><th>Impact</th></tr></thead>
         <tbody><tr>
@@ -547,7 +547,7 @@
     </div>
 
     <div style="margin-bottom:32px">
-      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px" data-i18n="enrollmentPricing">Enrollment-Based Pricing (Schools)</h3>
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Enrollment-Based Pricing (Schools)</h3>
       <table class="pricing-table">
         <thead><tr><th>Tier</th><th>Student Enrollment</th><th>Price/Student/Year</th><th>Monthly Credits</th></tr></thead>
         <tbody>
@@ -559,7 +559,7 @@
       </table>
     </div>
 
-    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px" data-i18n="buildingBlocks">Building Blocks</h2>
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Building Blocks</h2>
     <table class="pricing-table">
       <thead><tr><th>Building Block</th><th>Cost</th><th>Unit</th><th>Notes</th></tr></thead>
       <tbody>
@@ -603,14 +603,14 @@
 <div class="builder" style="display:none">
   <!-- LEFT: Package Options -->
   <div class="catalog-col">
-    <div class="section-title" data-i18n="packageOptions">Package Options</div>
+    <div class="section-title">Package Options</div>
 
     <div class="pathway-section" id="softwareSection">
       <div class="pathway-header" onclick="document.getElementById('softwareSection').classList.toggle('collapsed')">
         <span class="pathway-chevron">&#x25BC;</span>
         <div class="pathway-dot" style="background:#8b5cf6"></div>
-        <h2 data-i18n="softwareLicenses">Software Licenses</h2>
-        <span class="pathway-desc" data-i18n="softwareLicensesDesc">Enterprise tiers &mdash; add multiple licenses</span>
+        <h2>Software Licenses</h2>
+        <span class="pathway-desc">Enterprise tiers &mdash; add multiple licenses</span>
       </div>
       <div class="pathway-body">
         <div class="sw-grid" id="swGrid"></div>
@@ -623,8 +623,8 @@
       <div class="pathway-header" onclick="document.getElementById('addonsSection').classList.toggle('collapsed')">
         <span class="pathway-chevron">&#x25BC;</span>
         <div class="pathway-dot" style="background:var(--slate-500)"></div>
-        <h2 data-i18n="addOns">Add-Ons</h2>
-        <span class="pathway-desc" data-i18n="addOnsDesc">Individual services to supplement packages</span>
+        <h2>Add-Ons</h2>
+        <span class="pathway-desc">Individual services to supplement packages</span>
       </div>
       <div class="pathway-body">
         <div class="addon-grid" id="addonGrid"></div>
@@ -636,62 +636,62 @@
   <div class="quote-col">
   <div class="quote-tabs" id="quoteTabBar"></div>
   <div class="quote-col-inner">
-    <div style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:4px" data-i18n="packageBuilder">Package Builder</div>
+    <div style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Package Builder</div>
 
     <div>
-      <div class="q-label" data-i18n="partnerOrg">Partner / Organization</div>
-      <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District" data-i18n-placeholder="partnerPlaceholder">
+      <div class="q-label">Partner / Organization</div>
+      <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District">
     </div>
 
     <div id="licenseSummaryWrap">
-      <div class="q-label" data-i18n="softwareLicenses">Software Licenses</div>
+      <div class="q-label">Software Licenses</div>
       <div id="licenseList"></div>
     </div>
 
     <div>
-      <div class="q-label" data-i18n="services">Services</div>
+      <div class="q-label">Services</div>
       <div class="quote-packages" id="quotePackages"></div>
     </div>
 
     <div id="quoteAddonsWrap" style="display:none">
-      <div class="q-label" data-i18n="addOns">Add-Ons</div>
+      <div class="q-label">Add-Ons</div>
       <div id="quoteAddonsList"></div>
     </div>
 
     <div>
-      <div class="q-label" data-i18n="baseRates">Base Rates</div>
+      <div class="q-label">Base Rates</div>
       <div class="rate-editor" id="rateEditor">
         <button class="rate-editor-toggle" onclick="document.getElementById('rateEditor').classList.toggle('open')">
-          <span class="rate-editor-label" data-i18n="baseRates">Base Rates</span>
+          <span class="rate-editor-label">Base Rates</span>
           <span class="rate-editor-status" id="rateStatus">LP $250 &middot; Dev $200 &middot; Travel $125</span>
         </button>
         <div class="rate-editor-body">
-          <div class="rate-field"><label>LP $/hr</label><input class="rate-input" id="rateLp" type="number" min="1" value="250" onchange="updateRates()" oninput="updateRates()"></div>
-          <div class="rate-field"><label>Dev $/hr</label><input class="rate-input" id="rateDev" type="number" min="1" value="200" onchange="updateRates()" oninput="updateRates()"></div>
-          <div class="rate-field"><label>Travel $/hr</label><input class="rate-input" id="rateTravel" type="number" min="1" value="125" onchange="updateRates()" oninput="updateRates()"></div>
-          <button class="rate-reset" onclick="resetRates()" data-i18n="resetToDefaults">Reset to defaults</button>
+          <div class="rate-field"><label>LP $/hr</label><input class="rate-input" id="rateLp" type="number" step="any" value="250" onchange="updateRates()" oninput="updateRates()"></div>
+          <div class="rate-field"><label>Dev $/hr</label><input class="rate-input" id="rateDev" type="number" step="any" value="200" onchange="updateRates()" oninput="updateRates()"></div>
+          <div class="rate-field"><label>Travel $/hr</label><input class="rate-input" id="rateTravel" type="number" step="any" value="125" onchange="updateRates()" oninput="updateRates()"></div>
+          <button class="rate-reset" onclick="resetRates()">Reset to defaults</button>
         </div>
       </div>
     </div>
 
     <div class="totals-section">
       <div class="t-row">
-        <span class="t-label" data-i18n="servicesTotal">Services Total</span>
+        <span class="t-label">Services Total</span>
         <span class="t-value" id="servicesTotal">&mdash;</span>
       </div>
       <div class="t-row">
-        <span class="t-label" data-i18n="softwareTotal">Software Total</span>
+        <span class="t-label">Software Total</span>
         <span class="t-value" id="softwareTotal">&mdash;</span>
       </div>
       <div class="t-row" style="border-top:1px solid var(--slate-100);padding-top:8px">
-        <span class="t-label" data-i18n="standardTotal">Standard Total</span>
+        <span class="t-label">Standard Total</span>
         <span class="t-value" id="standardTotal">&mdash;</span>
       </div>
       <div class="discount-row">
-        <span class="disc-label" data-i18n="discount">Discount</span>
+        <span class="disc-label">Discount</span>
         <div class="disc-inputs">
-          <input class="disc-name" id="discountName" type="text" placeholder="e.g. Pilot Phase Incentive" data-i18n-placeholder="discountPlaceholder">
-          <input class="disc-num" id="discountVal" type="number" min="0" step="any" placeholder="0">
+          <input class="disc-name" id="discountName" type="text" placeholder="e.g. Pilot Phase Incentive">
+          <input class="disc-num" id="discountVal" type="number" step="any" placeholder="0">
           <select class="disc-type" id="discountType">
             <option value="pct">%</option>
             <option value="flat" id="discFlatLabel">$</option>
@@ -700,7 +700,7 @@
         <span class="disc-amt" id="discountDisplay"></span>
       </div>
       <div class="total-final">
-        <span class="t-label" data-i18n="customPartnerPrice">Custom Partner Price</span>
+        <span class="t-label">Custom Partner Price</span>
         <span class="t-value" id="partnerPrice">&mdash;</span>
       </div>
       <div class="savings-note" id="savingsNote"></div>
@@ -708,14 +708,14 @@
 
     <div class="insights-section" id="insightsSection" style="display:none">
       <div class="insight-row">
-        <span class="insight-label"><span data-i18n="studentsServed">Students served</span>
-          <input class="insight-input" id="studentCount" type="number" min="0" placeholder="0">
+        <span class="insight-label"><span>Students served</span>
+          <input class="insight-input" id="studentCount" type="number" step="any" placeholder="0">
         </span>
         <span class="insight-value" id="perStudentCost">&mdash;</span>
       </div>
       <div class="insight-row">
-        <span class="insight-label"><span data-i18n="educatorsServed">Educators served</span>
-          <input class="insight-input" id="educatorCount" type="number" min="0" placeholder="0">
+        <span class="insight-label"><span>Educators served</span>
+          <input class="insight-input" id="educatorCount" type="number" step="any" placeholder="0">
         </span>
         <span class="insight-value" id="perEducatorCost">&mdash;</span>
       </div>
@@ -724,17 +724,17 @@
     <div class="actions">
       <button class="btn-export" id="exportDocBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        <span data-i18n="exportToGoogleDoc">Export to Google Doc</span>
+        <span>Export to Google Doc</span>
       </button>
       <div class="copy-row">
-        <button class="btn-copy" id="copyBtn" data-i18n="copyForProposal">Copy for Proposal</button>
+        <button class="btn-copy" id="copyBtn">Copy for Proposal</button>
         <button class="btn-copy-md" id="copyMdBtn" title="Copy as Markdown">MD</button>
       </div>
-      <button class="btn-copy" id="copyLinkBtn" style="background:var(--slate-700)" data-i18n="copyShareableLink">Copy Shareable Link</button>
-      <button class="btn-clear" id="clearBtn" data-i18n="clearAll">Clear All</button>
+      <button class="btn-copy" id="copyLinkBtn" style="background:var(--slate-700)">Copy Shareable Link</button>
+      <button class="btn-clear" id="clearBtn">Clear All</button>
     </div>
 
-    <p class="footnote" data-i18n="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
+    <p class="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
   </div>
   </div>
 </div>
@@ -742,561 +742,164 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── i18n / Translations ──────────────────────────────────────────────────────
-const TRANSLATIONS = {
-  en: {
-    packageBuilderV3: 'Package Builder v3',
-    packageBuilder: 'Package Builder',
-    currency: 'Currency',
-    tabBuilder: 'Builder',
-    tabPricingSheet: 'Pricing Sheet',
-    authError: 'Access is restricted to @playlab.ai accounts. Please sign in with your Playlab Google account.',
-    softwarePricing: 'Software Pricing',
-    softwareTiers: 'Software Tiers',
-    enrollmentPricing: 'Enrollment-Based Pricing (Schools)',
-    buildingBlocks: 'Building Blocks',
-    packageOptions: 'Package Options',
-    softwareLicenses: 'Software Licenses',
-    softwareLicensesDesc: 'Enterprise tiers \u2014 add multiple licenses',
-    addOns: 'Add-Ons',
-    addOnsDesc: 'Individual services to supplement packages',
-    pathwayEducators: 'AI Agency for Educators',
-    pathwayStudents: 'AI Agency for Students & Families',
-    pathwayImpact: 'Solutions for AI Impact',
-    pathwayEducatorsDesc: 'From AI Curious to AI Creator',
-    pathwayStudentsDesc: 'Understand, build, and shape AI',
-    pathwayImpactDesc: 'Design and build AI solutions for real challenges',
-    'pkg.edu-starter': 'Starter Package',
-    'pkg.edu-core': 'Core Package',
-    'pkg.edu-full': 'Full Agency Package',
-    'pkg.edu-intro': 'Intro Workshop',
-    'pkg.edu-powerup': 'Power-Up: New Features',
-    'pkg.stu-starter': 'Starter Sprint',
-    'pkg.stu-core': 'Core Sprint',
-    'pkg.stu-full': 'Full Sprint',
-    'pkg.stu-pd': 'Educator PD for Student AI',
-    'pkg.impact-ideation': 'Ideation',
-    'pkg.impact-build': 'Tool Build \u2014 Initial',
-    'pkg.impact-build-addl': 'Tool Build \u2014 Additional',
-    'pkg.impact-pilot': 'Pilot Support',
-    'pkg.impact-full': 'Full AI Impact Pathway',
-    'pkgDesc.edu-starter': 'A foundational introduction where participants learn how AI works and build their first simple AI tool.',
-    'pkgDesc.edu-core': 'A deeper learning experience for teams ready to move beyond basics to intentional design with advanced features.',
-    'pkgDesc.edu-full': 'Our most comprehensive experience \u2014 from understanding AI to designing advanced tools, evaluating impact, and a final showcase.',
-    'pkgDesc.edu-intro': 'Educators learn how AI works and build a simple AI tool. Ideal to introduce key leaders to Playlab.',
-    'pkgDesc.edu-powerup': 'Educators explore new Playlab features (python, voice, knowledge graph, etc.) and incorporate them into their builds. 50% discount for renewal partners.',
-    'pkgDesc.stu-starter': 'A foundational introduction where students learn how AI works and build their first simple AI tool.',
-    'pkgDesc.stu-core': 'A deeper experience where students intentionally design AI tools that address a real school or community challenge.',
-    'pkgDesc.stu-full': 'Our most comprehensive student experience \u2014 from understanding AI to designing advanced tools, culminating in a showcase.',
-    'pkgDesc.stu-pd': 'Prepare your educators to deliver student AI experiences. Playlab facilitates training using proven structure, tailored to your chosen curriculum.',
-    'pkgDesc.impact-ideation': 'Identify where AI can meaningfully improve teaching, learning, or operations. Teams generate ideas, evaluate feasibility, and select 2\u20133 high-priority use cases.',
-    'pkgDesc.impact-build': 'Playlab partners with your team to design and build a custom AI tool \u2014 requirements, engineering, and multiple cycles of testing and refinement.',
-    'pkgDesc.impact-build-addl': 'Additional custom AI tool build, streamlined after initial.',
-    'pkgDesc.impact-pilot': 'Design and launch a pilot to test AI tools in real contexts. Plan implementation, train early users, evaluate results, and refine.',
-    'pkgDesc.impact-full': 'All blocks plus three tool builds at a 20% discount. Each block builds toward the next \u2014 from ideation to building solutions to implementing at scale.',
-    'badge.edu-starter': 'Recommended Start',
-    'badge.edu-core': 'Most Popular',
-    'badge.edu-full': 'Gold Standard',
-    'badge.edu-intro': 'Quick Start',
-    'badge.edu-powerup': 'Renewal Add-On',
-    'badge.stu-starter': 'Student Sprint',
-    'badge.stu-core': 'Most Popular',
-    'badge.stu-full': 'Full Experience',
-    'badge.stu-pd': 'Educator Prep',
-    'badge.impact-ideation': 'Discovery',
-    'badge.impact-build': 'Build',
-    'badge.impact-build-addl': 'Build +',
-    'badge.impact-pilot': 'Pilot',
-    'badge.impact-full': 'Highest Value',
-    partnerOrg: 'Partner / Organization',
-    partnerPlaceholder: 'e.g. Nampa School District',
-    services: 'Services',
-    baseRates: 'Base Rates',
-    resetToDefaults: 'Reset to defaults',
-    servicesTotal: 'Services Total',
-    softwareTotal: 'Software Total',
-    standardTotal: 'Standard Total',
-    discount: 'Discount',
-    discountPlaceholder: 'e.g. Pilot Phase Incentive',
-    customPartnerPrice: 'Custom Partner Price',
-    studentsServed: 'Students served',
-    educatorsServed: 'Educators served',
-    perStudent: '/student',
-    perEducator: '/educator',
-    exportToGoogleDoc: 'Export to Google Doc',
-    copyForProposal: 'Copy for Proposal',
-    copyShareableLink: 'Copy Shareable Link',
-    clearAll: 'Clear All',
-    copied: 'Copied!',
-    linkCopied: 'Link Copied!',
-    addBtn: '+ Add',
-    addAnotherBtn: '+ Add Another',
-    addToBuilder: 'Add to Builder',
-    cancel: 'Cancel',
-    sessions: 'Sessions',
-    delivery: 'Delivery',
-    participants: 'Participants',
-    facilitators: 'facilitators',
-    facilitator: 'facilitator',
-    estimatedTotal: 'Estimated total',
-    virtual: 'Virtual',
-    local: 'Local',
-    travel: 'Travel',
-    session: 'Session',
-    hrs: 'hrs',
-    hrsTotal: '{hours} hrs total',
-    newQuote: 'New Quote',
-    newTab: '+ New',
-    noLicenses: 'No licenses added yet',
-    emptyState: 'Add packages from the left to build a quote',
-    addLicense: '+ Add License',
-    partnershipProposal: 'Partnership Proposal',
-    softwareAndLicensing: 'SOFTWARE & LICENSING',
-    proposalServices: 'SERVICES',
-    partnerSaves: 'Partner saves {amount} \u2014 {pct}% off standard',
-    perStudentCost: 'Per-student cost: {cost}/student ({count} students)',
-    perEducatorCost: 'Per-educator cost: {cost}/educator ({count} educators)',
-    footnote: '* AI model usage costs are covered by Playlab and not passed on to partners.',
-    pathwayDiscount: 'Pathway Discount',
-    proposalAddOns: 'Add-Ons',
-    launchMeeting: 'Launch Meeting',
-    officeHours: 'Office Hours',
-    travelLocal: 'Travel (Local)',
-    travelFlight: 'Travel (Flight)',
-    support: 'support',
-    auto: 'auto',
-    manual: '(manual)',
-    perThirty: '(1 per 30)',
-    sessionsMinusOne: '(sessions\u22121)',
-    addServiceFirst: 'Add services first',
-    deleteTabConfirm: 'Delete tab "{name}"? This cannot be undone.',
-    proposalCreated: 'Proposal created!',
-    exportFailed: 'Export failed \u2014 check console',
-    added: 'Added: {name}'
-  },
-  es: {
-    packageBuilderV3: 'Constructor de Paquetes v3',
-    packageBuilder: 'Constructor de Paquetes',
-    currency: 'Moneda',
-    tabBuilder: 'Constructor',
-    tabPricingSheet: 'Hoja de Precios',
-    authError: 'El acceso est\u00e1 restringido a cuentas @playlab.ai. Por favor, inicia sesi\u00f3n con tu cuenta de Google de Playlab.',
-    softwarePricing: 'Precios de Software',
-    softwareTiers: 'Niveles de Software',
-    enrollmentPricing: 'Precios por Matr\u00edcula (Escuelas)',
-    buildingBlocks: 'Bloques de Construcci\u00f3n',
-    packageOptions: 'Opciones de Paquetes',
-    softwareLicenses: 'Licencias de Software',
-    softwareLicensesDesc: 'Niveles empresariales \u2014 a\u00f1ade m\u00faltiples licencias',
-    addOns: 'Complementos',
-    addOnsDesc: 'Servicios individuales para complementar paquetes',
-    pathwayEducators: 'Agencia de IA para Educadores',
-    pathwayStudents: 'Agencia de IA para Estudiantes y Familias',
-    pathwayImpact: 'Soluciones de Impacto de IA',
-    pathwayEducatorsDesc: 'De curiosos por la IA a creadores de IA',
-    pathwayStudentsDesc: 'Comprender, construir y dar forma a la IA',
-    pathwayImpactDesc: 'Dise\u00f1ar y construir soluciones de IA para retos reales',
-    'pkg.edu-starter': 'Paquete Inicial',
-    'pkg.edu-core': 'Paquete Principal',
-    'pkg.edu-full': 'Paquete Completo',
-    'pkg.edu-intro': 'Taller Introductorio',
-    'pkg.edu-powerup': 'Potenciador: Nuevas Funciones',
-    'pkg.stu-starter': 'Sprint Inicial',
-    'pkg.stu-core': 'Sprint Principal',
-    'pkg.stu-full': 'Sprint Completo',
-    'pkg.stu-pd': 'Formaci\u00f3n Docente para IA Estudiantil',
-    'pkg.impact-ideation': 'Ideaci\u00f3n',
-    'pkg.impact-build': 'Construcci\u00f3n de Herramienta \u2014 Inicial',
-    'pkg.impact-build-addl': 'Construcci\u00f3n de Herramienta \u2014 Adicional',
-    'pkg.impact-pilot': 'Soporte Piloto',
-    'pkg.impact-full': 'Ruta Completa de Impacto de IA',
-    'pkgDesc.edu-starter': 'Una introducci\u00f3n fundacional donde los participantes aprenden c\u00f3mo funciona la IA y construyen su primera herramienta simple de IA.',
-    'pkgDesc.edu-core': 'Una experiencia de aprendizaje m\u00e1s profunda para equipos listos para ir m\u00e1s all\u00e1 de lo b\u00e1sico hacia el dise\u00f1o intencional con funciones avanzadas.',
-    'pkgDesc.edu-full': 'Nuestra experiencia m\u00e1s completa \u2014 desde comprender la IA hasta dise\u00f1ar herramientas avanzadas, evaluar el impacto y una presentaci\u00f3n final.',
-    'pkgDesc.edu-intro': 'Los educadores aprenden c\u00f3mo funciona la IA y construyen una herramienta simple. Ideal para presentar Playlab a l\u00edderes clave.',
-    'pkgDesc.edu-powerup': 'Los educadores exploran las nuevas funciones de Playlab (python, voz, grafos de conocimiento, etc.) y las incorporan en sus creaciones. 50% de descuento para socios de renovaci\u00f3n.',
-    'pkgDesc.stu-starter': 'Una introducci\u00f3n fundacional donde los estudiantes aprenden c\u00f3mo funciona la IA y construyen su primera herramienta simple de IA.',
-    'pkgDesc.stu-core': 'Una experiencia m\u00e1s profunda donde los estudiantes dise\u00f1an intencionalmente herramientas de IA para abordar un reto real de la escuela o comunidad.',
-    'pkgDesc.stu-full': 'Nuestra experiencia estudiantil m\u00e1s completa \u2014 desde comprender la IA hasta dise\u00f1ar herramientas avanzadas, culminando en una presentaci\u00f3n.',
-    'pkgDesc.stu-pd': 'Prepara a tus educadores para ofrecer experiencias de IA estudiantil. Playlab facilita la formaci\u00f3n con una estructura probada, adaptada a tu curr\u00edculo.',
-    'pkgDesc.impact-ideation': 'Identifica d\u00f3nde la IA puede mejorar significativamente la ense\u00f1anza, el aprendizaje o las operaciones. Los equipos generan ideas, eval\u00faan la viabilidad y seleccionan 2\u20133 casos de uso prioritarios.',
-    'pkgDesc.impact-build': 'Playlab se asocia con tu equipo para dise\u00f1ar y construir una herramienta de IA personalizada \u2014 requisitos, ingenier\u00eda y m\u00faltiples ciclos de prueba y refinamiento.',
-    'pkgDesc.impact-build-addl': 'Construcci\u00f3n adicional de herramienta de IA personalizada, simplificada tras la inicial.',
-    'pkgDesc.impact-pilot': 'Dise\u00f1a y lanza un piloto para probar herramientas de IA en contextos reales. Planifica la implementaci\u00f3n, forma a los primeros usuarios, eval\u00faa resultados y refina.',
-    'pkgDesc.impact-full': 'Todos los bloques m\u00e1s tres construcciones de herramientas con un 20% de descuento. Cada bloque conduce al siguiente \u2014 desde la ideaci\u00f3n hasta la implementaci\u00f3n a escala.',
-    'badge.edu-starter': 'Inicio Recomendado',
-    'badge.edu-core': 'M\u00e1s Popular',
-    'badge.edu-full': 'Est\u00e1ndar de Oro',
-    'badge.edu-intro': 'Inicio R\u00e1pido',
-    'badge.edu-powerup': 'Complemento de Renovaci\u00f3n',
-    'badge.stu-starter': 'Sprint Estudiantil',
-    'badge.stu-core': 'M\u00e1s Popular',
-    'badge.stu-full': 'Experiencia Completa',
-    'badge.stu-pd': 'Preparaci\u00f3n Docente',
-    'badge.impact-ideation': 'Descubrimiento',
-    'badge.impact-build': 'Construcci\u00f3n',
-    'badge.impact-build-addl': 'Construcci\u00f3n +',
-    'badge.impact-pilot': 'Piloto',
-    'badge.impact-full': 'Mayor Valor',
-    partnerOrg: 'Socio / Organizaci\u00f3n',
-    partnerPlaceholder: 'ej. Distrito Escolar de Nampa',
-    services: 'Servicios',
-    baseRates: 'Tarifas Base',
-    resetToDefaults: 'Restablecer valores predeterminados',
-    servicesTotal: 'Total de Servicios',
-    softwareTotal: 'Total de Software',
-    standardTotal: 'Total Est\u00e1ndar',
-    discount: 'Descuento',
-    discountPlaceholder: 'ej. Incentivo de Fase Piloto',
-    customPartnerPrice: 'Precio Personalizado del Socio',
-    studentsServed: 'Estudiantes atendidos',
-    educatorsServed: 'Educadores atendidos',
-    perStudent: '/estudiante',
-    perEducator: '/educador',
-    exportToGoogleDoc: 'Exportar a Google Doc',
-    copyForProposal: 'Copiar para Propuesta',
-    copyShareableLink: 'Copiar Enlace Compartible',
-    clearAll: 'Limpiar Todo',
-    copied: '\u00a1Copiado!',
-    linkCopied: '\u00a1Enlace Copiado!',
-    addBtn: '+ A\u00f1adir',
-    addAnotherBtn: '+ A\u00f1adir Otro',
-    addToBuilder: 'A\u00f1adir al Constructor',
-    cancel: 'Cancelar',
-    sessions: 'Sesiones',
-    delivery: 'Entrega',
-    participants: 'Participantes',
-    facilitators: 'facilitadores',
-    facilitator: 'facilitador',
-    estimatedTotal: 'Total estimado',
-    virtual: 'Virtual',
-    local: 'Local',
-    travel: 'Viaje',
-    session: 'Sesi\u00f3n',
-    hrs: 'hrs',
-    hrsTotal: '{hours} hrs en total',
-    newQuote: 'Nueva Cotizaci\u00f3n',
-    newTab: '+ Nueva',
-    noLicenses: 'A\u00fan no se han a\u00f1adido licencias',
-    emptyState: 'A\u00f1ade paquetes desde la izquierda para crear una cotizaci\u00f3n',
-    addLicense: '+ A\u00f1adir Licencia',
-    partnershipProposal: 'Propuesta de Colaboraci\u00f3n',
-    softwareAndLicensing: 'SOFTWARE Y LICENCIAS',
-    proposalServices: 'SERVICIOS',
-    partnerSaves: 'El socio ahorra {amount} \u2014 {pct}% de descuento sobre el est\u00e1ndar',
-    perStudentCost: 'Costo por estudiante: {cost}/estudiante ({count} estudiantes)',
-    perEducatorCost: 'Costo por educador: {cost}/educador ({count} educadores)',
-    footnote: '* Los costos de uso de modelos de IA est\u00e1n cubiertos por Playlab y no se trasladan a los socios.',
-    pathwayDiscount: 'Descuento de Ruta',
-    proposalAddOns: 'Complementos',
-    launchMeeting: 'Reuni\u00f3n de Lanzamiento',
-    officeHours: 'Horas de Consulta',
-    travelLocal: 'Viaje (Local)',
-    travelFlight: 'Viaje (Vuelo)',
-    support: 'soporte',
-    auto: 'auto',
-    manual: '(manual)',
-    perThirty: '(1 por 30)',
-    sessionsMinusOne: '(sesiones\u22121)',
-    addServiceFirst: 'A\u00f1ade servicios primero',
-    deleteTabConfirm: '\u00bfEliminar la pesta\u00f1a "{name}"? Esta acci\u00f3n no se puede deshacer.',
-    proposalCreated: '\u00a1Propuesta creada!',
-    exportFailed: 'Exportaci\u00f3n fallida \u2014 revisa la consola',
-    added: 'A\u00f1adido: {name}'
-  },
-  fr: {
-    packageBuilderV3: 'Configurateur de Forfaits v3',
-    packageBuilder: 'Configurateur de Forfaits',
-    currency: 'Devise',
-    tabBuilder: 'Configurateur',
-    tabPricingSheet: 'Grille Tarifaire',
-    authError: "L\u2019acc\u00e8s est r\u00e9serv\u00e9 aux comptes @playlab.ai. Veuillez vous connecter avec votre compte Google Playlab.",
-    softwarePricing: 'Tarifs Logiciels',
-    softwareTiers: 'Niveaux de Logiciel',
-    enrollmentPricing: 'Tarification par Inscription (\u00c9coles)',
-    buildingBlocks: '\u00c9l\u00e9ments de Base',
-    packageOptions: 'Options de Forfaits',
-    softwareLicenses: 'Licences Logicielles',
-    softwareLicensesDesc: 'Niveaux entreprise \u2014 ajoutez plusieurs licences',
-    addOns: 'Modules Compl\u00e9mentaires',
-    addOnsDesc: 'Services individuels pour compl\u00e9ter les forfaits',
-    pathwayEducators: "Agence IA pour \u00c9ducateurs",
-    pathwayStudents: "Agence IA pour \u00c9l\u00e8ves et Familles",
-    pathwayImpact: "Solutions pour l\u2019Impact de l\u2019IA",
-    pathwayEducatorsDesc: "De la curiosit\u00e9 \u00e0 la cr\u00e9ation avec l\u2019IA",
-    pathwayStudentsDesc: "Comprendre, construire et fa\u00e7onner l\u2019IA",
-    pathwayImpactDesc: "Concevoir et construire des solutions IA pour des d\u00e9fis r\u00e9els",
-    'pkg.edu-starter': 'Forfait D\u00e9couverte',
-    'pkg.edu-core': 'Forfait Principal',
-    'pkg.edu-full': 'Forfait Complet',
-    'pkg.edu-intro': "Atelier d\u2019Introduction",
-    'pkg.edu-powerup': '\u00c9volution : Nouvelles Fonctions',
-    'pkg.stu-starter': 'Sprint D\u00e9couverte',
-    'pkg.stu-core': 'Sprint Principal',
-    'pkg.stu-full': 'Sprint Complet',
-    'pkg.stu-pd': "Formation Enseignants pour l\u2019IA \u00c9l\u00e8ves",
-    'pkg.impact-ideation': 'Id\u00e9ation',
-    'pkg.impact-build': "Construction d\u2019Outil \u2014 Initial",
-    'pkg.impact-build-addl': "Construction d\u2019Outil \u2014 Suppl\u00e9mentaire",
-    'pkg.impact-pilot': 'Accompagnement Pilote',
-    'pkg.impact-full': "Parcours Complet d\u2019Impact IA",
-    'pkgDesc.edu-starter': "Une introduction fondamentale o\u00f9 les participants d\u00e9couvrent le fonctionnement de l\u2019IA et construisent leur premier outil IA simple.",
-    'pkgDesc.edu-core': "Une exp\u00e9rience d\u2019apprentissage approfondie pour les \u00e9quipes pr\u00eates \u00e0 aller au-del\u00e0 des bases vers une conception intentionnelle avec des fonctionnalit\u00e9s avanc\u00e9es.",
-    'pkgDesc.edu-full': "Notre exp\u00e9rience la plus compl\u00e8te \u2014 de la compr\u00e9hension de l\u2019IA \u00e0 la conception d\u2019outils avanc\u00e9s, l\u2019\u00e9valuation de l\u2019impact et une pr\u00e9sentation finale.",
-    'pkgDesc.edu-intro': "Les \u00e9ducateurs d\u00e9couvrent le fonctionnement de l\u2019IA et construisent un outil simple. Id\u00e9al pour pr\u00e9senter Playlab aux d\u00e9cideurs cl\u00e9s.",
-    'pkgDesc.edu-powerup': "Les \u00e9ducateurs explorent les nouvelles fonctionnalit\u00e9s de Playlab (python, voix, graphe de connaissances, etc.) et les int\u00e8grent dans leurs cr\u00e9ations. 50 % de remise pour les partenaires en renouvellement.",
-    'pkgDesc.stu-starter': "Une introduction fondamentale o\u00f9 les \u00e9l\u00e8ves d\u00e9couvrent le fonctionnement de l\u2019IA et construisent leur premier outil IA simple.",
-    'pkgDesc.stu-core': "Une exp\u00e9rience approfondie o\u00f9 les \u00e9l\u00e8ves con\u00e7oivent intentionnellement des outils IA pour r\u00e9pondre \u00e0 un d\u00e9fi r\u00e9el de l\u2019\u00e9cole ou de la communaut\u00e9.",
-    'pkgDesc.stu-full': "Notre exp\u00e9rience \u00e9l\u00e8ve la plus compl\u00e8te \u2014 de la compr\u00e9hension de l\u2019IA \u00e0 la conception d\u2019outils avanc\u00e9s, avec une pr\u00e9sentation finale.",
-    'pkgDesc.stu-pd': "Pr\u00e9parez vos enseignants \u00e0 proposer des exp\u00e9riences IA aux \u00e9l\u00e8ves. Playlab anime la formation avec une structure \u00e9prouv\u00e9e, adapt\u00e9e \u00e0 votre programme.",
-    'pkgDesc.impact-ideation': "Identifiez o\u00f9 l\u2019IA peut am\u00e9liorer significativement l\u2019enseignement, l\u2019apprentissage ou les op\u00e9rations. Les \u00e9quipes g\u00e9n\u00e8rent des id\u00e9es, \u00e9valuent la faisabilit\u00e9 et s\u00e9lectionnent 2\u20133 cas d\u2019usage prioritaires.",
-    'pkgDesc.impact-build': "Playlab s\u2019associe \u00e0 votre \u00e9quipe pour concevoir et construire un outil IA sur mesure \u2014 sp\u00e9cifications, ing\u00e9nierie et plusieurs cycles de tests et d\u2019am\u00e9lioration.",
-    'pkgDesc.impact-build-addl': "Construction suppl\u00e9mentaire d\u2019outil IA sur mesure, simplifi\u00e9e apr\u00e8s la premi\u00e8re.",
-    'pkgDesc.impact-pilot': "Concevez et lancez un pilote pour tester des outils IA en contexte r\u00e9el. Planifiez le d\u00e9ploiement, formez les premiers utilisateurs, \u00e9valuez les r\u00e9sultats et affinez.",
-    'pkgDesc.impact-full': "Tous les modules plus trois constructions d\u2019outils avec 20 % de remise. Chaque module m\u00e8ne au suivant \u2014 de l\u2019id\u00e9ation \u00e0 l\u2019impl\u00e9mentation \u00e0 grande \u00e9chelle.",
-    'badge.edu-starter': 'D\u00e9but Recommand\u00e9',
-    'badge.edu-core': 'Le Plus Populaire',
-    'badge.edu-full': 'R\u00e9f\u00e9rence',
-    'badge.edu-intro': 'D\u00e9marrage Rapide',
-    'badge.edu-powerup': 'Compl\u00e9ment Renouvellement',
-    'badge.stu-starter': 'Sprint \u00c9l\u00e8ves',
-    'badge.stu-core': 'Le Plus Populaire',
-    'badge.stu-full': 'Exp\u00e9rience Compl\u00e8te',
-    'badge.stu-pd': 'Pr\u00e9paration Enseignants',
-    'badge.impact-ideation': 'D\u00e9couverte',
-    'badge.impact-build': 'Construction',
-    'badge.impact-build-addl': 'Construction +',
-    'badge.impact-pilot': 'Pilote',
-    'badge.impact-full': 'Valeur Maximale',
-    partnerOrg: 'Partenaire / Organisation',
-    partnerPlaceholder: 'ex. Acad\u00e9mie de Paris',
-    services: 'Services',
-    baseRates: 'Tarifs de Base',
-    resetToDefaults: 'R\u00e9tablir les valeurs par d\u00e9faut',
-    servicesTotal: 'Total Services',
-    softwareTotal: 'Total Logiciels',
-    standardTotal: 'Total Standard',
-    discount: 'Remise',
-    discountPlaceholder: 'ex. Incentive Phase Pilote',
-    customPartnerPrice: 'Prix Partenaire Personnalis\u00e9',
-    studentsServed: '\u00c9l\u00e8ves concern\u00e9s',
-    educatorsServed: '\u00c9ducateurs concern\u00e9s',
-    perStudent: '/\u00e9l\u00e8ve',
-    perEducator: '/\u00e9ducateur',
-    exportToGoogleDoc: 'Exporter vers Google Doc',
-    copyForProposal: 'Copier pour Proposition',
-    copyShareableLink: 'Copier le Lien de Partage',
-    clearAll: 'Tout Effacer',
-    copied: 'Copi\u00e9 !',
-    linkCopied: 'Lien Copi\u00e9 !',
-    addBtn: '+ Ajouter',
-    addAnotherBtn: '+ Ajouter un Autre',
-    addToBuilder: 'Ajouter au Configurateur',
-    cancel: 'Annuler',
-    sessions: 'S\u00e9ances',
-    delivery: 'Mode de prestation',
-    participants: 'Participants',
-    facilitators: 'animateurs',
-    facilitator: 'animateur',
-    estimatedTotal: 'Total estim\u00e9',
-    virtual: 'Virtuel',
-    local: 'Local',
-    travel: 'D\u00e9placement',
-    session: 'S\u00e9ance',
-    hrs: 'h',
-    hrsTotal: '{hours} h au total',
-    newQuote: 'Nouveau Devis',
-    newTab: '+ Nouveau',
-    noLicenses: 'Aucune licence ajout\u00e9e',
-    emptyState: 'Ajoutez des forfaits depuis la gauche pour cr\u00e9er un devis',
-    addLicense: '+ Ajouter une Licence',
-    partnershipProposal: 'Proposition de Partenariat',
-    softwareAndLicensing: 'LOGICIELS ET LICENCES',
-    proposalServices: 'SERVICES',
-    partnerSaves: 'Le partenaire \u00e9conomise {amount} \u2014 {pct} % de remise sur le standard',
-    perStudentCost: 'Co\u00fbt par \u00e9l\u00e8ve : {cost}/\u00e9l\u00e8ve ({count} \u00e9l\u00e8ves)',
-    perEducatorCost: 'Co\u00fbt par \u00e9ducateur : {cost}/\u00e9ducateur ({count} \u00e9ducateurs)',
-    footnote: "* Les co\u00fbts d\u2019utilisation des mod\u00e8les d\u2019IA sont pris en charge par Playlab et ne sont pas r\u00e9percut\u00e9s sur les partenaires.",
-    pathwayDiscount: 'Remise Parcours',
-    proposalAddOns: 'Modules Compl\u00e9mentaires',
-    launchMeeting: 'R\u00e9union de Lancement',
-    officeHours: 'Heures de Permanence',
-    travelLocal: 'D\u00e9placement (Local)',
-    travelFlight: 'D\u00e9placement (Vol)',
-    support: 'support',
-    auto: 'auto',
-    manual: '(manuel)',
-    perThirty: '(1 pour 30)',
-    sessionsMinusOne: '(s\u00e9ances\u22121)',
-    addServiceFirst: "Ajoutez d\u2019abord des services",
-    deleteTabConfirm: "Supprimer l\u2019onglet \u00ab {name} \u00bb ? Cette action est irr\u00e9versible.",
-    proposalCreated: 'Proposition cr\u00e9\u00e9e !',
-    exportFailed: "\u00c9chec de l\u2019export \u2014 consultez la console",
-    added: 'Ajout\u00e9 : {name}'
-  },
-  eu: {
-    packageBuilderV3: 'Pakete Eraikitzailea v3',
-    packageBuilder: 'Pakete Eraikitzailea',
-    currency: 'Moneta',
-    tabBuilder: 'Eraikitzailea',
-    tabPricingSheet: 'Prezio Orria',
-    authError: '@playlab.ai kontuetara mugatuta dago sarbidea. Mesedez, hasi saioa zure Playlab Google kontuarekin.',
-    softwarePricing: 'Software Prezioak',
-    softwareTiers: 'Software Mailak',
-    enrollmentPricing: 'Matrikulazio Prezioak (Eskolak)',
-    buildingBlocks: 'Oinarrizko Blokeak',
-    packageOptions: 'Pakete Aukerak',
-    softwareLicenses: 'Software Lizentziak',
-    softwareLicensesDesc: 'Enpresa mailak \u2014 gehitu lizentzia anitz',
-    addOns: 'Osagarriak',
-    addOnsDesc: 'Paketeak osatzeko banakako zerbitzuak',
-    pathwayEducators: 'AA Agentzia Hezitzaileentzat',
-    pathwayStudents: 'AA Agentzia Ikasle eta Familientzat',
-    pathwayImpact: 'AA Inpakturako Irtenbideak',
-    pathwayEducatorsDesc: 'AA jakinminetatik AA sortzaile izatera',
-    pathwayStudentsDesc: 'AA ulertu, eraiki eta moldatu',
-    pathwayImpactDesc: 'Benetako erronketarako AA irtenbideak diseinatu eta eraiki',
-    'pkg.edu-starter': 'Hasierako Paketea',
-    'pkg.edu-core': 'Oinarrizko Paketea',
-    'pkg.edu-full': 'Pakete Osoa',
-    'pkg.edu-intro': 'Sarrerako Tailerra',
-    'pkg.edu-powerup': 'Bultzada: Ezaugarri Berriak',
-    'pkg.stu-starter': 'Hasierako Sprinta',
-    'pkg.stu-core': 'Oinarrizko Sprinta',
-    'pkg.stu-full': 'Sprint Osoa',
-    'pkg.stu-pd': 'Ikasleen AA-rako Irakasle Prestakuntza',
-    'pkg.impact-ideation': 'Ideiaketa',
-    'pkg.impact-build': 'Tresna Eraikuntza \u2014 Hasierakoa',
-    'pkg.impact-build-addl': 'Tresna Eraikuntza \u2014 Gehigarria',
-    'pkg.impact-pilot': 'Pilotu Laguntza',
-    'pkg.impact-full': 'AA Inpaktu Ibilbide Osoa',
-    'pkgDesc.edu-starter': 'Sarrera oinarrizkoa, non parte-hartzaileek AAk nola funtzionatzen duen ikasten duten eta lehen AA tresna sinplea eraikitzen duten.',
-    'pkgDesc.edu-core': 'Ikaskuntza esperientzia sakonagoa, oinarrietatik haratago joateko prest dauden taldeentzat, ezaugarri aurreratuekin diseinua eginez.',
-    'pkgDesc.edu-full': 'Gure esperientziarik osoena \u2014 AA ulertzetik tresna aurreratuak diseinatzera, inpaktua ebaluatzera eta azken aurkezpenera.',
-    'pkgDesc.edu-intro': 'Hezitzaileek AAk nola funtzionatzen duen ikasten dute eta tresna sinple bat eraikitzen dute. Ezin hobea Playlab lider nagusiei aurkezteko.',
-    'pkgDesc.edu-powerup': 'Hezitzaileek Playlab-en ezaugarri berriak (python, ahotsa, ezagutza-grafoa, etab.) aztertzen dituzte eta beren lanetan txertatzen dituzte. %50eko deskontua berritzeko bazkideentzat.',
-    'pkgDesc.stu-starter': 'Sarrera oinarrizkoa, non ikasleek AAk nola funtzionatzen duen ikasten duten eta lehen AA tresna sinplea eraikitzen duten.',
-    'pkgDesc.stu-core': 'Esperientzia sakonagoa, non ikasleek modu intentzionalean AA tresnak diseinatzen dituzten eskola edo komunitateko benetako erronka bati erantzuteko.',
-    'pkgDesc.stu-full': 'Gure ikasleen esperientziarik osoena \u2014 AA ulertzetik tresna aurreratuak diseinatzera, aurkezpen batekin amaituz.',
-    'pkgDesc.stu-pd': 'Prestatu zure irakasleak ikasleen AA esperientziak emateko. Playlab-ek prestakuntza gidatzen du egitura frogatuarekin, zure curriculumera egokituta.',
-    'pkgDesc.impact-ideation': 'Identifikatu non hobetu dezakeen AAk modu esanguratsuan irakaskuntza, ikaskuntza edo eragiketak. Taldeek ideiak sortzen dituzte, bideragarritasuna ebaluatzen eta 2\u20133 lehentasunezko erabilera-kasu hautatzen.',
-    'pkgDesc.impact-build': 'Playlab zure taldearekin batera lan egiten du AA tresna pertsonalizatua diseinatu eta eraikitzeko \u2014 eskakizunak, ingeniaritza eta proba eta hobekuntza ziklo anitz.',
-    'pkgDesc.impact-build-addl': 'AA tresna pertsonalizatu gehigarriaren eraikuntza, lehenaren ondoren sinplifikatua.',
-    'pkgDesc.impact-pilot': 'Diseinatu eta abiatu pilotu bat AA tresnak testuinguru errealetan probatzeko. Planifikatu inplementazioa, prestatu lehen erabiltzaileak, ebaluatu emaitzak eta hobetu.',
-    'pkgDesc.impact-full': 'Bloke guztiak eta hiru tresna eraikuntza %20ko deskonturekin. Bloke bakoitzak hurrengora darama \u2014 ideiaketatik eskalan inplementatzera.',
-    'badge.edu-starter': 'Gomendatutako Hasiera',
-    'badge.edu-core': 'Ezagunena',
-    'badge.edu-full': 'Urre Estandarra',
-    'badge.edu-intro': 'Hasiera Azkarra',
-    'badge.edu-powerup': 'Berritze Osagarria',
-    'badge.stu-starter': 'Ikasle Sprinta',
-    'badge.stu-core': 'Ezagunena',
-    'badge.stu-full': 'Esperientzia Osoa',
-    'badge.stu-pd': 'Irakasle Prestakuntza',
-    'badge.impact-ideation': 'Aurkikuntza',
-    'badge.impact-build': 'Eraikuntza',
-    'badge.impact-build-addl': 'Eraikuntza +',
-    'badge.impact-pilot': 'Pilotua',
-    'badge.impact-full': 'Balio Gorena',
-    partnerOrg: 'Bazkidea / Erakundea',
-    partnerPlaceholder: 'adib. Nampa Eskola Barrutia',
-    services: 'Zerbitzuak',
-    baseRates: 'Oinarrizko Tarifak',
-    resetToDefaults: 'Lehenetsitako balioak berrezarri',
-    servicesTotal: 'Zerbitzuen Guztira',
-    softwareTotal: 'Software Guztira',
-    standardTotal: 'Guztira Estandarra',
-    discount: 'Deskontua',
-    discountPlaceholder: 'adib. Pilotu Faseko Pizgarria',
-    customPartnerPrice: 'Bazkidearen Prezio Pertsonalizatua',
-    studentsServed: 'Ikasle zerbitzatuak',
-    educatorsServed: 'Hezitzaile zerbitzatuak',
-    perStudent: '/ikasle',
-    perEducator: '/hezitzaile',
-    exportToGoogleDoc: 'Google Doc-era Esportatu',
-    copyForProposal: 'Proposamenerako Kopiatu',
-    copyShareableLink: 'Partekatzeko Esteka Kopiatu',
-    clearAll: 'Dena Garbitu',
-    copied: 'Kopiatuta!',
-    linkCopied: 'Esteka Kopiatuta!',
-    addBtn: '+ Gehitu',
-    addAnotherBtn: '+ Beste Bat Gehitu',
-    addToBuilder: 'Eraikitzailera Gehitu',
-    cancel: 'Utzi',
-    sessions: 'Saioak',
-    delivery: 'Ematea',
-    participants: 'Parte-hartzaileak',
-    facilitators: 'dinamizatzaile',
-    facilitator: 'dinamizatzaile',
-    estimatedTotal: 'Gutxi gorabeherako guztira',
-    virtual: 'Birtuala',
-    local: 'Lokala',
-    travel: 'Bidaia',
-    session: 'Saioa',
-    hrs: 'ord',
-    hrsTotal: '{hours} ord guztira',
-    newQuote: 'Aurrekontu Berria',
-    newTab: '+ Berria',
-    noLicenses: 'Oraindik ez da lizentziarik gehitu',
-    emptyState: 'Gehitu paketeak ezkerretik aurrekontu bat sortzeko',
-    addLicense: '+ Lizentzia Gehitu',
-    partnershipProposal: 'Lankidetza Proposamena',
-    softwareAndLicensing: 'SOFTWAREA ETA LIZENTZIAK',
-    proposalServices: 'ZERBITZUAK',
-    partnerSaves: 'Bazkideak {amount} aurrezten du \u2014 estandarretik %{pct} deskontu',
-    perStudentCost: 'Ikasle bakoitzeko kostua: {cost}/ikasle ({count} ikasle)',
-    perEducatorCost: 'Hezitzaile bakoitzeko kostua: {cost}/hezitzaile ({count} hezitzaile)',
-    footnote: '* AA ereduen erabilera kostuak Playlab-ek ordaintzen ditu eta ez zaizkie bazkideei pasatzen.',
-    pathwayDiscount: 'Ibilbide Deskontua',
-    proposalAddOns: 'Osagarriak',
-    launchMeeting: 'Hasierako Bilera',
-    officeHours: 'Kontsulta Orduak',
-    travelLocal: 'Bidaia (Lokala)',
-    travelFlight: 'Bidaia (Hegaldia)',
-    support: 'laguntza',
-    auto: 'auto',
-    manual: '(eskuzkoa)',
-    perThirty: '(1 30eko)',
-    sessionsMinusOne: '(saioak\u22121)',
-    addServiceFirst: 'Gehitu zerbitzuak lehenik',
-    deleteTabConfirm: '"{name}" fitxa ezabatu? Ezin da desegin.',
-    proposalCreated: 'Proposamena sortuta!',
-    exportFailed: 'Esportazioak huts egin du \u2014 begiratu kontsola',
-    added: 'Gehituta: {name}'
-  }
-};
-
+// ─── i18n / Language ──────────────────────────────────────────────────────────
 let selectedLang = localStorage.getItem('playlab_builder_lang') || 'en';
 
-function t(key, replacements) {
-  const str = TRANSLATIONS[selectedLang]?.[key] || TRANSLATIONS['en'][key] || key;
-  if (!replacements) return str;
-  return str.replace(/\{(\w+)\}/g, (_, k) => replacements[k] !== undefined ? replacements[k] : '{' + k + '}');
+// ─── Auto-Translation System ────────────────────────────────────────────────
+const LANG_LOCALES = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', eu: 'eu-ES' };
+let translationCache = {};
+try { translationCache = JSON.parse(localStorage.getItem('playlab_i18n_cache') || '{}'); } catch { translationCache = {}; }
+
+function saveTranslationCache() {
+  try { localStorage.setItem('playlab_i18n_cache', JSON.stringify(translationCache)); } catch {}
 }
 
-function applyStaticTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = t(key);
-    if (val) el.textContent = val;
+async function apiTranslate(text, targetLang) {
+  const res = await fetch(
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
+  );
+  const data = await res.json();
+  let translated = data[0].map(s => s[0]).join('');
+  translated = translated.replace(/playlab/gi, 'Playlab');
+  return translated;
+}
+
+function getCachedTranslation(text, lang) {
+  if (!lang || lang === 'en' || !text.trim()) return text;
+  return translationCache[lang + ':' + text] || null;
+}
+
+function getTextNodes(root) {
+  const nodes = [];
+  const skip = new Set(['SCRIPT', 'STYLE', 'SVG', 'NOSCRIPT', 'IFRAME', 'CODE', 'PRE']);
+  function walk(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent.trim();
+      if (text && text.length > 1 && !/^[\d$\u20AC\u00A3\u20B9\u20B5\s,.%\u00D7\u00B7\u2014\u2212\u2500\-]+$/.test(text)) {
+        nodes.push(node);
+      }
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    if (skip.has(node.tagName)) return;
+    for (const child of node.childNodes) walk(child);
+  }
+  walk(root);
+  return nodes;
+}
+
+const _origTexts = new WeakMap();
+const _origPlaceholders = new WeakMap();
+
+let _translateDebounce = null;
+function scheduleTranslation() {
+  if (_translateDebounce) clearTimeout(_translateDebounce);
+  _translateDebounce = setTimeout(() => translateVisibleDOM(), 30);
+}
+
+async function translateVisibleDOM() {
+  if (selectedLang === 'en') { restoreEnglish(); return; }
+
+  const textNodes = getTextNodes(document.body);
+  const uncached = new Set();
+
+  for (const node of textNodes) {
+    if (!_origTexts.has(node)) _origTexts.set(node, node.textContent);
+    const orig = _origTexts.get(node).trim();
+    if (orig && !translationCache[selectedLang + ':' + orig]) uncached.add(orig);
+  }
+
+  document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+    if (!_origPlaceholders.has(el)) _origPlaceholders.set(el, el.placeholder);
+    const orig = _origPlaceholders.get(el);
+    if (orig && !translationCache[selectedLang + ':' + orig]) uncached.add(orig);
   });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    const val = t(key);
-    if (val) el.placeholder = val;
+
+  document.querySelectorAll('option').forEach(el => {
+    if (!_origTexts.has(el)) _origTexts.set(el, el.textContent);
+    const orig = _origTexts.get(el).trim();
+    if (orig && orig.length > 1 && !translationCache[selectedLang + ':' + orig]) uncached.add(orig);
   });
-  document.title = 'Playlab \u2014 ' + t('packageBuilderV3');
-  const cl = document.getElementById('currencyLabel');
-  if (cl) cl.textContent = t('currency');
+
+  const titleOrig = document.title;
+  if (!translationCache[selectedLang + ':' + titleOrig]) uncached.add(titleOrig);
+
+  const toTranslate = [...uncached];
+  if (toTranslate.length > 0) {
+    const BATCH = 10;
+    for (let i = 0; i < toTranslate.length; i += BATCH) {
+      const batch = toTranslate.slice(i, i + BATCH);
+      await Promise.all(batch.map(async (text) => {
+        try {
+          const translated = await apiTranslate(text, selectedLang);
+          translationCache[selectedLang + ':' + text] = translated;
+        } catch { /* keep English */ }
+      }));
+    }
+    saveTranslationCache();
+  }
+
+  for (const node of textNodes) {
+    const orig = (_origTexts.get(node) || '').trim();
+    const trans = translationCache[selectedLang + ':' + orig];
+    if (trans && trans !== orig) {
+      const raw = _origTexts.get(node) || node.textContent;
+      const leading = raw.match(/^\s*/)[0];
+      const trailing = raw.match(/\s*$/)[0];
+      node.textContent = leading + trans + trailing;
+    }
+  }
+
+  document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+    const orig = _origPlaceholders.get(el) || el.placeholder;
+    const trans = translationCache[selectedLang + ':' + orig];
+    if (trans) el.placeholder = trans;
+  });
+
+  document.querySelectorAll('option').forEach(el => {
+    const orig = (_origTexts.get(el) || '').trim();
+    const trans = translationCache[selectedLang + ':' + orig];
+    if (trans) el.textContent = trans;
+  });
+
+  const titleTrans = translationCache[selectedLang + ':' + titleOrig];
+  if (titleTrans) document.title = titleTrans;
+}
+
+function restoreEnglish() {
+  const textNodes = getTextNodes(document.body);
+  for (const node of textNodes) {
+    const orig = _origTexts.get(node);
+    if (orig) node.textContent = orig;
+  }
+  document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+    const orig = _origPlaceholders.get(el);
+    if (orig) el.placeholder = orig;
+  });
+  document.querySelectorAll('option').forEach(el => {
+    const orig = _origTexts.get(el);
+    if (orig) el.textContent = orig;
+  });
+}
+
+async function translateString(text, lang) {
+  if (!lang || lang === 'en' || !text.trim()) return text;
+  const cacheKey = lang + ':' + text;
+  if (translationCache[cacheKey]) return translationCache[cacheKey];
+  try {
+    const translated = await apiTranslate(text, lang);
+    translationCache[cacheKey] = translated;
+    saveTranslationCache();
+    return translated;
+  } catch { return text; }
 }
 
 function switchLanguage(lang) {
   selectedLang = lang;
   localStorage.setItem('playlab_builder_lang', lang);
-  applyStaticTranslations();
-  renderAll();
-  renderTabBar();
+  translateVisibleDOM();
 }
+
 
 // ─── Auth Gate ────────────────────────────────────────────────────────────────
 const ALLOWED_DOMAIN = 'playlab.ai';
@@ -1498,7 +1101,7 @@ function addLicense(tierId, count) {
   renderSwCards();
   renderLicenseList();
   renderTotals();
-  showToast(t('added', { name: tier.name }));
+  showToast(`Added: ${tier.name}`);
 }
 
 function removeLicense(licenseId) {
@@ -1519,10 +1122,13 @@ function updateLicenseCount(licenseId, input, clamp) {
   const lic = quoteLicenses.find(l => l.licenseId === licenseId);
   if (!lic) return;
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
-  let val = parseInt(input.value);
-  if (clamp && (isNaN(val) || val < tier.minCount)) val = tier.minCount;
-  if (!isNaN(val) && val >= 1) lic.count = val;
-  if (clamp) input.value = lic.count;
+  let val = parseFloat(input.value);
+  if (clamp) {
+    if (isNaN(val) || val < tier.minCount) val = tier.minCount;
+    val = Math.round(val);
+    input.value = val;
+  }
+  if (!isNaN(val) && val >= 1) lic.count = Math.round(val);
   renderLicenseList();
   renderTotals();
   saveToUrl();
@@ -1803,13 +1409,11 @@ function renderCatalog() {
     const section = document.createElement('div');
     section.className = 'pathway-section' + (isCollapsed ? ' collapsed' : '');
     section.id = 'pw-' + pathway.id;
-    const pwNameKey = pathway.id === 'educators' ? 'pathwayEducators' : pathway.id === 'students' ? 'pathwayStudents' : 'pathwayImpact';
-    const pwDescKey = pathway.id === 'educators' ? 'pathwayEducatorsDesc' : pathway.id === 'students' ? 'pathwayStudentsDesc' : 'pathwayImpactDesc';
     section.innerHTML = `<div class="pathway-header" onclick="togglePathway('${pathway.id}')">
       <span class="pathway-chevron">\u25BC</span>
       <div class="pathway-dot" style="background:${pathway.color}"></div>
-      <h2>${t(pwNameKey)}</h2>
-      <span class="pathway-desc">${t(pwDescKey)}</span>
+      <h2>${pathway.name}</h2>
+      <span class="pathway-desc">${pathway.desc}</span>
     </div><div class="pathway-body"><div class="pkg-grid" id="grid-${pathway.id}"></div></div>`;
     container.appendChild(section);
     const grid = section.querySelector('.pkg-grid');
@@ -1838,9 +1442,9 @@ function buildPkgCard(pkg, pathway) {
     configHtml = buildInlineConfig(pkg);
   }
 
-  const pkgName = t('pkg.' + pkg.id) || pkg.name;
-  const pkgDesc = t('pkgDesc.' + pkg.id) || pkg.desc;
-  const pkgBadge = t('badge.' + pkg.id) || pkg.badge;
+  const pkgName = pkg.name;
+  const pkgDesc = pkg.desc;
+  const pkgBadge = pkg.badge;
   card.innerHTML = `
     <div class="pkg-top">
       <div><div class="pkg-name">${pkgName}</div><div class="pkg-subtitle">${pkg.subtitle}</div></div>
@@ -1849,10 +1453,10 @@ function buildPkgCard(pkg, pathway) {
     <div class="pkg-desc">${pkgDesc}</div>
     <div class="pkg-price-row">
       <div class="pkg-price">${fmt(netPrice)}${pkg.pathwayDiscount ? ' <span style="font-size:10px;font-weight:500;color:var(--emerald-600)">(20% off)</span>' : ''}</div>
-      <div class="pkg-price-note">1 ${t('facilitator')} \u00B7 30 ${t('participants').toLowerCase()}</div>
+      <div class="pkg-price-note">1 facilitator \u00B7 30 participants</div>
     </div>
     <div class="pkg-components">${compSummary}</div>
-    ${isConfigOpen ? '' : `<button class="pkg-add-btn" onclick="event.stopPropagation(); openConfig('${pkg.id}')">${inQuote ? t('addAnotherBtn') : t('addBtn')}</button>`}
+    ${isConfigOpen ? '' : `<button class="pkg-add-btn" onclick="event.stopPropagation(); openConfig('${pkg.id}')">${inQuote ? '+ Add Another' : '+ Add'}</button>`}
     ${configHtml}`;
   return card;
 }
@@ -1870,23 +1474,23 @@ function buildInlineConfig(pkg) {
     const flightCost = getBlockPrice('travel-flight');
 
     sessionsHtml = `<div class="pkg-config-row">
-      <span class="pkg-config-label">${t('sessions')}</span>
-      <input class="num-sessions-input" type="number" min="1" max="${maxSessions}" value="${numSessions}"
+      <span class="pkg-config-label">Sessions</span>
+      <input class="num-sessions-input" type="number" step="any" value="${numSessions}"
              onchange="updateConfigNumSessions('${pkg.id}', this)"
              oninput="updateConfigNumSessions('${pkg.id}', this)">
-      <span style="font-size:10px;color:var(--slate-400)">${t('hrsTotal', { hours: pkg.facilitationHours })}</span>
+      <span style="font-size:10px;color:var(--slate-400)">${`${pkg.facilitationHours} hrs total`}</span>
     </div>
     <div class="session-config-rows">
       ${sessions.map((s, i) => `<div class="session-config-row">
-        <span class="session-config-label">${t('session')} ${i + 1}:</span>
-        <input class="session-hours-input" type="number" min="0.5" step="0.5" value="${s.hours}"
+        <span class="session-config-label">Session ${i + 1}:</span>
+        <input class="session-hours-input" type="number" step="any" value="${s.hours}"
                onchange="updateConfigSessionHours('${pkg.id}', ${i}, this, true)"
                oninput="updateConfigSessionHours('${pkg.id}', ${i}, this, false)">
-        <span class="session-hours-unit">${t('hrs')}</span>
+        <span class="session-hours-unit">hrs</span>
         <select class="config-select" style="font-size:10px;padding:4px 6px;min-width:0" onchange="updateConfigSessionDelivery('${pkg.id}',${i},this.value)">
-          <option value="virtual" ${s.delivery === 'virtual' ? 'selected' : ''}>${t('virtual')}</option>
-          <option value="local" ${s.delivery === 'local' ? 'selected' : ''}>${t('local')} (+${fmt(localCost)})</option>
-          <option value="travel" ${s.delivery === 'travel' ? 'selected' : ''}>${t('travel')} (+${fmt(flightCost)})</option>
+          <option value="virtual" ${s.delivery === 'virtual' ? 'selected' : ''}>Virtual</option>
+          <option value="local" ${s.delivery === 'local' ? 'selected' : ''}>Local (+${fmt(localCost)})</option>
+          <option value="travel" ${s.delivery === 'travel' ? 'selected' : ''}>Travel (+${fmt(flightCost)})</option>
         </select>
       </div>`).join('')}
     </div>`;
@@ -1896,11 +1500,11 @@ function buildInlineConfig(pkg) {
     const localCost = getBlockPrice('travel-local');
     const flightCost = getBlockPrice('travel-flight');
     sessionsHtml = `<div class="pkg-config-row">
-      <span class="pkg-config-label">${t('delivery')}</span>
+      <span class="pkg-config-label">Delivery</span>
       <div class="delivery-pills">
-        <button class="delivery-pill ${delivery === 'virtual' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','virtual')">${t('virtual')}<span class="pill-cost">+$0</span></button>
-        <button class="delivery-pill ${delivery === 'local' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','local')">${t('local')}<span class="pill-cost">+${fmt(localCost)}</span></button>
-        <button class="delivery-pill ${delivery === 'travel' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','travel')">${t('travel')}<span class="pill-cost">+${fmt(flightCost)}</span></button>
+        <button class="delivery-pill ${delivery === 'virtual' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','virtual')">Virtual<span class="pill-cost">+$0</span></button>
+        <button class="delivery-pill ${delivery === 'local' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','local')">Local<span class="pill-cost">+${fmt(localCost)}</span></button>
+        <button class="delivery-pill ${delivery === 'travel' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','travel')">Travel<span class="pill-cost">+${fmt(flightCost)}</span></button>
       </div>
     </div>`;
   }
@@ -1908,9 +1512,9 @@ function buildInlineConfig(pkg) {
   const participants = cs.participants || 30;
   const numFac = Math.max(1, Math.ceil(participants / 30));
   const participantsHtml = hasFacilitation ? `<div class="pkg-config-row">
-    <span class="pkg-config-label">${t('participants')}</span>
-    <input class="config-participants" type="number" min="1" value="${participants}" onchange="updateConfigParticipants('${pkg.id}', this)" oninput="updateConfigParticipants('${pkg.id}', this)">
-    <span style="font-size:10px;color:var(--slate-400)">\u2192 ${numFac} ${numFac > 1 ? t('facilitators') : t('facilitator')}</span>
+    <span class="pkg-config-label">Participants</span>
+    <input class="config-participants" type="number" step="any" value="${participants}" onchange="updateConfigParticipants('${pkg.id}', this)" oninput="updateConfigParticipants('${pkg.id}', this)">
+    <span style="font-size:10px;color:var(--slate-400)">\u2192 ${numFac} ${numFac > 1 ? 'facilitators' : 'facilitator'}</span>
   </div>` : '';
 
   // Preview cost
@@ -1920,11 +1524,11 @@ function buildInlineConfig(pkg) {
     ${sessionsHtml}
     ${participantsHtml}
     <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding-top:4px;border-top:1px solid var(--slate-200)">
-      <span style="color:var(--slate-500);font-weight:500">${t('estimatedTotal')}</span>
+      <span style="color:var(--slate-500);font-weight:500">Estimated total</span>
       <span style="font-weight:800;color:var(--sky-700)">${fmt(previewCost)}</span>
     </div>
-    <button class="config-confirm-btn" onclick="confirmAddPackage('${pkg.id}')">${t('addToBuilder')}</button>
-    <button style="width:100%;padding:5px;background:none;border:none;font-family:'Lexend',sans-serif;font-size:10px;color:var(--slate-400);cursor:pointer" onclick="closeConfig()">${t('cancel')}</button>
+    <button class="config-confirm-btn" onclick="confirmAddPackage('${pkg.id}')">Add to Builder</button>
+    <button style="width:100%;padding:5px;background:none;border:none;font-family:'Lexend',sans-serif;font-size:10px;color:var(--slate-400);cursor:pointer" onclick="closeConfig()">Cancel</button>
   </div>`;
 }
 
@@ -2015,7 +1619,7 @@ function updateConfigNumSessions(pkgId, input) {
   const cs = ensureConfigState(pkgId);
   const pkg = PACKAGES.find(p => p.id === pkgId);
   const totalHours = pkg?.facilitationHours || 1;
-  let val = parseInt(input.value);
+  let val = Math.round(parseFloat(input.value));
   const maxS = getMaxSessions(totalHours);
   if (isNaN(val) || val < 1) val = 1;
   if (val > maxS) val = maxS;
@@ -2040,8 +1644,7 @@ function updateConfigSessionHours(pkgId, idx, input, commit) {
   const cs = ensureConfigState(pkgId);
   let val = parseFloat(input.value);
   if (commit) {
-    if (isNaN(val) || val < 0.5) val = 0.5;
-    val = Math.round(val * 2) / 2;
+    if (isNaN(val) || val < 0) val = 0;
     input.value = val;
     cs.sessions[idx].hours = val;
     const hadFocus = document.activeElement === input;
@@ -2052,7 +1655,7 @@ function updateConfigSessionHours(pkgId, idx, input, commit) {
       if (inputs && inputs[idx]) { inputs[idx].focus(); inputs[idx].select(); }
     }
   } else {
-    if (!isNaN(val) && val >= 0.5) cs.sessions[idx].hours = Math.round(val * 2) / 2;
+    if (!isNaN(val) && val >= 0) cs.sessions[idx].hours = val;
   }
 }
 
@@ -2070,7 +1673,7 @@ function updateConfigImpactDelivery(pkgId, mode) {
 
 function updateConfigParticipants(pkgId, input) {
   const cs = ensureConfigState(pkgId);
-  let val = parseInt(input.value);
+  let val = Math.round(parseFloat(input.value));
   if (isNaN(val) || val < 1) val = 1;
   cs.participants = val;
   const hadFocus = document.activeElement === input;
@@ -2116,7 +1719,7 @@ function confirmAddPackage(pkgId) {
   renderCatalog();
   renderQuote();
   renderTotals();
-  showToast(t('added', { name: t('pkg.' + pkg.id) || pkg.name }));
+  showToast(`Added: ${pkg.name}`);
 }
 
 // Direct add for impact pathway packages (no config needed - but we still show config for delivery mode)
@@ -2147,9 +1750,10 @@ function togglePkg(pkgId) {
 function setParticipants(pkgId, input, commit) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg) return;
-  let val = parseInt(input.value);
+  let val = parseFloat(input.value);
   if (commit) {
     if (isNaN(val) || val < 1) val = 1;
+    val = Math.round(val);
     input.value = val;
   }
   if (!isNaN(val) && val >= 1) {
@@ -2174,9 +1778,10 @@ function setParticipants(pkgId, input, commit) {
 function setFacilitators(pkgId, input, commit) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg) return;
-  let val = parseInt(input.value);
+  let val = parseFloat(input.value);
   if (commit) {
     if (isNaN(val) || val < 1) val = 1;
+    val = Math.round(val);
     input.value = val;
   }
   if (!isNaN(val) && val >= 1) {
@@ -2202,12 +1807,11 @@ function updateQuoteSessionHours(pkgId, idx, input, commit) {
   if (!qpkg || !qpkg.sessions[idx]) return;
   let val = parseFloat(input.value);
   if (commit) {
-    if (isNaN(val) || val < 0.5) val = 0.5;
-    val = Math.round(val * 2) / 2;
+    if (isNaN(val) || val < 0) val = 0;
     input.value = val;
   }
-  if (!isNaN(val) && val >= 0.5) {
-    qpkg.sessions[idx].hours = Math.round(val * 2) / 2;
+  if (!isNaN(val) && val >= 0) {
+    qpkg.sessions[idx].hours = val;
   }
   renderTotals();
   if (commit) {
@@ -2253,8 +1857,8 @@ function setCompQty(pkgId, compId, input) {
   const comp = qpkg.components.find(c => c.id === compId);
   if (!comp) return;
   let val = parseFloat(input.value);
-  if (isNaN(val) || val < 0.5) val = 0.5;
-  comp.qty = Math.round(val * 2) / 2;
+  if (isNaN(val) || val < 0) val = 0;
+  comp.qty = val;
   renderTotals();
   saveToUrl();
 }
@@ -2275,7 +1879,9 @@ function setAutoQty(pkgId, field, input) {
   if (!qpkg) return;
   let val = parseFloat(input.value);
   if (isNaN(val) || val < 0) val = 0;
-  qpkg[field] = Math.round(val * 2) / 2;
+  // Office hours are measured in hours (allow decimals); others are meeting counts (round to int)
+  if (field !== 'officeHoursQty') val = Math.round(val);
+  qpkg[field] = val;
   renderQuote();
   renderTotals();
 }
@@ -2293,9 +1899,9 @@ function changeTravelQty(pkgId, field, dir) {
 function setTravelQty(pkgId, field, input) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg) return;
-  let val = parseInt(input.value);
+  let val = parseFloat(input.value);
   if (isNaN(val) || val < 0) val = 0;
-  qpkg[field] = val;
+  qpkg[field] = Math.round(val);
   renderQuote();
   renderTotals();
 }
@@ -2315,7 +1921,7 @@ function addAddon(blockId) {
   renderAddonGrid();
   renderQuote();
   renderTotals();
-  showToast(t('added', { name: def.label }));
+  showToast(`Added: ${def.label}`);
 }
 
 function removeAddon(addonId) {
@@ -2339,8 +1945,8 @@ function setAddonQty(addonId, input) {
   const addon = quoteAddons.find(a => a.addonId === addonId);
   if (!addon) return;
   let val = parseFloat(input.value);
-  if (isNaN(val) || val < addon.minQty) val = addon.minQty;
-  addon.qty = Math.round(Math.round(val / addon.step) * addon.step * 100) / 100;
+  if (isNaN(val) || val < 0) val = addon.minQty;
+  addon.qty = val;
   renderQuote();
   renderTotals();
 }
@@ -2363,7 +1969,7 @@ function renderSwCards() {
     const computedText = tier.isCustom ? 'Custom' : `${fmt(cost)}${period}`;
     const countRow = `<div class="sw-card-row">
         <label>${countLabel}:</label>
-        <input class="sw-count-input" type="number" min="${tier.minCount}" value="${defaultCount}" id="sw-input-${tier.id}">
+        <input class="sw-count-input" type="number" step="any" value="${defaultCount}" id="sw-input-${tier.id}">
         <span class="sw-card-computed">${computedText}</span>
       </div>`;
     let metaRow = '';
@@ -2374,13 +1980,13 @@ function renderSwCards() {
       <div class="sw-card-price">${priceLabel}</div>
       ${metaRow}
       ${countRow}
-      <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">${t('addLicense')}</button>`;
+      <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">+ Add License</button>`;
     grid.appendChild(card);
 
     const input = card.querySelector('.sw-count-input');
     const computed = card.querySelector('.sw-card-computed');
     input.addEventListener('input', () => {
-      const v = parseInt(input.value) || tier.defaultCount;
+      const v = parseFloat(input.value) || tier.defaultCount;
       computed.textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + (tier.periodLabel || '/yr');
     });
   }
@@ -2393,12 +1999,12 @@ function renderSwCards() {
   const defaultTier = getSchoolTierForEnrollment(defaultEnrollment);
   schoolCard.innerHTML = `
     <div class="sw-card-name">Schools</div>
-    <div class="sw-card-tagline">Enrollment-based pricing for K–12</div>
+    <div class="sw-card-tagline">Enrollment-based pricing for K\u201312</div>
     <div class="sw-card-price" id="schools-price-badge">${defaultTier.priceNote}</div>
     <div id="schools-tier-detail" style="font-size:10px;color:var(--slate-400);margin-top:2px">${defaultTier.name} · ${defaultTier.monthlyCredits}</div>
     <div class="sw-card-row">
       <label>Students:</label>
-      <input class="sw-count-input" type="number" min="1" value="${defaultEnrollment}" id="sw-input-schools" step="100">
+      <input class="sw-count-input" type="number" step="any" value="${defaultEnrollment}" id="sw-input-schools">
       <span class="sw-card-computed" id="schools-computed">${fmt(defaultTier.pricePerUnit * defaultEnrollment)}/yr</span>
     </div>
     <div id="schools-tier-table" style="margin-top:6px;font-size:9.5px;color:var(--slate-400);line-height:1.6">
@@ -2407,12 +2013,12 @@ function renderSwCards() {
       <div style="display:flex;justify-content:space-between"><span>25,000–49,999</span><span>$2.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>50,000+</span><span>Custom</span></div>
     </div>
-    <button class="sw-add-btn" onclick="addSchoolLicense()">${t('addLicense')}</button>`;
+    <button class="sw-add-btn" onclick="addSchoolLicense()">+ Add License</button>`;
   grid.appendChild(schoolCard);
 
   const schoolInput = schoolCard.querySelector('#sw-input-schools');
   schoolInput.addEventListener('input', () => {
-    const v = parseInt(schoolInput.value) || 1;
+    const v = Math.round(parseFloat(schoolInput.value)) || 1;
     const tier = getSchoolTierForEnrollment(v);
     document.getElementById('schools-price-badge').textContent = tier.priceNote;
     document.getElementById('schools-tier-detail').textContent = tier.name + ' · ' + tier.monthlyCredits;
@@ -2422,7 +2028,7 @@ function renderSwCards() {
 
 function addSchoolLicense() {
   const input = document.getElementById('sw-input-schools');
-  let count = parseInt(input.value) || 5000;
+  let count = Math.round(parseFloat(input.value)) || 5000;
   if (count < 1) count = 1;
   const tier = getSchoolTierForEnrollment(count);
   addLicense(tier.id, count);
@@ -2431,7 +2037,7 @@ function addSchoolLicense() {
 function addLicenseFromCard(tierId) {
   const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
   const input = document.getElementById('sw-input-' + tierId);
-  let count = parseInt(input.value) || tier.defaultCount;
+  let count = Math.round(parseFloat(input.value)) || tier.defaultCount;
   if (count < tier.minCount) count = tier.minCount;
   addLicense(tierId, count);
 }
@@ -2442,7 +2048,7 @@ function renderLicenseList() {
   const wrap = document.getElementById('licenseSummaryWrap');
 
   if (quoteLicenses.length === 0) {
-    list.innerHTML = '<div style="font-size:11px;color:var(--slate-400);padding:8px 0">' + t('noLicenses') + '</div>';
+    list.innerHTML = '<div style="font-size:11px;color:var(--slate-400);padding:8px 0">No licenses added yet</div>';
     return;
   }
 
@@ -2452,7 +2058,7 @@ function renderLicenseList() {
     if (!tier) continue;
     const cost = calcLicenseCost(lic);
     const priceDisplay = tier.isCustom ? 'Custom' : `${fmt(cost)}/yr`;
-    const detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} — Custom pricing` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
+    const detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
@@ -2466,8 +2072,7 @@ function renderLicenseList() {
         <div class="license-detail">${detailDisplay}</div>
       </div>
       <div class="comp-qty">
-        <input class="comp-qty-input" type="number" min="${tier.minCount}" value="${lic.count}" style="width:60px"
-               ${tier.minCount >= 1000 ? 'step="100"' : ''}
+        <input class="comp-qty-input" type="number" step="any" value="${lic.count}" style="width:60px"
                onchange="updateLicenseCount(${lic.licenseId}, this, true)"
                oninput="updateLicenseCount(${lic.licenseId}, this, false)">
       </div>
@@ -2488,7 +2093,7 @@ function renderAddonGrid() {
     card.onclick = () => addAddon(addon.blockId);
     card.innerHTML = `<div class="addon-name">${addon.label}</div>
       <div class="addon-price">${fmt(getBlockPrice(addon.blockId))}/${addon.unit === 'flat' ? 'ea' : addon.unit}</div>
-      <div class="addon-add">${inQuote ? t('addAnotherBtn') : t('addBtn')}</div>`;
+      <div class="addon-add">${inQuote ? '+ Add Another' : '+ Add'}</div>`;
     grid.appendChild(card);
   }
 }
@@ -2498,7 +2103,7 @@ function renderQuote() {
   const wrap = document.getElementById('quotePackages');
 
   if (quotePackages.length === 0) {
-    wrap.innerHTML = '<div class="empty-state"><span class="empty-icon">\uD83D\uDCE6</span><span>' + t('emptyState') + '</span></div>';
+    wrap.innerHTML = '<div class="empty-state"><span class="empty-icon">\uD83D\uDCE6</span><span>Add packages from the left to build a quote</span></div>';
   } else {
     wrap.innerHTML = '';
     for (const qpkg of quotePackages) wrap.appendChild(buildQuotePkg(qpkg));
@@ -2519,7 +2124,8 @@ function renderQuote() {
 function getDeliveryBadgesForSessions(sessions) {
   // Summarize delivery modes for header badge
   const modes = [...new Set(sessions.map(s => s.delivery))];
-  return modes.map(m => `<span class="delivery-badge ${m}">${m}</span>`).join('');
+  const deliveryLabels = { virtual: 'Virtual', local: 'Local', travel: 'Travel' };
+  return modes.map(m => `<span class="delivery-badge ${m}">${deliveryLabels[m] || m}</span>`).join('');
 }
 
 function buildQuotePkg(qpkg) {
@@ -2549,15 +2155,15 @@ function buildQuotePkg(qpkg) {
       const travelNote = sessionTravelCost > 0 ? `+${fmt(sessionTravelCost)}` : '';
 
       bodyHtml += `<div class="builder-session-row">
-        <span class="builder-session-label">${t('session')} ${i + 1}:</span>
-        ${hasFacilitation ? `<input class="builder-session-hours" type="number" min="0.5" step="0.5" value="${s.hours}"
+        <span class="builder-session-label">Session ${i + 1}:</span>
+        ${hasFacilitation ? `<input class="builder-session-hours" type="number" step="any" value="${s.hours}"
                onchange="updateQuoteSessionHours(${qpkg.pkgId}, ${i}, this, true)"
                oninput="updateQuoteSessionHours(${qpkg.pkgId}, ${i}, this, false)">
-        <span class="session-hours-unit">${t('hrs')}</span>` : ''}
+        <span class="session-hours-unit">hrs</span>` : ''}
         <div class="delivery-pills-sm">
-          <button class="delivery-pill-sm ${s.delivery === 'virtual' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'virtual')">${t('virtual')}</button>
-          <button class="delivery-pill-sm ${s.delivery === 'local' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'local')">${t('local')}</button>
-          <button class="delivery-pill-sm ${s.delivery === 'travel' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'travel')">${t('travel')}</button>
+          <button class="delivery-pill-sm ${s.delivery === 'virtual' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'virtual')">Virtual</button>
+          <button class="delivery-pill-sm ${s.delivery === 'local' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'local')">Local</button>
+          <button class="delivery-pill-sm ${s.delivery === 'travel' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'travel')">Travel</button>
         </div>
         <span class="builder-session-info">${travelNote}</span>
       </div>`;
@@ -2566,14 +2172,14 @@ function buildQuotePkg(qpkg) {
 
   if (hasScalable) {
     bodyHtml += `<div class="participants-row">
-      <label>${t('participants')}:</label>
-      <input class="participants-input" type="number" min="1" value="${qpkg.participants}"
+      <label>Participants:</label>
+      <input class="participants-input" type="number" step="any" value="${qpkg.participants}"
              onchange="setParticipants(${qpkg.pkgId}, this, true)" oninput="setParticipants(${qpkg.pkgId}, this, false)">
       <span>\u2192</span>
-      <input class="facilitator-input" type="number" min="1" value="${qpkg.facilitators}"
+      <input class="facilitator-input" type="number" step="any" value="${qpkg.facilitators}"
              onchange="setFacilitators(${qpkg.pkgId}, this, true)" oninput="setFacilitators(${qpkg.pkgId}, this, false)">
-      <span class="facilitator-count">${qpkg.facilitators > 1 ? t('facilitators') : t('facilitator')}</span>
-      <span style="font-size:9px;color:#92400e">${qpkg.facilitatorsManual ? t('manual') : t('perThirty')}</span>
+      <span class="facilitator-count">${qpkg.facilitators > 1 ? 'facilitators' : 'facilitator'}</span>
+      <span style="font-size:9px;color:#92400e">${qpkg.facilitatorsManual ? '(manual)' : '(1 per 30)'}</span>
     </div>`;
   }
 
@@ -2583,14 +2189,14 @@ function buildQuotePkg(qpkg) {
     const total = getBlockPrice(comp.blockId) * effQty;
     const unit = comp.blockId === 'facilitation' || comp.blockId === 'coaching' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
     const tags = [];
-    if (comp.support) tags.push('<span class="support-tag">' + t('support') + '</span>');
+    if (comp.support) tags.push('<span class="support-tag">support</span>');
     if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
 
     bodyHtml += `<div class="comp-line ${comp.support ? 'support' : ''}">
       <div class="comp-info"><div class="comp-name">${comp.label}${tags.join('')}</div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${comp.qty}" min="0.5" step="0.5"
+        <input class="comp-qty-input" type="number" step="any" value="${comp.qty}"
                onchange="setCompQty(${qpkg.pkgId},'${comp.id}',this)">
         <span class="comp-unit">${unitShort(unit)}</span>
         <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',1)">+</button>
@@ -2608,7 +2214,7 @@ function buildQuotePkg(qpkg) {
       <div class="comp-info"><div class="comp-name">Travel (Local) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-local'))}/day</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelLocalDays',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${localDays}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${localDays}"
                onchange="setTravelQty(${qpkg.pkgId},'travelLocalDays',this)">
         <span class="comp-unit">day</span>
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelLocalDays',1)">+</button>
@@ -2622,7 +2228,7 @@ function buildQuotePkg(qpkg) {
       <div class="comp-info"><div class="comp-name">Travel (Flight) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-flight'))}/trip</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${flightTrips}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${flightTrips}"
                onchange="setTravelQty(${qpkg.pkgId},'travelFlightTrips',this)">
         <span class="comp-unit">trip</span>
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',1)">+</button>
@@ -2635,10 +2241,10 @@ function buildQuotePkg(qpkg) {
   if (qpkg.launchMeetingQty > 0 || hasFacilitation) {
     const lmTotal = qpkg.launchMeetingQty * getBlockPrice('admin-meetings');
     bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">${t('launchMeeting')}<span class="auto-tag">${t('auto')}</span></div></div>
+      <div class="comp-info"><div class="comp-name">Launch Meeting<span class="auto-tag">auto</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${qpkg.launchMeetingQty}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.launchMeetingQty}"
                onchange="setAutoQty(${qpkg.pkgId},'launchMeetingQty',this)">
         <span class="comp-unit">\u00D7</span>
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',1)">+</button>
@@ -2651,10 +2257,10 @@ function buildQuotePkg(qpkg) {
   if (qpkg.officeHoursQty > 0 || hasFacilitation) {
     const ohTotal = qpkg.officeHoursQty * getBlockPrice('office-hours');
     bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">${t('officeHours')}<span class="auto-tag">${t('auto')}</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">${t('sessionsMinusOne')}</span></div></div>
+      <div class="comp-info"><div class="comp-name">Office Hours<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121)</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${qpkg.officeHoursQty}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.officeHoursQty}"
                onchange="setAutoQty(${qpkg.pkgId},'officeHoursQty',this)">
         <span class="comp-unit">hr</span>
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',1)">+</button>
@@ -2670,7 +2276,7 @@ function buildQuotePkg(qpkg) {
       <div class="comp-info"><div class="comp-name">Check-ins<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121 \u00D7 30 min)</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${qpkg.checkInQty || 0}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.checkInQty || 0}"
                onchange="setAutoQty(${qpkg.pkgId},'checkInQty',this)">
         <span class="comp-unit">\u00D7</span>
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',1)">+</button>
@@ -2686,7 +2292,7 @@ function buildQuotePkg(qpkg) {
       <div class="comp-info"><div class="comp-name">Reflection Meeting<span class="auto-tag">auto</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" value="${qpkg.reflectionMeetingQty || 0}" min="0" step="1"
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.reflectionMeetingQty || 0}"
                onchange="setAutoQty(${qpkg.pkgId},'reflectionMeetingQty',this)">
         <span class="comp-unit">\u00D7</span>
         <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',1)">+</button>
@@ -2699,12 +2305,12 @@ function buildQuotePkg(qpkg) {
   if (pkg?.pathwayDiscount) {
     const discAmt = gross * pkg.pathwayDiscount;
     bodyHtml += `<div class="pathway-discount-row">
-      <span class="pathway-discount-label">${t('pathwayDiscount')} (${Math.round(pkg.pathwayDiscount * 100)}%)</span>
+      <span class="pathway-discount-label">Pathway Discount (${Math.round(pkg.pathwayDiscount * 100)}%)</span>
       <span class="pathway-discount-value">\u2212${fmt(discAmt)}</span>
     </div>`;
   }
 
-  const displayName = qpkg.customName || (pkg ? (t('pkg.' + pkg.id) || pkg.name) : 'Package');
+  const displayName = qpkg.customName || (pkg ? (pkg.name) : 'Package');
   div.innerHTML = `<div class="qpkg-header" onclick="togglePkg(${qpkg.pkgId})">
       <span class="qpkg-chevron">\u25B6</span>
       <input class="qpkg-name-input" type="text" value="${escHtml(displayName)}"
@@ -2726,7 +2332,7 @@ function buildQuoteAddon(addon) {
   div.innerHTML = `<div class="comp-info"><div class="comp-name">${addon.label}</div></div>
     <div class="comp-qty">
       <button class="comp-qty-btn" onclick="changeAddonQty(${addon.addonId},-1)">\u2212</button>
-      <input class="comp-qty-input" type="number" value="${addon.qty}" min="${addon.minQty}" step="${addon.step}"
+      <input class="comp-qty-input" type="number" step="any" value="${addon.qty}"
              onchange="setAddonQty(${addon.addonId},this)">
       <span class="comp-unit">${unit}</span>
       <button class="comp-qty-btn" onclick="changeAddonQty(${addon.addonId},1)">+</button>
@@ -2753,7 +2359,7 @@ function renderTotals() {
 
   const sn = document.getElementById('savingsNote');
   if (disc > 0 && has) {
-    sn.textContent = t('partnerSaves', { amount: fmt(disc), pct: Math.round(disc / std * 100) });
+    sn.textContent = `Partner saves ${fmt(disc)} \u2014 ${Math.round(disc / std * 100)}% off standard`;
     sn.classList.add('show');
   } else { sn.classList.remove('show'); }
 
@@ -2771,10 +2377,10 @@ function renderInsights() {
   const disc = calcDiscount(std);
   const partner = std - disc;
 
-  const students = parseInt(document.getElementById('studentCount').value) || 0;
-  const educators = parseInt(document.getElementById('educatorCount').value) || 0;
-  document.getElementById('perStudentCost').textContent = students > 0 ? fmt(Math.round(partner / students)) + t('perStudent') : '\u2014';
-  document.getElementById('perEducatorCost').textContent = educators > 0 ? fmt(Math.round(partner / educators)) + t('perEducator') : '\u2014';
+  const students = parseFloat(document.getElementById('studentCount').value) || 0;
+  const educators = parseFloat(document.getElementById('educatorCount').value) || 0;
+  document.getElementById('perStudentCost').textContent = students > 0 ? fmt(Math.round(partner / students)) + '/student' : '\u2014';
+  document.getElementById('perEducatorCost').textContent = educators > 0 ? fmt(Math.round(partner / educators)) + '/educator' : '\u2014';
 }
 
 // ─── Clear All ──────────────────────────────────────────────────────────────────
@@ -2809,9 +2415,9 @@ function clearAll() {
 
 // ─── Rate Editor ──────────────────────────────────────────────────────────────
 function updateRates() {
-  rates.lp = parseInt(document.getElementById('rateLp').value) || DEFAULT_RATES.lp;
-  rates.dev = parseInt(document.getElementById('rateDev').value) || DEFAULT_RATES.dev;
-  rates.travel = parseInt(document.getElementById('rateTravel').value) || DEFAULT_RATES.travel;
+  rates.lp = parseFloat(document.getElementById('rateLp').value) || DEFAULT_RATES.lp;
+  rates.dev = parseFloat(document.getElementById('rateDev').value) || DEFAULT_RATES.dev;
+  rates.travel = parseFloat(document.getElementById('rateTravel').value) || DEFAULT_RATES.travel;
   updateRateStatus();
   renderAll();
 }
@@ -2869,7 +2475,7 @@ function renderAll() {
   renderLicenseList();
   renderQuote();
   renderTotals();
-  applyStaticTranslations();
+  if (selectedLang !== 'en') scheduleTranslation();
 }
 
 // ─── URL State ─────────────────────────────────────────────────────────────────
@@ -3024,11 +2630,12 @@ function loadFromUrl() {
 }
 
 // ─── Copy for Proposal ────────────────────────────────────────────────────────
-function copyForProposal() {
-  if (!hasQuoteItems()) { showToast(t('addServiceFirst')); return; }
+async function copyForProposal() {
+  if (!hasQuoteItems()) { showToast('Add services first'); return; }
 
   const partner = document.getElementById('partnerName').value.trim() || '[Partner]';
-  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const locale = LANG_LOCALES[selectedLang] || 'en-US';
+  const today = new Date().toLocaleDateString(locale, { month: 'long', day: 'numeric', year: 'numeric' });
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partnerTotal = std - disc;
@@ -3036,7 +2643,7 @@ function copyForProposal() {
   const pad = (l, r) => l + ' ' + '.'.repeat(Math.max(2, W - l.length - r.length - 1)) + ' ' + r;
 
   const lines = [];
-  lines.push(`${partner} x Playlab \u2014 ${t('partnershipProposal')}`);
+  lines.push(`${partner} x Playlab \u2014 Partnership Proposal`);
   lines.push(`Date: ${today}`);
   if (selectedCurrency !== 'USD') {
     const note = ratesLastUpdated ? `ECB rate as of ${ratesLastUpdated}` : 'approximate rate';
@@ -3046,7 +2653,7 @@ function copyForProposal() {
 
   // Software
   if (quoteLicenses.length > 0) {
-    lines.push(t('softwareAndLicensing'));
+    lines.push('SOFTWARE & LICENSING');
     lines.push('\u2500'.repeat(W));
     for (const lic of quoteLicenses) {
       const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
@@ -3060,7 +2667,7 @@ function copyForProposal() {
 
   // Services
   if (quotePackages.length > 0 || quoteAddons.length > 0) {
-    lines.push(t('proposalServices'));
+    lines.push('SERVICES');
     lines.push('\u2500'.repeat(W));
 
     for (const qpkg of quotePackages) {
@@ -3070,13 +2677,13 @@ function copyForProposal() {
       const sessions = qpkg.sessions || [];
       const deliveryModes = [...new Set(sessions.map(s => s.delivery))];
       const deliveryTag = deliveryModes.length === 1 && deliveryModes[0] !== 'virtual' ? ` [${deliveryModes[0]}]` : deliveryModes.length > 1 ? ` [mixed delivery]` : '';
-      const proposalPkgName = qpkg.customName || (pkg ? (t('pkg.' + pkg.id) || pkg.name) : 'Package');
+      const proposalPkgName = qpkg.customName || (pkg ? (pkg.name) : 'Package');
       lines.push(pad(`  ${proposalPkgName}${deliveryTag}`, fmt(net)));
       if (sessions.length > 0) {
         for (let si = 0; si < sessions.length; si++) {
           const s = sessions[si];
           const dTag = s.delivery !== 'virtual' ? ` (${s.delivery})` : '';
-          lines.push(`    ${t('session')} ${si + 1}: ${s.hours} ${t('hrs')}${dTag}`);
+          lines.push(`    Session ${si + 1}: ${s.hours} hrs${dTag}`);
         }
       }
       for (const comp of qpkg.components) {
@@ -3088,7 +2695,7 @@ function copyForProposal() {
       const travelCost = calcTravelCost(qpkg);
       if (travelCost > 0) {
         const nonVirtualCount = sessions.filter(s => s.delivery !== 'virtual').length;
-        lines.push(`    \u2022 Travel (${nonVirtualCount} session${nonVirtualCount > 1 ? 's' : ''}) \u2014 ${fmt(travelCost)}`);
+        lines.push(`    \u2022 Travel (${nonVirtualCount} ${nonVirtualCount > 1 ? 'sessions' : 'session'}) \u2014 ${fmt(travelCost)}`);
       }
       if (qpkg.launchMeetingQty > 0) {
         lines.push(`    \u2022 Launch Meeting (${qpkg.launchMeetingQty}\u00D7) \u2014 ${fmt(qpkg.launchMeetingQty * getBlockPrice('admin-meetings'))}`);
@@ -3104,16 +2711,16 @@ function copyForProposal() {
       }
       if (pkg?.pathwayDiscount) {
         const discAmt = calcQuotePkgGross(qpkg) * pkg.pathwayDiscount;
-        lines.push(`    \u2022 ${t('pathwayDiscount')} (${Math.round(pkg.pathwayDiscount * 100)}%) \u2014 \u2212${fmt(discAmt)}`);
+        lines.push(`    \u2022 Pathway Discount (${Math.round(pkg.pathwayDiscount * 100)}%) \u2014 \u2212${fmt(discAmt)}`);
       }
       if (qpkg.facilitators > 1) {
-        lines.push(`    (${qpkg.participants} ${t('participants').toLowerCase()} \u2192 ${qpkg.facilitators} ${t('facilitators')})`);
+        lines.push(`    (${qpkg.participants} participants \u2192 ${qpkg.facilitators} facilitators)`);
       }
     }
 
     if (quoteAddons.length > 0) {
       lines.push('');
-      lines.push('  ' + t('proposalAddOns'));
+      lines.push('  ' + 'Add-Ons');
       for (const addon of quoteAddons) {
         const total = calcAddonTotal(addon);
         const qtyStr = addon.unit === 'flat' ? '' : ` (${addon.qty} ${addon.unit}${addon.qty !== 1 ? 's' : ''})`;
@@ -3125,46 +2732,50 @@ function copyForProposal() {
 
   // Totals
   lines.push('\u2500'.repeat(W));
-  lines.push(pad(t('standardTotal'), fmt(std)));
+  lines.push(pad('Standard Total', fmt(std)));
   if (disc > 0) {
-    const discName = document.getElementById('discountName').value.trim() || t('discount');
+    const discName = document.getElementById('discountName').value.trim() || 'Discount';
     const discVal = document.getElementById('discountVal').value;
     const discType = document.getElementById('discountType').value;
     const discLabel = discType === 'pct' ? `${discName} (${discVal}%)` : `${discName}`;
     lines.push(pad(discLabel, '\u2212' + fmt(disc)));
   }
-  lines.push(pad(t('customPartnerPrice'), fmt(partnerTotal)));
+  lines.push(pad('Custom Partner Price', fmt(partnerTotal)));
   lines.push('');
 
-  const students = parseInt(document.getElementById('studentCount').value) || 0;
-  const educators = parseInt(document.getElementById('educatorCount').value) || 0;
-  if (students > 0) lines.push(t('perStudentCost', { cost: fmt(Math.round(partnerTotal / students)), count: students.toLocaleString() }));
-  if (educators > 0) lines.push(t('perEducatorCost', { cost: fmt(Math.round(partnerTotal / educators)), count: educators.toLocaleString() }));
+  const students = parseFloat(document.getElementById('studentCount').value) || 0;
+  const educators = parseFloat(document.getElementById('educatorCount').value) || 0;
+  if (students > 0) lines.push(`Per-student cost: ${fmt(Math.round(partnerTotal / students))}/student (${students.toLocaleString()} students)`);
+  if (educators > 0) lines.push(`Per-educator cost: ${fmt(Math.round(partnerTotal / educators))}/educator (${educators.toLocaleString()} educators)`);
   if (students > 0 || educators > 0) lines.push('');
 
-  lines.push(t('footnote'));
+  lines.push('* AI model usage costs are covered by Playlab and not passed on to partners.');
 
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+  let output = lines.join('\n');
+  if (selectedLang !== 'en') {
+    output = await translateString(output, selectedLang);
+  }
+  navigator.clipboard.writeText(output).then(() => {
     const btn = document.getElementById('copyBtn');
-    btn.textContent = t('copied');
+    btn.textContent = 'Copied!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = t('copyForProposal'); btn.classList.remove('copied'); }, 2000);
+    setTimeout(() => { btn.textContent = 'Copy for Proposal'; btn.classList.remove('copied'); }, 2000);
   });
 }
 
 // ─── Copy as Markdown ─────────────────────────────────────────────────────────
-function copyAsMarkdown() {
-  if (!hasQuoteItems()) { showToast(t('addServiceFirst')); return; }
+async function copyAsMarkdown() {
+  if (!hasQuoteItems()) { showToast('Add services first'); return; }
 
   const partner = document.getElementById('partnerName').value.trim() || '[Partner]';
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partnerTotal = std - disc;
 
-  let md = `# ${partner} x Playlab \u2014 ${t('partnershipProposal')}\n\n`;
+  let md = `# ${partner} x Playlab \u2014 Partnership Proposal\n\n`;
 
   if (quoteLicenses.length > 0) {
-    md += `## ${t('softwareAndLicensing')}\n\n`;
+    md += `## SOFTWARE & LICENSING\n\n`;
     md += `| License | Details | Annual Cost |\n|---|---|---|\n`;
     for (const lic of quoteLicenses) {
       const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
@@ -3176,8 +2787,8 @@ function copyAsMarkdown() {
     md += '\n';
   }
 
-  md += `## ${t('proposalServices')}\n\n`;
-  md += `| ${t('services')} | ${t('standardTotal')} | ${t('customPartnerPrice')} |\n|---|---|---|\n`;
+  md += `## SERVICES\n\n`;
+  md += `| Services | Standard Total | Custom Partner Price |\n|---|---|---|\n`;
 
   for (const qpkg of quotePackages) {
     const pkg = PACKAGES.find(p => p.id === qpkg.packageId);
@@ -3186,21 +2797,24 @@ function copyAsMarkdown() {
     const sessions = qpkg.sessions || [];
     const deliveryModes = [...new Set(sessions.map(s => s.delivery))];
     const deliveryTag = deliveryModes.length === 1 && deliveryModes[0] !== 'virtual' ? ` [${deliveryModes[0]}]` : deliveryModes.length > 1 ? ` [mixed delivery]` : '';
-    md += `| **${qpkg.customName || (pkg ? (t('pkg.' + pkg.id) || pkg.name) : 'Package')}${deliveryTag}** | ${fmt(gross)} | ${fmt(net)} |\n`;
+    md += `| **${qpkg.customName || (pkg ? (pkg.name) : 'Package')}${deliveryTag}** | ${fmt(gross)} | ${fmt(net)} |\n`;
   }
   for (const addon of quoteAddons) {
     const total = calcAddonTotal(addon);
     md += `| ${addon.label} | ${fmt(total)} | ${fmt(total)} |\n`;
   }
 
-  md += `\n**${t('standardTotal')}:** ${fmt(std)}\n\n`;
+  md += `\n**Standard Total:** ${fmt(std)}\n\n`;
   if (disc > 0) {
-    const discName = document.getElementById('discountName').value.trim() || t('discount');
+    const discName = document.getElementById('discountName').value.trim() || 'Discount';
     md += `**${discName}:** \u2212${fmt(disc)}\n\n`;
   }
-  md += `**${t('customPartnerPrice')}:** ${fmt(partnerTotal)}\n\n`;
-  md += `*${t('footnote').replace(/^\* ?/, '')}*\n`;
+  md += `**Custom Partner Price:** ${fmt(partnerTotal)}\n\n`;
+  md += `*${'* AI model usage costs are covered by Playlab and not passed on to partners.'.replace(/^\* ?/, '')}*\n`;
 
+  if (selectedLang !== 'en') {
+    md = await translateString(md, selectedLang);
+  }
   navigator.clipboard.writeText(md).then(() => {
     const btn = document.getElementById('copyMdBtn');
     btn.textContent = '\u2713';
@@ -3234,7 +2848,7 @@ function getGapiToken() {
 }
 
 async function exportToGoogleDoc() {
-  if (!hasQuoteItems()) { showToast(t('addServiceFirst')); return; }
+  if (!hasQuoteItems()) { showToast('Add services first'); return; }
   const btn = document.getElementById('exportDocBtn');
   btn.disabled = true;
   btn.innerHTML = 'Creating doc...';
@@ -3342,13 +2956,13 @@ async function exportToGoogleDoc() {
     }
 
     window.open(`https://docs.google.com/document/d/${docId}/edit`, '_blank');
-    showToast(t('proposalCreated'));
+    showToast('Proposal created!');
   } catch (err) {
     console.error('Export error:', err);
-    showToast(t('exportFailed'));
+    showToast('Export failed \u2014 check console');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> <span data-i18n="exportToGoogleDoc">' + t('exportToGoogleDoc') + '</span>';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> <span>Export to Google Doc</span>';
   }
 }
 
@@ -3360,9 +2974,9 @@ document.getElementById('copyLinkBtn').addEventListener('click', () => {
   saveToUrl();
   navigator.clipboard.writeText(location.href).then(() => {
     const btn = document.getElementById('copyLinkBtn');
-    btn.textContent = t('linkCopied');
+    btn.textContent = 'Link Copied!';
     btn.style.background = 'var(--emerald-500)';
-    setTimeout(() => { btn.textContent = t('copyShareableLink'); btn.style.background = 'var(--slate-700)'; }, 2000);
+    setTimeout(() => { btn.textContent = 'Copy Shareable Link'; btn.style.background = 'var(--slate-700)'; }, 2000);
   });
 });
 document.getElementById('clearBtn').addEventListener('click', clearAll);
@@ -3501,7 +3115,7 @@ function saveActiveTab() {
   const tab = builderTabs.find(t => t.id === activeTabId);
   if (!tab) return;
   tab.state = getTabState();
-  tab.name = document.getElementById('partnerName').value || t('newQuote');
+  tab.name = document.getElementById('partnerName').value || 'New Quote';
   try {
     localStorage.setItem('playlab_builder_tabs', JSON.stringify(builderTabs));
     localStorage.setItem('playlab_builder_activeTabId', activeTabId);
@@ -3553,7 +3167,7 @@ function deleteTab(tabId) {
     (tab.state.licenses && tab.state.licenses.length > 0) ||
     (tab.state.partner && tab.state.partner.trim())
   );
-  if (hasContent && !confirm(t('deleteTabConfirm', { name: tab.name }))) return;
+  if (hasContent && !confirm(`Delete tab "${tab.name}"? This cannot be undone.`)) return;
 
   const idx = builderTabs.findIndex(t => t.id === tabId);
   builderTabs.splice(idx, 1);
@@ -3583,20 +3197,20 @@ function renderTabBar() {
   const bar = document.getElementById('quoteTabBar');
   if (!bar) return;
   // Update the active tab name from current partner input (live)
-  const currentName = document.getElementById('partnerName').value || t('newQuote');
+  const currentName = document.getElementById('partnerName').value || 'New Quote';
   const activeTab = builderTabs.find(t => t.id === activeTabId);
   if (activeTab) activeTab.name = currentName;
 
   let html = '';
   for (const tab of builderTabs) {
     const isActive = tab.id === activeTabId;
-    const displayName = tab.name || t('newQuote');
+    const displayName = tab.name || 'New Quote';
     html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + displayName.replace(/"/g, '&quot;') + '">';
     html += '<span class="quote-tab-name">' + displayName.replace(/</g, '&lt;') + '</span>';
     html += '<span class="quote-tab-close" onclick="event.stopPropagation(); deleteTab(\'' + tab.id + '\')">&times;</span>';
     html += '</button>';
   }
-  html += '<button class="quote-tab-new" onclick="createNewTab()">' + t('newTab') + '</button>';
+  html += '<button class="quote-tab-new" onclick="createNewTab()">+ New</button>';
   bar.innerHTML = html;
 }
 
@@ -3641,7 +3255,9 @@ if (urlLoaded) {
 }
 // Apply saved language
 document.getElementById('langSelect').value = selectedLang;
-applyStaticTranslations();
+if (selectedLang !== 'en') {
+  setTimeout(() => translateVisibleDOM(), 100);
+}
 fetchLiveRates();
 </script>
 </body>
