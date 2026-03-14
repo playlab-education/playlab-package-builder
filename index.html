@@ -2518,113 +2518,117 @@ function saveToUrl() {
   saveActiveTab();
 }
 
+function hydrateState(state) {
+  if (state.partner) document.getElementById('partnerName').value = state.partner;
+  if (state.currency && CURRENCIES[state.currency]) selectedCurrency = state.currency;
+  if (state.rates) {
+    rates = { ...DEFAULT_RATES, ...state.rates };
+    document.getElementById('rateLp').value = rates.lp;
+    document.getElementById('rateDev').value = rates.dev;
+    document.getElementById('rateTravel').value = rates.travel;
+    updateRateStatus();
+  }
+  if (state.discountVal) document.getElementById('discountVal').value = state.discountVal;
+  if (state.discountType) document.getElementById('discountType').value = state.discountType;
+  if (state.discountName) document.getElementById('discountName').value = state.discountName;
+  if (state.students) document.getElementById('studentCount').value = state.students;
+  if (state.educators) document.getElementById('educatorCount').value = state.educators;
+
+  // Load licenses (v3 format)
+  if (state.licenses) {
+    for (const sl of state.licenses) {
+      const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
+      if (!tier) continue;
+      quoteLicenses.push({ licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '' });
+    }
+  }
+  // Backward compat: v2 tier/tierCounts
+  if (!state.licenses && state.tier) {
+    const tierId = state.tier;
+    const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
+    if (tier) {
+      const count = state.tierCounts?.[tierId] || tier.defaultCount;
+      quoteLicenses.push({ licenseId: nextLicenseId++, tierId, count, customName: '' });
+    }
+  }
+
+  if (state.packages) {
+    for (const sp of state.packages) {
+      const pkg = PACKAGES.find(p => p.id === sp.packageId);
+      if (!pkg) continue;
+      let compId = 1;
+      const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
+      if (sp.components) {
+        for (const sc of sp.components) {
+          const comp = components.find(c => c.id === sc.id);
+          if (comp) comp.qty = sc.qty;
+        }
+      }
+      const participants = sp.participants || 30;
+      const hasFac = pkg.facilitationHours && pkg.facilitationHours > 0;
+
+      // Load sessions: new format (sessions array) or backward compat (deliveryMode + sessionCount)
+      let sessions;
+      if (sp.sessions && Array.isArray(sp.sessions)) {
+        sessions = sp.sessions.map(s => ({ hours: s.hours || 0, delivery: s.delivery || 'virtual' }));
+      } else {
+        // Backward compat from v3 old format
+        const sessionCount = sp.sessionCount || 1;
+        const sessionDuration = sp.sessionDuration || (hasFac ? pkg.facilitationHours : 0);
+        const delivery = sp.deliveryMode || 'virtual';
+        sessions = [];
+        for (let si = 0; si < sessionCount; si++) {
+          sessions.push({ hours: sessionDuration, delivery });
+        }
+      }
+
+      const autoFac = Math.max(1, Math.ceil(participants / 30));
+      const qpkg = {
+        pkgId: nextPkgId++,
+        packageId: sp.packageId,
+        customName: sp.customName || null,
+        participants,
+        facilitators: sp.facilitators || autoFac,
+        facilitatorsManual: sp.facilitators ? (sp.facilitators !== autoFac) : false,
+        sessions,
+        travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
+        travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
+        launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : ((hasFac || pkg.pathway === 'impact') ? 1 : 0),
+        officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
+        checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
+        reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : (hasFac ? 1 : 0),
+        components
+      };
+      quotePackages.push(qpkg);
+    }
+    if (quotePackages.length > 0) expandedPkgId = quotePackages[0].pkgId;
+  }
+
+  if (state.addons) {
+    for (const sa of state.addons) {
+      const def = ADDONS.find(a => a.blockId === sa.blockId);
+      if (!def) continue;
+      quoteAddons.push({
+        addonId: nextAddonId++,
+        blockId: def.blockId,
+        label: def.label,
+        unit: def.unit,
+        qty: sa.qty || def.defaultQty,
+        minQty: def.minQty,
+        step: def.step
+      });
+    }
+  }
+
+  document.getElementById('currencySelect').value = selectedCurrency;
+}
+
 function loadFromUrl() {
   const hash = location.hash.slice(1);
   if (!hash) return false;
   try {
     const state = JSON.parse(atob(hash));
-    if (state.partner) document.getElementById('partnerName').value = state.partner;
-    if (state.currency && CURRENCIES[state.currency]) selectedCurrency = state.currency;
-    if (state.rates) {
-      rates = { ...DEFAULT_RATES, ...state.rates };
-      document.getElementById('rateLp').value = rates.lp;
-      document.getElementById('rateDev').value = rates.dev;
-      document.getElementById('rateTravel').value = rates.travel;
-      updateRateStatus();
-    }
-    if (state.discountVal) document.getElementById('discountVal').value = state.discountVal;
-    if (state.discountType) document.getElementById('discountType').value = state.discountType;
-    if (state.discountName) document.getElementById('discountName').value = state.discountName;
-    if (state.students) document.getElementById('studentCount').value = state.students;
-    if (state.educators) document.getElementById('educatorCount').value = state.educators;
-
-    // Load licenses (v3 format)
-    if (state.licenses) {
-      for (const sl of state.licenses) {
-        const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
-        if (!tier) continue;
-        quoteLicenses.push({ licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '' });
-      }
-    }
-    // Backward compat: v2 tier/tierCounts
-    if (!state.licenses && state.tier) {
-      const tierId = state.tier;
-      const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
-      if (tier) {
-        const count = state.tierCounts?.[tierId] || tier.defaultCount;
-        quoteLicenses.push({ licenseId: nextLicenseId++, tierId, count, customName: '' });
-      }
-    }
-
-    if (state.packages) {
-      for (const sp of state.packages) {
-        const pkg = PACKAGES.find(p => p.id === sp.packageId);
-        if (!pkg) continue;
-        let compId = 1;
-        const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
-        if (sp.components) {
-          for (const sc of sp.components) {
-            const comp = components.find(c => c.id === sc.id);
-            if (comp) comp.qty = sc.qty;
-          }
-        }
-        const participants = sp.participants || 30;
-        const hasFac = pkg.facilitationHours && pkg.facilitationHours > 0;
-
-        // Load sessions: new format (sessions array) or backward compat (deliveryMode + sessionCount)
-        let sessions;
-        if (sp.sessions && Array.isArray(sp.sessions)) {
-          sessions = sp.sessions.map(s => ({ hours: s.hours || 0, delivery: s.delivery || 'virtual' }));
-        } else {
-          // Backward compat from v3 old format
-          const sessionCount = sp.sessionCount || 1;
-          const sessionDuration = sp.sessionDuration || (hasFac ? pkg.facilitationHours : 0);
-          const delivery = sp.deliveryMode || 'virtual';
-          sessions = [];
-          for (let si = 0; si < sessionCount; si++) {
-            sessions.push({ hours: sessionDuration, delivery });
-          }
-        }
-
-        const autoFac = Math.max(1, Math.ceil(participants / 30));
-        const qpkg = {
-          pkgId: nextPkgId++,
-          packageId: sp.packageId,
-          customName: sp.customName || null,
-          participants,
-          facilitators: sp.facilitators || autoFac,
-          facilitatorsManual: sp.facilitators ? (sp.facilitators !== autoFac) : false,
-          sessions,
-          travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
-          travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
-          launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : ((hasFac || pkg.pathway === 'impact') ? 1 : 0),
-          officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-          checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-          reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : (hasFac ? 1 : 0),
-          components
-        };
-        quotePackages.push(qpkg);
-      }
-      if (quotePackages.length > 0) expandedPkgId = quotePackages[0].pkgId;
-    }
-
-    if (state.addons) {
-      for (const sa of state.addons) {
-        const def = ADDONS.find(a => a.blockId === sa.blockId);
-        if (!def) continue;
-        quoteAddons.push({
-          addonId: nextAddonId++,
-          blockId: def.blockId,
-          label: def.label,
-          unit: def.unit,
-          qty: sa.qty || def.defaultQty,
-          minQty: def.minQty,
-          step: def.step
-        });
-      }
-    }
-
-    document.getElementById('currencySelect').value = selectedCurrency;
+    hydrateState(state);
     return true;
   } catch { return false; }
 }
@@ -3010,102 +3014,7 @@ function loadTabState(state) {
   resetBuilderState();
   if (!state) { renderAll(); return; }
   try {
-  if (state.partner) document.getElementById('partnerName').value = state.partner;
-  if (state.currency && CURRENCIES[state.currency]) selectedCurrency = state.currency;
-  if (state.rates) {
-    rates = { ...DEFAULT_RATES, ...state.rates };
-    document.getElementById('rateLp').value = rates.lp;
-    document.getElementById('rateDev').value = rates.dev;
-    document.getElementById('rateTravel').value = rates.travel;
-    updateRateStatus();
-  }
-  if (state.discountVal) document.getElementById('discountVal').value = state.discountVal;
-  if (state.discountType) document.getElementById('discountType').value = state.discountType;
-  if (state.discountName) document.getElementById('discountName').value = state.discountName;
-  if (state.students) document.getElementById('studentCount').value = state.students;
-  if (state.educators) document.getElementById('educatorCount').value = state.educators;
-
-  if (state.licenses) {
-    for (const sl of state.licenses) {
-      const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
-      if (!tier) continue;
-      quoteLicenses.push({ licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount });
-    }
-  }
-  if (!state.licenses && state.tier) {
-    const tierId = state.tier;
-    const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
-    if (tier) {
-      const count = state.tierCounts?.[tierId] || tier.defaultCount;
-      quoteLicenses.push({ licenseId: nextLicenseId++, tierId, count, customName: '' });
-    }
-  }
-
-  if (state.packages) {
-    for (const sp of state.packages) {
-      const pkg = PACKAGES.find(p => p.id === sp.packageId);
-      if (!pkg) continue;
-      let compId = 1;
-      const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
-      if (sp.components) {
-        for (const sc of sp.components) {
-          const comp = components.find(c => c.id === sc.id);
-          if (comp) comp.qty = sc.qty;
-        }
-      }
-      const participants = sp.participants || 30;
-      const hasFac = pkg.facilitationHours && pkg.facilitationHours > 0;
-      let sessions;
-      if (sp.sessions && Array.isArray(sp.sessions)) {
-        sessions = sp.sessions.map(s => ({ hours: s.hours || 0, delivery: s.delivery || 'virtual' }));
-      } else {
-        const sessionCount = sp.sessionCount || 1;
-        const sessionDuration = sp.sessionDuration || (hasFac ? pkg.facilitationHours : 0);
-        const delivery = sp.deliveryMode || 'virtual';
-        sessions = [];
-        for (let si = 0; si < sessionCount; si++) {
-          sessions.push({ hours: sessionDuration, delivery });
-        }
-      }
-      const autoFac = Math.max(1, Math.ceil(participants / 30));
-      const qpkg = {
-        pkgId: nextPkgId++,
-        packageId: sp.packageId,
-        customName: sp.customName || null,
-        participants,
-        facilitators: sp.facilitators || autoFac,
-        facilitatorsManual: sp.facilitators ? (sp.facilitators !== autoFac) : false,
-        sessions,
-        travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
-        travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
-        launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : ((hasFac || pkg.pathway === 'impact') ? 1 : 0),
-        officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-        checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-        reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : (hasFac ? 1 : 0),
-        components
-      };
-      quotePackages.push(qpkg);
-    }
-    if (quotePackages.length > 0) expandedPkgId = quotePackages[0].pkgId;
-  }
-
-  if (state.addons) {
-    for (const sa of state.addons) {
-      const def = ADDONS.find(a => a.blockId === sa.blockId);
-      if (!def) continue;
-      quoteAddons.push({
-        addonId: nextAddonId++,
-        blockId: def.blockId,
-        label: def.label,
-        unit: def.unit,
-        qty: sa.qty || def.defaultQty,
-        minQty: def.minQty,
-        step: def.step
-      });
-    }
-  }
-
-  document.getElementById('currencySelect').value = selectedCurrency;
+    hydrateState(state);
   } catch (e) { console.error('loadTabState error:', e); }
   renderAll();
 }
