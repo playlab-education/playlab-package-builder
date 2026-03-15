@@ -114,7 +114,6 @@ function getBlockPrice(blockId) {
   const { lp, dev, travel: tr } = rates;
   switch (blockId) {
     case 'office-hours':      return roundPrice(lp * 1.0 * 1.2);
-    case 'coaching':          return roundPrice(lp * 1.5 * 1.2);
     case 'admin-meetings':    return roundPrice(lp * 1.5 * 1.2);
     case 'facilitation':      return roundPrice(lp * 2.0 * 1.2);
     case 'dev-hourly':        return roundPrice(dev * 1.0);
@@ -1294,7 +1293,7 @@ function buildQuotePkg(qpkg) {
   for (const comp of qpkg.components) {
     const effQty = comp.scalable ? comp.qty * qpkg.facilitators : comp.qty;
     const total = getBlockPrice(comp.blockId) * effQty;
-    const unit = comp.blockId === 'facilitation' || comp.blockId === 'coaching' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
+    const unit = comp.blockId === 'facilitation' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
     const tags = [];
     if (comp.support) tags.push('<span class="support-tag">support</span>');
     if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
