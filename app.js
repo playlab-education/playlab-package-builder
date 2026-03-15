@@ -1,3 +1,10 @@
+// ─── Global Error Handler ─────────────────────────────────────────────────────
+window.onerror = (msg, src, line) => {
+  console.error('Unhandled error:', msg, src, line);
+  const t = document.getElementById('toast');
+  if (t) { t.textContent = 'Something went wrong \u2014 try refreshing'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }
+};
+
 // ─── Auth Gate ────────────────────────────────────────────────────────────────
 const AUTH_SESSION_KEY = 'playlab_auth_ok';
 const AUTH_HASH = '2ce06a9e7f8c3e6bf85a6067d0b220fb0ad03de983053942a90c43e73ec76f89';
@@ -1569,12 +1576,17 @@ function switchMainTab(tab) {
 
 // ─── Render All ──────────────────────────────────────────────────────────────
 function renderAll() {
-  renderCatalog();
-  renderAddonGrid();
-  renderSwCards();
-  renderLicenseList();
-  renderQuote();
-  renderTotals();
+  try {
+    renderCatalog();
+    renderAddonGrid();
+    renderSwCards();
+    renderLicenseList();
+    renderQuote();
+    renderTotals();
+  } catch (err) {
+    console.error('Render error:', err);
+    showToast('Render error \u2014 try clearing your data');
+  }
 }
 
 // ─── URL State ─────────────────────────────────────────────────────────────────
