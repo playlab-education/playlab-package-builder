@@ -1133,25 +1133,19 @@ const PACKAGES = [
     desc: 'A foundational introduction where participants learn how AI works and build their first simple AI tool.',
     facilitationHours: 3,
     components: [
-      { blockId: 'facilitation', qty: 3, label: 'Facilitation', scalable: true },
-      { blockId: 'facilitation', qty: 1, label: 'Launch Session', scalable: false, support: true },
-      { blockId: 'office-hours', qty: 1, label: 'Office Hours', scalable: false, support: true }
+      { blockId: 'facilitation', qty: 3, label: 'Facilitation', scalable: true }
     ] },
   { id: 'edu-core', pathway: 'educators', name: 'Core Package', subtitle: '6 hrs + supports', badge: 'Most Popular',
     desc: 'A deeper learning experience for teams ready to move beyond basics to intentional design with advanced features.',
     facilitationHours: 6,
     components: [
-      { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true },
-      { blockId: 'facilitation', qty: 1, label: 'Launch Session', scalable: false, support: true },
-      { blockId: 'office-hours', qty: 2, label: 'Office Hours', scalable: false, support: true }
+      { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true }
     ] },
   { id: 'edu-full', pathway: 'educators', name: 'Full Agency Package', subtitle: '9 hrs + supports', badge: 'Gold Standard',
     desc: 'Our most comprehensive experience \u2014 from understanding AI to designing advanced tools, evaluating impact, and a final showcase.',
     facilitationHours: 9,
     components: [
-      { blockId: 'facilitation', qty: 9, label: 'Facilitation', scalable: true },
-      { blockId: 'facilitation', qty: 1, label: 'Launch Session', scalable: false, support: true },
-      { blockId: 'office-hours', qty: 3, label: 'Office Hours', scalable: false, support: true }
+      { blockId: 'facilitation', qty: 9, label: 'Facilitation', scalable: true }
     ] },
   // Educators: Smaller Options
   { id: 'edu-intro', pathway: 'educators', name: 'Intro Workshop', subtitle: '90 minutes', badge: 'Quick Start',
@@ -1164,8 +1158,7 @@ const PACKAGES = [
     desc: 'Educators explore new Playlab features (python, voice, knowledge graph, etc.) and incorporate them into their builds. 50% discount for renewal partners.',
     facilitationHours: 3,
     components: [
-      { blockId: 'facilitation', qty: 3, label: 'Facilitation', scalable: true },
-      { blockId: 'facilitation', qty: 1, label: 'Launch Session', scalable: false, support: true }
+      { blockId: 'facilitation', qty: 3, label: 'Facilitation', scalable: true }
     ] },
   // Students
   { id: 'stu-starter', pathway: 'students', name: 'Starter Sprint', subtitle: '3 hrs', badge: 'Student Sprint',
@@ -1191,7 +1184,6 @@ const PACKAGES = [
     facilitationHours: 6,
     components: [
       { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true },
-      { blockId: 'facilitation', qty: 1, label: 'Launch Session', scalable: false, support: true },
       { blockId: 'admin-meetings', qty: 1, label: 'Admin Planning', scalable: false, support: true }
     ] },
   // AI Impact
@@ -1301,10 +1293,10 @@ function calcQuotePkgGross(qpkg) {
   total += qpkg.launchMeetingQty * getBlockPrice('admin-meetings');
   // Add office hours
   total += qpkg.officeHoursQty * getBlockPrice('office-hours');
-  // Add check-ins (30 min each)
-  total += (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('admin-meetings');
-  // Add reflection meeting (1 hr each)
-  total += (qpkg.reflectionMeetingQty || 0) * getBlockPrice('admin-meetings');
+  // Add check-ins (30 min each, at office-hours rate)
+  total += (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('office-hours');
+  // Add reflection meeting (1 hr each, at office-hours rate)
+  total += (qpkg.reflectionMeetingQty || 0) * getBlockPrice('office-hours');
   return total;
 }
 
@@ -1462,8 +1454,8 @@ function buildInlineConfig(pkg) {
     sessionsHtml = `<div class="pkg-config-row">
       <span class="pkg-config-label">Sessions</span>
       <input class="num-sessions-input" type="number" step="any" value="${numSessions}"
-             onchange="updateConfigNumSessions('${pkg.id}', this)"
-             oninput="updateConfigNumSessions('${pkg.id}', this)">
+             onchange="updateConfigNumSessions('${pkg.id}', this, true)"
+             oninput="updateConfigNumSessions('${pkg.id}', this, false)">
       <span style="font-size:10px;color:var(--slate-400)">${`${pkg.facilitationHours} hrs total`}</span>
     </div>
     <div class="session-config-rows">
@@ -1499,7 +1491,7 @@ function buildInlineConfig(pkg) {
   const numFac = Math.max(1, Math.ceil(participants / 30));
   const participantsHtml = hasFacilitation ? `<div class="pkg-config-row">
     <span class="pkg-config-label">Participants</span>
-    <input class="config-participants" type="number" step="any" value="${participants}" onchange="updateConfigParticipants('${pkg.id}', this)" oninput="updateConfigParticipants('${pkg.id}', this)">
+    <input class="config-participants" type="number" step="any" value="${participants}" onchange="updateConfigParticipants('${pkg.id}', this, true)" oninput="updateConfigParticipants('${pkg.id}', this, false)">
     <span style="font-size:10px;color:var(--slate-400)">\u2192 ${numFac} ${numFac > 1 ? 'facilitators' : 'facilitator'}</span>
   </div>` : '';
 
@@ -1540,10 +1532,12 @@ function calcConfigPreview(pkg) {
     if (s.delivery === 'travel') cost += getBlockPrice('travel-flight');
   }
 
-  // Auto-included: launch meeting + office hours
+  // Auto-included supports
   if (hasFacilitation) {
     cost += 1 * getBlockPrice('admin-meetings'); // launch meeting
     cost += Math.max(0, sessions.length - 1) * getBlockPrice('office-hours'); // office hours
+    cost += Math.max(0, sessions.length - 1) * 0.5 * getBlockPrice('office-hours'); // check-ins (30 min each)
+    cost += 1 * getBlockPrice('office-hours'); // reflection meeting
   }
 
   return cost;
@@ -1601,14 +1595,29 @@ function rerenderConfigOnly(pkgId) {
   oldConfig.replaceWith(temp.firstElementChild);
 }
 
-function updateConfigNumSessions(pkgId, input) {
+function updateConfigNumSessions(pkgId, input, commit) {
   const cs = ensureConfigState(pkgId);
   const pkg = PACKAGES.find(p => p.id === pkgId);
   const totalHours = pkg?.facilitationHours || 1;
   let val = Math.round(parseFloat(input.value));
   const maxS = getMaxSessions(totalHours);
+  if (!commit) {
+    // Live typing: update state silently, no re-render
+    if (!isNaN(val) && val >= 1 && val <= maxS) {
+      cs.numSessions = val;
+      const oldSessions = cs.sessions || [];
+      const newSessions = distributeHours(totalHours, val);
+      for (let i = 0; i < newSessions.length; i++) {
+        if (i < oldSessions.length) newSessions[i].delivery = oldSessions[i].delivery;
+      }
+      cs.sessions = newSessions;
+    }
+    return;
+  }
+  // Commit: clamp, re-render
   if (isNaN(val) || val < 1) val = 1;
   if (val > maxS) val = maxS;
+  input.value = val;
   cs.numSessions = val;
   const oldSessions = cs.sessions || [];
   const newSessions = distributeHours(totalHours, val);
@@ -1616,7 +1625,6 @@ function updateConfigNumSessions(pkgId, input) {
     if (i < oldSessions.length) newSessions[i].delivery = oldSessions[i].delivery;
   }
   cs.sessions = newSessions;
-  // Re-render config but restore focus to the sessions input
   const hadFocus = document.activeElement === input;
   rerenderConfigOnly(pkgId);
   if (hadFocus) {
@@ -1657,10 +1665,17 @@ function updateConfigImpactDelivery(pkgId, mode) {
   rerenderConfigOnly(pkgId);
 }
 
-function updateConfigParticipants(pkgId, input) {
+function updateConfigParticipants(pkgId, input, commit) {
   const cs = ensureConfigState(pkgId);
   let val = Math.round(parseFloat(input.value));
+  if (!commit) {
+    // Live typing: update state silently, no re-render
+    if (!isNaN(val) && val >= 1) cs.participants = val;
+    return;
+  }
+  // Commit: clamp, re-render
   if (isNaN(val) || val < 1) val = 1;
+  input.value = val;
   cs.participants = val;
   const hadFocus = document.activeElement === input;
   rerenderConfigOnly(pkgId);
@@ -2257,7 +2272,7 @@ function buildQuotePkg(qpkg) {
 
   // Auto-included: Check-ins (30 min each)
   if ((qpkg.checkInQty || 0) > 0 || hasFacilitation) {
-    const ciTotal = (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('admin-meetings');
+    const ciTotal = (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('office-hours');
     bodyHtml += `<div class="comp-line support">
       <div class="comp-info"><div class="comp-name">Check-ins<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121 \u00D7 30 min)</span></div></div>
       <div class="comp-qty">
@@ -2273,7 +2288,7 @@ function buildQuotePkg(qpkg) {
 
   // Auto-included: Reflection Meeting (1 hr each)
   if ((qpkg.reflectionMeetingQty || 0) > 0 || hasFacilitation) {
-    const rmTotal = (qpkg.reflectionMeetingQty || 0) * getBlockPrice('admin-meetings');
+    const rmTotal = (qpkg.reflectionMeetingQty || 0) * getBlockPrice('office-hours');
     bodyHtml += `<div class="comp-line support">
       <div class="comp-info"><div class="comp-name">Reflection Meeting<span class="auto-tag">auto</span></div></div>
       <div class="comp-qty">
@@ -2694,10 +2709,10 @@ async function copyForProposal() {
         lines.push(`    \u2022 Office Hours (${qpkg.officeHoursQty} hrs) \u2014 ${fmt(qpkg.officeHoursQty * getBlockPrice('office-hours'))}`);
       }
       if ((qpkg.checkInQty || 0) > 0) {
-        lines.push(`    \u2022 Check-ins (${qpkg.checkInQty}\u00D7 30 min) \u2014 ${fmt(qpkg.checkInQty * 0.5 * getBlockPrice('admin-meetings'))}`);
+        lines.push(`    \u2022 Check-ins (${qpkg.checkInQty}\u00D7 30 min) \u2014 ${fmt(qpkg.checkInQty * 0.5 * getBlockPrice('office-hours'))}`);
       }
       if ((qpkg.reflectionMeetingQty || 0) > 0) {
-        lines.push(`    \u2022 Reflection Meeting (${qpkg.reflectionMeetingQty}\u00D7) \u2014 ${fmt(qpkg.reflectionMeetingQty * getBlockPrice('admin-meetings'))}`);
+        lines.push(`    \u2022 Reflection Meeting (${qpkg.reflectionMeetingQty}\u00D7) \u2014 ${fmt(qpkg.reflectionMeetingQty * getBlockPrice('office-hours'))}`);
       }
       if (pkg?.pathwayDiscount) {
         const discAmt = calcQuotePkgGross(qpkg) * pkg.pathwayDiscount;
