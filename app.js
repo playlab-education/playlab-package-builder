@@ -154,8 +154,8 @@ function unitShort(unit) {
 
 // ─── Software Tiers (Enterprise only) ───────────────────────────────────────
 const SOFTWARE_TIERS = [
-  { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students' },
-  { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500 },
+  { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00' },
+  { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
   { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1–9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
   { id: 'schools-t3', name: 'Schools — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
@@ -1089,10 +1089,16 @@ function renderSwCards() {
         <input class="sw-count-input" type="number" step="any" value="${tier.defaultStudents}" id="sw-students-${tier.id}">
       </div>`;
     }
+    const cardColor = tier.color || '#8b5cf6';
+    const cardColorLight = tier.colorLight || '#f5f3ff';
+    const cardColorText = tier.colorText || cardColor;
+    card.style.setProperty('--card-color', cardColor);
+    card.style.setProperty('--card-color-light', cardColorLight);
+    card.style.setProperty('--card-btn-text', tier.id === 'play' ? '#5a4000' : tier.id === 'impact' ? '#1a4a3a' : 'white');
     card.innerHTML = `
       <div class="sw-card-name">${tier.name}</div>
       <div class="sw-card-tagline">${tier.tagline}</div>
-      <div class="sw-card-price">${priceLabel}</div>
+      <div class="sw-card-price" style="color:${cardColorText};background:${cardColorLight}">${priceLabel}</div>
       ${metaRow}
       ${countRow}
       ${studentRow}
@@ -1113,10 +1119,13 @@ function renderSwCards() {
   schoolCard.id = 'sw-schools';
   const defaultEnrollment = 5000;
   const defaultTier = getSchoolTierForEnrollment(defaultEnrollment);
+  schoolCard.style.setProperty('--card-color', '#7ee4bb');
+  schoolCard.style.setProperty('--card-color-light', '#edfdf5');
+  schoolCard.style.setProperty('--card-btn-text', '#1a4a3a');
   schoolCard.innerHTML = `
     <div class="sw-card-name">Schools</div>
     <div class="sw-card-tagline">Enrollment-based pricing for K\u201312</div>
-    <div class="sw-card-price" id="schools-price-badge">${defaultTier.priceNote}</div>
+    <div class="sw-card-price" id="schools-price-badge" style="color:#1a6b4a;background:#edfdf5">${defaultTier.priceNote}</div>
     <div id="schools-tier-detail" style="font-size:10px;color:var(--slate-400);margin-top:2px">${defaultTier.name} · ${defaultTier.monthlyCredits}</div>
     <div class="sw-card-row">
       <label>Students:</label>
