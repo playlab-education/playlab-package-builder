@@ -155,7 +155,7 @@ function unitShort(unit) {
 // ─── Software Tiers (Enterprise only) ───────────────────────────────────────
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students' },
-  { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5 },
+  { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500 },
   { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1–9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
   { id: 'schools-t3', name: 'Schools — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
@@ -184,11 +184,13 @@ function calcTotalSoftware() {
   return quoteLicenses.reduce((sum, lic) => sum + calcLicenseCost(lic), 0);
 }
 
-function addLicense(tierId, count) {
+function addLicense(tierId, count, students) {
   const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
   if (!tier) return;
   const c = count || tier.defaultCount;
-  quoteLicenses.push({ licenseId: nextLicenseId++, tierId, count: c, customName: '' });
+  const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '' };
+  if (tier.hasStudentInput) lic.students = students || tier.defaultStudents || 0;
+  quoteLicenses.push(lic);
   renderSwCards();
   renderLicenseList();
   renderTotals();
@@ -571,9 +573,9 @@ function buildInlineConfig(pkg) {
                oninput="updateConfigSessionHours('${pkg.id}', ${i}, this, false)">
         <span class="session-hours-unit">hrs</span>
         <select class="config-select" style="font-size:10px;padding:4px 6px;min-width:0" onchange="updateConfigSessionDelivery('${pkg.id}',${i},this.value)">
-          <option value="virtual" ${s.delivery === 'virtual' ? 'selected' : ''}>Virtual</option>
-          <option value="local" ${s.delivery === 'local' ? 'selected' : ''}>Local (+${fmt(localCost)})</option>
-          <option value="travel" ${s.delivery === 'travel' ? 'selected' : ''}>Travel (+${fmt(flightCost)})</option>
+          <option value="virtual" ${s.delivery === 'virtual' ? 'selected' : ''}>\uD83D\uDCBB Virtual</option>
+          <option value="local" ${s.delivery === 'local' ? 'selected' : ''}>\uD83D\uDE97 Local (+${fmt(localCost)})</option>
+          <option value="travel" ${s.delivery === 'travel' ? 'selected' : ''}>\u2708\uFE0F Travel (+${fmt(flightCost)})</option>
         </select>
       </div>`).join('')}
     </div>`;
@@ -585,9 +587,9 @@ function buildInlineConfig(pkg) {
     sessionsHtml = `<div class="pkg-config-row">
       <span class="pkg-config-label">Delivery</span>
       <div class="delivery-pills">
-        <button class="delivery-pill ${delivery === 'virtual' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','virtual')">Virtual<span class="pill-cost">+$0</span></button>
-        <button class="delivery-pill ${delivery === 'local' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','local')">Local<span class="pill-cost">+${fmt(localCost)}</span></button>
-        <button class="delivery-pill ${delivery === 'travel' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','travel')">Travel<span class="pill-cost">+${fmt(flightCost)}</span></button>
+        <button class="delivery-pill ${delivery === 'virtual' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','virtual')">\uD83D\uDCBB Virtual<span class="pill-cost">+$0</span></button>
+        <button class="delivery-pill ${delivery === 'local' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','local')">\uD83D\uDE97 Local<span class="pill-cost">+${fmt(localCost)}</span></button>
+        <button class="delivery-pill ${delivery === 'travel' ? 'active' : ''}" onclick="updateConfigImpactDelivery('${pkg.id}','travel')">\u2708\uFE0F Travel<span class="pill-cost">+${fmt(flightCost)}</span></button>
       </div>
     </div>`;
   }
@@ -1080,12 +1082,20 @@ function renderSwCards() {
       </div>`;
     let metaRow = '';
     if (tier.educators) metaRow = `<div style="font-size:10px;color:var(--slate-400);margin-top:2px">${tier.educators} · ${tier.students}</div>`;
+    let studentRow = '';
+    if (tier.hasStudentInput) {
+      studentRow = `<div class="sw-card-row">
+        <label>Students:</label>
+        <input class="sw-count-input" type="number" step="any" value="${tier.defaultStudents}" id="sw-students-${tier.id}">
+      </div>`;
+    }
     card.innerHTML = `
       <div class="sw-card-name">${tier.name}</div>
       <div class="sw-card-tagline">${tier.tagline}</div>
       <div class="sw-card-price">${priceLabel}</div>
       ${metaRow}
       ${countRow}
+      ${studentRow}
       <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">+ Add License</button>`;
     grid.appendChild(card);
 
@@ -1145,7 +1155,12 @@ function addLicenseFromCard(tierId) {
   const input = document.getElementById('sw-input-' + tierId);
   let count = Math.round(parseFloat(input.value)) || tier.defaultCount;
   if (count < tier.minCount) count = tier.minCount;
-  addLicense(tierId, count);
+  let students = 0;
+  if (tier.hasStudentInput) {
+    const studentInput = document.getElementById('sw-students-' + tierId);
+    students = Math.round(parseFloat(studentInput.value)) || tier.defaultStudents;
+  }
+  addLicense(tierId, count, students);
 }
 
 // ─── Render: License List (Right Panel) ──────────────────────────────────────
@@ -1164,7 +1179,8 @@ function renderLicenseList() {
     if (!tier) continue;
     const cost = calcLicenseCost(lic);
     const priceDisplay = tier.isCustom ? 'Custom' : `${fmt(cost)}/yr`;
-    const detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
+    let detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
+    if (lic.students) detailDisplay += ` · ${lic.students.toLocaleString()} students`;
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
@@ -1230,7 +1246,7 @@ function renderQuote() {
 function getDeliveryBadgesForSessions(sessions) {
   // Summarize delivery modes for header badge
   const modes = [...new Set(sessions.map(s => s.delivery))];
-  const deliveryLabels = { virtual: 'Virtual', local: 'Local', travel: 'Travel' };
+  const deliveryLabels = { virtual: '\uD83D\uDCBB Virtual', local: '\uD83D\uDE97 Local', travel: '\u2708\uFE0F Travel' };
   return modes.map(m => `<span class="delivery-badge ${m}">${deliveryLabels[m] || m}</span>`).join('');
 }
 
@@ -1267,9 +1283,9 @@ function buildQuotePkg(qpkg) {
                oninput="updateQuoteSessionHours(${qpkg.pkgId}, ${i}, this, false)">
         <span class="session-hours-unit">hrs</span>` : ''}
         <div class="delivery-pills-sm">
-          <button class="delivery-pill-sm ${s.delivery === 'virtual' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'virtual')">Virtual</button>
-          <button class="delivery-pill-sm ${s.delivery === 'local' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'local')">Local</button>
-          <button class="delivery-pill-sm ${s.delivery === 'travel' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'travel')">Travel</button>
+          <button class="delivery-pill-sm ${s.delivery === 'virtual' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'virtual')">\uD83D\uDCBB Virtual</button>
+          <button class="delivery-pill-sm ${s.delivery === 'local' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'local')">\uD83D\uDE97 Local</button>
+          <button class="delivery-pill-sm ${s.delivery === 'travel' ? 'active' : ''}" onclick="updateQuoteSessionDelivery(${qpkg.pkgId},${i},'travel')">\u2708\uFE0F Travel</button>
         </div>
         <span class="builder-session-info">${travelNote}</span>
       </div>`;
@@ -1600,7 +1616,7 @@ function getTabState() {
     discountName: document.getElementById('discountName').value,
     students: document.getElementById('studentCount').value,
     educators: document.getElementById('educatorCount').value,
-    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, customName: l.customName || undefined })),
+    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, customName: l.customName || undefined, students: l.students || undefined })),
     packages: quotePackages.map(qp => ({
       packageId: qp.packageId,
       customName: qp.customName || undefined,
@@ -1649,7 +1665,9 @@ function hydrateState(state) {
     for (const sl of state.licenses) {
       const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
       if (!tier) continue;
-      quoteLicenses.push({ licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '' });
+      const lic = { licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '' };
+      if (sl.students) lic.students = sl.students;
+      quoteLicenses.push(lic);
     }
   }
   // Backward compat: v2 tier/tierCounts
@@ -1773,7 +1791,8 @@ function copyForProposal() {
       if (!tier) continue;
       const cost = calcLicenseCost(lic);
       const licLabel = lic.customName ? `Playlab ${tier.name} (${lic.customName})` : `Playlab ${tier.name}`;
-      lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`, fmt(cost)));
+      const studentNote = lic.students ? ` \u2014 ${lic.students.toLocaleString()} students` : '';
+      lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}`, fmt(cost)));
     }
     lines.push('');
   }
@@ -1892,7 +1911,8 @@ function copyAsMarkdown() {
       if (!tier) continue;
       const cost = calcLicenseCost(lic);
       const licLabel = lic.customName ? `Playlab ${tier.name} (${lic.customName})` : `Playlab ${tier.name}`;
-      md += `| ${licLabel} | ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} | ${fmt(cost)}/yr |\n`;
+      const studentMd = lic.students ? ` · ${lic.students.toLocaleString()} students` : '';
+      md += `| ${licLabel} | ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural}${studentMd} | ${fmt(cost)}/yr |\n`;
     }
     md += '\n';
   }
