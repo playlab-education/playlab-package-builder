@@ -1981,8 +1981,6 @@ function copyAsMarkdown() {
 }
 
 // ─── Events ───────────────────────────────────────────────────────────────────
-document.getElementById('copyBtn').addEventListener('click', copyForProposal);
-document.getElementById('copyMdBtn').addEventListener('click', copyAsMarkdown);
 document.getElementById('copyLinkBtn').addEventListener('click', () => {
   saveToUrl();
   navigator.clipboard.writeText(location.href).then(() => {
