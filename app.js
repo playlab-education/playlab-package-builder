@@ -113,9 +113,9 @@ function roundPrice(n) {
 function getBlockPrice(blockId) {
   const { lp, dev, travel: tr } = rates;
   switch (blockId) {
-    case 'office-hours':      return roundPrice(lp * 1.0 * 1.2);
-    case 'admin-meetings':    return roundPrice(lp * 1.5 * 1.2);
-    case 'facilitation':      return roundPrice(lp * 2.0 * 1.2);
+    case 'office-hours':      return roundPrice(lp * 1.0);
+    case 'admin-meetings':    return roundPrice(lp * 1.2);
+    case 'facilitation':      return roundPrice(lp * 2.4);
     case 'dev-hourly':        return roundPrice(dev * 1.0);
     case 'app-support-light': return roundPrice(dev * 5.0);
     case 'app-support-medium':return roundPrice(dev * 10.0);
@@ -125,7 +125,6 @@ function getBlockPrice(blockId) {
     case 'travel-addl-day':   return roundPrice((tr + 375)    * 1.15 * 1.04);
     case 'site-visit-half':   return roundPrice((lp * 3 + tr + lp * 2) * 1.09);
     case 'site-visit-full':   return roundPrice((lp * 6 + tr + lp * 2) * 1.16);
-    case 'ai-crash-course':   return roundPrice(lp * 8 * 1.15);
     case 'ideation-lp':       return roundPrice(lp * 10);
     case 'ideation-lp-le':    return roundPrice(lp * 14 * 1.15);
     case 'tool-build-initial':return roundPrice((lp + dev) * 10 * 1.1);
@@ -290,8 +289,7 @@ const PACKAGES = [
     desc: 'Prepare your educators to deliver student AI experiences. Playlab facilitates training using proven structure, tailored to your chosen curriculum.',
     facilitationHours: 6,
     components: [
-      { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true },
-      { blockId: 'admin-meetings', qty: 1, label: 'Admin Planning', scalable: false, support: true }
+      { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true }
     ] },
   // AI Impact
   { id: 'impact-ideation', pathway: 'impact', name: 'Ideation', subtitle: '~4 hr facilitated session', badge: 'Discovery',
@@ -335,7 +333,6 @@ const ADDONS = [
   { blockId: 'office-hours', label: 'Office Hours', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, category: 'Learning Partner', desc: 'Drop-in support for educators between sessions' },
   { blockId: 'admin-meetings', label: 'Admin Meetings', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, category: 'Learning Partner', desc: 'Strategic planning time with leadership' },
   { blockId: 'facilitation', label: 'Extra Facilitation', unit: 'hr', defaultQty: 1.5, minQty: 1.5, step: 0.5, category: 'Learning Partner', desc: 'Additional live facilitation hours (up to 50 participants)' },
-  { blockId: 'ai-crash-course', label: 'AI Agency Crash Course', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, category: 'Learning Partner', desc: 'Half-day intro workshop (4 hrs facilitation + 4 hrs prep)' },
   { blockId: 'app-support-light', label: 'App Support \u2014 Light', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '5 hrs/mo of ongoing app maintenance and updates' },
   { blockId: 'app-support-medium', label: 'App Support \u2014 Medium', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '10 hrs/mo of ongoing app maintenance and updates' },
   { blockId: 'app-support-full', label: 'App Support \u2014 Full', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '20 hrs/mo of dedicated app maintenance and iteration' },
@@ -793,6 +790,36 @@ function updateConfigParticipants(pkgId, input, commit) {
   }
 }
 
+function getSupportDefaults(pkg, sessions) {
+  const isIntro = pkg.id === 'edu-intro';
+  const isPowerUp = pkg.id === 'edu-powerup';
+  const isStudent = pkg.pathway === 'students';
+  const isImpact = pkg.pathway === 'impact';
+  const isEduCore = pkg.pathway === 'educators' && !isIntro && !isPowerUp;
+
+  if (isImpact) {
+    return { launchMeetingQty: 1, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
+  }
+  if (isIntro) {
+    return { launchMeetingQty: 0, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
+  }
+  if (isPowerUp) {
+    return { launchMeetingQty: 1, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
+  }
+  if (isStudent) {
+    return { launchMeetingQty: 1, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 1 };
+  }
+  if (isEduCore) {
+    return {
+      launchMeetingQty: 1,
+      officeHoursQty: Math.max(0, sessions.length - 1),
+      checkInQty: Math.max(0, sessions.length - 1),
+      reflectionMeetingQty: 1
+    };
+  }
+  return { launchMeetingQty: 0, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
+}
+
 function confirmAddPackage(pkgId) {
   const pkg = PACKAGES.find(p => p.id === pkgId);
   if (!pkg) return;
@@ -815,10 +842,10 @@ function confirmAddPackage(pkgId) {
     sessions,
     travelLocalDays: travelCounts.localDays,
     travelFlightTrips: travelCounts.flightTrips,
-    launchMeetingQty: (hasFacilitation || pkg.pathway === 'impact') ? 1 : 0,
-    officeHoursQty: hasFacilitation ? Math.max(0, sessions.length - 1) : 0,
-    checkInQty: hasFacilitation ? Math.max(0, sessions.length - 1) : 0,
-    reflectionMeetingQty: hasFacilitation ? 1 : 0,
+    launchMeetingQty: getSupportDefaults(pkg, sessions).launchMeetingQty,
+    officeHoursQty: getSupportDefaults(pkg, sessions).officeHoursQty,
+    checkInQty: getSupportDefaults(pkg, sessions).checkInQty,
+    reflectionMeetingQty: getSupportDefaults(pkg, sessions).reflectionMeetingQty,
     components
   };
   quotePackages.push(qpkg);
@@ -1751,10 +1778,10 @@ function hydrateState(state) {
         sessions,
         travelLocalDays: sp.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays,
         travelFlightTrips: sp.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips,
-        launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : ((hasFac || pkg.pathway === 'impact') ? 1 : 0),
-        officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-        checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : (hasFac ? Math.max(0, sessions.length - 1) : 0),
-        reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : (hasFac ? 1 : 0),
+        launchMeetingQty: sp.launchMeetingQty !== undefined ? sp.launchMeetingQty : getSupportDefaults(pkg, sessions).launchMeetingQty,
+        officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : getSupportDefaults(pkg, sessions).officeHoursQty,
+        checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : getSupportDefaults(pkg, sessions).checkInQty,
+        reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : getSupportDefaults(pkg, sessions).reflectionMeetingQty,
         components
       };
       quotePackages.push(qpkg);
