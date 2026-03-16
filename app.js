@@ -332,23 +332,23 @@ const PACKAGES = [
 
 // ─── Add-On Definitions ────────────────────────────────────────────────────────
 const ADDONS = [
-  { blockId: 'office-hours', label: 'Office Hours', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, desc: '$300/hr \u00B7 starting at 30 min' },
-  { blockId: 'admin-meetings', label: 'Admin Meetings', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, desc: '$450/hr \u00B7 starting at 30 min' },
-  { blockId: 'facilitation', label: 'Extra Facilitation', unit: 'hr', defaultQty: 1.5, minQty: 1.5, step: 0.5, desc: '$600/hr \u00B7 up to 50 participants' },
-  { blockId: 'travel-flight', label: 'Travel \u2014 Flight', unit: 'trip', defaultQty: 1, minQty: 1, step: 1, desc: '$2,000/trip \u00B7 8 hrs travel + flight + ground' },
-  { blockId: 'travel-local', label: 'Travel \u2014 Local', unit: 'day', defaultQty: 1, minQty: 1, step: 1, desc: '$250/day \u00B7 mileage + per diem' },
-  { blockId: 'travel-addl-day', label: 'Travel \u2014 Addl Day', unit: 'day', defaultQty: 1, minQty: 1, step: 1, desc: '$600/day \u00B7 hotel + ground + per diem' },
-  { blockId: 'site-visit-half', label: 'Site Visit \u2014 Half Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, desc: '$1,500 \u00B7 1\u20134 hour visit' },
-  { blockId: 'site-visit-full', label: 'Site Visit \u2014 Full Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, desc: '$2,500 \u00B7 4\u20138 hour visit' },
-  { blockId: 'app-support-light', label: 'App Support \u2014 Light', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '$1,000/mo \u00B7 5 hrs support' },
-  { blockId: 'app-support-medium', label: 'App Support \u2014 Medium', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '$2,000/mo \u00B7 10 hrs support' },
-  { blockId: 'app-support-full', label: 'App Support \u2014 Full', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '$4,000/mo \u00B7 20 hrs support' },
-  { blockId: 'ai-crash-course', label: 'AI Agency Crash Course', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$2,300 \u00B7 4 hrs facilitation + 4 hrs prep' },
-  { blockId: 'knowledge-graph', label: 'Knowledge Graph', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$1,500/curricula' },
-  { blockId: 'tool-revision-light', label: 'Tool Revision \u2014 Light', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$1,500/mo \u00B7 6 hrs LE' },
-  { blockId: 'tool-revision-medium', label: 'Tool Revision \u2014 Medium', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$2,800/mo \u00B7 12 hrs LE' },
-  { blockId: 'tool-revision-full', label: 'Tool Revision \u2014 Full', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '$5,000/mo \u00B7 22 hrs LE' },
-  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '$300/mo \u00B7 for non-school partners' }
+  { blockId: 'office-hours', label: 'Office Hours', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, desc: 'Drop-in support for educators between sessions' },
+  { blockId: 'admin-meetings', label: 'Admin Meetings', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, desc: 'Strategic planning time with leadership' },
+  { blockId: 'facilitation', label: 'Extra Facilitation', unit: 'hr', defaultQty: 1.5, minQty: 1.5, step: 0.5, desc: 'Additional live facilitation hours (up to 50 participants)' },
+  { blockId: 'travel-flight', label: 'Travel \u2014 Flight', unit: 'trip', defaultQty: 1, minQty: 1, step: 1, desc: 'Round-trip flight with ground transport and per diem' },
+  { blockId: 'travel-local', label: 'Travel \u2014 Local', unit: 'day', defaultQty: 1, minQty: 1, step: 1, desc: 'Local driving with mileage and per diem' },
+  { blockId: 'travel-addl-day', label: 'Travel \u2014 Addl Day', unit: 'day', defaultQty: 1, minQty: 1, step: 1, desc: 'Extra day on-site with hotel and per diem' },
+  { blockId: 'site-visit-half', label: 'Site Visit \u2014 Half Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, desc: '1\u20134 hour on-site observation or working session' },
+  { blockId: 'site-visit-full', label: 'Site Visit \u2014 Full Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, desc: '4\u20138 hour on-site observation or working session' },
+  { blockId: 'app-support-light', label: 'App Support \u2014 Light', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '5 hrs/mo of ongoing app maintenance and updates' },
+  { blockId: 'app-support-medium', label: 'App Support \u2014 Medium', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '10 hrs/mo of ongoing app maintenance and updates' },
+  { blockId: 'app-support-full', label: 'App Support \u2014 Full', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: '20 hrs/mo of dedicated app maintenance and iteration' },
+  { blockId: 'ai-crash-course', label: 'AI Agency Crash Course', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: 'Half-day intro workshop with prep (4 hrs facilitation + 4 hrs prep)' },
+  { blockId: 'knowledge-graph', label: 'Knowledge Graph', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: 'Standards-aligned curriculum mapping for AI apps' },
+  { blockId: 'tool-revision-light', label: 'Tool Revision \u2014 Light', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '6 hrs/mo of learning engineer time for app refinement' },
+  { blockId: 'tool-revision-medium', label: 'Tool Revision \u2014 Medium', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '12 hrs/mo of learning engineer time for app refinement' },
+  { blockId: 'tool-revision-full', label: 'Tool Revision \u2014 Full', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, desc: '22 hrs/mo of dedicated learning engineer iteration' },
+  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, desc: 'Monthly AI model usage for non-school partners' }
 ];
 
 // ─── Session Helpers ──────────────────────────────────────────────────────────
@@ -1214,6 +1214,7 @@ function renderAddonGrid() {
     card.className = 'addon-card' + (inQuote ? ' in-quote' : '');
     card.onclick = () => addAddon(addon.blockId);
     card.innerHTML = `<div class="addon-name">${addon.label}</div>
+      <div class="addon-desc" style="font-size:10px;color:var(--slate-400);margin:2px 0 6px;line-height:1.4">${addon.desc}</div>
       <div class="addon-price">${fmt(getBlockPrice(addon.blockId))}/${addon.unit === 'flat' ? 'ea' : addon.unit}</div>
       <div class="addon-add">${inQuote ? '+ Add Another' : '+ Add'}</div>`;
     grid.appendChild(card);
