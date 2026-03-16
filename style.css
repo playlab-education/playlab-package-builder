@@ -266,14 +266,14 @@
     .addon-line { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: var(--slate-50); border-radius: 7px; }
 
     /* Software license line in quote */
-    .license-line { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--violet-50); border: 1px solid var(--violet-500); border-radius: 8px; }
+    .license-line { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--lic-bg, var(--violet-50)); border: 1px solid var(--lic-color, var(--violet-500)); border-radius: 8px; }
     .license-line .comp-info { flex: 1; }
-    .license-line .license-name { font-size: 11px; font-weight: 700; color: var(--violet-600); display: flex; align-items: center; gap: 4px; }
-    .license-line .license-name-input { font-family: 'Lexend', sans-serif; font-size: 10px; font-weight: 500; color: var(--slate-600); background: white; border: 1px solid var(--violet-300); border-radius: 4px; padding: 1px 5px; width: 120px; outline: none; }
+    .license-line .license-name { font-size: 11px; font-weight: 700; color: var(--lic-text, var(--violet-600)); display: flex; align-items: center; gap: 4px; }
+    .license-line .license-name-input { font-family: 'Lexend', sans-serif; font-size: 10px; font-weight: 500; color: var(--slate-600); background: white; border: 1px solid var(--lic-color, var(--violet-300)); border-radius: 4px; padding: 1px 5px; width: 120px; outline: none; }
     .license-line .license-name-input:focus { border-color: var(--sky-500); }
     .license-line .license-name-input::placeholder { color: var(--slate-400); font-style: italic; }
     .license-line .license-detail { font-size: 9.5px; color: var(--slate-500); }
-    .license-line .license-price { font-size: 12px; font-weight: 800; color: var(--violet-600); flex-shrink: 0; }
+    .license-line .license-price { font-size: 12px; font-weight: 800; color: var(--lic-text, var(--violet-600)); flex-shrink: 0; }
 
     /* Totals */
     .totals-section { border-top: 1.5px solid var(--slate-100); padding-top: 14px; display: flex; flex-direction: column; gap: 9px; }

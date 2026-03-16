@@ -1193,6 +1193,12 @@ function renderLicenseList() {
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
+    const licColor = tier.color || (tier.isSchool ? '#7ee4bb' : '#8b5cf6');
+    const licColorLight = tier.colorLight || (tier.isSchool ? '#edfdf5' : '#f5f3ff');
+    const licColorText = tier.colorText || (tier.isSchool ? '#1a6b4a' : '#7c3aed');
+    div.style.setProperty('--lic-color', licColor);
+    div.style.setProperty('--lic-bg', licColorLight);
+    div.style.setProperty('--lic-text', licColorText);
     div.innerHTML = `
       <div class="comp-info">
         <div class="license-name">${tier.name}
