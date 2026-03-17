@@ -409,6 +409,22 @@
         <span class="t-value" id="partnerPrice">&mdash;</span>
       </div>
       <div class="savings-note" id="savingsNote"></div>
+      <div class="funder-row">
+        <span class="disc-label">Funder</span>
+        <div class="disc-inputs">
+          <input class="disc-name" id="funderName" type="text" placeholder="e.g. Gates Foundation">
+          <input class="disc-num" id="funderVal" type="number" step="any" placeholder="0">
+          <select class="disc-type" id="funderType">
+            <option value="pct">%</option>
+            <option value="flat" id="funderFlatLabel">$</option>
+          </select>
+        </div>
+        <span class="disc-amt" id="funderDisplay" style="color:var(--sky-600)"></span>
+      </div>
+      <div class="total-final oop-final" id="oopRow" style="display:none">
+        <span class="t-label">Partner Out-of-Pocket</span>
+        <span class="t-value" id="oopPrice">&mdash;</span>
+      </div>
     </div>
 
     <div class="insights-section" id="insightsSection" style="display:none">

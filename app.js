@@ -448,6 +448,14 @@ function calcDiscount(std) {
   return Math.min(val / getCurrency().rate, std);
 }
 
+function calcFunderSubsidy(partnerPrice) {
+  const val = parseFloat(document.getElementById('funderVal').value) || 0;
+  const type = document.getElementById('funderType').value;
+  if (val <= 0) return 0;
+  if (type === 'pct') return partnerPrice * (Math.min(val, 100) / 100);
+  return Math.min(val / getCurrency().rate, partnerPrice);
+}
+
 function hasQuoteItems() {
   return quotePackages.length > 0 || quoteAddons.length > 0 || quoteLicenses.length > 0;
 }
@@ -1528,6 +1536,8 @@ function renderTotals() {
   const std = services + software;
   const disc = calcDiscount(std);
   const partner = std - disc;
+  const funder = calcFunderSubsidy(partner);
+  const oop = partner - funder;
   const has = hasQuoteItems();
 
   document.getElementById('servicesTotal').textContent = has ? fmt(services) : '\u2014';
@@ -1535,6 +1545,15 @@ function renderTotals() {
   document.getElementById('standardTotal').textContent = has ? fmt(std) : '\u2014';
   document.getElementById('discountDisplay').textContent = disc > 0 ? '\u2212' + fmt(disc) : '';
   document.getElementById('partnerPrice').textContent = has ? fmt(partner) : '\u2014';
+  document.getElementById('funderDisplay').textContent = funder > 0 ? '\u2212' + fmt(funder) : '';
+
+  const oopRow = document.getElementById('oopRow');
+  if (funder > 0 && has) {
+    oopRow.style.display = '';
+    document.getElementById('oopPrice').textContent = fmt(oop);
+  } else {
+    oopRow.style.display = 'none';
+  }
 
   const sn = document.getElementById('savingsNote');
   if (disc > 0 && has) {
@@ -1555,11 +1574,13 @@ function renderInsights() {
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partner = std - disc;
+  const funder = calcFunderSubsidy(partner);
+  const finalCost = partner - funder;
 
   const students = parseFloat(document.getElementById('studentCount').value) || 0;
   const educators = parseFloat(document.getElementById('educatorCount').value) || 0;
-  document.getElementById('perStudentCost').textContent = students > 0 ? fmt(Math.round(partner / students)) + '/student' : '\u2014';
-  document.getElementById('perEducatorCost').textContent = educators > 0 ? fmt(Math.round(partner / educators)) + '/educator' : '\u2014';
+  document.getElementById('perStudentCost').textContent = students > 0 ? fmt(Math.round(finalCost / students)) + '/student' : '\u2014';
+  document.getElementById('perEducatorCost').textContent = educators > 0 ? fmt(Math.round(finalCost / educators)) + '/educator' : '\u2014';
 }
 
 // ─── Clear All ──────────────────────────────────────────────────────────────────
@@ -1580,6 +1601,8 @@ function resetBuilderState() {
   updateRateStatus();
   document.getElementById('discountVal').value = '';
   document.getElementById('discountName').value = '';
+  document.getElementById('funderVal').value = '';
+  document.getElementById('funderName').value = '';
   document.getElementById('partnerName').value = '';
   document.getElementById('studentCount').value = '';
   document.getElementById('educatorCount').value = '';
@@ -1671,6 +1694,9 @@ function getTabState() {
     discountVal: document.getElementById('discountVal').value,
     discountType: document.getElementById('discountType').value,
     discountName: document.getElementById('discountName').value,
+    funderVal: document.getElementById('funderVal').value,
+    funderType: document.getElementById('funderType').value,
+    funderName: document.getElementById('funderName').value,
     students: document.getElementById('studentCount').value,
     educators: document.getElementById('educatorCount').value,
     licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, customName: l.customName || undefined, students: l.students || undefined })),
@@ -1714,6 +1740,9 @@ function hydrateState(state) {
   if (state.discountVal) document.getElementById('discountVal').value = state.discountVal;
   if (state.discountType) document.getElementById('discountType').value = state.discountType;
   if (state.discountName) document.getElementById('discountName').value = state.discountName;
+  if (state.funderVal) document.getElementById('funderVal').value = state.funderVal;
+  if (state.funderType) document.getElementById('funderType').value = state.funderType;
+  if (state.funderName) document.getElementById('funderName').value = state.funderName;
   if (state.students) document.getElementById('studentCount').value = state.students;
   if (state.educators) document.getElementById('educatorCount').value = state.educators;
 
@@ -1827,6 +1856,8 @@ function copyForProposal() {
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partnerTotal = std - disc;
+  const funderAmt = calcFunderSubsidy(partnerTotal);
+  const oopTotal = partnerTotal - funderAmt;
   const W = 52;
   const pad = (l, r) => l + ' ' + '.'.repeat(Math.max(2, W - l.length - r.length - 1)) + ' ' + r;
 
@@ -1930,12 +1961,21 @@ function copyForProposal() {
     lines.push(pad(discLabel, '\u2212' + fmt(disc)));
   }
   lines.push(pad('Custom Partner Price', fmt(partnerTotal)));
+  if (funderAmt > 0) {
+    const funderName = document.getElementById('funderName').value.trim() || 'Funder Subsidy';
+    const funderVal = document.getElementById('funderVal').value;
+    const funderType = document.getElementById('funderType').value;
+    const funderLabel = funderType === 'pct' ? `${funderName} (${funderVal}%)` : `${funderName}`;
+    lines.push(pad(funderLabel, '\u2212' + fmt(funderAmt)));
+    lines.push(pad('Partner Out-of-Pocket', fmt(oopTotal)));
+  }
   lines.push('');
 
+  const finalCost = funderAmt > 0 ? oopTotal : partnerTotal;
   const students = parseFloat(document.getElementById('studentCount').value) || 0;
   const educators = parseFloat(document.getElementById('educatorCount').value) || 0;
-  if (students > 0) lines.push(`Per-student cost: ${fmt(Math.round(partnerTotal / students))}/student (${students.toLocaleString()} students)`);
-  if (educators > 0) lines.push(`Per-educator cost: ${fmt(Math.round(partnerTotal / educators))}/educator (${educators.toLocaleString()} educators)`);
+  if (students > 0) lines.push(`Per-student cost: ${fmt(Math.round(finalCost / students))}/student (${students.toLocaleString()} students)`);
+  if (educators > 0) lines.push(`Per-educator cost: ${fmt(Math.round(finalCost / educators))}/educator (${educators.toLocaleString()} educators)`);
   if (students > 0 || educators > 0) lines.push('');
 
   lines.push('* AI model usage costs are covered by Playlab and not passed on to partners.');
@@ -1957,6 +1997,8 @@ function copyAsMarkdown() {
   const std = calcStandardTotal();
   const disc = calcDiscount(std);
   const partnerTotal = std - disc;
+  const funderAmt = calcFunderSubsidy(partnerTotal);
+  const oopTotal = partnerTotal - funderAmt;
 
   let md = `# ${partner} x Playlab \u2014 Partnership Proposal\n\n`;
 
@@ -1997,6 +2039,14 @@ function copyAsMarkdown() {
     md += `**${discName}:** \u2212${fmt(disc)}\n\n`;
   }
   md += `**Custom Partner Price:** ${fmt(partnerTotal)}\n\n`;
+  if (funderAmt > 0) {
+    const funderName = document.getElementById('funderName').value.trim() || 'Funder Subsidy';
+    const funderVal = document.getElementById('funderVal').value;
+    const funderType = document.getElementById('funderType').value;
+    const funderLabel = funderType === 'pct' ? `${funderName} (${funderVal}%)` : `${funderName}`;
+    md += `**${funderLabel}:** \u2212${fmt(funderAmt)}\n\n`;
+    md += `**Partner Out-of-Pocket:** ${fmt(oopTotal)}\n\n`;
+  }
   md += `*${'* AI model usage costs are covered by Playlab and not passed on to partners.'.replace(/^\* ?/, '')}*\n`;
 
   navigator.clipboard.writeText(md).then(() => {
@@ -2021,6 +2071,9 @@ document.getElementById('clearBtn').addEventListener('click', clearAll);
 document.getElementById('discountVal').addEventListener('input', renderTotals);
 document.getElementById('discountType').addEventListener('change', renderTotals);
 document.getElementById('discountName').addEventListener('change', saveToUrl);
+document.getElementById('funderVal').addEventListener('input', renderTotals);
+document.getElementById('funderType').addEventListener('change', renderTotals);
+document.getElementById('funderName').addEventListener('change', saveToUrl);
 document.getElementById('partnerName').addEventListener('change', saveToUrl);
 document.getElementById('partnerName').addEventListener('input', renderTabBar);
 document.getElementById('studentCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
@@ -2030,6 +2083,7 @@ document.getElementById('currencySelect').addEventListener('change', function() 
   const cur = getCurrency();
   const sym = cur.prefix ? cur.symbol.trim() : cur.symbol.trim();
   document.getElementById('discFlatLabel').textContent = sym;
+  document.getElementById('funderFlatLabel').textContent = sym;
   renderAll();
 });
 

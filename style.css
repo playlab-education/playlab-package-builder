@@ -295,6 +295,8 @@
     .total-final .t-value { color: white; font-size: 18px; font-weight: 800; }
     .savings-note { text-align: center; font-size: 10.5px; color: var(--emerald-600); font-weight: 600; display: none; }
     .savings-note.show { display: block; }
+    .funder-row { display: flex; align-items: center; gap: 7px; }
+    .oop-final { background: var(--sky-700); }
 
     /* Insights */
     .insights-section { border-top: 1.5px solid var(--slate-100); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
