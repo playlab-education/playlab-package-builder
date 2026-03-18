@@ -1691,8 +1691,17 @@ function renderAll() {
 
 // ─── URL State ─────────────────────────────────────────────────────────────────
 function getTabState() {
+  // Compute prices so the proposal command can use them directly
+  const std = calcStandardTotal();
+  const discVal = parseFloat(document.getElementById('discountVal').value) || 0;
+  const discType = document.getElementById('discountType').value;
+  const discAmt = calcDiscount(std);
+  const partnerTotal = std - discAmt;
+  const funderAmt = calcFunderSubsidy(partnerTotal);
+  const oopTotal = partnerTotal - funderAmt;
+
   return {
-    v: 3,
+    v: 4,
     partner: document.getElementById('partnerName').value,
     currency: selectedCurrency,
     rates: (rates.lp !== DEFAULT_RATES.lp || rates.dev !== DEFAULT_RATES.dev || rates.travel !== DEFAULT_RATES.travel) ? rates : undefined,
@@ -1704,6 +1713,21 @@ function getTabState() {
     funderName: document.getElementById('funderName').value,
     students: document.getElementById('studentCount').value,
     educators: document.getElementById('educatorCount').value,
+    prices: {
+      softwareTotal: calcTotalSoftware(),
+      packages: quotePackages.map(qp => ({
+        gross: calcQuotePkgGross(qp),
+        net: calcQuotePkgNet(qp)
+      })),
+      addons: quoteAddons.map(a => calcAddonTotal(a)),
+      servicesTotal: calcServicesTotal(),
+      standardTotal: std,
+      discountAmount: discAmt,
+      partnerTotal: partnerTotal,
+      funderAmount: funderAmt,
+      outOfPocket: oopTotal,
+      grandTotal: funderAmt > 0 ? oopTotal : partnerTotal
+    },
     licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, customName: l.customName || undefined, students: l.students || undefined })),
     packages: quotePackages.map(qp => ({
       packageId: qp.packageId,
