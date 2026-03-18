@@ -423,7 +423,8 @@ function getDefaultTravelCounts(sessions) {
 function calcTravelCost(qpkg) {
   const localDays = qpkg.travelLocalDays ?? getDefaultTravelCounts(qpkg.sessions).localDays;
   const flightTrips = qpkg.travelFlightTrips ?? getDefaultTravelCounts(qpkg.sessions).flightTrips;
-  return localDays * getBlockPrice('travel-local') + flightTrips * getBlockPrice('travel-flight');
+  const fac = qpkg.facilitators || 1;
+  return (localDays * getBlockPrice('travel-local') + flightTrips * getBlockPrice('travel-flight')) * fac;
 }
 
 function calcAddonTotal(addon) {
@@ -638,10 +639,10 @@ function calcConfigPreview(pkg) {
   // Apply pathway discount
   if (pkg.pathwayDiscount) cost *= (1 - pkg.pathwayDiscount);
 
-  // Travel: per-session
+  // Travel: per-session, per-facilitator
   for (const s of sessions) {
-    if (s.delivery === 'local') cost += getBlockPrice('travel-local');
-    if (s.delivery === 'travel') cost += getBlockPrice('travel-flight');
+    if (s.delivery === 'local') cost += getBlockPrice('travel-local') * facilitators;
+    if (s.delivery === 'travel') cost += getBlockPrice('travel-flight') * facilitators;
   }
 
   // Auto-included supports
@@ -1338,7 +1339,8 @@ function buildQuotePkg(qpkg) {
   if (sessions.length > 0 && (hasFacilitation || sessions.some(s => s.delivery !== 'virtual'))) {
     for (let i = 0; i < sessions.length; i++) {
       const s = sessions[i];
-      const sessionTravelCost = s.delivery === 'local' ? getBlockPrice('travel-local') : s.delivery === 'travel' ? getBlockPrice('travel-flight') : 0;
+      const sessionTravelUnit = s.delivery === 'local' ? getBlockPrice('travel-local') : s.delivery === 'travel' ? getBlockPrice('travel-flight') : 0;
+      const sessionTravelCost = sessionTravelUnit * (qpkg.facilitators || 1);
       const travelNote = sessionTravelCost > 0 ? `+${fmt(sessionTravelCost)}` : '';
 
       bodyHtml += `<div class="builder-session-row">
@@ -1395,10 +1397,12 @@ function buildQuotePkg(qpkg) {
   // Travel cost lines (editable)
   const localDays = qpkg.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays;
   const flightTrips = qpkg.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips;
+  const fac = qpkg.facilitators || 1;
   if (localDays > 0 || sessions.some(s => s.delivery === 'local')) {
-    const localTotal = localDays * getBlockPrice('travel-local');
+    const localTotal = localDays * getBlockPrice('travel-local') * fac;
+    const facTag = fac > 1 ? `<span class="scale-tag">\u00D7${fac}</span>` : '';
     bodyHtml += `<div class="comp-line travel-line">
-      <div class="comp-info"><div class="comp-name">Travel (Local) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-local'))}/day</span></div></div>
+      <div class="comp-info"><div class="comp-name">Travel (Local) ${facTag}<span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-local'))}/day</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelLocalDays',-1)">\u2212</button>
         <input class="comp-qty-input" type="number" step="any" value="${localDays}"
@@ -1410,9 +1414,10 @@ function buildQuotePkg(qpkg) {
     </div>`;
   }
   if (flightTrips > 0 || sessions.some(s => s.delivery === 'travel')) {
-    const flightTotal = flightTrips * getBlockPrice('travel-flight');
+    const flightTotal = flightTrips * getBlockPrice('travel-flight') * fac;
+    const facTag = fac > 1 ? `<span class="scale-tag">\u00D7${fac}</span>` : '';
     bodyHtml += `<div class="comp-line travel-line">
-      <div class="comp-info"><div class="comp-name">Travel (Flight) <span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-flight'))}/trip</span></div></div>
+      <div class="comp-info"><div class="comp-name">Travel (Flight) ${facTag}<span style="font-size:9px;color:var(--slate-400)">${fmt(getBlockPrice('travel-flight'))}/trip</span></div></div>
       <div class="comp-qty">
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',-1)">\u2212</button>
         <input class="comp-qty-input" type="number" step="any" value="${flightTrips}"
@@ -1915,7 +1920,8 @@ function copyForProposal() {
       const travelCost = calcTravelCost(qpkg);
       if (travelCost > 0) {
         const nonVirtualCount = sessions.filter(s => s.delivery !== 'virtual').length;
-        lines.push(`    \u2022 Travel (${nonVirtualCount} ${nonVirtualCount > 1 ? 'sessions' : 'session'}) \u2014 ${fmt(travelCost)}`);
+        const facNote = qpkg.facilitators > 1 ? `, ${qpkg.facilitators} facilitators` : '';
+        lines.push(`    \u2022 Travel (${nonVirtualCount} ${nonVirtualCount > 1 ? 'sessions' : 'session'}${facNote}) \u2014 ${fmt(travelCost)}`);
       }
       if (qpkg.launchMeetingQty > 0) {
         lines.push(`    \u2022 Launch Meeting (${qpkg.launchMeetingQty}\u00D7) \u2014 ${fmt(qpkg.launchMeetingQty * getBlockPrice('admin-meetings'))}`);
