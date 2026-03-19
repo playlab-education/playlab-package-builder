@@ -332,7 +332,7 @@ const PACKAGES = [
 const ADDONS = [
   { blockId: 'office-hours', label: 'Office Hours', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, category: 'Learning Partner', desc: 'Drop-in support for educators between sessions' },
   { blockId: 'admin-meetings', label: 'Admin Meetings', unit: 'hr', defaultQty: 1, minQty: 0.5, step: 0.5, category: 'Learning Partner', desc: 'Strategic planning time with leadership' },
-  { blockId: 'facilitation', label: 'Extra Facilitation', unit: 'hr', defaultQty: 1.5, minQty: 1.5, step: 0.5, category: 'Learning Partner', desc: 'Additional live facilitation hours (up to 50 participants)' },
+  { blockId: 'facilitation', label: 'Extra Facilitation', unit: 'hr', defaultQty: 1.5, minQty: 1.5, step: 0.5, category: 'Learning Partner', desc: 'Additional live facilitation hours (up to 40 participants)' },
   { blockId: 'app-support-light', label: 'App Support \u2014 Light', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '5 hrs/mo of ongoing app maintenance and updates' },
   { blockId: 'app-support-medium', label: 'App Support \u2014 Medium', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '10 hrs/mo of ongoing app maintenance and updates' },
   { blockId: 'app-support-full', label: 'App Support \u2014 Full', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Developer', desc: '20 hrs/mo of dedicated app maintenance and iteration' },
@@ -544,7 +544,7 @@ function buildPkgCard(pkg, pathway) {
     <div class="pkg-desc">${pkgDesc}</div>
     <div class="pkg-price-row">
       <div class="pkg-price">${fmt(netPrice)}${pkg.pathwayDiscount ? ' <span style="font-size:10px;font-weight:500;color:var(--emerald-600)">(20% off)</span>' : ''}</div>
-      <div class="pkg-price-note">1 facilitator \u00B7 30 participants</div>
+      <div class="pkg-price-note">1 facilitator \u00B7 40 participants</div>
     </div>
     <div class="pkg-components">${compSummary}</div>
     ${isConfigOpen ? '' : `<button class="pkg-add-btn" onclick="event.stopPropagation(); openConfig('${pkg.id}')">${inQuote ? '+ Add Another' : '+ Add'}</button>`}
@@ -600,8 +600,8 @@ function buildInlineConfig(pkg) {
     </div>`;
   }
 
-  const participants = cs.participants || 30;
-  const numFac = Math.max(1, Math.ceil(participants / 30));
+  const participants = cs.participants || 40;
+  const numFac = Math.max(1, Math.ceil(participants / 40));
   const participantsHtml = hasFacilitation ? `<div class="pkg-config-row">
     <span class="pkg-config-label">Participants</span>
     <input class="config-participants" type="number" step="any" value="${participants}" onchange="updateConfigParticipants('${pkg.id}', this, true)" oninput="updateConfigParticipants('${pkg.id}', this, false)">
@@ -626,8 +626,8 @@ function buildInlineConfig(pkg) {
 function calcConfigPreview(pkg) {
   const cs = configState[pkg.id] || {};
   const hasFacilitation = pkg.facilitationHours && pkg.facilitationHours > 0;
-  const participants = cs.participants || 30;
-  const facilitators = Math.max(1, Math.ceil(participants / 30));
+  const participants = cs.participants || 40;
+  const facilitators = Math.max(1, Math.ceil(participants / 40));
   const sessions = cs.sessions || [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }];
 
   // Base component cost
@@ -666,7 +666,7 @@ function openConfig(pkgId) {
       sessions: hasFac
         ? distributeHours(pkg.facilitationHours, 1)
         : [{ hours: 0, delivery: 'virtual' }],
-      participants: 30
+      participants: 40
     };
   }
   renderCatalog();
@@ -689,7 +689,7 @@ function ensureConfigState(pkgId) {
     configState[pkgId] = {
       numSessions: 1,
       sessions: hasFac ? distributeHours(pkg.facilitationHours, 1) : [{ hours: 0, delivery: 'virtual' }],
-      participants: 30
+      participants: 40
     };
   }
   return configState[pkgId];
@@ -832,10 +832,10 @@ function getSupportDefaults(pkg, sessions) {
 function confirmAddPackage(pkgId) {
   const pkg = PACKAGES.find(p => p.id === pkgId);
   if (!pkg) return;
-  const cs = configState[pkgId] || { numSessions: 1, sessions: [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }], participants: 30 };
+  const cs = configState[pkgId] || { numSessions: 1, sessions: [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }], participants: 40 };
   const hasFacilitation = pkg.facilitationHours && pkg.facilitationHours > 0;
-  const participants = cs.participants || 30;
-  const facilitators = Math.max(1, Math.ceil(participants / 30));
+  const participants = cs.participants || 40;
+  const facilitators = Math.max(1, Math.ceil(participants / 40));
   const sessions = (cs.sessions || [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }]).map(s => ({ ...s }));
 
   let compId = 1;
@@ -930,7 +930,7 @@ function setFacilitators(pkgId, input, commit) {
   }
   if (!isNaN(val) && val >= 1) {
     qpkg.facilitators = val;
-    const autoVal = Math.max(1, Math.ceil(qpkg.participants / 30));
+    const autoVal = Math.max(1, Math.ceil(qpkg.participants / 40));
     qpkg.facilitatorsManual = (val !== autoVal);
   }
   renderTotals();
@@ -1807,7 +1807,7 @@ function hydrateState(state) {
           if (comp) comp.qty = sc.qty;
         }
       }
-      const participants = sp.participants || 30;
+      const participants = sp.participants || 40;
       const hasFac = pkg.facilitationHours && pkg.facilitationHours > 0;
 
       // Load sessions: new format (sessions array) or backward compat (deliveryMode + sessionCount)
@@ -1825,7 +1825,7 @@ function hydrateState(state) {
         }
       }
 
-      const autoFac = Math.max(1, Math.ceil(participants / 30));
+      const autoFac = Math.max(1, Math.ceil(participants / 40));
       const qpkg = {
         pkgId: nextPkgId++,
         packageId: sp.packageId,
