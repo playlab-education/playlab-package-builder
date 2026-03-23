@@ -1,3 +1,8 @@
+// ─── Analytics ────────────────────────────────────────────────────────────────
+function track(event, params) {
+  if (typeof gtag === 'function') gtag('event', event, params);
+}
+
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 window.onerror = (msg, src, line) => {
   console.error('Unhandled error:', msg, src, line);
@@ -24,6 +29,7 @@ function initAuthGate() {
     const input = document.getElementById('authPassInput').value;
     if (await checkPassphrase(input)) {
       sessionStorage.setItem(AUTH_SESSION_KEY, '1');
+      track('login', { method: 'passphrase' });
       unlockApp();
     } else {
       document.getElementById('authError').classList.add('show');
@@ -155,7 +161,7 @@ function unitShort(unit) {
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: '6-month trial for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00' },
   { id: 'impact', name: 'Impact', tagline: 'For non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
-  { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1–9,999', monthlyCredits: '2M Tokens', isSchool: true },
+  { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1,000–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1,000–9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
   { id: 'schools-t3', name: 'Schools — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
   { id: 'schools-t4', name: 'Schools — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true, isSchool: true }
@@ -190,6 +196,7 @@ function addLicense(tierId, count, students) {
   const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '' };
   if (tier.hasStudentInput) lic.students = students || tier.defaultStudents || 0;
   quoteLicenses.push(lic);
+  track('add_license', { tier_name: tier.name, tier_id: tierId, count: c });
   renderSwCards();
   renderLicenseList();
   renderTotals();
@@ -860,6 +867,7 @@ function confirmAddPackage(pkgId) {
   quotePackages.push(qpkg);
   expandedPkgId = qpkg.pkgId;
   activeConfigPkgId = null;
+  track('add_package', { package_name: pkg.name, package_id: pkgId, participants: participants, sessions: sessions.length });
   renderCatalog();
   renderQuote();
   renderTotals();
@@ -879,6 +887,8 @@ function renamePkg(pkgId, name) {
 }
 
 function removePkg(pkgId) {
+  const removed = quotePackages.find(qp => qp.pkgId === pkgId);
+  if (removed) { const pkg = PACKAGES.find(p => p.id === removed.packageId); track('remove_package', { package_name: pkg ? pkg.name : removed.packageId }); }
   quotePackages = quotePackages.filter(qp => qp.pkgId !== pkgId);
   if (expandedPkgId === pkgId) expandedPkgId = quotePackages.length > 0 ? quotePackages[quotePackages.length - 1].pkgId : null;
   renderCatalog();
@@ -1062,6 +1072,7 @@ function addAddon(blockId) {
     minQty: def.minQty,
     step: def.step
   });
+  track('add_addon', { addon_name: def.label, block_id: def.blockId });
   renderAddonGrid();
   renderQuote();
   renderTotals();
@@ -1169,7 +1180,7 @@ function renderSwCards() {
       <span class="sw-card-computed" id="schools-computed">${fmt(defaultTier.pricePerUnit * defaultEnrollment)}/yr</span>
     </div>
     <div id="schools-tier-table" style="margin-top:6px;font-size:9.5px;color:var(--slate-400);line-height:1.6">
-      <div style="display:flex;justify-content:space-between"><span>1–9,999</span><span>$3.00/student</span></div>
+      <div style="display:flex;justify-content:space-between"><span>1,000–9,999</span><span>$3.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>10,000–24,999</span><span>$2.50/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>25,000–49,999</span><span>$2.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>50,000+</span><span>Custom</span></div>
@@ -1667,6 +1678,7 @@ function switchMainTab(tab) {
   Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
   const tabIndex = { welcome: 0, builder: 1, pricing: 2, resources: 3 };
   if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
+  track('tab_view', { tab_name: tab });
   if (tab === 'builder') {
     views.builder.style.display = 'grid';
   } else if (views[tab]) {
@@ -1872,6 +1884,7 @@ function loadFromUrl() {
   try {
     const state = JSON.parse(atob(hash));
     hydrateState(state);
+    track('open_shared_link', { partner: state.partner || '', packages: (state.pkgs || []).length, addons: (state.addons || []).length });
     return true;
   } catch { return false; }
 }
@@ -2012,6 +2025,7 @@ function copyForProposal() {
 
   const output = lines.join('\n');
   navigator.clipboard.writeText(output).then(() => {
+    track('copy_quote', { format: 'proposal', partner: partner, currency: selectedCurrency, total_usd: std, packages: quotePackages.length, addons: quoteAddons.length });
     const btn = document.getElementById('copyBtn');
     btn.textContent = 'Copied!';
     btn.classList.add('copied');
@@ -2080,6 +2094,7 @@ function copyAsMarkdown() {
   md += `*${'* AI model usage costs are covered by Playlab and not passed on to partners.'.replace(/^\* ?/, '')}*\n`;
 
   navigator.clipboard.writeText(md).then(() => {
+    track('copy_quote', { format: 'markdown', partner: partner, currency: selectedCurrency, total_usd: std, packages: quotePackages.length, addons: quoteAddons.length });
     const btn = document.getElementById('copyMdBtn');
     btn.textContent = '\u2713';
     btn.classList.add('copied');
@@ -2091,6 +2106,7 @@ function copyAsMarkdown() {
 document.getElementById('copyLinkBtn').addEventListener('click', () => {
   saveToUrl();
   navigator.clipboard.writeText(location.href).then(() => {
+    track('share_link', { packages: quotePackages.length, addons: quoteAddons.length });
     const btn = document.getElementById('copyLinkBtn');
     btn.textContent = 'Link Copied!';
     btn.style.background = 'var(--emerald-500)';
@@ -2110,6 +2126,7 @@ document.getElementById('studentCount').addEventListener('input', () => { render
 document.getElementById('educatorCount').addEventListener('input', () => { renderInsights(); saveToUrl(); });
 document.getElementById('currencySelect').addEventListener('change', function() {
   selectedCurrency = this.value;
+  track('currency_change', { currency: this.value });
   const cur = getCurrency();
   const sym = cur.prefix ? cur.symbol.trim() : cur.symbol.trim();
   document.getElementById('discFlatLabel').textContent = sym;
