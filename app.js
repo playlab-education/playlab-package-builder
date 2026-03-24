@@ -1331,6 +1331,26 @@ function getDeliveryBadgesForSessions(sessions) {
   return modes.map(m => `<span class="delivery-badge ${m}">${deliveryLabels[m] || m}</span>`).join('');
 }
 
+function buildCompLineHtml(comp, qpkg) {
+  const effQty = comp.scalable ? comp.qty * qpkg.facilitators : comp.qty;
+  const total = getBlockPrice(comp.blockId) * effQty;
+  const unit = comp.blockId === 'facilitation' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
+  const tags = [];
+  if (comp.support) tags.push('<span class="support-tag">support</span>');
+  if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
+  return `<div class="comp-line ${comp.support ? 'support' : ''}">
+    <div class="comp-info"><div class="comp-name">${comp.label}${tags.join('')}</div></div>
+    <div class="comp-qty">
+      <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',-1)">\u2212</button>
+      <input class="comp-qty-input" type="number" step="any" value="${comp.qty}"
+             onchange="setCompQty(${qpkg.pkgId},'${comp.id}',this)">
+      <span class="comp-unit">${unitShort(unit)}</span>
+      <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',1)">+</button>
+    </div>
+    <div class="comp-total">${fmt(total)}</div>
+  </div>`;
+}
+
 function buildQuotePkg(qpkg) {
   const pkg = PACKAGES.find(p => p.id === qpkg.packageId);
   const pathway = PATHWAYS.find(pw => pw.id === pkg?.pathway);
@@ -1346,12 +1366,14 @@ function buildQuotePkg(qpkg) {
   div.dataset.pkgId = qpkg.pkgId;
 
   let bodyHtml = '';
+  const sectionHdr = (label) => `<div class="comp-section-header">${label}</div>`;
 
   // Delivery badges for header
   const deliveryBadges = getDeliveryBadgesForSessions(sessions);
 
-  // Per-session rows with inline delivery pills and hours input
+  // ── SESSIONS ──
   if (sessions.length > 0 && (hasFacilitation || sessions.some(s => s.delivery !== 'virtual'))) {
+    bodyHtml += sectionHdr('Sessions');
     for (let i = 0; i < sessions.length; i++) {
       const s = sessions[i];
       const sessionTravelUnit = s.delivery === 'local' ? getBlockPrice('travel-local') : s.delivery === 'travel' ? getBlockPrice('travel-flight') : 0;
@@ -1387,32 +1409,102 @@ function buildQuotePkg(qpkg) {
     </div>`;
   }
 
-  // Regular components
-  for (const comp of qpkg.components) {
-    const effQty = comp.scalable ? comp.qty * qpkg.facilitators : comp.qty;
-    const total = getBlockPrice(comp.blockId) * effQty;
-    const unit = comp.blockId === 'facilitation' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
-    const tags = [];
-    if (comp.support) tags.push('<span class="support-tag">support</span>');
-    if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
+  // ── COMPONENTS (grouped by type) ──
+  const targetedAiBlockIds = ['ideation-lp-le', 'ideation-lp', 'tool-build-initial', 'tool-build-addl', 'tool-pilot'];
+  const facilitationComps = qpkg.components.filter(c => c.blockId === 'facilitation');
+  const targetedAiComps = qpkg.components.filter(c => targetedAiBlockIds.includes(c.blockId));
+  const otherComps = qpkg.components.filter(c => c.blockId !== 'facilitation' && !targetedAiBlockIds.includes(c.blockId));
 
-    bodyHtml += `<div class="comp-line ${comp.support ? 'support' : ''}">
-      <div class="comp-info"><div class="comp-name">${comp.label}${tags.join('')}</div></div>
+  if (facilitationComps.length > 0) {
+    bodyHtml += sectionHdr('Facilitation');
+    for (const comp of facilitationComps) bodyHtml += buildCompLineHtml(comp, qpkg);
+  }
+  if (targetedAiComps.length > 0) {
+    bodyHtml += sectionHdr('Targeted AI');
+    for (const comp of targetedAiComps) bodyHtml += buildCompLineHtml(comp, qpkg);
+  }
+  if (otherComps.length > 0) {
+    bodyHtml += sectionHdr('Other');
+    for (const comp of otherComps) bodyHtml += buildCompLineHtml(comp, qpkg);
+  }
+
+  // ── SUPPORT ──
+  const hasLaunch = qpkg.launchMeetingQty > 0 || hasFacilitation;
+  const hasOH = qpkg.officeHoursQty > 0 || hasFacilitation;
+  const hasCI = (qpkg.checkInQty || 0) > 0 || hasFacilitation;
+  const hasRM = (qpkg.reflectionMeetingQty || 0) > 0 || hasFacilitation;
+  if (hasLaunch || hasOH || hasCI || hasRM) {
+    bodyHtml += sectionHdr('Support');
+  }
+
+  if (hasLaunch) {
+    const lmTotal = qpkg.launchMeetingQty * getBlockPrice('admin-meetings');
+    bodyHtml += `<div class="comp-line support">
+      <div class="comp-info"><div class="comp-name">Launch Meeting<span class="auto-tag">auto</span></div></div>
       <div class="comp-qty">
-        <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" step="any" value="${comp.qty}"
-               onchange="setCompQty(${qpkg.pkgId},'${comp.id}',this)">
-        <span class="comp-unit">${unitShort(unit)}</span>
-        <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',1)">+</button>
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.launchMeetingQty}"
+               onchange="setAutoQty(${qpkg.pkgId},'launchMeetingQty',this)">
+        <span class="comp-unit">\u00D7</span>
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',1)">+</button>
       </div>
-      <div class="comp-total">${fmt(total)}</div>
+      <div class="comp-total">${fmt(lmTotal)}</div>
     </div>`;
   }
 
-  // Travel cost lines (editable)
+  if (hasOH) {
+    const ohTotal = qpkg.officeHoursQty * getBlockPrice('office-hours');
+    bodyHtml += `<div class="comp-line support">
+      <div class="comp-info"><div class="comp-name">Office Hours<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121)</span></div></div>
+      <div class="comp-qty">
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.officeHoursQty}"
+               onchange="setAutoQty(${qpkg.pkgId},'officeHoursQty',this)">
+        <span class="comp-unit">hr</span>
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',1)">+</button>
+      </div>
+      <div class="comp-total">${fmt(ohTotal)}</div>
+    </div>`;
+  }
+
+  if (hasCI) {
+    const ciTotal = (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('office-hours');
+    bodyHtml += `<div class="comp-line support">
+      <div class="comp-info"><div class="comp-name">Check-ins<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121 \u00D7 30 min)</span></div></div>
+      <div class="comp-qty">
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.checkInQty || 0}"
+               onchange="setAutoQty(${qpkg.pkgId},'checkInQty',this)">
+        <span class="comp-unit">\u00D7</span>
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',1)">+</button>
+      </div>
+      <div class="comp-total">${fmt(ciTotal)}</div>
+    </div>`;
+  }
+
+  if (hasRM) {
+    const rmTotal = (qpkg.reflectionMeetingQty || 0) * getBlockPrice('office-hours');
+    bodyHtml += `<div class="comp-line support">
+      <div class="comp-info"><div class="comp-name">Reflection Meeting<span class="auto-tag">auto</span></div></div>
+      <div class="comp-qty">
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',-1)">\u2212</button>
+        <input class="comp-qty-input" type="number" step="any" value="${qpkg.reflectionMeetingQty || 0}"
+               onchange="setAutoQty(${qpkg.pkgId},'reflectionMeetingQty',this)">
+        <span class="comp-unit">\u00D7</span>
+        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',1)">+</button>
+      </div>
+      <div class="comp-total">${fmt(rmTotal)}</div>
+    </div>`;
+  }
+
+  // ── TRAVEL ──
   const localDays = qpkg.travelLocalDays ?? getDefaultTravelCounts(sessions).localDays;
   const flightTrips = qpkg.travelFlightTrips ?? getDefaultTravelCounts(sessions).flightTrips;
   const fac = qpkg.facilitators || 1;
+  const hasTravel = localDays > 0 || flightTrips > 0 || sessions.some(s => s.delivery === 'local') || sessions.some(s => s.delivery === 'travel');
+  if (hasTravel) {
+    bodyHtml += sectionHdr('Travel');
+  }
   if (localDays > 0 || sessions.some(s => s.delivery === 'local')) {
     const localTotal = localDays * getBlockPrice('travel-local') * fac;
     const facTag = fac > 1 ? `<span class="scale-tag">\u00D7${fac}</span>` : '';
@@ -1441,70 +1533,6 @@ function buildQuotePkg(qpkg) {
         <button class="comp-qty-btn" onclick="changeTravelQty(${qpkg.pkgId},'travelFlightTrips',1)">+</button>
       </div>
       <div class="comp-total">${fmt(flightTotal)}</div>
-    </div>`;
-  }
-
-  // Auto-included: Launch Meeting
-  if (qpkg.launchMeetingQty > 0 || hasFacilitation) {
-    const lmTotal = qpkg.launchMeetingQty * getBlockPrice('admin-meetings');
-    bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">Launch Meeting<span class="auto-tag">auto</span></div></div>
-      <div class="comp-qty">
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" step="any" value="${qpkg.launchMeetingQty}"
-               onchange="setAutoQty(${qpkg.pkgId},'launchMeetingQty',this)">
-        <span class="comp-unit">\u00D7</span>
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'launchMeetingQty',1)">+</button>
-      </div>
-      <div class="comp-total">${fmt(lmTotal)}</div>
-    </div>`;
-  }
-
-  // Auto-included: Office Hours
-  if (qpkg.officeHoursQty > 0 || hasFacilitation) {
-    const ohTotal = qpkg.officeHoursQty * getBlockPrice('office-hours');
-    bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">Office Hours<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121)</span></div></div>
-      <div class="comp-qty">
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" step="any" value="${qpkg.officeHoursQty}"
-               onchange="setAutoQty(${qpkg.pkgId},'officeHoursQty',this)">
-        <span class="comp-unit">hr</span>
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'officeHoursQty',1)">+</button>
-      </div>
-      <div class="comp-total">${fmt(ohTotal)}</div>
-    </div>`;
-  }
-
-  // Auto-included: Check-ins (30 min each)
-  if ((qpkg.checkInQty || 0) > 0 || hasFacilitation) {
-    const ciTotal = (qpkg.checkInQty || 0) * 0.5 * getBlockPrice('office-hours');
-    bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">Check-ins<span class="auto-tag">auto</span><span style="font-size:9px;color:var(--slate-400);margin-left:4px">(sessions\u22121 \u00D7 30 min)</span></div></div>
-      <div class="comp-qty">
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" step="any" value="${qpkg.checkInQty || 0}"
-               onchange="setAutoQty(${qpkg.pkgId},'checkInQty',this)">
-        <span class="comp-unit">\u00D7</span>
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'checkInQty',1)">+</button>
-      </div>
-      <div class="comp-total">${fmt(ciTotal)}</div>
-    </div>`;
-  }
-
-  // Auto-included: Reflection Meeting (1 hr each)
-  if ((qpkg.reflectionMeetingQty || 0) > 0 || hasFacilitation) {
-    const rmTotal = (qpkg.reflectionMeetingQty || 0) * getBlockPrice('office-hours');
-    bodyHtml += `<div class="comp-line support">
-      <div class="comp-info"><div class="comp-name">Reflection Meeting<span class="auto-tag">auto</span></div></div>
-      <div class="comp-qty">
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',-1)">\u2212</button>
-        <input class="comp-qty-input" type="number" step="any" value="${qpkg.reflectionMeetingQty || 0}"
-               onchange="setAutoQty(${qpkg.pkgId},'reflectionMeetingQty',this)">
-        <span class="comp-unit">\u00D7</span>
-        <button class="comp-qty-btn" onclick="changeAutoQty(${qpkg.pkgId},'reflectionMeetingQty',1)">+</button>
-      </div>
-      <div class="comp-total">${fmt(rmTotal)}</div>
     </div>`;
   }
 

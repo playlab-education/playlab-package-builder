@@ -239,6 +239,10 @@
     .facilitator-input:focus { outline: none; border-color: var(--sky-500); }
     .facilitator-count { font-weight: 700; flex-shrink: 0; font-size: 11px; }
 
+    /* Component section header */
+    .comp-section-header { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--slate-400); margin: 8px 0 3px 2px; }
+    .comp-section-header:first-child { margin-top: 0; }
+
     /* Component line */
     .comp-line { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: var(--slate-50); border-radius: 7px; }
     .comp-line.support { background: var(--emerald-50); }
