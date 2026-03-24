@@ -1185,24 +1185,28 @@ function renderSwCards() {
       <div style="display:flex;justify-content:space-between"><span>25,000–49,999</span><span>$2.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>50,000+</span><span>Custom</span></div>
     </div>
+    <div id="schools-min-warning" style="display:none;font-size:10px;color:var(--rose-500,#f43f5e);margin-top:4px;line-height:1.4">Minimum 1,000 students — will be adjusted to 1,000 ($3,000/yr)</div>
     <button class="sw-add-btn" onclick="addSchoolLicense()">+ Add License</button>`;
   grid.appendChild(schoolCard);
 
   const schoolInput = schoolCard.querySelector('#sw-input-schools');
   schoolInput.addEventListener('input', () => {
-    const v = Math.round(parseFloat(schoolInput.value)) || 1;
-    const tier = getSchoolTierForEnrollment(v);
+    const raw = Math.round(parseFloat(schoolInput.value)) || 1000;
+    const tier = getSchoolTierForEnrollment(raw);
+    const v = Math.max(raw, tier.minCount);
     document.getElementById('schools-price-badge').textContent = tier.priceNote;
     document.getElementById('schools-tier-detail').textContent = tier.name + ' · ' + tier.monthlyCredits;
     document.getElementById('schools-computed').textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + '/yr';
+    const warn = document.getElementById('schools-min-warning');
+    warn.style.display = (raw < tier.minCount) ? 'block' : 'none';
   });
 }
 
 function addSchoolLicense() {
   const input = document.getElementById('sw-input-schools');
   let count = Math.round(parseFloat(input.value)) || 5000;
-  if (count < 1) count = 1;
   const tier = getSchoolTierForEnrollment(count);
+  if (count < tier.minCount) count = tier.minCount;
   addLicense(tier.id, count);
 }
 
