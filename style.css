@@ -263,8 +263,10 @@
 
     /* Pathway discount */
     .pathway-discount-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; background: var(--emerald-50); border: 1px solid var(--emerald-500); border-radius: 7px; font-size: 11px; }
+    .pathway-discount-row.inactive { background: var(--slate-50); border-color: var(--slate-200); }
+    .pathway-discount-row.inactive .pathway-discount-label { color: var(--slate-400); }
     .pathway-discount-label { font-weight: 600; color: var(--emerald-600); }
-    .pathway-discount-value { font-weight: 800; color: var(--emerald-600); }
+    .pathway-discount-value { font-weight: 800; color: var(--emerald-600); min-width: 60px; text-align: right; }
 
     /* Addon line in quote */
     .addon-line { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: var(--slate-50); border-radius: 7px; }

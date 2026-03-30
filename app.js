@@ -413,9 +413,8 @@ function calcQuotePkgGross(qpkg) {
 
 function calcQuotePkgNet(qpkg) {
   const gross = calcQuotePkgGross(qpkg);
-  const pkg = PACKAGES.find(p => p.id === qpkg.packageId);
-  const pathwayDisc = pkg?.pathwayDiscount || 0;
-  return gross * (1 - pathwayDisc);
+  const disc = qpkg.discount || 0;
+  return gross * (1 - disc / 100);
 }
 
 function getDefaultTravelCounts(sessions) {
@@ -862,6 +861,7 @@ function confirmAddPackage(pkgId) {
     officeHoursQty: getSupportDefaults(pkg, sessions).officeHoursQty,
     checkInQty: getSupportDefaults(pkg, sessions).checkInQty,
     reflectionMeetingQty: getSupportDefaults(pkg, sessions).reflectionMeetingQty,
+    discount: (pkg.pathwayDiscount || 0) * 100,
     components
   };
   quotePackages.push(qpkg);
@@ -884,6 +884,17 @@ function renamePkg(pkgId, name) {
   if (!qpkg) return;
   qpkg.customName = name.trim() || null;
   saveToUrl();
+}
+
+function setPkgDiscount(pkgId, input) {
+  const qpkg = quotePackages.find(q => q.pkgId === pkgId);
+  if (!qpkg) return;
+  let val = parseFloat(input.value) || 0;
+  if (val < 0) val = 0;
+  if (val > 100) val = 100;
+  qpkg.discount = val;
+  renderQuote();
+  renderTotals();
 }
 
 function removePkg(pkgId) {
@@ -1536,14 +1547,20 @@ function buildQuotePkg(qpkg) {
     </div>`;
   }
 
-  // Pathway discount
-  if (pkg?.pathwayDiscount) {
-    const discAmt = gross * pkg.pathwayDiscount;
-    bodyHtml += `<div class="pathway-discount-row">
-      <span class="pathway-discount-label">Pathway Discount (${Math.round(pkg.pathwayDiscount * 100)}%)</span>
-      <span class="pathway-discount-value">\u2212${fmt(discAmt)}</span>
-    </div>`;
-  }
+  // Package discount (editable)
+  const discPct = qpkg.discount || 0;
+  const discAmt = gross * discPct / 100;
+  bodyHtml += `<div class="pathway-discount-row${discPct > 0 ? '' : ' inactive'}">
+    <span class="pathway-discount-label">Package Discount</span>
+    <div style="display:flex;align-items:center;gap:4px">
+      <input class="comp-qty-input" type="number" step="any" min="0" max="100" value="${discPct || ''}"
+             placeholder="0" style="width:48px;text-align:center;font-size:11px"
+             oninput="setPkgDiscount(${qpkg.pkgId},this)"
+             onchange="setPkgDiscount(${qpkg.pkgId},this)">
+      <span style="font-size:11px;font-weight:600;color:${discPct > 0 ? 'var(--emerald-600)' : 'var(--slate-400)'}">%</span>
+    </div>
+    <span class="pathway-discount-value">${discPct > 0 ? '\u2212' + fmt(discAmt) : ''}</span>
+  </div>`;
 
   const displayName = qpkg.customName || (pkg ? (pkg.name) : 'Package');
   div.innerHTML = `<div class="qpkg-header" onclick="togglePkg(${qpkg.pkgId})">
@@ -1580,6 +1597,8 @@ function buildQuoteAddon(addon) {
 // ─── Render: Totals ────────────────────────────────────────────────────────────
 function renderTotals() {
   const services = calcServicesTotal();
+  const grossServices = quotePackages.reduce((s, qp) => s + calcQuotePkgGross(qp), 0) + quoteAddons.reduce((s, a) => s + calcAddonTotal(a), 0);
+  const pkgDiscounts = grossServices - services;
   const software = calcTotalSoftware();
   const std = services + software;
   const disc = calcDiscount(std);
@@ -1587,6 +1606,19 @@ function renderTotals() {
   const funder = calcFunderSubsidy(partner);
   const oop = partner - funder;
   const has = hasQuoteItems();
+
+  // Package discounts row
+  const pdRow = document.getElementById('pkgDiscountsRow');
+  const gsRow = document.getElementById('grossServicesRow');
+  if (pkgDiscounts > 0 && has) {
+    gsRow.style.display = '';
+    document.getElementById('grossServicesTotal').textContent = fmt(grossServices);
+    pdRow.style.display = '';
+    document.getElementById('pkgDiscountsDisplay').textContent = '\u2212' + fmt(pkgDiscounts);
+  } else {
+    gsRow.style.display = 'none';
+    pdRow.style.display = 'none';
+  }
 
   document.getElementById('servicesTotal').textContent = has ? fmt(services) : '\u2014';
   document.getElementById('softwareTotal').textContent = has ? fmt(software) : '\u2014';
@@ -1761,9 +1793,12 @@ function getTabState() {
       softwareTotal: calcTotalSoftware(),
       packages: quotePackages.map(qp => ({
         gross: calcQuotePkgGross(qp),
-        net: calcQuotePkgNet(qp)
+        net: calcQuotePkgNet(qp),
+        discount: qp.discount || 0
       })),
       addons: quoteAddons.map(a => calcAddonTotal(a)),
+      grossServicesTotal: quotePackages.reduce((s, qp) => s + calcQuotePkgGross(qp), 0) + quoteAddons.reduce((s, a) => s + calcAddonTotal(a), 0),
+      packageDiscounts: quotePackages.reduce((s, qp) => s + (calcQuotePkgGross(qp) - calcQuotePkgNet(qp)), 0),
       servicesTotal: calcServicesTotal(),
       standardTotal: std,
       discountAmount: discAmt,
@@ -1785,6 +1820,7 @@ function getTabState() {
       officeHoursQty: qp.officeHoursQty,
       checkInQty: qp.checkInQty || 0,
       reflectionMeetingQty: qp.reflectionMeetingQty || 0,
+      discount: qp.discount || 0,
       components: qp.components.map(c => ({ id: c.id, qty: c.qty }))
     })),
     addons: quoteAddons.map(a => ({ blockId: a.blockId, qty: a.qty }))
@@ -1870,6 +1906,7 @@ function hydrateState(state) {
       }
 
       const autoFac = Math.max(1, Math.ceil(participants / 40));
+      const defaultDiscount = (pkg.pathwayDiscount || 0) * 100;
       const qpkg = {
         pkgId: nextPkgId++,
         packageId: sp.packageId,
@@ -1884,6 +1921,7 @@ function hydrateState(state) {
         officeHoursQty: sp.officeHoursQty !== undefined ? sp.officeHoursQty : getSupportDefaults(pkg, sessions).officeHoursQty,
         checkInQty: sp.checkInQty !== undefined ? sp.checkInQty : getSupportDefaults(pkg, sessions).checkInQty,
         reflectionMeetingQty: sp.reflectionMeetingQty !== undefined ? sp.reflectionMeetingQty : getSupportDefaults(pkg, sessions).reflectionMeetingQty,
+        discount: sp.discount !== undefined ? sp.discount : defaultDiscount,
         components
       };
       quotePackages.push(qpkg);
@@ -2004,9 +2042,9 @@ function copyForProposal() {
       if ((qpkg.reflectionMeetingQty || 0) > 0) {
         lines.push(`    \u2022 Reflection Meeting (${qpkg.reflectionMeetingQty}\u00D7) \u2014 ${fmt(qpkg.reflectionMeetingQty * getBlockPrice('office-hours'))}`);
       }
-      if (pkg?.pathwayDiscount) {
-        const discAmt = calcQuotePkgGross(qpkg) * pkg.pathwayDiscount;
-        lines.push(`    \u2022 Pathway Discount (${Math.round(pkg.pathwayDiscount * 100)}%) \u2014 \u2212${fmt(discAmt)}`);
+      if (qpkg.discount > 0) {
+        const discAmt = calcQuotePkgGross(qpkg) * qpkg.discount / 100;
+        lines.push(`    \u2022 Package Discount (${Math.round(qpkg.discount)}%) \u2014 \u2212${fmt(discAmt)}`);
       }
       if (qpkg.facilitators > 1) {
         lines.push(`    (${qpkg.participants} participants \u2192 ${qpkg.facilitators} facilitators)`);
