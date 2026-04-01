@@ -141,6 +141,10 @@ function getBlockPrice(blockId) {
     case 'tool-revision-full':  return roundPrice(dev * 22 * 1.15 * 0.99);
     case 'knowledge-graph':     return 1500;
     case 'ai-usage-costs':      return 300;
+    case 'coaching-retainer-essentials': return 500;
+    case 'coaching-retainer-advisory': return 1000;
+    case 'coaching-retainer-strategic': return 2500;
+    case 'coaching-retainer-embedded': return 5000;
     default: return 0;
   }
 }
@@ -237,7 +241,8 @@ function updateLicenseCount(licenseId, input, clamp) {
 const PATHWAYS = [
   { id: 'educators', name: 'AI Agency for Educators', color: '#0EA5E9', desc: 'From AI Curious to AI Creator' },
   { id: 'students', name: 'AI Agency for Students & Families', color: '#f97316', desc: 'Understand, build, and shape AI' },
-  { id: 'impact', name: 'Solutions for AI Impact', color: '#8b5cf6', desc: 'Design and build AI solutions for real challenges' }
+  { id: 'impact', name: 'Solutions for AI Impact', color: '#8b5cf6', desc: 'Design and build AI solutions for real challenges' },
+  { id: 'coaching', name: 'AI Leadership Coaching', color: '#10b981', desc: 'Strategic AI guidance for school-system leaders' }
 ];
 
 const PACKAGES = [
@@ -332,6 +337,31 @@ const PACKAGES = [
       { blockId: 'tool-build-initial', qty: 1, label: 'Tool Build (Initial)', scalable: false },
       { blockId: 'tool-build-addl', qty: 2, label: 'Tool Build (Additional)', scalable: false },
       { blockId: 'tool-pilot', qty: 1, label: 'Pilot Support', scalable: false }
+    ] },
+  // AI Leadership Coaching
+  { id: 'coaching-retainer-essentials', pathway: 'coaching', name: 'Essentials', subtitle: '$500/mo · 6-mo min', badge: 'Sounding Board',
+    desc: 'A monthly check-in call with pre- and post-email follow-up. Ideal for leaders who need a sounding board as they navigate early AI decisions.',
+    facilitationHours: null, isCoachingRetainer: true,
+    components: [
+      { blockId: 'coaching-retainer-essentials', qty: 6, label: 'Essentials Retainer', scalable: false }
+    ] },
+  { id: 'coaching-retainer-advisory', pathway: 'coaching', name: 'Advisory', subtitle: '$1,000/mo · 6-mo min', badge: 'Recommended',
+    desc: 'Scheduled calls plus email support. Light-touch strategic check-ins to keep AI adoption on track.',
+    facilitationHours: null, isCoachingRetainer: true,
+    components: [
+      { blockId: 'coaching-retainer-advisory', qty: 6, label: 'Advisory Retainer', scalable: false }
+    ] },
+  { id: 'coaching-retainer-strategic', pathway: 'coaching', name: 'Strategic', subtitle: '$2,500/mo · 6-mo min', badge: 'Deep Engagement',
+    desc: 'Regular strategy sessions plus ongoing email and call access. Enough to actively shape an AI roadmap and drive decisions.',
+    facilitationHours: null, isCoachingRetainer: true,
+    components: [
+      { blockId: 'coaching-retainer-strategic', qty: 6, label: 'Strategic Retainer', scalable: false }
+    ] },
+  { id: 'coaching-retainer-embedded', pathway: 'coaching', name: 'Embedded', subtitle: '$5,000/mo · 6-mo min', badge: 'Fractional Advisor',
+    desc: 'Near-fractional advisor. Weekly touchpoints, strategy plus hands-on app guidance, and stakeholder prep.',
+    facilitationHours: null, isCoachingRetainer: true,
+    components: [
+      { blockId: 'coaching-retainer-embedded', qty: 6, label: 'Embedded Retainer', scalable: false }
     ] }
 ];
 
@@ -473,6 +503,7 @@ function getPathwayBadgeColors(pathwayId) {
     case 'educators': return { bg: '#e0f2fe', color: '#0369a1' };
     case 'students': return { bg: '#fff7ed', color: '#c2410c' };
     case 'impact': return { bg: '#ede9fe', color: '#6d28d9' };
+    case 'coaching': return { bg: '#d1fae5', color: '#065f46' };
     default: return { bg: '#f1f5f9', color: '#475569' };
   }
 }
@@ -550,7 +581,7 @@ function buildPkgCard(pkg, pathway) {
     <div class="pkg-desc">${pkgDesc}</div>
     <div class="pkg-price-row">
       <div class="pkg-price">${fmt(netPrice)}${pkg.pathwayDiscount ? ' <span style="font-size:10px;font-weight:500;color:var(--emerald-600)">(20% off)</span>' : ''}</div>
-      <div class="pkg-price-note">1 facilitator \u00B7 40 participants</div>
+      <div class="pkg-price-note">${pkg.isCoachingRetainer ? '6-month minimum' : '1 facilitator \u00B7 40 participants'}</div>
     </div>
     <div class="pkg-components">${compSummary}</div>
     ${isConfigOpen ? '' : `<button class="pkg-add-btn" onclick="event.stopPropagation(); openConfig('${pkg.id}')">${inQuote ? '+ Add Another' : '+ Add'}</button>`}
@@ -561,6 +592,29 @@ function buildPkgCard(pkg, pathway) {
 function buildInlineConfig(pkg) {
   const cs = configState[pkg.id] || {};
   const hasFacilitation = pkg.facilitationHours && pkg.facilitationHours > 0;
+  const isCoaching = pkg.pathway === 'coaching';
+
+  // Coaching packages: simplified config
+  if (isCoaching) {
+    const months = cs.months || 6;
+    let coachingHtml = `<div class="pkg-config-row">
+      <span class="pkg-config-label">Months</span>
+      <input class="config-participants" type="number" min="6" step="1" value="${months}"
+             onchange="updateConfigCoachingMonths('${pkg.id}', this, true)"
+             oninput="updateConfigCoachingMonths('${pkg.id}', this, false)">
+      <span style="font-size:10px;color:var(--slate-400)">6-month minimum</span>
+    </div>`;
+    const previewCost = calcConfigPreview(pkg);
+    return `<div class="pkg-config">
+      ${coachingHtml}
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding-top:4px;border-top:1px solid var(--slate-200)">
+        <span style="color:var(--slate-500);font-weight:500">Estimated total</span>
+        <span style="font-weight:800;color:var(--sky-700)">${fmt(previewCost)}</span>
+      </div>
+      <button class="config-confirm-btn" onclick="confirmAddPackage('${pkg.id}')">Add to Builder</button>
+      <button style="width:100%;padding:5px;background:none;border:none;font-family:'Lexend',sans-serif;font-size:10px;color:var(--slate-400);cursor:pointer" onclick="closeConfig()">Cancel</button>
+    </div>`;
+  }
 
   let sessionsHtml = '';
   if (hasFacilitation) {
@@ -631,6 +685,13 @@ function buildInlineConfig(pkg) {
 
 function calcConfigPreview(pkg) {
   const cs = configState[pkg.id] || {};
+
+  // Coaching packages: simple price calculation
+  if (pkg.pathway === 'coaching') {
+    const months = cs.months || 6;
+    return getBlockPrice(pkg.components[0].blockId) * months;
+  }
+
   const hasFacilitation = pkg.facilitationHours && pkg.facilitationHours > 0;
   const participants = cs.participants || 40;
   const facilitators = Math.max(1, Math.ceil(participants / 40));
@@ -666,14 +727,18 @@ function openConfig(pkgId) {
   activeConfigPkgId = pkgId;
   if (!configState[pkgId]) {
     const pkg = PACKAGES.find(p => p.id === pkgId);
-    const hasFac = pkg && pkg.facilitationHours && pkg.facilitationHours > 0;
-    configState[pkgId] = {
-      numSessions: hasFac ? 1 : 1,
-      sessions: hasFac
-        ? distributeHours(pkg.facilitationHours, 1)
-        : [{ hours: 0, delivery: 'virtual' }],
-      participants: 40
-    };
+    if (pkg && pkg.pathway === 'coaching') {
+      configState[pkgId] = { months: 6 };
+    } else {
+      const hasFac = pkg && pkg.facilitationHours && pkg.facilitationHours > 0;
+      configState[pkgId] = {
+        numSessions: hasFac ? 1 : 1,
+        sessions: hasFac
+          ? distributeHours(pkg.facilitationHours, 1)
+          : [{ hours: 0, delivery: 'virtual' }],
+        participants: 40
+      };
+    }
   }
   renderCatalog();
   // Scroll to config
@@ -691,12 +756,16 @@ function closeConfig() {
 function ensureConfigState(pkgId) {
   if (!configState[pkgId]) {
     const pkg = PACKAGES.find(p => p.id === pkgId);
-    const hasFac = pkg && pkg.facilitationHours && pkg.facilitationHours > 0;
-    configState[pkgId] = {
-      numSessions: 1,
-      sessions: hasFac ? distributeHours(pkg.facilitationHours, 1) : [{ hours: 0, delivery: 'virtual' }],
-      participants: 40
-    };
+    if (pkg && pkg.pathway === 'coaching') {
+      configState[pkgId] = { months: 6 };
+    } else {
+      const hasFac = pkg && pkg.facilitationHours && pkg.facilitationHours > 0;
+      configState[pkgId] = {
+        numSessions: 1,
+        sessions: hasFac ? distributeHours(pkg.facilitationHours, 1) : [{ hours: 0, delivery: 'virtual' }],
+        participants: 40
+      };
+    }
   }
   return configState[pkgId];
 }
@@ -805,13 +874,30 @@ function updateConfigParticipants(pkgId, input, commit) {
   }
 }
 
+function updateConfigCoachingMonths(pkgId, input, commit) {
+  const cs = ensureConfigState(pkgId);
+  let val = Math.round(parseFloat(input.value));
+  if (!commit) {
+    if (!isNaN(val) && val >= 6) cs.months = val;
+    return;
+  }
+  if (isNaN(val) || val < 6) val = 6;
+  input.value = val;
+  cs.months = val;
+  rerenderConfigOnly(pkgId);
+}
+
 function getSupportDefaults(pkg, sessions) {
   const isIntro = pkg.id === 'edu-intro';
   const isPowerUp = pkg.id === 'edu-powerup';
   const isStudent = pkg.pathway === 'students';
   const isImpact = pkg.pathway === 'impact';
+  const isCoaching = pkg.pathway === 'coaching';
   const isEduCore = pkg.pathway === 'educators' && !isIntro && !isPowerUp;
 
+  if (isCoaching) {
+    return { launchMeetingQty: 0, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
+  }
   if (isImpact) {
     return { launchMeetingQty: 1, officeHoursQty: 0, checkInQty: 0, reflectionMeetingQty: 0 };
   }
@@ -838,6 +924,40 @@ function getSupportDefaults(pkg, sessions) {
 function confirmAddPackage(pkgId) {
   const pkg = PACKAGES.find(p => p.id === pkgId);
   if (!pkg) return;
+
+  // Coaching packages: simplified add flow
+  if (pkg.pathway === 'coaching') {
+    const cs = configState[pkgId] || {};
+    let compId = 1;
+    const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
+    // Set qty from config (months)
+    components[0].qty = cs.months || 6;
+    const qpkg = {
+      pkgId: nextPkgId++,
+      packageId: pkgId,
+      participants: 0,
+      facilitators: 1,
+      facilitatorsManual: false,
+      sessions: [],
+      travelLocalDays: 0,
+      travelFlightTrips: 0,
+      launchMeetingQty: 0,
+      officeHoursQty: 0,
+      checkInQty: 0,
+      reflectionMeetingQty: 0,
+      components
+    };
+    quotePackages.push(qpkg);
+    expandedPkgId = qpkg.pkgId;
+    activeConfigPkgId = null;
+    track('add_package', { package_name: pkg.name, package_id: pkgId });
+    renderCatalog();
+    renderQuote();
+    renderTotals();
+    showToast(`Added: ${pkg.name}`);
+    return;
+  }
+
   const cs = configState[pkgId] || { numSessions: 1, sessions: [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }], participants: 40 };
   const hasFacilitation = pkg.facilitationHours && pkg.facilitationHours > 0;
   const participants = cs.participants || 40;
@@ -1345,7 +1465,9 @@ function getDeliveryBadgesForSessions(sessions) {
 function buildCompLineHtml(comp, qpkg) {
   const effQty = comp.scalable ? comp.qty * qpkg.facilitators : comp.qty;
   const total = getBlockPrice(comp.blockId) * effQty;
-  const unit = comp.blockId === 'facilitation' || comp.blockId === 'office-hours' || comp.blockId === 'admin-meetings' ? 'hr' : 'flat';
+  const hourBlocks = ['facilitation', 'office-hours', 'admin-meetings'];
+  const moBlocks = ['coaching-retainer-essentials', 'coaching-retainer-advisory', 'coaching-retainer-strategic', 'coaching-retainer-embedded'];
+  const unit = hourBlocks.includes(comp.blockId) ? 'hr' : moBlocks.includes(comp.blockId) ? 'mo' : 'flat';
   const tags = [];
   if (comp.support) tags.push('<span class="support-tag">support</span>');
   if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
@@ -1422,9 +1544,11 @@ function buildQuotePkg(qpkg) {
 
   // ── COMPONENTS (grouped by type) ──
   const targetedAiBlockIds = ['ideation-lp-le', 'ideation-lp', 'tool-build-initial', 'tool-build-addl', 'tool-pilot'];
+  const coachingBlockIds = ['coaching-retainer-essentials', 'coaching-retainer-advisory', 'coaching-retainer-strategic', 'coaching-retainer-embedded'];
   const facilitationComps = qpkg.components.filter(c => c.blockId === 'facilitation');
   const targetedAiComps = qpkg.components.filter(c => targetedAiBlockIds.includes(c.blockId));
-  const otherComps = qpkg.components.filter(c => c.blockId !== 'facilitation' && !targetedAiBlockIds.includes(c.blockId));
+  const coachingComps = qpkg.components.filter(c => coachingBlockIds.includes(c.blockId));
+  const otherComps = qpkg.components.filter(c => c.blockId !== 'facilitation' && !targetedAiBlockIds.includes(c.blockId) && !coachingBlockIds.includes(c.blockId));
 
   if (facilitationComps.length > 0) {
     bodyHtml += sectionHdr('Facilitation');
@@ -1433,6 +1557,10 @@ function buildQuotePkg(qpkg) {
   if (targetedAiComps.length > 0) {
     bodyHtml += sectionHdr('Targeted AI');
     for (const comp of targetedAiComps) bodyHtml += buildCompLineHtml(comp, qpkg);
+  }
+  if (coachingComps.length > 0) {
+    bodyHtml += sectionHdr('Coaching');
+    for (const comp of coachingComps) bodyHtml += buildCompLineHtml(comp, qpkg);
   }
   if (otherComps.length > 0) {
     bodyHtml += sectionHdr('Other');
@@ -2021,7 +2149,8 @@ function copyForProposal() {
       for (const comp of qpkg.components) {
         const effQty = comp.scalable ? comp.qty * qpkg.facilitators : comp.qty;
         const total = getBlockPrice(comp.blockId) * effQty;
-        const qtyStr = comp.blockId.includes('tool-') || comp.blockId.includes('ideation') ? '' : ` (${effQty} hrs)`;
+        const isRetainer = comp.blockId.startsWith('coaching-retainer-');
+        const qtyStr = isRetainer ? ` (${effQty} months)` : comp.blockId.includes('tool-') || comp.blockId.includes('ideation') ? '' : ` (${effQty} hrs)`;
         lines.push(`    \u2022 ${comp.label}${qtyStr} \u2014 ${fmt(total)}`);
       }
       const travelCost = calcTravelCost(qpkg);
