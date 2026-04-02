@@ -167,7 +167,10 @@
     .quote-col-inner { flex: 1; overflow-y: scroll; padding: 20px 20px 28px; box-sizing: border-box; }
 
     /* Quote Tabs */
-    .quote-tabs { display: flex; align-items: stretch; background: var(--slate-50); border-bottom: 1.5px solid var(--slate-200); flex-shrink: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+    .quote-tabs-wrap { display:flex; align-items:stretch; background:var(--slate-50); border-bottom:1.5px solid var(--slate-200); }
+    .library-tab-btn { display:flex; align-items:center; gap:4px; padding:6px 12px; font-family:'Lexend',sans-serif; font-size:11px; font-weight:600; color:var(--sky-600); background:var(--sky-50); border:1.5px solid var(--sky-200); border-radius:6px; cursor:pointer; white-space:nowrap; margin:4px 8px 4px 4px; flex-shrink:0; transition:all .12s; order:-1; }
+    .library-tab-btn:hover { background:var(--sky-100); border-color:var(--sky-400); }
+    .quote-tabs { display: flex; align-items: stretch; background: var(--slate-50); flex-shrink: 1; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; flex:1; min-width:0; }
     .quote-tabs::-webkit-scrollbar { height: 3px; }
     .quote-tabs::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 2px; }
     .quote-tab { display: flex; align-items: center; gap: 5px; padding: 7px 10px 6px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 500; color: var(--slate-500); background: var(--slate-100); border: none; border-right: 1px solid var(--slate-200); cursor: pointer; white-space: nowrap; transition: all 0.12s; max-width: 160px; flex-shrink: 0; border-top: 2px solid transparent; }

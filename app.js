@@ -2451,8 +2451,18 @@ function renderTabBar() {
     html += '</button>';
   }
   html += '<button class="quote-tab-new" onclick="createNewTab()">+ New</button>';
-  html += '<button class="quote-tab-new" onclick="openLibrary()" style="margin-left:auto;background:var(--sky-50);color:var(--sky-600);border:1.5px solid var(--sky-200)" title="Open saved quotes library">&#x1F4C1; Library</button>';
   bar.innerHTML = html;
+  // Library button is rendered separately (outside scrollable tabs, in the wrapper)
+  const wrap = document.getElementById('quoteTabWrap');
+  if (wrap && !document.getElementById('libraryBtn')) {
+    const libBtn = document.createElement('button');
+    libBtn.id = 'libraryBtn';
+    libBtn.className = 'library-tab-btn';
+    libBtn.onclick = openLibrary;
+    libBtn.title = 'Open saved quotes library';
+    libBtn.innerHTML = '&#x1F4C1; Library';
+    wrap.insertBefore(libBtn, bar);
+  }
 }
 
 function initTabs() {
