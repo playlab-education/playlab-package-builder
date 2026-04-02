@@ -2582,39 +2582,110 @@ function decodeBase64Content(b64) {
   return JSON.parse(decodeURIComponent(escape(atob(clean))));
 }
 
+// ─── Library: Index Management ───────────────────────────────────────────────
+// Index files (quotes/index.json, archive/index.json) store metadata for all
+// quotes in that directory. This reduces list operations from N+1 to 1 API call.
+
+function encodeJsonContent(obj) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
+}
+
+async function readIndex(basePath) {
+  const resp = await libApi('GET', `${basePath}/index.json`);
+  if (!resp || resp.status === 404) return { entries: {}, sha: null };
+  if (!resp.ok) return null;
+  try {
+    const file = await resp.json();
+    const content = decodeBase64Content(file.content);
+    return { entries: content || {}, sha: file.sha };
+  } catch { return { entries: {}, sha: null }; }
+}
+
+async function writeIndex(basePath, entries, existingSha) {
+  const body = {
+    message: '[auto] Update index',
+    content: encodeJsonContent(entries)
+  };
+  if (existingSha) body.sha = existingSha;
+  const resp = await libApi('PUT', `${basePath}/index.json`, body);
+  if (resp && resp.status === 409) {
+    // Index was modified concurrently — re-read, merge, retry once
+    const fresh = await readIndex(basePath);
+    if (!fresh) return false;
+    const merged = { ...fresh.entries, ...entries };
+    const retryBody = { message: '[auto] Update index (merged)', content: encodeJsonContent(merged) };
+    if (fresh.sha) retryBody.sha = fresh.sha;
+    const retryResp = await libApi('PUT', `${basePath}/index.json`, retryBody);
+    return retryResp && retryResp.ok;
+  }
+  return resp && resp.ok;
+}
+
+async function removeFromIndex(basePath, filename) {
+  const idx = await readIndex(basePath);
+  if (!idx) return false;
+  delete idx.entries[filename];
+  return writeIndex(basePath, idx.entries, idx.sha);
+}
+
+async function addToIndex(basePath, filename, meta) {
+  const idx = await readIndex(basePath);
+  if (!idx) return false;
+  idx.entries[filename] = meta;
+  return writeIndex(basePath, idx.entries, idx.sha);
+}
+
+// Rebuild index by scanning all files (fallback if index is missing/corrupted)
+async function rebuildIndex(basePath) {
+  const resp = await libApi('GET', basePath);
+  if (!resp || !resp.ok) return null;
+  const files = await resp.json();
+  const jsonFiles = files.filter(f => f.name.endsWith('.json') && f.name !== 'index.json' && f.name !== '.gitkeep');
+  const entries = {};
+  const results = await Promise.all(jsonFiles.map(async f => {
+    try {
+      const r = await libApi('GET', `${basePath}/${f.name}`);
+      if (!r || !r.ok) return null;
+      const file = await r.json();
+      const content = decodeBase64Content(file.content);
+      if (!validateQuoteData(content)) return null;
+      entries[f.name] = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+    } catch {}
+  }));
+  // Check if index.json exists to get its SHA
+  const existingIdx = await readIndex(basePath);
+  await writeIndex(basePath, entries, existingIdx?.sha || null);
+  return entries;
+}
+
 // ─── Library: List ───────────────────────────────────────────────────────────
-async function listLibraryQuotes(forceRefresh) {
+async function listFromIndex(basePath, cacheKey, forceRefresh) {
   if (!forceRefresh) {
     try {
-      const cached = sessionStorage.getItem(LIB_CACHE_KEY);
+      const cached = sessionStorage.getItem(cacheKey);
       if (cached) {
         const c = JSON.parse(cached);
         if (Date.now() - c.ts < LIB_CACHE_TTL) return c.data;
       }
     } catch {}
   }
-  const resp = await libApi('GET', LIB_QUOTES_PATH);
-  if (!resp) return null;
-  if (resp.status === 404) return []; // empty directory
-  if (!resp.ok) return null;
-  const files = await resp.json();
-  const quotes = files.filter(f => f.name.endsWith('.json') && f.name !== '.gitkeep');
-  // Fetch metadata from each file (name is in content)
-  // To avoid N+1, we'll store metadata in a lightweight index
-  // For now, fetch all — at <100 files this is fine via parallel requests
-  const results = await Promise.all(quotes.map(async f => {
-    try {
-      const r = await libApi('GET', `${LIB_QUOTES_PATH}/${f.name}`);
-      if (!r || !r.ok) return null;
-      const file = await r.json();
-      const content = decodeBase64Content(file.content);
-      if (!validateQuoteData(content)) return null;
-      return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
-    } catch { return null; }
-  }));
-  const data = results.filter(Boolean).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
-  try { sessionStorage.setItem(LIB_CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+  let idx = await readIndex(basePath);
+  if (!idx) return null;
+  let entries = idx.entries;
+  // If index is empty but directory might have files, rebuild
+  if (Object.keys(entries).length === 0 && !idx.sha) {
+    const rebuilt = await rebuildIndex(basePath);
+    if (rebuilt) entries = rebuilt;
+  }
+  const data = Object.entries(entries).map(([filename, meta]) => ({
+    filename, partnerName: meta.partnerName, savedAt: meta.savedAt, savedBy: meta.savedBy || 'Team'
+  })).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+  try { sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch {}
   return data;
+}
+
+async function listLibraryQuotes(forceRefresh) {
+  return listFromIndex(LIB_QUOTES_PATH, LIB_CACHE_KEY, forceRefresh);
 }
 
 // ─── Library: Save ───────────────────────────────────────────────────────────
@@ -2638,6 +2709,8 @@ async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
   const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, body);
   if (resp && resp.ok) {
     try { localStorage.removeItem(LIB_DRAFT_KEY); } catch {}
+    // Update index
+    await addToIndex(LIB_QUOTES_PATH, filename, { partnerName: name, savedAt: metadata.savedAt, savedBy: metadata.savedBy });
     // Invalidate cache
     try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
     const result = await resp.json();
@@ -2678,35 +2751,7 @@ async function loadQuoteFromPath(filename, basePath) {
 
 // ─── Library: List Archived ──────────────────────────────────────────────────
 async function listArchivedQuotes(forceRefresh) {
-  const cacheKey = LIB_CACHE_KEY + '_archive';
-  if (!forceRefresh) {
-    try {
-      const cached = sessionStorage.getItem(cacheKey);
-      if (cached) {
-        const c = JSON.parse(cached);
-        if (Date.now() - c.ts < LIB_CACHE_TTL) return c.data;
-      }
-    } catch {}
-  }
-  const resp = await libApi('GET', LIB_ARCHIVE_PATH);
-  if (!resp) return null;
-  if (resp.status === 404) return [];
-  if (!resp.ok) return null;
-  const files = await resp.json();
-  const quotes = files.filter(f => f.name.endsWith('.json') && f.name !== '.gitkeep');
-  const results = await Promise.all(quotes.map(async f => {
-    try {
-      const r = await libApi('GET', `${LIB_ARCHIVE_PATH}/${f.name}`);
-      if (!r || !r.ok) return null;
-      const file = await r.json();
-      const content = decodeBase64Content(file.content);
-      if (!validateQuoteData(content)) return null;
-      return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
-    } catch { return null; }
-  }));
-  const data = results.filter(Boolean).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
-  try { sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch {}
-  return data;
+  return listFromIndex(LIB_ARCHIVE_PATH, LIB_CACHE_KEY + '_archive', forceRefresh);
 }
 
 // ─── Library: Restore from Archive ───────────────────────────────────────────
@@ -2725,6 +2770,13 @@ async function restoreFromArchive(filename, sha, name) {
     if (!resp || !resp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
     const file = await resp.json();
 
+    // Extract metadata for index
+    let meta = {};
+    try {
+      const content = decodeBase64Content(file.content);
+      meta = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+    } catch {}
+
     // Create in quotes/
     const createBody = { message: `[auto] Restore: ${name}`, content: file.content };
     const createResp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, createBody);
@@ -2734,6 +2786,10 @@ async function restoreFromArchive(filename, sha, name) {
     const delBody = { message: `[auto] Restore: ${name}`, sha: file.sha };
     const delResp = await libApi('DELETE', `${LIB_ARCHIVE_PATH}/${filename}`, delBody);
     if (!delResp || !delResp.ok) { showToast('Restored but failed to remove from archive \u2014 you may see a duplicate'); }
+
+    // Update both indexes
+    await addToIndex(LIB_QUOTES_PATH, filename, meta);
+    await removeFromIndex(LIB_ARCHIVE_PATH, filename);
 
     // Invalidate both caches
     try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
@@ -2751,6 +2807,13 @@ async function archiveQuote(filename, sha) {
   if (!resp || !resp.ok) { showToast('Failed to archive'); return false; }
   const file = await resp.json();
 
+  // Extract metadata for index
+  let meta = {};
+  try {
+    const content = decodeBase64Content(file.content);
+    meta = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+  } catch {}
+
   // Create in archive/
   const archiveBody = {
     message: `[auto] Archive: ${filename}`,
@@ -2763,6 +2826,10 @@ async function archiveQuote(filename, sha) {
   const delBody = { message: `[auto] Archive: ${filename}`, sha: file.sha };
   const delResp = await libApi('DELETE', `${LIB_QUOTES_PATH}/${filename}`, delBody);
   if (!delResp || !delResp.ok) { showToast('Archived but failed to remove original'); }
+
+  // Update both indexes
+  await addToIndex(LIB_ARCHIVE_PATH, filename, meta);
+  await removeFromIndex(LIB_QUOTES_PATH, filename);
 
   // Invalidate both caches
   try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
