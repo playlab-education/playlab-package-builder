@@ -539,12 +539,45 @@
     </div>
 
     <div class="actions">
+      <button class="btn-library-save" id="saveToLibraryBtn" onclick="saveCurrentToLibrary()">&#x1F4BE; Save to Library</button>
       <button class="btn-copy" id="copyLinkBtn">Copy Shareable Link</button>
       <button class="btn-clear" id="clearBtn">Clear All</button>
     </div>
 
     <p class="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
   </div>
+  </div>
+</div>
+
+<!-- Library Modal -->
+<div class="library-overlay" id="libraryOverlay" onclick="if(event.target===this)closeLibrary()">
+  <div class="library-modal">
+    <div class="library-header">
+      <h2>Quote Library</h2>
+      <button class="library-close" onclick="closeLibrary()">&times;</button>
+    </div>
+    <div class="library-body" id="libraryBody">
+      <div class="library-loading">Loading saved quotes&hellip;</div>
+    </div>
+  </div>
+</div>
+
+<!-- Token Prompt Modal -->
+<div class="library-overlay" id="tokenOverlay" onclick="if(event.target===this)closeTokenPrompt()">
+  <div class="library-modal" style="max-width:440px">
+    <div class="library-header">
+      <h2>Connect to Quote Library</h2>
+      <button class="library-close" onclick="closeTokenPrompt()">&times;</button>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin-bottom:16px">Enter the GitHub token to connect to the shared quote library. You only need to do this once per browser.</p>
+      <input class="auth-input" type="password" id="githubTokenInput" placeholder="ghp_..." style="width:100%;margin-bottom:12px" autocomplete="off">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn-clear" onclick="closeTokenPrompt()">Cancel</button>
+        <button class="btn-library-save" onclick="submitGithubToken()">Connect</button>
+      </div>
+      <div class="auth-error" id="tokenError" style="margin-top:8px">Invalid token or no access to the quote library.</div>
+    </div>
   </div>
 </div>
 

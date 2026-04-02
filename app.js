@@ -2451,6 +2451,7 @@ function renderTabBar() {
     html += '</button>';
   }
   html += '<button class="quote-tab-new" onclick="createNewTab()">+ New</button>';
+  html += '<button class="quote-tab-new" onclick="openLibrary()" style="margin-left:auto;background:var(--sky-50);color:var(--sky-600);border:1.5px solid var(--sky-200)" title="Open saved quotes library">&#x1F4C1; Library</button>';
   bar.innerHTML = html;
 }
 
@@ -2473,6 +2474,311 @@ function initTabs() {
   }
 
   renderTabBar();
+}
+
+// ─── Quote Library (GitHub Backend) ──────────────────────────────────────────
+const LIB_OWNER = 'nkelloggplaylab';
+const LIB_REPO = 'playlab-quotes';
+const LIB_QUOTES_PATH = 'quotes';
+const LIB_ARCHIVE_PATH = 'archive';
+const LIB_TOKEN_KEY = 'playlab_github_token';
+const LIB_DRAFT_KEY = 'playlab_library_draft';
+const LIB_CACHE_KEY = 'playlab_library_cache';
+const LIB_CACHE_TTL = 60000; // 60s
+
+function getLibToken() { return localStorage.getItem(LIB_TOKEN_KEY); }
+
+function promptLibToken(callback) {
+  document.getElementById('tokenError').classList.remove('show');
+  document.getElementById('githubTokenInput').value = '';
+  document.getElementById('tokenOverlay').classList.add('open');
+  window._tokenCallback = callback || null;
+  setTimeout(() => document.getElementById('githubTokenInput').focus(), 100);
+}
+
+function closeTokenPrompt() {
+  document.getElementById('tokenOverlay').classList.remove('open');
+  window._tokenCallback = null;
+}
+
+async function submitGithubToken() {
+  const input = document.getElementById('githubTokenInput');
+  const token = input.value.trim();
+  if (!token) return;
+  // Validate token by listing the repo
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}/contents/${LIB_QUOTES_PATH}`, {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (resp.ok || resp.status === 404) {
+      // 404 is OK — empty directory
+      localStorage.setItem(LIB_TOKEN_KEY, token);
+      closeTokenPrompt();
+      if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
+      return;
+    }
+  } catch {}
+  document.getElementById('tokenError').classList.add('show');
+}
+
+async function libApi(method, path, body, retries) {
+  const token = getLibToken();
+  if (!token) return null;
+  const url = `https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}/contents/${path}`;
+  const opts = {
+    method,
+    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+  };
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  try {
+    const resp = await fetch(url, opts);
+    if (resp.status === 401) {
+      localStorage.removeItem(LIB_TOKEN_KEY);
+      showToast('GitHub token expired \u2014 please reconnect');
+      return null;
+    }
+    return resp;
+  } catch (e) {
+    if ((retries || 0) < 1) {
+      await new Promise(r => setTimeout(r, 1000));
+      return libApi(method, path, body, (retries || 0) + 1);
+    }
+    return null;
+  }
+}
+
+function generateQuoteId() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function validateQuoteData(data) {
+  return data && typeof data === 'object' && data.quoteState && data.partnerName && data.savedAt;
+}
+
+// ─── Library: List ───────────────────────────────────────────────────────────
+async function listLibraryQuotes(forceRefresh) {
+  if (!forceRefresh) {
+    try {
+      const cached = sessionStorage.getItem(LIB_CACHE_KEY);
+      if (cached) {
+        const c = JSON.parse(cached);
+        if (Date.now() - c.ts < LIB_CACHE_TTL) return c.data;
+      }
+    } catch {}
+  }
+  const resp = await libApi('GET', LIB_QUOTES_PATH);
+  if (!resp) return null;
+  if (resp.status === 404) return []; // empty directory
+  if (!resp.ok) return null;
+  const files = await resp.json();
+  const quotes = files.filter(f => f.name.endsWith('.json') && f.name !== '.gitkeep');
+  // Fetch metadata from each file (name is in content)
+  // To avoid N+1, we'll store metadata in a lightweight index
+  // For now, fetch all — at <100 files this is fine via parallel requests
+  const results = await Promise.all(quotes.map(async f => {
+    try {
+      const r = await libApi('GET', `${LIB_QUOTES_PATH}/${f.name}`);
+      if (!r || !r.ok) return null;
+      const file = await r.json();
+      const content = JSON.parse(atob(file.content));
+      if (!validateQuoteData(content)) return null;
+      return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+    } catch { return null; }
+  }));
+  const data = results.filter(Boolean).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+  try { sessionStorage.setItem(LIB_CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+  return data;
+}
+
+// ─── Library: Save ───────────────────────────────────────────────────────────
+async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
+  const metadata = {
+    partnerName: name,
+    savedAt: new Date().toISOString(),
+    savedBy: 'Team',
+    quoteState: state
+  };
+  // Draft to localStorage first
+  try { localStorage.setItem(LIB_DRAFT_KEY, JSON.stringify(metadata)); } catch {}
+
+  const filename = existingFilename || (generateQuoteId() + '.json');
+  const body = {
+    message: `[auto] Save quote: ${name}`,
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(metadata, null, 2))))
+  };
+  if (existingSha) body.sha = existingSha;
+
+  const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, body);
+  if (resp && resp.ok) {
+    try { localStorage.removeItem(LIB_DRAFT_KEY); } catch {}
+    // Invalidate cache
+    try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
+    const result = await resp.json();
+    return { filename, sha: result.content.sha };
+  }
+  if (resp && resp.status === 409) {
+    showToast('Quote was modified by someone else \u2014 try loading it first');
+    return null;
+  }
+  showToast('Save failed \u2014 your quote is safe locally. Try again.');
+  return null;
+}
+
+// ─── Library: Load ───────────────────────────────────────────────────────────
+async function loadQuoteFromLibrary(filename) {
+  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
+  if (!resp || !resp.ok) { showToast('Failed to load quote'); return null; }
+  const file = await resp.json();
+  try {
+    const content = JSON.parse(decodeURIComponent(escape(atob(file.content))));
+    if (!validateQuoteData(content)) { showToast('Quote file is corrupted'); return null; }
+    return { ...content, _sha: file.sha, _filename: filename };
+  } catch { showToast('Failed to parse quote'); return null; }
+}
+
+// ─── Library: Archive ────────────────────────────────────────────────────────
+async function archiveQuote(filename, sha) {
+  // Read the file first
+  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
+  if (!resp || !resp.ok) { showToast('Failed to archive'); return false; }
+  const file = await resp.json();
+
+  // Create in archive/
+  const archiveBody = {
+    message: `[auto] Archive: ${filename}`,
+    content: file.content
+  };
+  const archResp = await libApi('PUT', `${LIB_ARCHIVE_PATH}/${filename}`, archiveBody);
+  if (!archResp || !archResp.ok) { showToast('Failed to archive'); return false; }
+
+  // Delete from quotes/
+  const delBody = { message: `[auto] Archive: ${filename}`, sha: file.sha };
+  const delResp = await libApi('DELETE', `${LIB_QUOTES_PATH}/${filename}`, delBody);
+  if (!delResp || !delResp.ok) { showToast('Archived but failed to remove original'); }
+
+  try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
+  return true;
+}
+
+// ─── Library UI ──────────────────────────────────────────────────────────────
+function openLibrary() {
+  if (!getLibToken()) {
+    promptLibToken(() => openLibrary());
+    return;
+  }
+  document.getElementById('libraryOverlay').classList.add('open');
+  document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Loading saved quotes&hellip;</div>';
+  renderLibraryList();
+}
+
+function closeLibrary() {
+  document.getElementById('libraryOverlay').classList.remove('open');
+}
+
+async function renderLibraryList() {
+  const body = document.getElementById('libraryBody');
+  const quotes = await listLibraryQuotes(true);
+  if (quotes === null) {
+    body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>';
+    return;
+  }
+  if (quotes.length === 0) {
+    body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>';
+    return;
+  }
+  let html = '';
+  for (const q of quotes) {
+    const date = new Date(q.savedAt);
+    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    html += `<div class="library-card" ondblclick="loadFromLibrary('${escHtml(q.filename)}')">
+      <div class="library-card-info">
+        <div class="library-card-name">${escHtml(q.partnerName)}</div>
+        <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
+      </div>
+      <div class="library-card-actions">
+        <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escHtml(q.filename)}')">Load</button>
+        <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${escHtml(q.filename)}','${q.sha}','${escHtml(q.partnerName)}')">Archive</button>
+      </div>
+    </div>`;
+  }
+  body.innerHTML = html;
+}
+
+async function loadFromLibrary(filename) {
+  const data = await loadQuoteFromLibrary(filename);
+  if (!data) return;
+  closeLibrary();
+  // Create a new tab with this quote
+  saveActiveTab();
+  const newTab = { id: generateTabId(), name: data.partnerName || 'Loaded Quote', state: data.quoteState };
+  // Store library metadata on the tab for "Update" support
+  newTab._libFile = data._filename;
+  newTab._libSha = data._sha;
+  builderTabs.push(newTab);
+  activeTabId = newTab.id;
+  loadTabState(newTab.state);
+  try {
+    localStorage.setItem('playlab_builder_tabs', JSON.stringify(builderTabs));
+    localStorage.setItem('playlab_builder_activeTabId', activeTabId);
+  } catch {}
+  renderTabBar();
+  showToast('Loaded: ' + (data.partnerName || 'Quote'));
+  track('library_load', { partner: data.partnerName });
+}
+
+async function archiveFromLibrary(filename, sha, name) {
+  if (!confirm('Archive "' + name + '"? It will be moved out of the active library.')) return;
+  const body = document.getElementById('libraryBody');
+  body.innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
+  const ok = await archiveQuote(filename, sha);
+  if (ok) {
+    showToast('Archived: ' + name);
+    track('library_archive', { partner: name });
+  }
+  await renderLibraryList();
+}
+
+async function saveCurrentToLibrary() {
+  if (!getLibToken()) {
+    promptLibToken(() => saveCurrentToLibrary());
+    return;
+  }
+  const name = document.getElementById('partnerName').value.trim();
+  if (!name) {
+    document.getElementById('partnerName').focus();
+    showToast('Enter a partner name before saving');
+    return;
+  }
+  const state = getTabState();
+  const btn = document.getElementById('saveToLibraryBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving\u2026';
+
+  // Check if this tab was loaded from library (enable update)
+  const activeTab = builderTabs.find(t => t.id === activeTabId);
+  let existingFile = activeTab?._libFile || null;
+  let existingSha = activeTab?._libSha || null;
+
+  if (existingFile) {
+    const doUpdate = confirm('Update the existing saved quote, or save as a new copy?\n\nOK = Update existing\nCancel = Save as new');
+    if (!doUpdate) { existingFile = null; existingSha = null; }
+  }
+
+  const result = await saveQuoteToLibrary(name, state, existingFile, existingSha);
+  btn.disabled = false;
+  btn.textContent = '\uD83D\uDCBE Save to Library';
+
+  if (result) {
+    // Store library metadata on the active tab
+    if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; }
+    showToast('Saved to library: ' + name);
+    track('library_save', { partner: name, updated: !!existingFile });
+  }
 }
 
 // ─── Init ──────────────────────────────────────────────────────────────────────
