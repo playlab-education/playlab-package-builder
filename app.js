@@ -155,7 +155,7 @@ function fmt(n) {
   const formatted = Math.round(convertAmount(n)).toLocaleString('en-US');
   return cur.prefix ? cur.symbol + formatted : formatted + cur.symbol;
 }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function unitShort(unit) {
   const map = { hr: 'hr', mo: 'mo', day: 'day', trip: 'trip', visit: 'visit', flat: '\u00D7' };
   return map[unit] || unit;
@@ -1850,11 +1850,13 @@ function updateRateStatus() {
 }
 
 // ─── Toast ──────────────────────────────────────────────────────────────────
+let _toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
 }
 
 // ─── Tab Switching ──────────────────────────────────────────────────────────
@@ -2515,13 +2517,19 @@ async function submitGithubToken() {
   const input = document.getElementById('githubTokenInput');
   const token = input.value.trim();
   if (!token) return;
-  // Validate token by listing the repo
+  // Validate token by checking repo access first, then contents
   try {
-    const resp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}/contents/${LIB_QUOTES_PATH}`, {
+    const repoResp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}`, {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if (resp.ok || resp.status === 404) {
-      // 404 is OK — empty directory
+    if (!repoResp.ok) {
+      document.getElementById('tokenError').classList.add('show');
+      return;
+    }
+    const contentsResp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}/contents/${LIB_QUOTES_PATH}`, {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (contentsResp.ok || contentsResp.status === 404) {
       localStorage.setItem(LIB_TOKEN_KEY, token);
       closeTokenPrompt();
       if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
@@ -2569,6 +2577,11 @@ function validateQuoteData(data) {
   return data && typeof data === 'object' && data.quoteState && data.partnerName && data.savedAt;
 }
 
+function decodeBase64Content(b64) {
+  const clean = b64.replace(/\s/g, '');
+  return JSON.parse(decodeURIComponent(escape(atob(clean))));
+}
+
 // ─── Library: List ───────────────────────────────────────────────────────────
 async function listLibraryQuotes(forceRefresh) {
   if (!forceRefresh) {
@@ -2594,7 +2607,7 @@ async function listLibraryQuotes(forceRefresh) {
       const r = await libApi('GET', `${LIB_QUOTES_PATH}/${f.name}`);
       if (!r || !r.ok) return null;
       const file = await r.json();
-      const content = JSON.parse(atob(file.content));
+      const content = decodeBase64Content(file.content);
       if (!validateQuoteData(content)) return null;
       return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
     } catch { return null; }
@@ -2631,6 +2644,15 @@ async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
     return { filename, sha: result.content.sha };
   }
   if (resp && resp.status === 409) {
+    // Re-fetch to get current SHA so next save attempt works
+    try {
+      const fresh = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
+      if (fresh && fresh.ok) {
+        const freshFile = await fresh.json();
+        showToast('Quote was modified by someone else \u2014 click Save again to overwrite');
+        return { filename, sha: freshFile.sha, conflict: true };
+      }
+    } catch {}
     showToast('Quote was modified by someone else \u2014 try loading it first');
     return null;
   }
@@ -2648,7 +2670,7 @@ async function loadQuoteFromPath(filename, basePath) {
   if (!resp || !resp.ok) { showToast('Failed to load quote'); return null; }
   const file = await resp.json();
   try {
-    const content = JSON.parse(decodeURIComponent(escape(atob(file.content))));
+    const content = decodeBase64Content(file.content);
     if (!validateQuoteData(content)) { showToast('Quote file is corrupted'); return null; }
     return { ...content, _sha: file.sha, _filename: filename };
   } catch { showToast('Failed to parse quote'); return null; }
@@ -2677,7 +2699,7 @@ async function listArchivedQuotes(forceRefresh) {
       const r = await libApi('GET', `${LIB_ARCHIVE_PATH}/${f.name}`);
       if (!r || !r.ok) return null;
       const file = await r.json();
-      const content = JSON.parse(atob(file.content));
+      const content = decodeBase64Content(file.content);
       if (!validateQuoteData(content)) return null;
       return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
     } catch { return null; }
@@ -2688,30 +2710,37 @@ async function listArchivedQuotes(forceRefresh) {
 }
 
 // ─── Library: Restore from Archive ───────────────────────────────────────────
+let libBusy = false;
+
 async function restoreFromArchive(filename, sha, name) {
+  if (libBusy) return;
   if (!confirm('Restore "' + name + '" to the active library?')) return;
+  libBusy = true;
   const body = document.getElementById('libraryBody');
   body.innerHTML = '<div class="library-loading">Restoring&hellip;</div>';
 
-  // Read from archive
-  const resp = await libApi('GET', `${LIB_ARCHIVE_PATH}/${filename}`);
-  if (!resp || !resp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
-  const file = await resp.json();
+  try {
+    // Read from archive
+    const resp = await libApi('GET', `${LIB_ARCHIVE_PATH}/${filename}`);
+    if (!resp || !resp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
+    const file = await resp.json();
 
-  // Create in quotes/
-  const createBody = { message: `[auto] Restore: ${name}`, content: file.content };
-  const createResp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, createBody);
-  if (!createResp || !createResp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
+    // Create in quotes/
+    const createBody = { message: `[auto] Restore: ${name}`, content: file.content };
+    const createResp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, createBody);
+    if (!createResp || !createResp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
 
-  // Delete from archive/
-  const delBody = { message: `[auto] Restore: ${name}`, sha: file.sha };
-  await libApi('DELETE', `${LIB_ARCHIVE_PATH}/${filename}`, delBody);
+    // Delete from archive/
+    const delBody = { message: `[auto] Restore: ${name}`, sha: file.sha };
+    const delResp = await libApi('DELETE', `${LIB_ARCHIVE_PATH}/${filename}`, delBody);
+    if (!delResp || !delResp.ok) { showToast('Restored but failed to remove from archive \u2014 you may see a duplicate'); }
 
-  // Invalidate both caches
-  try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
+    // Invalidate both caches
+    try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
 
-  showToast('Restored: ' + name);
-  track('library_restore', { partner: name });
+    showToast('Restored: ' + name);
+    track('library_restore', { partner: name });
+  } finally { libBusy = false; }
   await renderArchivedList();
 }
 
@@ -2735,7 +2764,8 @@ async function archiveQuote(filename, sha) {
   const delResp = await libApi('DELETE', `${LIB_QUOTES_PATH}/${filename}`, delBody);
   if (!delResp || !delResp.ok) { showToast('Archived but failed to remove original'); }
 
-  try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
+  // Invalidate both caches
+  try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
   return true;
 }
 
@@ -2860,15 +2890,18 @@ async function loadFromLibrary(filename, basePath) {
 }
 
 async function archiveFromLibrary(filename, sha, name) {
+  if (libBusy) return;
   if (!confirm('Archive "' + name + '"? It will be moved to the Archived tab.')) return;
+  libBusy = true;
   const body = document.getElementById('libraryBody');
   body.innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
-  const ok = await archiveQuote(filename, sha);
-  if (ok) {
-    try { sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
-    showToast('Archived: ' + name);
-    track('library_archive', { partner: name });
-  }
+  try {
+    const ok = await archiveQuote(filename, sha);
+    if (ok) {
+      showToast('Archived: ' + name);
+      track('library_archive', { partner: name });
+    }
+  } finally { libBusy = false; }
   await renderLibraryList();
 }
 
@@ -2903,12 +2936,19 @@ async function saveCurrentToLibrary() {
   btn.textContent = '\uD83D\uDCBE Save to Library';
 
   if (result) {
-    // Store library metadata on the active tab
+    // Store library metadata on the active tab (works for both success and conflict recovery)
     if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; }
-    showToast('Saved to library: ' + name);
-    track('library_save', { partner: name, updated: !!existingFile });
+    if (!result.conflict) {
+      showToast('Saved to library: ' + name);
+      track('library_save', { partner: name, updated: !!existingFile });
+    }
   }
 }
+
+// ─── Keyboard Shortcuts ──────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeLibrary(); closeTokenPrompt(); }
+});
 
 // ─── Init ──────────────────────────────────────────────────────────────────────
 initTabs();
