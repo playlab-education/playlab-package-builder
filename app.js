@@ -2409,7 +2409,9 @@ function deleteTab(tabId) {
     (tab.state.licenses && tab.state.licenses.length > 0) ||
     (tab.state.partner && tab.state.partner.trim())
   );
-  if (hasContent && !confirm(`Delete tab "${tab.name}"? This cannot be undone.`)) return;
+  const isSaved = !!tab._libFile;
+  if (hasContent && !isSaved && !confirm(`Close tab "${tab.name}"? This quote is NOT saved to the Library and will be lost.`)) return;
+  if (hasContent && isSaved && !confirm(`Close tab "${tab.name}"? You can reload it anytime from the Library.`)) return;
 
   const idx = builderTabs.findIndex(t => t.id === tabId);
   builderTabs.splice(idx, 1);
