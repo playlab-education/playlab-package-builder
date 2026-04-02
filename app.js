@@ -2888,6 +2888,7 @@ async function archiveFromLibrary(filename, name) {
   try {
     const ok = await archiveQuote(filename);
     if (ok) { showToast('Archived: ' + name); track('library_archive', { partner: name }); }
+    else { showToast('Archive failed \u2014 try again'); }
   } finally { libBusy = false; }
   await renderLibraryList();
 }
@@ -2900,6 +2901,7 @@ async function restoreFromArchive(filename, name) {
   try {
     const ok = await restoreQuote(filename);
     if (ok) { showToast('Restored: ' + name); track('library_restore', { partner: name }); }
+    else { showToast('Restore failed \u2014 try again'); }
   } finally { libBusy = false; }
   await renderArchivedList();
 }
