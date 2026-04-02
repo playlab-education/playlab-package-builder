@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260402">
+  <link rel="stylesheet" href="style.css?v=20260402b">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -556,6 +556,10 @@
   <div class="library-modal">
     <div class="library-header">
       <h2>Quote Library</h2>
+      <div class="library-tabs">
+        <button class="library-tab active" id="libTabActive" onclick="switchLibraryTab('active')">Active</button>
+        <button class="library-tab" id="libTabArchived" onclick="switchLibraryTab('archived')">Archived</button>
+      </div>
       <button class="library-close" onclick="closeLibrary()">&times;</button>
     </div>
     <div class="library-body" id="libraryBody">
@@ -585,7 +589,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260402"></script>
+<script src="app.js?v=20260402b"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

@@ -2640,7 +2640,11 @@ async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
 
 // ─── Library: Load ───────────────────────────────────────────────────────────
 async function loadQuoteFromLibrary(filename) {
-  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
+  return loadQuoteFromPath(filename, LIB_QUOTES_PATH);
+}
+
+async function loadQuoteFromPath(filename, basePath) {
+  const resp = await libApi('GET', `${basePath}/${filename}`);
   if (!resp || !resp.ok) { showToast('Failed to load quote'); return null; }
   const file = await resp.json();
   try {
@@ -2648,6 +2652,67 @@ async function loadQuoteFromLibrary(filename) {
     if (!validateQuoteData(content)) { showToast('Quote file is corrupted'); return null; }
     return { ...content, _sha: file.sha, _filename: filename };
   } catch { showToast('Failed to parse quote'); return null; }
+}
+
+// ─── Library: List Archived ──────────────────────────────────────────────────
+async function listArchivedQuotes(forceRefresh) {
+  const cacheKey = LIB_CACHE_KEY + '_archive';
+  if (!forceRefresh) {
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        const c = JSON.parse(cached);
+        if (Date.now() - c.ts < LIB_CACHE_TTL) return c.data;
+      }
+    } catch {}
+  }
+  const resp = await libApi('GET', LIB_ARCHIVE_PATH);
+  if (!resp) return null;
+  if (resp.status === 404) return [];
+  if (!resp.ok) return null;
+  const files = await resp.json();
+  const quotes = files.filter(f => f.name.endsWith('.json') && f.name !== '.gitkeep');
+  const results = await Promise.all(quotes.map(async f => {
+    try {
+      const r = await libApi('GET', `${LIB_ARCHIVE_PATH}/${f.name}`);
+      if (!r || !r.ok) return null;
+      const file = await r.json();
+      const content = JSON.parse(atob(file.content));
+      if (!validateQuoteData(content)) return null;
+      return { filename: f.name, sha: file.sha, partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+    } catch { return null; }
+  }));
+  const data = results.filter(Boolean).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+  try { sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch {}
+  return data;
+}
+
+// ─── Library: Restore from Archive ───────────────────────────────────────────
+async function restoreFromArchive(filename, sha, name) {
+  if (!confirm('Restore "' + name + '" to the active library?')) return;
+  const body = document.getElementById('libraryBody');
+  body.innerHTML = '<div class="library-loading">Restoring&hellip;</div>';
+
+  // Read from archive
+  const resp = await libApi('GET', `${LIB_ARCHIVE_PATH}/${filename}`);
+  if (!resp || !resp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
+  const file = await resp.json();
+
+  // Create in quotes/
+  const createBody = { message: `[auto] Restore: ${name}`, content: file.content };
+  const createResp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, createBody);
+  if (!createResp || !createResp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
+
+  // Delete from archive/
+  const delBody = { message: `[auto] Restore: ${name}`, sha: file.sha };
+  await libApi('DELETE', `${LIB_ARCHIVE_PATH}/${filename}`, delBody);
+
+  // Invalidate both caches
+  try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
+
+  showToast('Restored: ' + name);
+  track('library_restore', { partner: name });
+  await renderArchivedList();
 }
 
 // ─── Library: Archive ────────────────────────────────────────────────────────
@@ -2675,11 +2740,15 @@ async function archiveQuote(filename, sha) {
 }
 
 // ─── Library UI ──────────────────────────────────────────────────────────────
+let libraryActiveTab = 'active'; // 'active' or 'archived'
+
 function openLibrary() {
   if (!getLibToken()) {
     promptLibToken(() => openLibrary());
     return;
   }
+  libraryActiveTab = 'active';
+  updateLibraryTabs();
   document.getElementById('libraryOverlay').classList.add('open');
   document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Loading saved quotes&hellip;</div>';
   renderLibraryList();
@@ -2687,6 +2756,21 @@ function openLibrary() {
 
 function closeLibrary() {
   document.getElementById('libraryOverlay').classList.remove('open');
+}
+
+function switchLibraryTab(tab) {
+  libraryActiveTab = tab;
+  updateLibraryTabs();
+  document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Loading&hellip;</div>';
+  if (tab === 'active') renderLibraryList();
+  else renderArchivedList();
+}
+
+function updateLibraryTabs() {
+  const activeBtn = document.getElementById('libTabActive');
+  const archivedBtn = document.getElementById('libTabArchived');
+  if (activeBtn) activeBtn.classList.toggle('active', libraryActiveTab === 'active');
+  if (archivedBtn) archivedBtn.classList.toggle('active', libraryActiveTab === 'archived');
 }
 
 async function renderLibraryList() {
@@ -2700,27 +2784,61 @@ async function renderLibraryList() {
     body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>';
     return;
   }
+  body.innerHTML = renderQuoteCards(quotes, 'active');
+}
+
+async function renderArchivedList() {
+  const body = document.getElementById('libraryBody');
+  const quotes = await listArchivedQuotes(true);
+  if (quotes === null) {
+    body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>';
+    return;
+  }
+  if (quotes.length === 0) {
+    body.innerHTML = '<div class="library-empty">No archived quotes.</div>';
+    return;
+  }
+  body.innerHTML = renderQuoteCards(quotes, 'archived');
+}
+
+function renderQuoteCards(quotes, mode) {
   let html = '';
   for (const q of quotes) {
     const date = new Date(q.savedAt);
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    html += `<div class="library-card" ondblclick="loadFromLibrary('${escHtml(q.filename)}')">
-      <div class="library-card-info">
-        <div class="library-card-name">${escHtml(q.partnerName)}</div>
-        <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
-      </div>
-      <div class="library-card-actions">
-        <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escHtml(q.filename)}')">Load</button>
-        <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${escHtml(q.filename)}','${q.sha}','${escHtml(q.partnerName)}')">Archive</button>
-      </div>
-    </div>`;
+    const escapedFilename = escHtml(q.filename);
+    const escapedName = escHtml(q.partnerName);
+    if (mode === 'active') {
+      html += `<div class="library-card" ondblclick="loadFromLibrary('${escapedFilename}','${LIB_QUOTES_PATH}')">
+        <div class="library-card-info">
+          <div class="library-card-name">${escapedName}</div>
+          <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
+        </div>
+        <div class="library-card-actions">
+          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escapedFilename}','${LIB_QUOTES_PATH}')">Load</button>
+          <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${escapedFilename}','${q.sha}','${escapedName}')">Archive</button>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="library-card" ondblclick="loadFromLibrary('${escapedFilename}','${LIB_ARCHIVE_PATH}')">
+        <div class="library-card-info">
+          <div class="library-card-name">${escapedName}</div>
+          <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
+        </div>
+        <div class="library-card-actions">
+          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escapedFilename}','${LIB_ARCHIVE_PATH}')">Load</button>
+          <button class="library-card-btn" onclick="event.stopPropagation();restoreFromArchive('${escapedFilename}','${q.sha}','${escapedName}')" style="color:var(--emerald-600)">Restore</button>
+        </div>
+      </div>`;
+    }
   }
-  body.innerHTML = html;
+  return html;
 }
 
-async function loadFromLibrary(filename) {
-  const data = await loadQuoteFromLibrary(filename);
+async function loadFromLibrary(filename, basePath) {
+  const path = basePath || LIB_QUOTES_PATH;
+  const data = await loadQuoteFromPath(filename, path);
   if (!data) return;
   closeLibrary();
   // Create a new tab with this quote
@@ -2742,11 +2860,12 @@ async function loadFromLibrary(filename) {
 }
 
 async function archiveFromLibrary(filename, sha, name) {
-  if (!confirm('Archive "' + name + '"? It will be moved out of the active library.')) return;
+  if (!confirm('Archive "' + name + '"? It will be moved to the Archived tab.')) return;
   const body = document.getElementById('libraryBody');
   body.innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
   const ok = await archiveQuote(filename, sha);
   if (ok) {
+    try { sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
     showToast('Archived: ' + name);
     track('library_archive', { partner: name });
   }
