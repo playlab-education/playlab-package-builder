@@ -560,6 +560,7 @@
         <button class="library-tab active" id="libTabActive" onclick="switchLibraryTab('active')">Active</button>
         <button class="library-tab" id="libTabArchived" onclick="switchLibraryTab('archived')">Archived</button>
       </div>
+      <button class="library-rebuild" onclick="rebuildIndex().then(()=>{if(libraryActiveTab==='active')renderLibraryList();else renderArchivedList();})" title="Rebuild index from files (use if quotes are missing)">&#x1F527; Repair</button>
       <button class="library-close" onclick="closeLibrary()">&times;</button>
     </div>
     <div class="library-body" id="libraryBody">
@@ -589,7 +590,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260402d"></script>
+<script src="app.js?v=20260402e"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

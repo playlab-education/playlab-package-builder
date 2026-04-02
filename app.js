@@ -2489,16 +2489,18 @@ function initTabs() {
 }
 
 // ─── Quote Library (GitHub Backend) ──────────────────────────────────────────
+// Single directory (quotes/) with status field in index. No file moves for archive/restore.
 const LIB_OWNER = 'nkelloggplaylab';
 const LIB_REPO = 'playlab-quotes';
 const LIB_QUOTES_PATH = 'quotes';
-const LIB_ARCHIVE_PATH = 'archive';
 const LIB_TOKEN_KEY = 'playlab_github_token';
+const LIB_USERNAME_KEY = 'playlab_github_user';
 const LIB_DRAFT_KEY = 'playlab_library_draft';
 const LIB_CACHE_KEY = 'playlab_library_cache';
 const LIB_CACHE_TTL = 60000; // 60s
 
 function getLibToken() { return localStorage.getItem(LIB_TOKEN_KEY); }
+function getLibUsername() { return localStorage.getItem(LIB_USERNAME_KEY) || 'Team'; }
 
 function promptLibToken(callback) {
   document.getElementById('tokenError').classList.remove('show');
@@ -2517,26 +2519,24 @@ async function submitGithubToken() {
   const input = document.getElementById('githubTokenInput');
   const token = input.value.trim();
   if (!token) return;
-  // Validate token by checking repo access first, then contents
   try {
+    // Validate: check repo access
     const repoResp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}`, {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if (!repoResp.ok) {
-      document.getElementById('tokenError').classList.add('show');
-      return;
-    }
-    const contentsResp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}/contents/${LIB_QUOTES_PATH}`, {
+    if (!repoResp.ok) { document.getElementById('tokenError').classList.add('show'); return; }
+    // Fetch GitHub username for attribution
+    const userResp = await fetch('https://api.github.com/user', {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if (contentsResp.ok || contentsResp.status === 404) {
-      localStorage.setItem(LIB_TOKEN_KEY, token);
-      closeTokenPrompt();
-      if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
-      return;
+    if (userResp.ok) {
+      const user = await userResp.json();
+      localStorage.setItem(LIB_USERNAME_KEY, user.name || user.login || 'Team');
     }
-  } catch {}
-  document.getElementById('tokenError').classList.add('show');
+    localStorage.setItem(LIB_TOKEN_KEY, token);
+    closeTokenPrompt();
+    if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
+  } catch { document.getElementById('tokenError').classList.add('show'); }
 }
 
 async function libApi(method, path, body, retries) {
@@ -2582,16 +2582,16 @@ function decodeBase64Content(b64) {
   return JSON.parse(decodeURIComponent(escape(atob(clean))));
 }
 
-// ─── Library: Index Management ───────────────────────────────────────────────
-// Index files (quotes/index.json, archive/index.json) store metadata for all
-// quotes in that directory. This reduces list operations from N+1 to 1 API call.
-
 function encodeJsonContent(obj) {
   return btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
 }
 
-async function readIndex(basePath) {
-  const resp = await libApi('GET', `${basePath}/index.json`);
+// ─── Library: Index Management ───────────────────────────────────────────────
+// Single index.json in quotes/ with status field per entry ('active'|'archived').
+// Index entry: { partnerName, savedAt, savedBy, status }
+
+async function readIndex() {
+  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/index.json`);
   if (!resp || resp.status === 404) return { entries: {}, sha: null };
   if (!resp.ok) return null;
   try {
@@ -2601,65 +2601,71 @@ async function readIndex(basePath) {
   } catch { return { entries: {}, sha: null }; }
 }
 
-async function writeIndex(basePath, entries, existingSha) {
-  const body = {
-    message: '[auto] Update index',
-    content: encodeJsonContent(entries)
-  };
-  if (existingSha) body.sha = existingSha;
-  const resp = await libApi('PUT', `${basePath}/index.json`, body);
+async function patchIndex(patchFn) {
+  // Read-patch-write with 409 retry. patchFn mutates entries in place.
+  const idx = await readIndex();
+  if (!idx) return false;
+  patchFn(idx.entries);
+  const body = { message: '[auto] Update index', content: encodeJsonContent(idx.entries) };
+  if (idx.sha) body.sha = idx.sha;
+  const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, body);
+  if (resp && resp.ok) return true;
   if (resp && resp.status === 409) {
-    // Index was modified concurrently — re-read, merge, retry once
-    const fresh = await readIndex(basePath);
+    // Re-read fresh, apply patch again, retry
+    const fresh = await readIndex();
     if (!fresh) return false;
-    const merged = { ...fresh.entries, ...entries };
-    const retryBody = { message: '[auto] Update index (merged)', content: encodeJsonContent(merged) };
+    patchFn(fresh.entries);
+    const retryBody = { message: '[auto] Update index (retry)', content: encodeJsonContent(fresh.entries) };
     if (fresh.sha) retryBody.sha = fresh.sha;
-    const retryResp = await libApi('PUT', `${basePath}/index.json`, retryBody);
+    const retryResp = await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, retryBody);
     return retryResp && retryResp.ok;
   }
-  return resp && resp.ok;
+  return false;
 }
 
-async function removeFromIndex(basePath, filename) {
-  const idx = await readIndex(basePath);
-  if (!idx) return false;
-  delete idx.entries[filename];
-  return writeIndex(basePath, idx.entries, idx.sha);
-}
-
-async function addToIndex(basePath, filename, meta) {
-  const idx = await readIndex(basePath);
-  if (!idx) return false;
-  idx.entries[filename] = meta;
-  return writeIndex(basePath, idx.entries, idx.sha);
-}
-
-// Rebuild index by scanning all files (fallback if index is missing/corrupted)
-async function rebuildIndex(basePath) {
-  const resp = await libApi('GET', basePath);
-  if (!resp || !resp.ok) return null;
+// Rebuild index by scanning all files
+async function rebuildIndex() {
+  const body = document.getElementById('libraryBody');
+  if (body) body.innerHTML = '<div class="library-loading">Rebuilding index&hellip;</div>';
+  const resp = await libApi('GET', LIB_QUOTES_PATH);
+  if (!resp || !resp.ok) { showToast('Rebuild failed \u2014 could not list files'); return null; }
   const files = await resp.json();
   const jsonFiles = files.filter(f => f.name.endsWith('.json') && f.name !== 'index.json' && f.name !== '.gitkeep');
   const entries = {};
-  const results = await Promise.all(jsonFiles.map(async f => {
+  await Promise.all(jsonFiles.map(async f => {
     try {
-      const r = await libApi('GET', `${basePath}/${f.name}`);
-      if (!r || !r.ok) return null;
+      const r = await libApi('GET', `${LIB_QUOTES_PATH}/${f.name}`);
+      if (!r || !r.ok) return;
       const file = await r.json();
       const content = decodeBase64Content(file.content);
-      if (!validateQuoteData(content)) return null;
-      entries[f.name] = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
+      if (!validateQuoteData(content)) return;
+      // Preserve existing status if present, default to 'active'
+      entries[f.name] = {
+        partnerName: content.partnerName,
+        savedAt: content.savedAt,
+        savedBy: content.savedBy || 'Team',
+        status: content.status || 'active'
+      };
     } catch {}
   }));
-  // Check if index.json exists to get its SHA
-  const existingIdx = await readIndex(basePath);
-  await writeIndex(basePath, entries, existingIdx?.sha || null);
+  const existingIdx = await readIndex();
+  // Merge: keep status from existing index where available
+  if (existingIdx && existingIdx.entries) {
+    for (const [k, v] of Object.entries(existingIdx.entries)) {
+      if (entries[k] && v.status) entries[k].status = v.status;
+    }
+  }
+  const writeBody = { message: '[auto] Rebuild index', content: encodeJsonContent(entries) };
+  if (existingIdx?.sha) writeBody.sha = existingIdx.sha;
+  await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, writeBody);
+  showToast('Index rebuilt \u2014 found ' + Object.keys(entries).length + ' quotes');
+  try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
   return entries;
 }
 
 // ─── Library: List ───────────────────────────────────────────────────────────
-async function listFromIndex(basePath, cacheKey, forceRefresh) {
+async function listQuotesByStatus(status, forceRefresh) {
+  const cacheKey = LIB_CACHE_KEY + '_' + status;
   if (!forceRefresh) {
     try {
       const cached = sessionStorage.getItem(cacheKey);
@@ -2669,31 +2675,39 @@ async function listFromIndex(basePath, cacheKey, forceRefresh) {
       }
     } catch {}
   }
-  let idx = await readIndex(basePath);
+  let idx = await readIndex();
   if (!idx) return null;
   let entries = idx.entries;
-  // If index is empty but directory might have files, rebuild
+  // If index is empty and has no SHA, try rebuilding
   if (Object.keys(entries).length === 0 && !idx.sha) {
-    const rebuilt = await rebuildIndex(basePath);
+    const rebuilt = await rebuildIndex();
     if (rebuilt) entries = rebuilt;
   }
-  const data = Object.entries(entries).map(([filename, meta]) => ({
-    filename, partnerName: meta.partnerName, savedAt: meta.savedAt, savedBy: meta.savedBy || 'Team'
-  })).sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+  const data = Object.entries(entries)
+    .filter(([, meta]) => (meta.status || 'active') === status)
+    .map(([filename, meta]) => ({
+      filename, partnerName: meta.partnerName, savedAt: meta.savedAt, savedBy: meta.savedBy || 'Team'
+    }))
+    .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
   try { sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch {}
   return data;
 }
 
 async function listLibraryQuotes(forceRefresh) {
-  return listFromIndex(LIB_QUOTES_PATH, LIB_CACHE_KEY, forceRefresh);
+  return listQuotesByStatus('active', forceRefresh);
+}
+
+async function listArchivedQuotes(forceRefresh) {
+  return listQuotesByStatus('archived', forceRefresh);
 }
 
 // ─── Library: Save ───────────────────────────────────────────────────────────
 async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
+  const savedBy = getLibUsername();
   const metadata = {
     partnerName: name,
     savedAt: new Date().toISOString(),
-    savedBy: 'Team',
+    savedBy,
     quoteState: state
   };
   // Draft to localStorage first
@@ -2702,22 +2716,22 @@ async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
   const filename = existingFilename || (generateQuoteId() + '.json');
   const body = {
     message: `[auto] Save quote: ${name}`,
-    content: btoa(unescape(encodeURIComponent(JSON.stringify(metadata, null, 2))))
+    content: encodeJsonContent(metadata)
   };
   if (existingSha) body.sha = existingSha;
 
   const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, body);
   if (resp && resp.ok) {
     try { localStorage.removeItem(LIB_DRAFT_KEY); } catch {}
-    // Update index
-    await addToIndex(LIB_QUOTES_PATH, filename, { partnerName: name, savedAt: metadata.savedAt, savedBy: metadata.savedBy });
-    // Invalidate cache
-    try { sessionStorage.removeItem(LIB_CACHE_KEY); } catch {}
+    // Update index (patch — only touches this entry)
+    await patchIndex(entries => {
+      entries[filename] = { partnerName: name, savedAt: metadata.savedAt, savedBy, status: 'active' };
+    });
+    try { sessionStorage.removeItem(LIB_CACHE_KEY + '_active'); } catch {}
     const result = await resp.json();
     return { filename, sha: result.content.sha };
   }
   if (resp && resp.status === 409) {
-    // Re-fetch to get current SHA so next save attempt works
     try {
       const fresh = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
       if (fresh && fresh.ok) {
@@ -2735,11 +2749,7 @@ async function saveQuoteToLibrary(name, state, existingFilename, existingSha) {
 
 // ─── Library: Load ───────────────────────────────────────────────────────────
 async function loadQuoteFromLibrary(filename) {
-  return loadQuoteFromPath(filename, LIB_QUOTES_PATH);
-}
-
-async function loadQuoteFromPath(filename, basePath) {
-  const resp = await libApi('GET', `${basePath}/${filename}`);
+  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
   if (!resp || !resp.ok) { showToast('Failed to load quote'); return null; }
   const file = await resp.json();
   try {
@@ -2749,101 +2759,32 @@ async function loadQuoteFromPath(filename, basePath) {
   } catch { showToast('Failed to parse quote'); return null; }
 }
 
-// ─── Library: List Archived ──────────────────────────────────────────────────
-async function listArchivedQuotes(forceRefresh) {
-  return listFromIndex(LIB_ARCHIVE_PATH, LIB_CACHE_KEY + '_archive', forceRefresh);
-}
-
-// ─── Library: Restore from Archive ───────────────────────────────────────────
+// ─── Library: Archive / Restore (status toggle — no file moves) ─────────────
 let libBusy = false;
 
-async function restoreFromArchive(filename, sha, name) {
-  if (libBusy) return;
-  if (!confirm('Restore "' + name + '" to the active library?')) return;
-  libBusy = true;
-  const body = document.getElementById('libraryBody');
-  body.innerHTML = '<div class="library-loading">Restoring&hellip;</div>';
-
-  try {
-    // Read from archive
-    const resp = await libApi('GET', `${LIB_ARCHIVE_PATH}/${filename}`);
-    if (!resp || !resp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
-    const file = await resp.json();
-
-    // Extract metadata for index
-    let meta = {};
-    try {
-      const content = decodeBase64Content(file.content);
-      meta = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
-    } catch {}
-
-    // Create in quotes/
-    const createBody = { message: `[auto] Restore: ${name}`, content: file.content };
-    const createResp = await libApi('PUT', `${LIB_QUOTES_PATH}/${filename}`, createBody);
-    if (!createResp || !createResp.ok) { showToast('Failed to restore'); await renderArchivedList(); return; }
-
-    // Delete from archive/
-    const delBody = { message: `[auto] Restore: ${name}`, sha: file.sha };
-    const delResp = await libApi('DELETE', `${LIB_ARCHIVE_PATH}/${filename}`, delBody);
-    if (!delResp || !delResp.ok) { showToast('Restored but failed to remove from archive \u2014 you may see a duplicate'); }
-
-    // Update both indexes
-    await addToIndex(LIB_QUOTES_PATH, filename, meta);
-    await removeFromIndex(LIB_ARCHIVE_PATH, filename);
-
-    // Invalidate both caches
-    try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
-
-    showToast('Restored: ' + name);
-    track('library_restore', { partner: name });
-  } finally { libBusy = false; }
-  await renderArchivedList();
+async function archiveQuote(filename) {
+  const ok = await patchIndex(entries => {
+    if (entries[filename]) entries[filename].status = 'archived';
+  });
+  if (!ok) { showToast('Failed to archive'); return false; }
+  try { sessionStorage.removeItem(LIB_CACHE_KEY + '_active'); sessionStorage.removeItem(LIB_CACHE_KEY + '_archived'); } catch {}
+  return true;
 }
 
-// ─── Library: Archive ────────────────────────────────────────────────────────
-async function archiveQuote(filename, sha) {
-  // Read the file first
-  const resp = await libApi('GET', `${LIB_QUOTES_PATH}/${filename}`);
-  if (!resp || !resp.ok) { showToast('Failed to archive'); return false; }
-  const file = await resp.json();
-
-  // Extract metadata for index
-  let meta = {};
-  try {
-    const content = decodeBase64Content(file.content);
-    meta = { partnerName: content.partnerName, savedAt: content.savedAt, savedBy: content.savedBy || 'Team' };
-  } catch {}
-
-  // Create in archive/
-  const archiveBody = {
-    message: `[auto] Archive: ${filename}`,
-    content: file.content
-  };
-  const archResp = await libApi('PUT', `${LIB_ARCHIVE_PATH}/${filename}`, archiveBody);
-  if (!archResp || !archResp.ok) { showToast('Failed to archive'); return false; }
-
-  // Delete from quotes/
-  const delBody = { message: `[auto] Archive: ${filename}`, sha: file.sha };
-  const delResp = await libApi('DELETE', `${LIB_QUOTES_PATH}/${filename}`, delBody);
-  if (!delResp || !delResp.ok) { showToast('Archived but failed to remove original'); }
-
-  // Update both indexes
-  await addToIndex(LIB_ARCHIVE_PATH, filename, meta);
-  await removeFromIndex(LIB_QUOTES_PATH, filename);
-
-  // Invalidate both caches
-  try { sessionStorage.removeItem(LIB_CACHE_KEY); sessionStorage.removeItem(LIB_CACHE_KEY + '_archive'); } catch {}
+async function restoreQuote(filename) {
+  const ok = await patchIndex(entries => {
+    if (entries[filename]) entries[filename].status = 'active';
+  });
+  if (!ok) { showToast('Failed to restore'); return false; }
+  try { sessionStorage.removeItem(LIB_CACHE_KEY + '_active'); sessionStorage.removeItem(LIB_CACHE_KEY + '_archived'); } catch {}
   return true;
 }
 
 // ─── Library UI ──────────────────────────────────────────────────────────────
-let libraryActiveTab = 'active'; // 'active' or 'archived'
+let libraryActiveTab = 'active';
 
 function openLibrary() {
-  if (!getLibToken()) {
-    promptLibToken(() => openLibrary());
-    return;
-  }
+  if (!getLibToken()) { promptLibToken(() => openLibrary()); return; }
   libraryActiveTab = 'active';
   updateLibraryTabs();
   document.getElementById('libraryOverlay').classList.add('open');
@@ -2851,9 +2792,7 @@ function openLibrary() {
   renderLibraryList();
 }
 
-function closeLibrary() {
-  document.getElementById('libraryOverlay').classList.remove('open');
-}
+function closeLibrary() { document.getElementById('libraryOverlay').classList.remove('open'); }
 
 function switchLibraryTab(tab) {
   libraryActiveTab = tab;
@@ -2864,37 +2803,25 @@ function switchLibraryTab(tab) {
 }
 
 function updateLibraryTabs() {
-  const activeBtn = document.getElementById('libTabActive');
-  const archivedBtn = document.getElementById('libTabArchived');
-  if (activeBtn) activeBtn.classList.toggle('active', libraryActiveTab === 'active');
-  if (archivedBtn) archivedBtn.classList.toggle('active', libraryActiveTab === 'archived');
+  const a = document.getElementById('libTabActive');
+  const b = document.getElementById('libTabArchived');
+  if (a) a.classList.toggle('active', libraryActiveTab === 'active');
+  if (b) b.classList.toggle('active', libraryActiveTab === 'archived');
 }
 
 async function renderLibraryList() {
   const body = document.getElementById('libraryBody');
   const quotes = await listLibraryQuotes(true);
-  if (quotes === null) {
-    body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>';
-    return;
-  }
-  if (quotes.length === 0) {
-    body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>';
-    return;
-  }
+  if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>'; return; }
+  if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>'; return; }
   body.innerHTML = renderQuoteCards(quotes, 'active');
 }
 
 async function renderArchivedList() {
   const body = document.getElementById('libraryBody');
   const quotes = await listArchivedQuotes(true);
-  if (quotes === null) {
-    body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>';
-    return;
-  }
-  if (quotes.length === 0) {
-    body.innerHTML = '<div class="library-empty">No archived quotes.</div>';
-    return;
-  }
+  if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>'; return; }
+  if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No archived quotes.</div>'; return; }
   body.innerHTML = renderQuoteCards(quotes, 'archived');
 }
 
@@ -2904,28 +2831,28 @@ function renderQuoteCards(quotes, mode) {
     const date = new Date(q.savedAt);
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    const escapedFilename = escHtml(q.filename);
-    const escapedName = escHtml(q.partnerName);
+    const ef = escHtml(q.filename);
+    const en = escHtml(q.partnerName);
     if (mode === 'active') {
-      html += `<div class="library-card" ondblclick="loadFromLibrary('${escapedFilename}','${LIB_QUOTES_PATH}')">
+      html += `<div class="library-card" ondblclick="loadFromLibrary('${ef}')">
         <div class="library-card-info">
-          <div class="library-card-name">${escapedName}</div>
+          <div class="library-card-name">${en}</div>
           <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
         </div>
         <div class="library-card-actions">
-          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escapedFilename}','${LIB_QUOTES_PATH}')">Load</button>
-          <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${escapedFilename}','${q.sha}','${escapedName}')">Archive</button>
+          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${ef}')">Load</button>
+          <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${ef}','${en}')">Archive</button>
         </div>
       </div>`;
     } else {
-      html += `<div class="library-card" ondblclick="loadFromLibrary('${escapedFilename}','${LIB_ARCHIVE_PATH}')">
+      html += `<div class="library-card" ondblclick="loadFromLibrary('${ef}')">
         <div class="library-card-info">
-          <div class="library-card-name">${escapedName}</div>
+          <div class="library-card-name">${en}</div>
           <div class="library-card-meta">${dateStr} at ${timeStr} &middot; ${escHtml(q.savedBy)}</div>
         </div>
         <div class="library-card-actions">
-          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${escapedFilename}','${LIB_ARCHIVE_PATH}')">Load</button>
-          <button class="library-card-btn" onclick="event.stopPropagation();restoreFromArchive('${escapedFilename}','${q.sha}','${escapedName}')" style="color:var(--emerald-600)">Restore</button>
+          <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${ef}')">Load</button>
+          <button class="library-card-btn" onclick="event.stopPropagation();restoreFromArchive('${ef}','${en}')" style="color:var(--emerald-600)">Restore</button>
         </div>
       </div>`;
     }
@@ -2933,15 +2860,12 @@ function renderQuoteCards(quotes, mode) {
   return html;
 }
 
-async function loadFromLibrary(filename, basePath) {
-  const path = basePath || LIB_QUOTES_PATH;
-  const data = await loadQuoteFromPath(filename, path);
+async function loadFromLibrary(filename) {
+  const data = await loadQuoteFromLibrary(filename);
   if (!data) return;
   closeLibrary();
-  // Create a new tab with this quote
   saveActiveTab();
   const newTab = { id: generateTabId(), name: data.partnerName || 'Loaded Quote', state: data.quoteState };
-  // Store library metadata on the tab for "Update" support
   newTab._libFile = data._filename;
   newTab._libSha = data._sha;
   builderTabs.push(newTab);
@@ -2956,39 +2880,39 @@ async function loadFromLibrary(filename, basePath) {
   track('library_load', { partner: data.partnerName });
 }
 
-async function archiveFromLibrary(filename, sha, name) {
+async function archiveFromLibrary(filename, name) {
   if (libBusy) return;
   if (!confirm('Archive "' + name + '"? It will be moved to the Archived tab.')) return;
   libBusy = true;
-  const body = document.getElementById('libraryBody');
-  body.innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
+  document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
   try {
-    const ok = await archiveQuote(filename, sha);
-    if (ok) {
-      showToast('Archived: ' + name);
-      track('library_archive', { partner: name });
-    }
+    const ok = await archiveQuote(filename);
+    if (ok) { showToast('Archived: ' + name); track('library_archive', { partner: name }); }
   } finally { libBusy = false; }
   await renderLibraryList();
 }
 
+async function restoreFromArchive(filename, name) {
+  if (libBusy) return;
+  if (!confirm('Restore "' + name + '" to the active library?')) return;
+  libBusy = true;
+  document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Restoring&hellip;</div>';
+  try {
+    const ok = await restoreQuote(filename);
+    if (ok) { showToast('Restored: ' + name); track('library_restore', { partner: name }); }
+  } finally { libBusy = false; }
+  await renderArchivedList();
+}
+
 async function saveCurrentToLibrary() {
-  if (!getLibToken()) {
-    promptLibToken(() => saveCurrentToLibrary());
-    return;
-  }
+  if (!getLibToken()) { promptLibToken(() => saveCurrentToLibrary()); return; }
   const name = document.getElementById('partnerName').value.trim();
-  if (!name) {
-    document.getElementById('partnerName').focus();
-    showToast('Enter a partner name before saving');
-    return;
-  }
+  if (!name) { document.getElementById('partnerName').focus(); showToast('Enter a partner name before saving'); return; }
   const state = getTabState();
   const btn = document.getElementById('saveToLibraryBtn');
   btn.disabled = true;
   btn.textContent = 'Saving\u2026';
 
-  // Check if this tab was loaded from library (enable update)
   const activeTab = builderTabs.find(t => t.id === activeTabId);
   let existingFile = activeTab?._libFile || null;
   let existingSha = activeTab?._libSha || null;
@@ -3003,7 +2927,6 @@ async function saveCurrentToLibrary() {
   btn.textContent = '\uD83D\uDCBE Save to Library';
 
   if (result) {
-    // Store library metadata on the active tab (works for both success and conflict recovery)
     if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; }
     if (!result.conflict) {
       showToast('Saved to library: ' + name);
