@@ -1867,10 +1867,11 @@ function switchMainTab(tab) {
     welcome: document.getElementById('welcomeView'),
     builder: document.querySelector('.builder'),
     pricing: document.getElementById('pricingView'),
-    resources: document.getElementById('resourcesView')
+    resources: document.getElementById('resourcesView'),
+    skills: document.getElementById('skillsView')
   };
   Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
-  const tabIndex = { welcome: 0, builder: 1, pricing: 2, resources: 3 };
+  const tabIndex = { welcome: 0, builder: 1, pricing: 2, resources: 3, skills: 4 };
   if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
   track('tab_view', { tab_name: tab });
   if (tab === 'builder') {
@@ -1878,6 +1879,19 @@ function switchMainTab(tab) {
   } else if (views[tab]) {
     views[tab].style.display = '';
   }
+}
+
+// ─── Cowork Skills Search ────────────────────────────────────────────────────
+function filterSkills(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.skill-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = q && !text.includes(q) ? 'none' : '';
+  });
+  document.querySelectorAll('.skills-category').forEach(cat => {
+    const visible = cat.querySelectorAll('.skill-card:not([style*="display: none"])');
+    cat.style.display = visible.length === 0 ? 'none' : '';
+  });
 }
 
 // ─── Render All ──────────────────────────────────────────────────────────────

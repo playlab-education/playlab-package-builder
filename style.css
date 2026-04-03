@@ -377,6 +377,23 @@
     .btn-library-save:hover { background:var(--sky-600); }
     .btn-library-save:disabled { opacity:.5; cursor:not-allowed; }
 
+    /* Cowork Skills */
+    .skills-view { background: var(--slate-50); min-height: calc(100vh - 95px); }
+    .skills-category { margin-bottom: 32px; }
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .skill-card { background: white; border: 1.5px solid var(--slate-200); border-radius: 10px; padding: 18px 20px; transition: all 0.15s; }
+    .skill-card:hover { border-color: var(--sky-300); box-shadow: 0 4px 12px rgba(14,165,233,.08); }
+    .skill-card-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .skill-name { font-size: 14px; font-weight: 700; color: var(--sky-600); font-family: 'Lexend', monospace; white-space: nowrap; }
+    .skill-oneliner { font-size: 12px; font-weight: 600; color: var(--slate-700); }
+    .skill-desc { font-size: 12px; color: var(--slate-500); line-height: 1.6; margin-bottom: 10px; }
+    .skill-examples { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .skill-examples-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-400); }
+    .skill-examples code { font-family: 'Lexend', monospace; font-size: 11px; font-weight: 500; color: var(--violet-600); background: var(--violet-50); padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
+    @media (max-width: 768px) {
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+
     /* Pricing Sheet */
     .pricing-view { background: var(--slate-50); min-height: calc(100vh - 95px); }
     .pricing-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--slate-200); border-radius: 10px; overflow: hidden; margin-bottom: 20px; font-size: 12px; }
