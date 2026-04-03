@@ -145,6 +145,7 @@ function getBlockPrice(blockId) {
     case 'coaching-retainer-advisory': return 1000;
     case 'coaching-retainer-strategic': return 2500;
     case 'coaching-retainer-embedded': return 5000;
+    case 'one-time-event':            return 500;
     default: return 0;
   }
 }
@@ -382,7 +383,8 @@ const ADDONS = [
   { blockId: 'travel-addl-day', label: 'Travel \u2014 Addl Day', unit: 'day', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: 'Extra day on-site with hotel and per diem' },
   { blockId: 'site-visit-half', label: 'Site Visit \u2014 Half Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: '1\u20134 hour on-site observation or working session' },
   { blockId: 'site-visit-full', label: 'Site Visit \u2014 Full Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: '4\u20138 hour on-site observation or working session' },
-  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Monthly AI model usage for non-school partners' }
+  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Monthly AI model usage for non-school partners' },
+  { blockId: 'one-time-event', label: 'One-Time Event', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Up to 100 people \u2014 2 months of access' }
 ];
 
 // ─── Session Helpers ──────────────────────────────────────────────────────────
@@ -1538,7 +1540,7 @@ function buildQuotePkg(qpkg) {
       <input class="facilitator-input" type="number" step="any" value="${qpkg.facilitators}"
              onchange="setFacilitators(${qpkg.pkgId}, this, true)" oninput="setFacilitators(${qpkg.pkgId}, this, false)">
       <span class="facilitator-count">${qpkg.facilitators > 1 ? 'facilitators' : 'facilitator'}</span>
-      <span style="font-size:9px;color:#92400e">${qpkg.facilitatorsManual ? '(manual)' : '(1 per 30)'}</span>
+      <span style="font-size:9px;color:#92400e">${qpkg.facilitatorsManual ? '(manual)' : '(1 per 40)'}</span>
     </div>`;
   }
 
