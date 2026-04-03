@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403a">
+  <link rel="stylesheet" href="style.css?v=20260403b">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -262,575 +262,270 @@
 <div class="skills-view" id="skillsView" style="display:none">
   <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
     <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Claude Cowork Skills</h2>
-    <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">Every slash command available in Claude Code, organized by workflow stage. Type these in Claude Code to run them.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">These are the Claude Cowork skills available to Playlab learning partners. Type these in Claude Code to automate a workflow.</p>
     <input type="text" id="skillSearch" placeholder="Search skills..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterSkills(this.value)">
 
-    <!-- Category: Research & Preparation -->
-    <div class="skills-category" data-category="research">
+    <!-- Category: Planning & Big Picture -->
+    <div class="skills-category" data-category="planning">
       <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--sky-200)">
-        <span style="font-size:20px">&#x1F50D;</span>
+        <span style="font-size:20px">&#x1F4CB;</span>
         <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Research &amp; Preparation</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Show up informed and ready for every partner interaction</p>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Planning &amp; Big Picture</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Start your day, end your week, stay on top of what matters</p>
         </div>
       </div>
       <div class="skills-grid">
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/research</span>
-            <span class="skill-oneliner">Organization Research Brief</span>
+            <span class="skill-name">daily-briefing</span>
+            <span class="skill-oneliner">Morning Executive Briefing</span>
           </div>
-          <p class="skill-desc">Generates a comprehensive research brief on a school, district, or organization in preparation for a discovery call. Runs targeted web searches, checks internal systems for relationship history, and produces a structured brief covering demographics, leadership, strategic priorities, tech landscape, and Playlab fit.</p>
+          <p class="skill-desc">Generate a morning executive briefing &mdash; a concise, prioritized snapshot of your day. Pulls calendar, email, and messaging data to surface what matters before you start.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/research Houston ISD</code>
-            <code>/research Teach For America</code>
+            <code>Give me my morning briefing</code>
+            <code>Briefing for tomorrow</code>
+            <code>What does my day look like Monday?</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/prep</span>
-            <span class="skill-oneliner">Meeting Prep Briefing</span>
+            <span class="skill-name">weekly-recap</span>
+            <span class="skill-oneliner">End-of-Week Summary</span>
           </div>
-          <p class="skill-desc">Generates a pre-meeting briefing for an upcoming call. Pulls context from calendar, past meetings, email history, CRM, and Slack. Includes relationship history, open commitments, talking points, and a tailored demo app idea.</p>
+          <p class="skill-desc">Generate a concise end-of-week summary: meetings held, key emails sent, action items still open, and threads that have gone cold. Helps with Friday wrap-up or Monday planning.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/prep next</code>
-            <code>/prep tomorrow</code>
-            <code>/prep Sarah Chen</code>
+            <code>Give me my weekly recap</code>
+            <code>Recap last week</code>
+            <code>What happened this week?</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/briefing</span>
-            <span class="skill-oneliner">Daily Morning Briefing</span>
+            <span class="skill-name">brand</span>
+            <span class="skill-oneliner">Playlab Brand Reference</span>
           </div>
-          <p class="skill-desc">Executive morning briefing that gathers meeting prep for every call that day, inbox triage, tasks, action items from yesterday, stale emails, and missed debriefs. Produces a comprehensive prioritized snapshot of the day.</p>
+          <p class="skill-desc">Quick-reference brand guide for applying Playlab&rsquo;s visual identity to any output &mdash; documents, slides, images, proposals, or other creative assets. Covers colors, fonts, logo usage, tone, and templates.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/briefing</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/calendly</span>
-            <span class="skill-oneliner">Scheduling Overview</span>
-          </div>
-          <p class="skill-desc">Shows upcoming Calendly bookings, event types, and invitee details. Supports filtering by time range and name/email search.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/calendly</code>
-            <code>/calendly today</code>
-            <code>/calendly this week</code>
+            <code>What are the Playlab brand colors?</code>
+            <code>What font does Playlab use?</code>
+            <code>Brand guidelines for a slide deck</code>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Category: Meeting Support & Follow-Up -->
-    <div class="skills-category" data-category="meetings">
+    <!-- Category: Meeting Preparation -->
+    <div class="skills-category" data-category="prep">
       <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--emerald-500)">
+        <span style="font-size:20px">&#x1F50D;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Meeting Preparation</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Show up informed and ready for every conversation</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">meeting-prep-briefing</span>
+            <span class="skill-oneliner">Pre-Meeting Briefing</span>
+          </div>
+          <p class="skill-desc">Generate a pre-meeting briefing for an upcoming call or meeting. Pulls context from calendar and email history to give you a clear picture before you walk in &mdash; attendee info, relationship history, open items, and talking points.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>Prep my next meeting</code>
+            <code>Prep Sarah Chen from Acme</code>
+            <code>Meeting prep for tomorrow</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">meeting-scheduler</span>
+            <span class="skill-oneliner">Calendar Availability &amp; Scheduling</span>
+          </div>
+          <p class="skill-desc">Check your calendar availability and draft a scheduling email &mdash; with context pulled from prior conversations so the invite isn&rsquo;t cold. Handles new vs. existing contacts differently.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>Schedule 30 min with Sarah next week</code>
+            <code>Find time for a call with the Acme team</code>
+            <code>Book a meeting with James &mdash; pilot kickoff</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: After Meetings -->
+    <div class="skills-category" data-category="followup">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--amber-500)">
         <span style="font-size:20px">&#x1F91D;</span>
         <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Meeting Support &amp; Follow-Up</h3>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">After Meetings</h3>
           <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Nothing falls through the cracks after a conversation</p>
         </div>
       </div>
       <div class="skills-grid">
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/debrief</span>
-            <span class="skill-oneliner">Post-Meeting Debrief</span>
+            <span class="skill-name">meeting-follow-up-email</span>
+            <span class="skill-oneliner">Follow-Up Email Drafter</span>
           </div>
-          <p class="skill-desc">The all-in-one post-meeting command. Pulls meeting notes, email context, and CRM records. Extracts summary, decisions, and commitments. Drafts follow-up email, creates tasks, updates CRM, and prepares team notifications &mdash; all confirmed before sending.</p>
+          <p class="skill-desc">Draft follow-up emails after meetings. Pulls recent calendar events, enriches with context, then drafts a follow-up in your voice. Shows status and recommendations (needed / simple touch / already sent / skip).</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/debrief</code>
-            <code>/debrief last</code>
-            <code>/debrief today</code>
-            <code>/debrief Sarah Chen</code>
+            <code>Follow up on my last meeting</code>
+            <code>Draft follow-ups for this week</code>
+            <code>Follow up with Sarah about next steps</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/followup</span>
-            <span class="skill-oneliner">Meeting Follow-Up Email</span>
-          </div>
-          <p class="skill-desc">Drafts a follow-up email after a meeting. Pulls recent calendar events, enriches each with email and CRM context, then presents a prioritized list. You pick one and it drafts the email.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/followup</code>
-            <code>/followup last</code>
-            <code>/followup this week</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/meeting-actions</span>
+            <span class="skill-name">meeting-action-items</span>
             <span class="skill-oneliner">Action Item Extractor</span>
           </div>
-          <p class="skill-desc">End-of-day action item extractor. Pulls today&rsquo;s meetings and emails, extracts all action items, deduplicates against existing tasks, and adds new items to the task database.</p>
+          <p class="skill-desc">Pull today&rsquo;s meetings, extract all action items assigned to you, and present a clean summary. Gathers from meeting notes, sent emails, and calendar descriptions. Best run at end of day.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/meeting-actions</code>
+            <code>What are my action items from today?</code>
+            <code>Pull action items from today&rsquo;s meetings</code>
+            <code>What did I commit to today?</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/noshow</span>
-            <span class="skill-oneliner">No-Show Nudge Email</span>
-          </div>
-          <p class="skill-desc">Sends a quick nudge email when someone hasn&rsquo;t shown up to a meeting. Checks for recent communication first, then drafts a short warm-but-urgent email with the meeting link and reschedule option.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/noshow</code>
-            <code>/noshow Sarah</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/granola-sync</span>
+            <span class="skill-name">granola-hubspot-sync</span>
             <span class="skill-oneliner">Meeting Notes to CRM</span>
           </div>
-          <p class="skill-desc">Syncs recent meeting recordings to HubSpot as meeting engagements. Deduplicates against existing records and creates entries with correct associations and timestamps.</p>
+          <p class="skill-desc">Sync your Granola meeting notes to HubSpot as properly formatted meeting engagements with correct date/time, attendee associations, and company links. Prevents duplicates.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/granola-sync</code>
-            <code>/granola-sync last 3 days</code>
-            <code>/granola-sync today</code>
+            <code>Sync today&rsquo;s meetings to HubSpot</code>
+            <code>Sync Granola notes from yesterday</code>
+            <code>Sync this week&rsquo;s meetings</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">crm-update</span>
+            <span class="skill-oneliner">CRM Note Generator</span>
+          </div>
+          <p class="skill-desc">After a meeting or email exchange, generate a structured CRM-ready note summarizing what happened, decisions made, and next steps. Works with any CRM &mdash; outputs formatted text or sends to a CRM forwarding address.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>CRM update for my call with Sarah today</code>
+            <code>CRM update for my thread with Acme</code>
+            <code>Log my last meeting to HubSpot</code>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Category: Communication & Outreach -->
+    <!-- Category: Communication -->
     <div class="skills-category" data-category="communication">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--amber-500)">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--violet-500)">
         <span style="font-size:20px">&#x2709;&#xFE0F;</span>
         <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Communication &amp; Outreach</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Fast, personal, professional communication</p>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Communication</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Draft emails, manage your inbox, catch dropped threads</p>
         </div>
       </div>
       <div class="skills-grid">
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/email</span>
+            <span class="skill-name">email-draft</span>
             <span class="skill-oneliner">Email Drafting</span>
           </div>
-          <p class="skill-desc">Drafts a professional email reply or new email. Can show your unread inbox, filter to a specific sender, or go straight to drafting. Matches your personal voice and style.</p>
+          <p class="skill-desc">Draft and send professional emails matching your personal voice and writing style using Gmail. Handles new outreach, replies, and follow-ups with configurable voice and style.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/email</code>
-            <code>/email Sarah</code>
-            <code>/email follow up with Sarah about the pilot</code>
+            <code>Draft a follow-up to Sarah about the pilot</code>
+            <code>Write a warm intro to James at Acme</code>
+            <code>Reply to Maria&rsquo;s email about next steps</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/triage</span>
+            <span class="skill-name">email-templates</span>
+            <span class="skill-oneliner">Quick Email Templates</span>
+          </div>
+          <p class="skill-desc">Generate common email types quickly &mdash; intro requests, reschedules, thank-yous, loop-ins, declines, nudges, and more. For when you know exactly what kind of email you need and just want it fast.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>Template reschedule with Sarah</code>
+            <code>Template thank-you to Maria for the intro</code>
+            <code>Template nudge to Alex about the proposal</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">inbox-triage</span>
             <span class="skill-oneliner">Inbox Triage</span>
           </div>
-          <p class="skill-desc">Full inbox triage across up to 50 emails. Categorizes every email: Reply today, Reply soon, Awaiting reply, Action needed, FYI, or Archive. Drafts suggested responses for priority items.</p>
+          <p class="skill-desc">Triage your email inbox &mdash; surface what needs action, categorize the rest, and suggest quick responses for the highest priority items. Categories: Reply Today, Reply Soon, Awaiting Reply, Action Needed, FYI, Can Archive.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/triage</code>
-            <code>/triage partnerships</code>
+            <code>Triage my inbox</code>
+            <code>Triage partnerships emails</code>
+            <code>What needs my attention in email?</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/stale</span>
+            <span class="skill-name">stale-email-tracker</span>
             <span class="skill-oneliner">Stale Email Tracker</span>
           </div>
-          <p class="skill-desc">Surfaces sent emails that haven&rsquo;t received a reply, prioritized by age and importance. Offers to draft re-engagement emails for the ones that matter.</p>
+          <p class="skill-desc">Surfaces sent emails that haven&rsquo;t received a reply &mdash; prioritized by age and relationship importance. Helps catch dropped threads before they go fully cold. Offers to draft re-engagement nudges.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/stale</code>
-            <code>/stale week</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/intake</span>
-            <span class="skill-oneliner">Intake Follow-Up Sender</span>
-          </div>
-          <p class="skill-desc">Sends follow-up emails to intake form contacts who have been assigned but haven&rsquo;t been contacted yet. Supports multiple email templates based on contact type.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/intake</code>
-            <code>/intake john@example.com</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/intake-notion</span>
-            <span class="skill-oneliner">Intake Lead Triage</span>
-          </div>
-          <p class="skill-desc">Triages new intake form leads. Scores legitimacy, researches contacts, classifies leads (Hot / Warm / International / Cool / Skip), and drafts outreach for priority leads.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/intake-notion</code>
-            <code>/intake-notion 30d</code>
-            <code>/intake-notion Houston</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/post</span>
-            <span class="skill-oneliner">LinkedIn Post Generator</span>
-          </div>
-          <p class="skill-desc">Scans recent meetings, emails, and tasks to surface post angles, then drafts a LinkedIn post in your voice &mdash; belief-led, practitioner language, not salesy.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/post</code>
-            <code>/post win</code>
-            <code>/post AI skepticism in districts</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/voice-note</span>
-            <span class="skill-oneliner">Voice Note Cleanup</span>
-          </div>
-          <p class="skill-desc">Transforms a voice note transcript into a coherent, well-organized written note. Preserves your natural voice while cleaning up filler words and organizing ideas logically.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/voice-note [paste transcript]</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/support-letter</span>
-            <span class="skill-oneliner">Letter of Support</span>
-          </div>
-          <p class="skill-desc">Drafts a letter of support from Playlab for a partner&rsquo;s grant application. Gathers context from email and meeting history, calibrates to funder requirements, and generates as a Google Doc.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/support-letter KIPP, Gates AI Grant</code>
+            <code>Show me stale threads</code>
+            <code>What emails haven&rsquo;t gotten a reply?</code>
+            <code>Stale emails from Sarah</code>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Category: Proposals, Pricing & Partnerships -->
+    <!-- Category: Proposals & Pipeline -->
     <div class="skills-category" data-category="proposals">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--violet-500)">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--rose-500)">
         <span style="font-size:20px">&#x1F4DD;</span>
         <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Proposals, Pricing &amp; Partnerships</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">From package recommendation to signed deal</p>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Proposals &amp; Pipeline</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Recommend packages and manage opportunities</p>
         </div>
       </div>
       <div class="skills-grid">
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/package-rec</span>
+            <span class="skill-name">package-recommender</span>
             <span class="skill-oneliner">Package Recommender</span>
           </div>
-          <p class="skill-desc">Analyzes partner context (meeting notes, CRM data, emails) to recommend the best-fit Playlab package. Loads current pricing, synthesizes a partner profile, recommends pathways and tiers, and estimates pricing with line items.</p>
+          <p class="skill-desc">Analyze everything known about a learning partner &mdash; meeting notes, CRM data, email history, and intake records &mdash; to recommend the best-fit Playlab package configuration and estimated pricing. The pre-proposal step.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/package-rec Houston ISD</code>
-            <code>/package-rec [paste meeting notes]</code>
+            <code>Recommend a package for Austin ISD</code>
+            <code>What should we propose for Hunter College?</code>
+            <code>Package rec from my last call</code>
           </div>
         </div>
         <div class="skill-card">
           <div class="skill-card-header">
-            <span class="skill-name">/partnership</span>
-            <span class="skill-oneliner">Proposal Generator</span>
+            <span class="skill-name">create-opportunity</span>
+            <span class="skill-oneliner">Create or Update CRM Deal</span>
           </div>
-          <p class="skill-desc">Generates or updates a Playlab partnership proposal as a native Google Doc. Researches the org, builds SOW sections, generates pricing tables, and fills the template. Handles non-English proposals and multi-currency.</p>
+          <p class="skill-desc">Turn meeting notes, a Granola recording, or a Gmail thread into a HubSpot deal &mdash; with duplicate checking, contact/company association, and confirmation before anything is created.</p>
           <div class="skill-examples">
             <span class="skill-examples-label">Try it:</span>
-            <code>/partnership Houston ISD</code>
-            <code>/partnership --update [doc URL] reduce to Core</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/partnereval</span>
-            <span class="skill-oneliner">Opportunity Evaluator</span>
-          </div>
-          <p class="skill-desc">Evaluates a partnership or grant opportunity using the REDE framework (Reach, Ease, Depth, Alignment). Scores each dimension and delivers a go/no-go decision with next steps.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/partnereval [paste email or RFP]</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/rfp</span>
-            <span class="skill-oneliner">RFP &amp; Grant Evaluator</span>
-          </div>
-          <p class="skill-desc">Evaluates and drafts responses to RFPs, grants, or conference proposals. Three-phase process with a go/no-go decision point. Saves progress for later and generates formatted Google Docs.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/rfp [paste RFP text]</code>
-            <code>/rfp [conference name or URL]</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/opp</span>
-            <span class="skill-oneliner">Create CRM Opportunity</span>
-          </div>
-          <p class="skill-desc">Creates or updates a HubSpot deal from meeting notes, a recording, or an email thread. Extracts deal info, checks for duplicates, and creates with full associations.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/opp last meeting</code>
-            <code>/opp email from Sarah</code>
-            <code>/opp [paste notes]</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/slack-opp</span>
-            <span class="skill-oneliner">Slack to CRM Opportunity</span>
-          </div>
-          <p class="skill-desc">Creates or updates a HubSpot deal from a document shared in a Slack channel. Reads the message, extracts linked documents, and creates the opportunity.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/slack-opp #partnerships</code>
-            <code>/slack-opp [Slack message URL]</code>
+            <code>Create opp from my last meeting</code>
+            <code>Log the deal from my call with Sarah</code>
+            <code>Create opp from email thread with James</code>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Category: App Building -->
-    <div class="skills-category" data-category="building">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--rose-500)">
-        <span style="font-size:20px">&#x1F528;</span>
-        <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">App Building</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Create Playlab apps and manage the Sales Hub</p>
-        </div>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/app</span>
-            <span class="skill-oneliner">Playlab App Builder</span>
-          </div>
-          <p class="skill-desc">Builds a complete Playlab app configuration (directions, input fields, references, settings) ready to paste into the Playlab app builder. Classifies audience, determines complexity, and generates full prompting with guardrails.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/app a tool that helps teachers write IEP goals</code>
-            <code>/app student debate coach that argues the other side</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/saleshub</span>
-            <span class="skill-oneliner">Sales Hub Editor</span>
-          </div>
-          <p class="skill-desc">Edits this Sales Hub website. Reads current files, references the Rules &amp; Pricing doc, makes targeted edits, and deploys via GitHub Pages.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/saleshub update pricing for Tier 2</code>
-            <code>/saleshub add a new building block</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/sync-builder</span>
-            <span class="skill-oneliner">Sync Builder with Rules Doc</span>
-          </div>
-          <p class="skill-desc">Synchronizes the Package Builder with the Rules &amp; Pricing document. Compares all pricing, packages, and rules, presents a diff table, and applies confirmed changes.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/sync-builder</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Category: CRM & Pipeline -->
-    <div class="skills-category" data-category="crm">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--sky-400)">
-        <span style="font-size:20px">&#x1F4CA;</span>
-        <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">CRM &amp; Pipeline Management</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Keep HubSpot healthy and the pipeline moving</p>
-        </div>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/hub</span>
-            <span class="skill-oneliner">HubSpot Quick Report</span>
-          </div>
-          <p class="skill-desc">General-purpose HubSpot query tool. Interprets natural language and runs the right API calls. Default view shows pipeline summary, deals closing soon, and recent deals.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/hub</code>
-            <code>/hub deals closing this month</code>
-            <code>/hub stale deals</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/crm-daily</span>
-            <span class="skill-oneliner">Daily CRM Health Check</span>
-          </div>
-          <p class="skill-desc">Daily pipeline health check: goal progress (revenue vs. target, partners vs. target), pipeline pulse, deal alerts (missing data, stale deals), and contract sync summary.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/crm-daily</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/crm-weekly</span>
-            <span class="skill-oneliner">Weekly CRM Deep-Dive</span>
-          </div>
-          <p class="skill-desc">Weekly deep-dive: win/loss velocity, renewal health (30/60/90 day windows), team adoption leaderboard, and data quality checks.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/crm-weekly</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/audit</span>
-            <span class="skill-oneliner">CRM Comprehensive Audit</span>
-          </div>
-          <p class="skill-desc">Full CRM audit covering contacts, companies, deals, property hygiene, and geo/vertical sync. Produces a scored report card (A&ndash;F) with prioritized fixes.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/audit</code>
-            <code>/audit deals</code>
-            <code>/audit quick</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/contract-sync</span>
-            <span class="skill-oneliner">Contract to CRM Sync</span>
-          </div>
-          <p class="skill-desc">Scans HubSpot deals with linked contracts, reads the Google Doc, and backfills blank deal properties (amounts, dates, tiers). Never overwrites existing values.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/contract-sync</code>
-            <code>/contract-sync --dry-run</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/add-conference</span>
-            <span class="skill-oneliner">Add Conference to CRM</span>
-          </div>
-          <p class="skill-desc">Adds a conference or event to the HubSpot Events pipeline. Researches details via web, checks for duplicates, and creates the deal with associations.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/add-conference NAIS Annual Conference</code>
-            <code>/add-conference SXSW Edu | March 2027</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Category: Strategy & Planning -->
-    <div class="skills-category" data-category="strategy">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--emerald-500)">
-        <span style="font-size:20px">&#x1F9ED;</span>
-        <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Strategy &amp; Planning</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Think bigger, stay accountable, manage tasks</p>
-        </div>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/coach</span>
-            <span class="skill-oneliner">Executive Coach</span>
-          </div>
-          <p class="skill-desc">Executive coaching sessions grounded in real-time data. Loads briefing, CRM data, and coaching journal, then leads with observations on alignment, accountability, and patterns. Supports check-ins, deep dives, and decision frameworks.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/coach</code>
-            <code>/coach pipeline strategy for Q3</code>
-            <code>/coach quick what&rsquo;s our close rate?</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/notion</span>
-            <span class="skill-oneliner">Add Task to Notion</span>
-          </div>
-          <p class="skill-desc">Adds a to-do item to the Notion task database. Infers priority, category, type, and due date from the task description.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/notion follow up with Sarah about the pilot</code>
-            <code>/notion pricing deck | priority: High | due: Friday</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Category: System & Meta -->
-    <div class="skills-category" data-category="system">
-      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--slate-300)">
-        <span style="font-size:20px">&#x2699;&#xFE0F;</span>
-        <div>
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">System &amp; Meta</h3>
-          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Maintain, audit, and improve the Claude Code setup</p>
-        </div>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/boris</span>
-            <span class="skill-oneliner">Claude Code Meta-Command</span>
-          </div>
-          <p class="skill-desc">Diagnoses and improves the Claude Code setup. Loads full system state (instructions, memory, commands, settings, integrations), identifies issues, and presents a prioritized health report.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/boris</code>
-            <code>/boris commands</code>
-            <code>/boris new [name]</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/debrief-audit</span>
-            <span class="skill-oneliner">Weekly Debrief Audit</span>
-          </div>
-          <p class="skill-desc">Checks if external calls were properly debriefed. Cross-references recordings, CRM notes, and follow-up emails. Classifies each as fully debriefed, partial, or missed.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/debrief-audit</code>
-            <code>/debrief-audit 7</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/proposal-admin</span>
-            <span class="skill-oneliner">Proposal Pipeline Admin</span>
-          </div>
-          <p class="skill-desc">Manages the automated proposal pipeline (Slack bot, Google Docs, HubSpot sync). Supports status checks, log viewing, health checks, and troubleshooting.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/proposal-admin status</code>
-            <code>/proposal-admin health</code>
-          </div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-header">
-            <span class="skill-name">/emailexample</span>
-            <span class="skill-oneliner">Save Email Examples</span>
-          </div>
-          <p class="skill-desc">Saves email templates, examples, or style notes from the current conversation to the reference file for future use.</p>
-          <div class="skill-examples">
-            <span class="skill-examples-label">Try it:</span>
-            <code>/emailexample</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">Skills are defined in <code>~/.claude/commands/</code>. To update this page, edit the Claude Cowork Skills section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
+    <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">To update this page, edit the Claude Cowork Skills section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
   </div>
 </div>
 
@@ -904,6 +599,7 @@
         <tr class="section-header"><td colspan="4">Other</td></tr>
         <tr><td>AI Usage Costs</td><td>$300</td><td>monthly</td><td>For non-school partners</td></tr>
         <tr><td>Knowledge Graph</td><td>$1,500</td><td>per curricula</td><td></td></tr>
+        <tr><td>One-Time Event</td><td>$500</td><td>per event</td><td>Up to 100 people &mdash; 2 months of access</td></tr>
       </tbody>
     </table>
 
@@ -1173,7 +869,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260403a"></script>
+<script src="app.js?v=20260403c"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
