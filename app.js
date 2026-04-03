@@ -2507,8 +2507,11 @@ function renderTabBar() {
     const displayName = tab.name || 'New Quote';
     const hasStuff = tabHasContent(tab);
     const isSaved = !!tab._libFile;
-    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (hasStuff && !isSaved ? ' (unsaved)' : '') + '">';
-    if (hasStuff) html += '<span class="quote-tab-dot ' + (isSaved ? 'saved' : 'unsaved') + '" title="' + (isSaved ? 'Saved to Library' : 'Not saved to Library') + '"></span>';
+    const isShared = !isSaved && !!tab._fromUrl;
+    const dotClass = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
+    const dotTitle = isSaved ? 'Saved to Library' : isShared ? 'Opened from shared link' : 'Not saved to Library';
+    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (!isSaved && !isShared && hasStuff ? ' (unsaved)' : '') + '">';
+    if (hasStuff) html += '<span class="quote-tab-dot ' + dotClass + '" title="' + dotTitle + '"></span>';
     html += '<span class="quote-tab-name">' + escHtml(displayName) + '</span>';
     html += '<span class="quote-tab-close" onclick="event.stopPropagation(); deleteTab(\'' + tab.id + '\')">&times;</span>';
     html += '</button>';
@@ -3133,7 +3136,7 @@ async function saveCurrentToLibrary() {
   btn.textContent = '\uD83D\uDCBE Save to Library';
 
   if (result) {
-    if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; }
+    if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; delete activeTab._fromUrl; }
     renderTabBar();
     if (!result.conflict) {
       showToast('Saved to library: ' + name);
@@ -3156,7 +3159,7 @@ function hasUnsavedTabs() {
   // Ensure active tab state is fresh
   const active = builderTabs.find(t => t.id === activeTabId);
   if (active) { active.state = getTabState(); active.name = document.getElementById('partnerName').value || 'New Quote'; }
-  return builderTabs.some(t => tabHasContent(t) && !t._libFile);
+  return builderTabs.some(t => tabHasContent(t) && !t._libFile && !t._fromUrl);
 }
 
 function updateSaveStatus() {
@@ -3167,14 +3170,17 @@ function updateSaveStatus() {
   active.state = getTabState();
   const hasStuff = tabHasContent(active);
   const isSaved = !!active._libFile;
+  const isShared = !isSaved && !!active._fromUrl;
+  const cls = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
+  const label = isSaved ? 'Saved' : isShared ? 'Shared link' : 'Not saved';
 
   // Bottom badge
   if (el) {
     if (!hasStuff) { el.style.display = 'none'; }
     else {
       el.style.display = 'inline-flex';
-      el.className = 'save-status-badge ' + (isSaved ? 'saved' : 'unsaved');
-      el.innerHTML = '<span class="save-status-dot ' + (isSaved ? 'saved' : 'unsaved') + '"></span> ' + (isSaved ? 'Saved' : 'Not saved');
+      el.className = 'save-status-badge ' + cls;
+      el.innerHTML = '<span class="save-status-dot ' + cls + '"></span> ' + label;
     }
   }
   // Inline dot next to partner name
@@ -3182,7 +3188,7 @@ function updateSaveStatus() {
     if (!hasStuff) { dot.style.display = 'none'; }
     else {
       dot.style.display = '';
-      dot.className = 'save-status-dot ' + (isSaved ? 'saved' : 'unsaved');
+      dot.className = 'save-status-dot ' + cls;
     }
   }
 }
@@ -3201,6 +3207,8 @@ initTabs();
 const urlLoaded = loadFromUrl();
 if (urlLoaded) {
   // URL hash takes priority — load into the active tab
+  const urlTab = builderTabs.find(t => t.id === activeTabId);
+  if (urlTab) urlTab._fromUrl = true;
   renderAll();
   saveActiveTab();
   renderTabBar();

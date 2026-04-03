@@ -185,13 +185,16 @@
     .quote-tab-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
     .quote-tab-dot.unsaved { background:var(--rose-500); }
     .quote-tab-dot.saved { background:var(--emerald-500); }
+    .quote-tab-dot.shared { background:var(--sky-400); }
 
     .save-status-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:4px 10px; border-radius:6px; }
     .save-status-badge.unsaved { color:var(--rose-500); background:var(--rose-50); }
     .save-status-badge.saved { color:var(--emerald-600); background:var(--emerald-50); }
+    .save-status-badge.shared { color:var(--sky-600); background:var(--sky-50); }
     .save-status-dot { width:7px; height:7px; border-radius:50%; }
     .save-status-dot.unsaved { background:var(--rose-500); }
     .save-status-dot.saved { background:var(--emerald-500); }
+    .save-status-dot.shared { background:var(--sky-400); }
     .quote-tab-close { width: 14px; height: 14px; border: none; background: none; color: var(--slate-400); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 3px; line-height: 1; flex-shrink: 0; transition: all 0.1s; }
     .quote-tab-close:hover { color: var(--rose-500); background: var(--rose-50); }
     .quote-tab-new { display: flex; align-items: center; gap: 3px; padding: 7px 12px 6px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; color: var(--sky-500); background: none; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.12s; }
