@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403i">
+  <link rel="stylesheet" href="style.css?v=20260403j">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -760,7 +760,10 @@
 
     <div>
       <div class="q-label">Partner / Organization</div>
-      <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District">
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District" style="flex:1">
+        <button class="btn-save-inline" onclick="saveCurrentToLibrary()" title="Save to Library"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 15H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h7l4 4v9a1 1 0 0 1-1 1z"/><path d="M5 1v4h5V1"/><path d="M5 11h6"/></svg> Save</button>
+      </div>
     </div>
 
     <div id="licenseSummaryWrap">
