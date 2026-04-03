@@ -3,6 +3,15 @@ function track(event, params) {
   if (typeof gtag === 'function') gtag('event', event, params);
 }
 
+// ─── Resource Link Copy ──────────────────────────────────────────────────────
+function copyResLink(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '&#x2713;';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#x1F4CB;'; }, 1500);
+  });
+}
+
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 window.onerror = (msg, src, line) => {
   console.error('Unhandled error:', msg, src, line);
