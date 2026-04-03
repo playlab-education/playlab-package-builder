@@ -3161,20 +3161,29 @@ function hasUnsavedTabs() {
 
 function updateSaveStatus() {
   const el = document.getElementById('saveStatusBadge');
-  if (!el) return;
+  const dot = document.getElementById('inlineSaveDot');
   const active = builderTabs.find(t => t.id === activeTabId);
-  if (!active) { el.style.display = 'none'; return; }
-  // Refresh state for accurate check
+  if (!active) { if (el) el.style.display = 'none'; if (dot) dot.style.display = 'none'; return; }
   active.state = getTabState();
   const hasStuff = tabHasContent(active);
-  if (!hasStuff) { el.style.display = 'none'; return; }
-  el.style.display = 'inline-flex';
-  if (active._libFile) {
-    el.className = 'save-status-badge saved';
-    el.innerHTML = '<span class="save-status-dot saved"></span> Saved';
-  } else {
-    el.className = 'save-status-badge unsaved';
-    el.innerHTML = '<span class="save-status-dot unsaved"></span> Not saved';
+  const isSaved = !!active._libFile;
+
+  // Bottom badge
+  if (el) {
+    if (!hasStuff) { el.style.display = 'none'; }
+    else {
+      el.style.display = 'inline-flex';
+      el.className = 'save-status-badge ' + (isSaved ? 'saved' : 'unsaved');
+      el.innerHTML = '<span class="save-status-dot ' + (isSaved ? 'saved' : 'unsaved') + '"></span> ' + (isSaved ? 'Saved' : 'Not saved');
+    }
+  }
+  // Inline dot next to partner name
+  if (dot) {
+    if (!hasStuff) { dot.style.display = 'none'; }
+    else {
+      dot.style.display = '';
+      dot.className = 'save-status-dot ' + (isSaved ? 'saved' : 'unsaved');
+    }
   }
 }
 
