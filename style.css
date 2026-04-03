@@ -182,6 +182,8 @@
     .quote-tab:hover { background: var(--slate-50); color: var(--slate-700); }
     .quote-tab.active { background: white; color: var(--slate-800); font-weight: 600; border-top-color: var(--sky-500); border-bottom: 1.5px solid white; margin-bottom: -1.5px; }
     .quote-tab-name { overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+    .quote-tab-unsaved { width:6px; height:6px; border-radius:50%; background:var(--amber-400); flex-shrink:0; }
+    .quote-tab.active .quote-tab-unsaved { background:var(--amber-500); }
     .quote-tab-close { width: 14px; height: 14px; border: none; background: none; color: var(--slate-400); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 3px; line-height: 1; flex-shrink: 0; transition: all 0.1s; }
     .quote-tab-close:hover { color: var(--rose-500); background: var(--rose-50); }
     .quote-tab-new { display: flex; align-items: center; gap: 3px; padding: 7px 12px 6px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; color: var(--sky-500); background: none; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.12s; }

@@ -1896,6 +1896,12 @@ function showToast(msg) {
 
 // ─── Tab Switching ──────────────────────────────────────────────────────────
 function switchMainTab(tab) {
+  // Warn if leaving Builder with unsaved quotes
+  const currentlyOnBuilder = document.querySelector('.builder')?.style.display === 'grid';
+  if (currentlyOnBuilder && tab !== 'builder' && hasUnsavedTabs()) {
+    if (!confirm('You have unsaved quotes in the Builder. Switch away anyway?\n\nYour work is preserved locally, but save to the Library to keep it permanently.')) return;
+  }
+
   const btns = document.querySelectorAll('.tab-bar > .tab-btn');
   btns.forEach(b => b.classList.remove('active'));
   const views = {
@@ -2499,7 +2505,9 @@ function renderTabBar() {
   for (const tab of builderTabs) {
     const isActive = tab.id === activeTabId;
     const displayName = tab.name || 'New Quote';
-    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + '">';
+    const unsaved = tabHasContent(tab) && !tab._libFile;
+    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (unsaved ? ' (unsaved)' : '') + '">';
+    if (unsaved) html += '<span class="quote-tab-unsaved" title="Not saved to Library"></span>';
     html += '<span class="quote-tab-name">' + escHtml(displayName) + '</span>';
     html += '<span class="quote-tab-close" onclick="event.stopPropagation(); deleteTab(\'' + tab.id + '\')">&times;</span>';
     html += '</button>';
@@ -3124,12 +3132,34 @@ async function saveCurrentToLibrary() {
 
   if (result) {
     if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; }
+    renderTabBar();
     if (!result.conflict) {
       showToast('Saved to library: ' + name);
       track('library_save', { partner: name, updated: !!existingFile });
     }
   }
 }
+
+// ─── Unsaved Changes Detection ──────────────────────────────────────────────
+function tabHasContent(tab) {
+  const s = tab.state;
+  if (!s) return false;
+  return (s.packages && s.packages.length > 0) ||
+    (s.addons && s.addons.length > 0) ||
+    (s.licenses && s.licenses.length > 0) ||
+    (s.partner && s.partner.trim());
+}
+
+function hasUnsavedTabs() {
+  // Ensure active tab state is fresh
+  const active = builderTabs.find(t => t.id === activeTabId);
+  if (active) { active.state = getTabState(); active.name = document.getElementById('partnerName').value || 'New Quote'; }
+  return builderTabs.some(t => tabHasContent(t) && !t._libFile);
+}
+
+window.addEventListener('beforeunload', e => {
+  if (hasUnsavedTabs()) { e.preventDefault(); }
+});
 
 // ─── Keyboard Shortcuts ──────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
