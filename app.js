@@ -2523,9 +2523,12 @@ function getLibUsername() { return localStorage.getItem(LIB_USERNAME_KEY) || 'Te
 function promptLibToken(callback) {
   document.getElementById('tokenError').classList.remove('show');
   document.getElementById('githubTokenInput').value = '';
+  const nameInput = document.getElementById('displayNameInput');
+  const existing = getLibUsername();
+  nameInput.value = existing === 'Team' ? '' : existing;
   document.getElementById('tokenOverlay').classList.add('open');
   window._tokenCallback = callback || null;
-  setTimeout(() => document.getElementById('githubTokenInput').focus(), 100);
+  setTimeout(() => (nameInput.value ? document.getElementById('githubTokenInput') : nameInput).focus(), 100);
 }
 
 function closeTokenPrompt() {
@@ -2535,26 +2538,35 @@ function closeTokenPrompt() {
 
 async function submitGithubToken() {
   const input = document.getElementById('githubTokenInput');
+  const nameInput = document.getElementById('displayNameInput');
   const token = input.value.trim();
+  const displayName = nameInput.value.trim();
   if (!token) return;
+  if (!displayName) { nameInput.focus(); return; }
   try {
     // Validate: check repo access
     const repoResp = await fetch(`https://api.github.com/repos/${LIB_OWNER}/${LIB_REPO}`, {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
     });
     if (!repoResp.ok) { document.getElementById('tokenError').classList.add('show'); return; }
-    // Fetch GitHub username for attribution
-    const userResp = await fetch('https://api.github.com/user', {
-      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (userResp.ok) {
-      const user = await userResp.json();
-      localStorage.setItem(LIB_USERNAME_KEY, user.name || user.login || 'Team');
-    }
+    localStorage.setItem(LIB_USERNAME_KEY, displayName);
     localStorage.setItem(LIB_TOKEN_KEY, token);
     closeTokenPrompt();
     if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
   } catch { document.getElementById('tokenError').classList.add('show'); }
+}
+
+function promptChangeName() {
+  const current = getLibUsername();
+  const newName = prompt('Change your display name:', current === 'Team' ? '' : current);
+  if (newName && newName.trim()) {
+    localStorage.setItem(LIB_USERNAME_KEY, newName.trim());
+    updateLibraryFilters();
+    if (libraryFilterMine) {
+      if (libraryActiveTab === 'active') renderLibraryList(false);
+      else renderArchivedList(false);
+    }
+  }
 }
 
 async function libApi(method, path, body, retries) {
@@ -2806,7 +2818,7 @@ let librarySearchQuery = '';
 function openLibrary() {
   if (!getLibToken()) { promptLibToken(() => openLibrary()); return; }
   libraryActiveTab = 'active';
-  libraryFilterMine = false;
+  libraryFilterMine = true;
   librarySearchQuery = '';
   updateLibraryTabs();
   updateLibraryFilters();
@@ -2838,9 +2850,13 @@ function updateLibraryFilters() {
   const mineBtn = document.getElementById('libFilterMine');
   const allBtn = document.getElementById('libFilterAll');
   const searchInput = document.getElementById('libSearchInput');
-  if (mineBtn) mineBtn.classList.toggle('active', libraryFilterMine);
+  const changeBtn = document.getElementById('libChangeName');
+  const name = getLibUsername();
+  const firstName = name === 'Team' ? 'Mine' : name.split(' ')[0];
+  if (mineBtn) { mineBtn.classList.toggle('active', libraryFilterMine); mineBtn.textContent = firstName; }
   if (allBtn) allBtn.classList.toggle('active', !libraryFilterMine);
   if (searchInput && searchInput.value !== librarySearchQuery) searchInput.value = librarySearchQuery;
+  if (changeBtn) changeBtn.textContent = name === 'Team' ? 'Set name' : 'change';
 }
 
 function toggleLibraryFilter(mine) {
@@ -2874,7 +2890,10 @@ async function renderLibraryList(forceRefresh) {
   if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>'; return; }
   if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>'; return; }
   const filtered = filterQuotes(quotes);
-  if (filtered.length === 0) { body.innerHTML = '<div class="library-empty">No matching quotes. Try adjusting your filters.</div>'; return; }
+  if (filtered.length === 0) {
+    const msg = libraryFilterMine ? 'No quotes saved under your name yet. Switch to <strong>All</strong> to see team quotes.' : 'No matching quotes. Try a different search.';
+    body.innerHTML = '<div class="library-empty">' + msg + '</div>'; return;
+  }
   body.innerHTML = renderQuoteCards(filtered, 'active');
 }
 
@@ -2884,7 +2903,10 @@ async function renderArchivedList(forceRefresh) {
   if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>'; return; }
   if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No archived quotes.</div>'; return; }
   const filtered = filterQuotes(quotes);
-  if (filtered.length === 0) { body.innerHTML = '<div class="library-empty">No matching quotes. Try adjusting your filters.</div>'; return; }
+  if (filtered.length === 0) {
+    const msg = libraryFilterMine ? 'No archived quotes under your name. Switch to <strong>All</strong> to see team archives.' : 'No matching quotes. Try a different search.';
+    body.innerHTML = '<div class="library-empty">' + msg + '</div>'; return;
+  }
   body.innerHTML = renderQuoteCards(filtered, 'archived');
 }
 

@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403d">
+  <link rel="stylesheet" href="style.css?v=20260403e">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -874,10 +874,11 @@
     </div>
     <div class="library-filter-bar" id="libraryFilterBar">
       <div class="library-filter-toggle">
-        <button class="library-filter-btn active" id="libFilterAll" onclick="toggleLibraryFilter(false)">All</button>
-        <button class="library-filter-btn" id="libFilterMine" onclick="toggleLibraryFilter(true)">Mine</button>
+        <button class="library-filter-btn" id="libFilterAll" onclick="toggleLibraryFilter(false)">All</button>
+        <button class="library-filter-btn active" id="libFilterMine" onclick="toggleLibraryFilter(true)"></button>
       </div>
       <input type="text" class="library-search" id="libSearchInput" placeholder="Search by partner name&hellip;" oninput="onLibrarySearch(this.value)" autocomplete="off">
+      <button class="library-change-name" id="libChangeName" onclick="promptChangeName()" title="Change your display name"></button>
     </div>
     <div class="library-body" id="libraryBody">
       <div class="library-loading">Loading saved quotes&hellip;</div>
@@ -893,7 +894,10 @@
       <button class="library-close" onclick="closeTokenPrompt()">&times;</button>
     </div>
     <div style="padding:20px 24px">
-      <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin-bottom:16px">Enter the GitHub token to connect to the shared quote library. You only need to do this once per browser.</p>
+      <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin-bottom:16px">Connect to the shared quote library. You only need to do this once per browser.</p>
+      <label style="font-size:11px;font-weight:600;color:var(--slate-500);display:block;margin-bottom:4px">Your name</label>
+      <input class="auth-input" type="text" id="displayNameInput" placeholder="e.g. Nate" style="width:100%;margin-bottom:12px" autocomplete="off">
+      <label style="font-size:11px;font-weight:600;color:var(--slate-500);display:block;margin-bottom:4px">GitHub token</label>
       <input class="auth-input" type="password" id="githubTokenInput" placeholder="ghp_..." style="width:100%;margin-bottom:12px" autocomplete="off">
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button class="btn-clear" onclick="closeTokenPrompt()">Cancel</button>
@@ -906,7 +910,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260403e"></script>
+<script src="app.js?v=20260403f"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
