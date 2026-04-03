@@ -2505,9 +2505,10 @@ function renderTabBar() {
   for (const tab of builderTabs) {
     const isActive = tab.id === activeTabId;
     const displayName = tab.name || 'New Quote';
-    const unsaved = tabHasContent(tab) && !tab._libFile;
-    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (unsaved ? ' (unsaved)' : '') + '">';
-    if (unsaved) html += '<span class="quote-tab-unsaved" title="Not saved to Library"></span>';
+    const hasStuff = tabHasContent(tab);
+    const isSaved = !!tab._libFile;
+    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (hasStuff && !isSaved ? ' (unsaved)' : '') + '">';
+    if (hasStuff) html += '<span class="quote-tab-dot ' + (isSaved ? 'saved' : 'unsaved') + '" title="' + (isSaved ? 'Saved to Library' : 'Not saved to Library') + '"></span>';
     html += '<span class="quote-tab-name">' + escHtml(displayName) + '</span>';
     html += '<span class="quote-tab-close" onclick="event.stopPropagation(); deleteTab(\'' + tab.id + '\')">&times;</span>';
     html += '</button>';
@@ -2525,6 +2526,7 @@ function renderTabBar() {
     libBtn.innerHTML = '&#x1F4C1; Library';
     wrap.insertBefore(libBtn, bar);
   }
+  updateSaveStatus();
 }
 
 function initTabs() {
@@ -3155,6 +3157,25 @@ function hasUnsavedTabs() {
   const active = builderTabs.find(t => t.id === activeTabId);
   if (active) { active.state = getTabState(); active.name = document.getElementById('partnerName').value || 'New Quote'; }
   return builderTabs.some(t => tabHasContent(t) && !t._libFile);
+}
+
+function updateSaveStatus() {
+  const el = document.getElementById('saveStatusBadge');
+  if (!el) return;
+  const active = builderTabs.find(t => t.id === activeTabId);
+  if (!active) { el.style.display = 'none'; return; }
+  // Refresh state for accurate check
+  active.state = getTabState();
+  const hasStuff = tabHasContent(active);
+  if (!hasStuff) { el.style.display = 'none'; return; }
+  el.style.display = 'inline-flex';
+  if (active._libFile) {
+    el.className = 'save-status-badge saved';
+    el.innerHTML = '<span class="save-status-dot saved"></span> Saved';
+  } else {
+    el.className = 'save-status-badge unsaved';
+    el.innerHTML = '<span class="save-status-dot unsaved"></span> Not saved';
+  }
 }
 
 window.addEventListener('beforeunload', e => {
