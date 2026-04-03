@@ -2506,10 +2506,7 @@ function renderTabBar() {
     const isActive = tab.id === activeTabId;
     const displayName = tab.name || 'New Quote';
     const hasStuff = tabHasContent(tab);
-    const isSaved = !!tab._libFile;
-    const isShared = !isSaved && !!tab._fromUrl;
-    const dotClass = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
-    const dotTitle = isSaved ? 'Saved to Library' : isShared ? 'Opened from shared link' : 'Not saved to Library';
+    const { isSaved, isShared, cls: dotClass, title: dotTitle } = getTabSaveInfo(tab);
     html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (!isSaved && !isShared && hasStuff ? ' (unsaved)' : '') + '">';
     if (hasStuff) html += '<span class="quote-tab-dot ' + dotClass + '" title="' + dotTitle + '"></span>';
     html += '<span class="quote-tab-name">' + escHtml(displayName) + '</span>';
@@ -2599,96 +2596,74 @@ async function submitGithubToken() {
     localStorage.setItem(LIB_USERNAME_KEY, displayName);
     localStorage.setItem(LIB_TOKEN_KEY, token);
     closeTokenPrompt();
-    updateSaveAttribution();
-    updateUserBadge();
+    refreshUserDisplay();
     if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
   } catch { document.getElementById('tokenError').classList.add('show'); }
 }
 
-let libEditingName = false;
-
-function startEditName() {
-  if (libEditingName) return;
-  libEditingName = true;
-  const display = document.getElementById('libNameDisplay');
-  const input = document.getElementById('libNameInput');
-  const current = getLibUsername();
-  input.value = current === 'Team' ? '' : current;
-  display.style.display = 'none';
-  input.style.display = 'block';
-  input.focus();
-  input.select();
+function makeNameEditor(displayId, inputId) {
+  let editing = false;
+  return {
+    start() {
+      if (editing) return;
+      editing = true;
+      const display = document.getElementById(displayId);
+      const input = document.getElementById(inputId);
+      const current = getLibUsername();
+      input.value = current === 'Team' ? '' : current;
+      display.style.display = 'none';
+      input.style.display = 'block';
+      input.focus();
+      input.select();
+    },
+    commit() {
+      if (!editing) return;
+      editing = false;
+      const display = document.getElementById(displayId);
+      const input = document.getElementById(inputId);
+      const val = input.value.trim();
+      if (val) localStorage.setItem(LIB_USERNAME_KEY, val);
+      display.style.display = '';
+      input.style.display = 'none';
+      refreshUserDisplay();
+    },
+    cancel() {
+      editing = false;
+      document.getElementById(displayId).style.display = '';
+      document.getElementById(inputId).style.display = 'none';
+    }
+  };
 }
 
-function commitEditName() {
-  if (!libEditingName) return;
-  libEditingName = false;
-  const display = document.getElementById('libNameDisplay');
-  const input = document.getElementById('libNameInput');
-  const val = input.value.trim();
-  if (val) localStorage.setItem(LIB_USERNAME_KEY, val);
-  display.style.display = '';
-  input.style.display = 'none';
+const libNameEditor = makeNameEditor('libNameDisplay', 'libNameInput');
+const badgeNameEditor = makeNameEditor('userBadgeName', 'userBadgeInput');
+function startEditName() { libNameEditor.start(); }
+function commitEditName() { libNameEditor.commit(); }
+function cancelEditName() { libNameEditor.cancel(); }
+function startEditUserBadge() { badgeNameEditor.start(); }
+function commitEditUserBadge() { badgeNameEditor.commit(); }
+function cancelEditUserBadge() { badgeNameEditor.cancel(); }
+
+function refreshUserDisplay() {
+  // Update header badge
+  const badge = document.getElementById('userBadgeName');
+  if (badge) {
+    const name = getLibUsername();
+    badge.textContent = name === 'Team' ? '' : name;
+  }
+  // Update save attribution
+  const attr = document.getElementById('saveAttribution');
+  if (attr) {
+    const name = getLibUsername();
+    attr.textContent = (name === 'Team' || !getLibToken()) ? '' : 'Saving as ' + name;
+  }
+  // Update library filter button
   updateLibraryFilters();
-  updateSaveAttribution();
-  updateUserBadge();
+  // Re-filter library list if showing personal quotes
   if (libraryFilterMine) {
     if (libraryActiveTab === 'active') renderLibraryList(false);
     else renderArchivedList(false);
   }
-}
-
-function cancelEditName() {
-  libEditingName = false;
-  const display = document.getElementById('libNameDisplay');
-  const input = document.getElementById('libNameInput');
-  display.style.display = '';
-  input.style.display = 'none';
-}
-
-function updateUserBadge() {
-  const el = document.getElementById('userBadgeName');
-  if (!el) return;
-  const name = getLibUsername();
-  el.textContent = name === 'Team' ? '' : name;
-}
-
-function startEditUserBadge() {
-  const display = document.getElementById('userBadgeName');
-  const input = document.getElementById('userBadgeInput');
-  const current = getLibUsername();
-  input.value = current === 'Team' ? '' : current;
-  display.style.display = 'none';
-  input.style.display = 'block';
-  input.focus();
-  input.select();
-}
-
-function commitEditUserBadge() {
-  const display = document.getElementById('userBadgeName');
-  const input = document.getElementById('userBadgeInput');
-  const val = input.value.trim();
-  if (val) localStorage.setItem(LIB_USERNAME_KEY, val);
-  display.style.display = '';
-  input.style.display = 'none';
-  updateUserBadge();
-  updateSaveAttribution();
-  updateLibraryFilters();
-}
-
-function cancelEditUserBadge() {
-  const display = document.getElementById('userBadgeName');
-  const input = document.getElementById('userBadgeInput');
-  display.style.display = '';
-  input.style.display = 'none';
-}
-
-function updateSaveAttribution() {
-  const el = document.getElementById('saveAttribution');
-  if (!el) return;
-  const name = getLibUsername();
-  if (name === 'Team' || !getLibToken()) { el.textContent = ''; return; }
-  el.textContent = 'Saving as ' + name;
 }
 
 async function libApi(method, path, body, retries) {
@@ -2955,8 +2930,8 @@ function switchLibraryTab(tab) {
   libraryActiveTab = tab;
   updateLibraryTabs();
   document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Loading&hellip;</div>';
-  if (tab === 'active') renderLibraryList();
-  else renderArchivedList();
+  if (tab === 'active') renderLibraryList(false);
+  else renderArchivedList(false);
 }
 
 function updateLibraryTabs() {
@@ -2988,10 +2963,14 @@ function toggleLibraryFilter(mine) {
   else renderArchivedList(false);
 }
 
+let _searchTimer;
 function onLibrarySearch(val) {
-  librarySearchQuery = val.trim().toLowerCase();
-  if (libraryActiveTab === 'active') renderLibraryList(false);
-  else renderArchivedList(false);
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(() => {
+    librarySearchQuery = val.trim().toLowerCase();
+    if (libraryActiveTab === 'active') renderLibraryList(false);
+    else renderArchivedList(false);
+  }, 150);
 }
 
 function filterQuotes(quotes) {
@@ -3006,9 +2985,9 @@ function filterQuotes(quotes) {
   return filtered;
 }
 
-async function renderLibraryList(forceRefresh) {
+async function renderLibraryList(forceRefresh = true) {
   const body = document.getElementById('libraryBody');
-  const quotes = await listLibraryQuotes(forceRefresh !== false);
+  const quotes = await listLibraryQuotes(forceRefresh);
   if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>'; return; }
   if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>'; return; }
   const filtered = filterQuotes(quotes);
@@ -3019,9 +2998,9 @@ async function renderLibraryList(forceRefresh) {
   body.innerHTML = renderQuoteCards(filtered, 'active');
 }
 
-async function renderArchivedList(forceRefresh) {
+async function renderArchivedList(forceRefresh = true) {
   const body = document.getElementById('libraryBody');
-  const quotes = await listArchivedQuotes(forceRefresh !== false);
+  const quotes = await listArchivedQuotes(forceRefresh);
   if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>'; return; }
   if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No archived quotes.</div>'; return; }
   const filtered = filterQuotes(quotes);
@@ -3162,17 +3141,22 @@ function hasUnsavedTabs() {
   return builderTabs.some(t => tabHasContent(t) && !t._libFile && !t._fromUrl);
 }
 
+function getTabSaveInfo(tab) {
+  const isSaved = !!tab._libFile;
+  const isShared = !isSaved && !!tab._fromUrl;
+  const cls = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
+  const label = isSaved ? 'Saved' : isShared ? 'Shared link' : 'Not saved';
+  const title = isSaved ? 'Saved to Library' : isShared ? 'Opened from shared link' : 'Not saved to Library';
+  return { isSaved, isShared, cls, label, title };
+}
+
 function updateSaveStatus() {
   const el = document.getElementById('saveStatusBadge');
   const dot = document.getElementById('inlineSaveDot');
   const active = builderTabs.find(t => t.id === activeTabId);
   if (!active) { if (el) el.style.display = 'none'; if (dot) dot.style.display = 'none'; return; }
-  active.state = getTabState();
   const hasStuff = tabHasContent(active);
-  const isSaved = !!active._libFile;
-  const isShared = !isSaved && !!active._fromUrl;
-  const cls = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
-  const label = isSaved ? 'Saved' : isShared ? 'Shared link' : 'Not saved';
+  const { cls, label } = getTabSaveInfo(active);
 
   // Bottom badge
   if (el) {
@@ -3223,5 +3207,4 @@ if (urlLoaded) {
   }
 }
 fetchLiveRates();
-updateSaveAttribution();
-updateUserBadge();
+refreshUserDisplay();
