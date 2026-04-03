@@ -376,8 +376,10 @@
     .library-search { flex:1; font-family:'Lexend',sans-serif; font-size:12px; padding:6px 10px; border:1.5px solid var(--slate-200); border-radius:6px; outline:none; color:var(--slate-700); transition:border-color .12s; }
     .library-search:focus { border-color:var(--sky-400); }
     .library-search::placeholder { color:var(--slate-400); }
-    .library-change-name { font-family:'Lexend',sans-serif; font-size:10px; color:var(--slate-400); background:none; border:none; cursor:pointer; padding:0; flex-shrink:0; text-decoration:underline; text-underline-offset:2px; }
-    .library-change-name:hover { color:var(--sky-600); }
+    .lib-name-display { cursor:pointer; border-bottom:1px dashed transparent; transition:border-color .12s; }
+    .library-filter-btn.active .lib-name-display:hover { border-bottom-color:var(--slate-400); }
+    .lib-name-input { display:none; font-family:'Lexend',sans-serif; font-size:11px; font-weight:600; width:72px; padding:1px 4px; border:1.5px solid var(--sky-400); border-radius:4px; outline:none; color:var(--slate-800); background:white; }
+    .save-attribution { font-size:11px; color:var(--slate-400); margin-left:4px; white-space:nowrap; }
     .library-card { display:flex; align-items:center; gap:14px; padding:12px 16px; border:1.5px solid var(--slate-200); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:all .12s; }
     .library-card:hover { border-color:var(--sky-400); box-shadow:0 2px 8px rgba(14,165,233,.1); }
     .library-card-info { flex:1; min-width:0; }

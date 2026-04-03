@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403f">
+  <link rel="stylesheet" href="style.css?v=20260403g">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -851,6 +851,7 @@
 
     <div class="actions">
       <button class="btn-library-save" id="saveToLibraryBtn" onclick="saveCurrentToLibrary()">&#x1F4BE; Save to Library</button>
+      <span class="save-attribution" id="saveAttribution"></span>
       <button class="btn-copy" id="copyLinkBtn">Copy Shareable Link</button>
       <button class="btn-clear" id="clearBtn">Clear All</button>
     </div>
@@ -875,10 +876,12 @@
     <div class="library-filter-bar" id="libraryFilterBar">
       <div class="library-filter-toggle">
         <button class="library-filter-btn" id="libFilterAll" onclick="toggleLibraryFilter(false)">All</button>
-        <button class="library-filter-btn active" id="libFilterMine" onclick="toggleLibraryFilter(true)"></button>
+        <button class="library-filter-btn active" id="libFilterMine" onclick="toggleLibraryFilter(true)">
+          <span class="lib-name-display" id="libNameDisplay" onclick="event.stopPropagation();startEditName()" title="Click to change your name"></span>
+          <input class="lib-name-input" id="libNameInput" onblur="commitEditName()" onkeydown="if(event.key==='Enter'){commitEditName()}else if(event.key==='Escape'){cancelEditName()}" autocomplete="off">
+        </button>
       </div>
       <input type="text" class="library-search" id="libSearchInput" placeholder="Search by partner name&hellip;" oninput="onLibrarySearch(this.value)" autocomplete="off">
-      <button class="library-change-name" id="libChangeName" onclick="promptChangeName()" title="Change your display name"></button>
     </div>
     <div class="library-body" id="libraryBody">
       <div class="library-loading">Loading saved quotes&hellip;</div>
@@ -910,7 +913,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260403g"></script>
+<script src="app.js?v=20260403h"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

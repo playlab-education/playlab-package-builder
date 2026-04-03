@@ -2577,21 +2577,57 @@ async function submitGithubToken() {
     localStorage.setItem(LIB_USERNAME_KEY, displayName);
     localStorage.setItem(LIB_TOKEN_KEY, token);
     closeTokenPrompt();
+    updateSaveAttribution();
     if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
   } catch { document.getElementById('tokenError').classList.add('show'); }
 }
 
-function promptChangeName() {
+let libEditingName = false;
+
+function startEditName() {
+  if (libEditingName) return;
+  libEditingName = true;
+  const display = document.getElementById('libNameDisplay');
+  const input = document.getElementById('libNameInput');
   const current = getLibUsername();
-  const newName = prompt('Change your display name:', current === 'Team' ? '' : current);
-  if (newName && newName.trim()) {
-    localStorage.setItem(LIB_USERNAME_KEY, newName.trim());
-    updateLibraryFilters();
-    if (libraryFilterMine) {
-      if (libraryActiveTab === 'active') renderLibraryList(false);
-      else renderArchivedList(false);
-    }
+  input.value = current === 'Team' ? '' : current;
+  display.style.display = 'none';
+  input.style.display = 'block';
+  input.focus();
+  input.select();
+}
+
+function commitEditName() {
+  if (!libEditingName) return;
+  libEditingName = false;
+  const display = document.getElementById('libNameDisplay');
+  const input = document.getElementById('libNameInput');
+  const val = input.value.trim();
+  if (val) localStorage.setItem(LIB_USERNAME_KEY, val);
+  display.style.display = '';
+  input.style.display = 'none';
+  updateLibraryFilters();
+  updateSaveAttribution();
+  if (libraryFilterMine) {
+    if (libraryActiveTab === 'active') renderLibraryList(false);
+    else renderArchivedList(false);
   }
+}
+
+function cancelEditName() {
+  libEditingName = false;
+  const display = document.getElementById('libNameDisplay');
+  const input = document.getElementById('libNameInput');
+  display.style.display = '';
+  input.style.display = 'none';
+}
+
+function updateSaveAttribution() {
+  const el = document.getElementById('saveAttribution');
+  if (!el) return;
+  const name = getLibUsername();
+  if (name === 'Team' || !getLibToken()) { el.textContent = ''; return; }
+  el.textContent = 'Saving as ' + name;
 }
 
 async function libApi(method, path, body, retries) {
@@ -2875,13 +2911,13 @@ function updateLibraryFilters() {
   const mineBtn = document.getElementById('libFilterMine');
   const allBtn = document.getElementById('libFilterAll');
   const searchInput = document.getElementById('libSearchInput');
-  const changeBtn = document.getElementById('libChangeName');
+  const nameDisplay = document.getElementById('libNameDisplay');
   const name = getLibUsername();
   const firstName = name === 'Team' ? 'Mine' : name.split(' ')[0];
-  if (mineBtn) { mineBtn.classList.toggle('active', libraryFilterMine); mineBtn.textContent = firstName; }
+  if (nameDisplay) nameDisplay.textContent = firstName;
+  if (mineBtn) mineBtn.classList.toggle('active', libraryFilterMine);
   if (allBtn) allBtn.classList.toggle('active', !libraryFilterMine);
   if (searchInput && searchInput.value !== librarySearchQuery) searchInput.value = librarySearchQuery;
-  if (changeBtn) changeBtn.textContent = name === 'Team' ? 'Set name' : 'change';
 }
 
 function toggleLibraryFilter(mine) {
@@ -3071,3 +3107,4 @@ if (urlLoaded) {
   }
 }
 fetchLiveRates();
+updateSaveAttribution();
