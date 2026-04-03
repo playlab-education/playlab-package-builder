@@ -8,7 +8,7 @@ function copyResLink(btn, url) {
   navigator.clipboard.writeText(url).then(() => {
     btn.classList.add('copied');
     btn.innerHTML = '&#x2713;';
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#x1F4CB;'; }, 1500);
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg>'; }, 1500);
   });
 }
 
