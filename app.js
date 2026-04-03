@@ -2800,11 +2800,16 @@ async function restoreQuote(filename) {
 
 // ─── Library UI ──────────────────────────────────────────────────────────────
 let libraryActiveTab = 'active';
+let libraryFilterMine = false;
+let librarySearchQuery = '';
 
 function openLibrary() {
   if (!getLibToken()) { promptLibToken(() => openLibrary()); return; }
   libraryActiveTab = 'active';
+  libraryFilterMine = false;
+  librarySearchQuery = '';
   updateLibraryTabs();
+  updateLibraryFilters();
   document.getElementById('libraryOverlay').classList.add('open');
   document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Loading saved quotes&hellip;</div>';
   renderLibraryList();
@@ -2827,20 +2832,60 @@ function updateLibraryTabs() {
   if (b) b.classList.toggle('active', libraryActiveTab === 'archived');
 }
 
-async function renderLibraryList() {
-  const body = document.getElementById('libraryBody');
-  const quotes = await listLibraryQuotes(true);
-  if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>'; return; }
-  if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>'; return; }
-  body.innerHTML = renderQuoteCards(quotes, 'active');
+function updateLibraryFilters() {
+  const bar = document.getElementById('libraryFilterBar');
+  if (!bar) return;
+  const mineBtn = document.getElementById('libFilterMine');
+  const allBtn = document.getElementById('libFilterAll');
+  const searchInput = document.getElementById('libSearchInput');
+  if (mineBtn) mineBtn.classList.toggle('active', libraryFilterMine);
+  if (allBtn) allBtn.classList.toggle('active', !libraryFilterMine);
+  if (searchInput && searchInput.value !== librarySearchQuery) searchInput.value = librarySearchQuery;
 }
 
-async function renderArchivedList() {
+function toggleLibraryFilter(mine) {
+  libraryFilterMine = mine;
+  updateLibraryFilters();
+  if (libraryActiveTab === 'active') renderLibraryList(false);
+  else renderArchivedList(false);
+}
+
+function onLibrarySearch(val) {
+  librarySearchQuery = val.trim().toLowerCase();
+  if (libraryActiveTab === 'active') renderLibraryList(false);
+  else renderArchivedList(false);
+}
+
+function filterQuotes(quotes) {
+  let filtered = quotes;
+  if (libraryFilterMine) {
+    const me = getLibUsername();
+    filtered = filtered.filter(q => q.savedBy === me);
+  }
+  if (librarySearchQuery) {
+    filtered = filtered.filter(q => q.partnerName.toLowerCase().includes(librarySearchQuery));
+  }
+  return filtered;
+}
+
+async function renderLibraryList(forceRefresh) {
   const body = document.getElementById('libraryBody');
-  const quotes = await listArchivedQuotes(true);
+  const quotes = await listLibraryQuotes(forceRefresh !== false);
+  if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the quote library. Check your token.</div>'; return; }
+  if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No saved quotes yet. Use &ldquo;Save to Library&rdquo; in the builder to save your first quote.</div>'; return; }
+  const filtered = filterQuotes(quotes);
+  if (filtered.length === 0) { body.innerHTML = '<div class="library-empty">No matching quotes. Try adjusting your filters.</div>'; return; }
+  body.innerHTML = renderQuoteCards(filtered, 'active');
+}
+
+async function renderArchivedList(forceRefresh) {
+  const body = document.getElementById('libraryBody');
+  const quotes = await listArchivedQuotes(forceRefresh !== false);
   if (quotes === null) { body.innerHTML = '<div class="library-empty">Could not connect to the archive. Check your token.</div>'; return; }
   if (quotes.length === 0) { body.innerHTML = '<div class="library-empty">No archived quotes.</div>'; return; }
-  body.innerHTML = renderQuoteCards(quotes, 'archived');
+  const filtered = filterQuotes(quotes);
+  if (filtered.length === 0) { body.innerHTML = '<div class="library-empty">No matching quotes. Try adjusting your filters.</div>'; return; }
+  body.innerHTML = renderQuoteCards(filtered, 'archived');
 }
 
 function renderQuoteCards(quotes, mode) {

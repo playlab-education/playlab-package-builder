@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403c">
+  <link rel="stylesheet" href="style.css?v=20260403d">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -872,6 +872,13 @@
       <button class="library-rebuild" onclick="rebuildIndex().then(()=>{if(libraryActiveTab==='active')renderLibraryList();else renderArchivedList();})" title="Rebuild index from files (use if quotes are missing)">&#x1F527; Repair</button>
       <button class="library-close" onclick="closeLibrary()">&times;</button>
     </div>
+    <div class="library-filter-bar" id="libraryFilterBar">
+      <div class="library-filter-toggle">
+        <button class="library-filter-btn active" id="libFilterAll" onclick="toggleLibraryFilter(false)">All</button>
+        <button class="library-filter-btn" id="libFilterMine" onclick="toggleLibraryFilter(true)">Mine</button>
+      </div>
+      <input type="text" class="library-search" id="libSearchInput" placeholder="Search by partner name&hellip;" oninput="onLibrarySearch(this.value)" autocomplete="off">
+    </div>
     <div class="library-body" id="libraryBody">
       <div class="library-loading">Loading saved quotes&hellip;</div>
     </div>
@@ -899,7 +906,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260403d"></script>
+<script src="app.js?v=20260403e"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
