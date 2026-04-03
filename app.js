@@ -2578,6 +2578,7 @@ async function submitGithubToken() {
     localStorage.setItem(LIB_TOKEN_KEY, token);
     closeTokenPrompt();
     updateSaveAttribution();
+    updateUserBadge();
     if (window._tokenCallback) { window._tokenCallback(); window._tokenCallback = null; }
   } catch { document.getElementById('tokenError').classList.add('show'); }
 }
@@ -2608,6 +2609,7 @@ function commitEditName() {
   input.style.display = 'none';
   updateLibraryFilters();
   updateSaveAttribution();
+  updateUserBadge();
   if (libraryFilterMine) {
     if (libraryActiveTab === 'active') renderLibraryList(false);
     else renderArchivedList(false);
@@ -2618,6 +2620,43 @@ function cancelEditName() {
   libEditingName = false;
   const display = document.getElementById('libNameDisplay');
   const input = document.getElementById('libNameInput');
+  display.style.display = '';
+  input.style.display = 'none';
+}
+
+function updateUserBadge() {
+  const el = document.getElementById('userBadgeName');
+  if (!el) return;
+  const name = getLibUsername();
+  el.textContent = name === 'Team' ? '' : name;
+}
+
+function startEditUserBadge() {
+  const display = document.getElementById('userBadgeName');
+  const input = document.getElementById('userBadgeInput');
+  const current = getLibUsername();
+  input.value = current === 'Team' ? '' : current;
+  display.style.display = 'none';
+  input.style.display = 'block';
+  input.focus();
+  input.select();
+}
+
+function commitEditUserBadge() {
+  const display = document.getElementById('userBadgeName');
+  const input = document.getElementById('userBadgeInput');
+  const val = input.value.trim();
+  if (val) localStorage.setItem(LIB_USERNAME_KEY, val);
+  display.style.display = '';
+  input.style.display = 'none';
+  updateUserBadge();
+  updateSaveAttribution();
+  updateLibraryFilters();
+}
+
+function cancelEditUserBadge() {
+  const display = document.getElementById('userBadgeName');
+  const input = document.getElementById('userBadgeInput');
   display.style.display = '';
   input.style.display = 'none';
 }
@@ -3108,3 +3147,4 @@ if (urlLoaded) {
 }
 fetchLiveRates();
 updateSaveAttribution();
+updateUserBadge();

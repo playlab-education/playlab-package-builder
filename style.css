@@ -51,6 +51,11 @@
     .currency-toggle label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate-400); }
     .currency-select { padding: 4px 8px; border: 1.5px solid var(--slate-200); border-radius: 6px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 600; color: var(--slate-700); background: white; cursor: pointer; }
     .currency-select:focus { outline: none; border-color: var(--sky-500); }
+    .user-badge { display:flex; align-items:center; flex-shrink:0; cursor:pointer; }
+    .user-badge-name { font-size:11px; font-weight:600; color:var(--slate-500); border-bottom:1px dashed transparent; transition:all .12s; }
+    .user-badge:hover .user-badge-name { color:var(--slate-700); border-bottom-color:var(--slate-400); }
+    .user-badge-input { display:none; font-family:'Lexend',sans-serif; font-size:11px; font-weight:600; width:80px; padding:2px 6px; border:1.5px solid var(--sky-400); border-radius:4px; outline:none; color:var(--slate-700); background:white; }
+    .user-badge-name:empty::after { content:'Set name'; color:var(--slate-400); font-style:italic; }
 
     /* Layout */
     .builder { display: grid; grid-template-columns: 1fr 540px; min-height: calc(100vh - 53px); }

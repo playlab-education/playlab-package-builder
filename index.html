@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260403g">
+  <link rel="stylesheet" href="style.css?v=20260403h">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -46,6 +46,11 @@
       <option value="GHS">GHS (GH&#x20B5;)</option>
       <option value="INR">INR (&#x20B9;)</option>
     </select>
+  </div>
+  <div class="header-sep"></div>
+  <div class="user-badge" id="userBadge" onclick="startEditUserBadge()" title="Click to change your name">
+    <span class="user-badge-name" id="userBadgeName"></span>
+    <input class="user-badge-input" id="userBadgeInput" onblur="commitEditUserBadge()" onkeydown="if(event.key==='Enter'){commitEditUserBadge()}else if(event.key==='Escape'){cancelEditUserBadge()}" autocomplete="off">
   </div>
 </header>
 
@@ -913,7 +918,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260403h"></script>
+<script src="app.js?v=20260403i"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
