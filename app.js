@@ -1008,6 +1008,22 @@ function renamePkg(pkgId, name) {
   saveToUrl();
 }
 
+function renameComp(pkgId, compId, name) {
+  const qpkg = quotePackages.find(q => q.pkgId === pkgId);
+  if (!qpkg) return;
+  const comp = qpkg.components.find(c => c.id === compId);
+  if (!comp) return;
+  comp.customLabel = name.trim() || null;
+  saveToUrl();
+}
+
+function renameAddon(addonId, name) {
+  const addon = quoteAddons.find(a => a.addonId === addonId);
+  if (!addon) return;
+  addon.customLabel = name.trim() || null;
+  saveToUrl();
+}
+
 function setPkgDiscount(pkgId, input) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg) return;
@@ -1473,8 +1489,12 @@ function buildCompLineHtml(comp, qpkg) {
   const tags = [];
   if (comp.support) tags.push('<span class="support-tag">support</span>');
   if (comp.scalable && qpkg.facilitators > 1) tags.push(`<span class="scale-tag">\u00D7${qpkg.facilitators}</span>`);
+  const displayLabel = comp.customLabel || comp.label;
   return `<div class="comp-line ${comp.support ? 'support' : ''}">
-    <div class="comp-info"><div class="comp-name">${comp.label}${tags.join('')}</div></div>
+    <div class="comp-info"><div class="comp-name"><input class="comp-name-input" type="text" value="${escHtml(displayLabel)}"
+             placeholder="${escHtml(comp.label)}"
+             onchange="renameComp(${qpkg.pkgId},'${comp.id}',this.value)"
+             title="Click to rename">${tags.join('')}</div></div>
     <div class="comp-qty">
       <button class="comp-qty-btn" onclick="changeCompQty(${qpkg.pkgId},'${comp.id}',-1)">\u2212</button>
       <input class="comp-qty-input" type="number" step="any" value="${comp.qty}"
@@ -1711,7 +1731,11 @@ function buildQuoteAddon(addon) {
   const unit = unitShort(addon.unit);
   const div = document.createElement('div');
   div.className = 'addon-line';
-  div.innerHTML = `<div class="comp-info"><div class="comp-name">${addon.label}</div></div>
+  const displayLabel = addon.customLabel || addon.label;
+  div.innerHTML = `<div class="comp-info"><div class="comp-name"><input class="comp-name-input" type="text" value="${escHtml(displayLabel)}"
+             placeholder="${escHtml(addon.label)}"
+             onchange="renameAddon(${addon.addonId},this.value)"
+             title="Click to rename"></div></div>
     <div class="comp-qty">
       <button class="comp-qty-btn" onclick="changeAddonQty(${addon.addonId},-1)">\u2212</button>
       <input class="comp-qty-input" type="number" step="any" value="${addon.qty}"
@@ -1967,9 +1991,9 @@ function getTabState() {
       checkInQty: qp.checkInQty || 0,
       reflectionMeetingQty: qp.reflectionMeetingQty || 0,
       discount: qp.discount || 0,
-      components: qp.components.map(c => ({ id: c.id, qty: c.qty }))
+      components: qp.components.map(c => ({ id: c.id, qty: c.qty, customLabel: c.customLabel || undefined }))
     })),
-    addons: quoteAddons.map(a => ({ blockId: a.blockId, qty: a.qty }))
+    addons: quoteAddons.map(a => ({ blockId: a.blockId, qty: a.qty, customLabel: a.customLabel || undefined }))
   };
 }
 
@@ -2030,7 +2054,7 @@ function hydrateState(state) {
       if (sp.components) {
         for (const sc of sp.components) {
           const comp = components.find(c => c.id === sc.id);
-          if (comp) comp.qty = sc.qty;
+          if (comp) { comp.qty = sc.qty; if (sc.customLabel) comp.customLabel = sc.customLabel; }
         }
       }
       const participants = sp.participants || 40;
@@ -2083,6 +2107,7 @@ function hydrateState(state) {
         addonId: nextAddonId++,
         blockId: def.blockId,
         label: def.label,
+        customLabel: sa.customLabel || null,
         unit: def.unit,
         qty: sa.qty || def.defaultQty,
         minQty: def.minQty,
@@ -2169,7 +2194,7 @@ function copyForProposal() {
         const total = getBlockPrice(comp.blockId) * effQty;
         const isRetainer = comp.blockId.startsWith('coaching-retainer-');
         const qtyStr = isRetainer ? ` (${effQty} months)` : comp.blockId.includes('tool-') || comp.blockId.includes('ideation') ? '' : ` (${effQty} hrs)`;
-        lines.push(`    \u2022 ${comp.label}${qtyStr} \u2014 ${fmt(total)}`);
+        lines.push(`    \u2022 ${comp.customLabel || comp.label}${qtyStr} \u2014 ${fmt(total)}`);
       }
       const travelCost = calcTravelCost(qpkg);
       if (travelCost > 0) {
@@ -2204,7 +2229,7 @@ function copyForProposal() {
       for (const addon of quoteAddons) {
         const total = calcAddonTotal(addon);
         const qtyStr = addon.unit === 'flat' ? '' : ` (${addon.qty} ${addon.unit}${addon.qty !== 1 ? 's' : ''})`;
-        lines.push(pad(`    \u2022 ${addon.label}${qtyStr}`, fmt(total)));
+        lines.push(pad(`    \u2022 ${addon.customLabel || addon.label}${qtyStr}`, fmt(total)));
       }
     }
     lines.push('');
@@ -2291,7 +2316,7 @@ function copyAsMarkdown() {
   }
   for (const addon of quoteAddons) {
     const total = calcAddonTotal(addon);
-    md += `| ${addon.label} | ${fmt(total)} | ${fmt(total)} |\n`;
+    md += `| ${addon.customLabel || addon.label} | ${fmt(total)} | ${fmt(total)} |\n`;
   }
 
   md += `\n**Standard Total:** ${fmt(std)}\n\n`;
