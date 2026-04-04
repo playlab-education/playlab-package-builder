@@ -326,6 +326,12 @@ const PACKAGES = [
     components: [
       { blockId: 'facilitation', qty: 3, label: 'Facilitation', scalable: true }
     ] },
+  { id: 'edu-custom', pathway: 'educators', name: 'Custom Package', subtitle: 'Flexible hours + supports', badge: 'Flexible',
+    desc: 'Build a custom engagement \u2014 PLC series, learning community, or any flexible format. Choose your total facilitation hours and number of sessions. Includes all standard supports.',
+    facilitationHours: 6, isCustom: true,
+    components: [
+      { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true }
+    ] },
   // Students
   { id: 'stu-starter', pathway: 'students', name: 'Starter Sprint', subtitle: '3 hrs', badge: 'Student Sprint',
     desc: 'A foundational introduction where students learn how AI works and build their first simple AI tool.',
@@ -667,18 +673,27 @@ function buildInlineConfig(pkg) {
 
   let sessionsHtml = '';
   if (hasFacilitation) {
+    const effHours = pkg.isCustom ? (cs.totalHours || pkg.facilitationHours) : pkg.facilitationHours;
     const numSessions = cs.numSessions || 1;
-    const maxSessions = getMaxSessions(pkg.facilitationHours);
-    const sessions = cs.sessions || distributeHours(pkg.facilitationHours, numSessions);
+    const maxSessions = getMaxSessions(effHours);
+    const sessions = cs.sessions || distributeHours(effHours, numSessions);
     const localCost = getBlockPrice('travel-local');
     const flightCost = getBlockPrice('travel-flight');
 
-    sessionsHtml = `<div class="pkg-config-row">
+    const totalHoursHtml = pkg.isCustom ? `<div class="pkg-config-row">
+      <span class="pkg-config-label">Total Hours</span>
+      <input class="config-total-hours" type="number" min="0.5" step="0.5" value="${effHours}"
+             onchange="updateConfigTotalHours('${pkg.id}', this, true)"
+             oninput="updateConfigTotalHours('${pkg.id}', this, false)">
+      <span style="font-size:10px;color:var(--slate-400)">facilitation hours</span>
+    </div>` : '';
+
+    sessionsHtml = `${totalHoursHtml}<div class="pkg-config-row">
       <span class="pkg-config-label">Sessions</span>
       <input class="num-sessions-input" type="number" step="any" value="${numSessions}"
              onchange="updateConfigNumSessions('${pkg.id}', this, true)"
              oninput="updateConfigNumSessions('${pkg.id}', this, false)">
-      <span style="font-size:10px;color:var(--slate-400)">${`${pkg.facilitationHours} hrs total`}</span>
+      <span style="font-size:10px;color:var(--slate-400)">${`${effHours} hrs total`}</span>
     </div>
     <div class="session-config-rows">
       ${sessions.map((s, i) => `<div class="session-config-row">
@@ -747,8 +762,10 @@ function calcConfigPreview(pkg) {
   const sessions = cs.sessions || [{ hours: pkg.facilitationHours || 0, delivery: 'virtual' }];
 
   // Base component cost
+  const customHours = pkg.isCustom ? (cs.totalHours || pkg.facilitationHours) : null;
   let cost = pkg.components.reduce((sum, c) => {
-    const effQty = c.scalable ? c.qty * facilitators : c.qty;
+    const qty = (customHours && c.blockId === 'facilitation') ? customHours : c.qty;
+    const effQty = c.scalable ? qty * facilitators : qty;
     return sum + getBlockPrice(c.blockId) * effQty;
   }, 0);
 
@@ -787,6 +804,7 @@ function openConfig(pkgId) {
           : [{ hours: 0, delivery: 'virtual' }],
         participants: 40
       };
+      if (pkg && pkg.isCustom) configState[pkgId].totalHours = pkg.facilitationHours;
     }
   }
   renderCatalog();
@@ -814,6 +832,7 @@ function ensureConfigState(pkgId) {
         sessions: hasFac ? distributeHours(pkg.facilitationHours, 1) : [{ hours: 0, delivery: 'virtual' }],
         participants: 40
       };
+      if (pkg && pkg.isCustom) configState[pkgId].totalHours = pkg.facilitationHours;
     }
   }
   return configState[pkgId];
@@ -835,7 +854,7 @@ function rerenderConfigOnly(pkgId) {
 function updateConfigNumSessions(pkgId, input, commit) {
   const cs = ensureConfigState(pkgId);
   const pkg = PACKAGES.find(p => p.id === pkgId);
-  const totalHours = pkg?.facilitationHours || 1;
+  const totalHours = (pkg?.isCustom && cs.totalHours) ? cs.totalHours : (pkg?.facilitationHours || 1);
   let val = Math.round(parseFloat(input.value));
   const maxS = getMaxSessions(totalHours);
   if (!commit) {
@@ -936,6 +955,38 @@ function updateConfigCoachingMonths(pkgId, input, commit) {
   rerenderConfigOnly(pkgId);
 }
 
+function updateConfigTotalHours(pkgId, input, commit) {
+  const cs = ensureConfigState(pkgId);
+  let val = parseFloat(input.value);
+  if (!commit) {
+    if (!isNaN(val) && val >= 0.5) {
+      cs.totalHours = val;
+      cs.sessions = distributeHours(val, cs.numSessions || 1);
+    }
+    return;
+  }
+  if (isNaN(val) || val < 0.5) val = 0.5;
+  val = Math.round(val * 2) / 2; // round to nearest 0.5
+  input.value = val;
+  cs.totalHours = val;
+  // Clamp numSessions if it exceeds new max
+  const maxS = getMaxSessions(val);
+  if (cs.numSessions > maxS) cs.numSessions = maxS;
+  const oldSessions = cs.sessions || [];
+  const newSessions = distributeHours(val, cs.numSessions || 1);
+  for (let i = 0; i < newSessions.length; i++) {
+    if (i < oldSessions.length) newSessions[i].delivery = oldSessions[i].delivery;
+  }
+  cs.sessions = newSessions;
+  const hadFocus = document.activeElement === input;
+  rerenderConfigOnly(pkgId);
+  if (hadFocus) {
+    const card = document.getElementById('pkgcard-' + pkgId);
+    const newInput = card?.querySelector('.config-total-hours');
+    if (newInput) { newInput.focus(); newInput.select(); }
+  }
+}
+
 function getSupportDefaults(pkg, sessions) {
   const isIntro = pkg.id === 'edu-intro';
   const isPowerUp = pkg.id === 'edu-powerup';
@@ -1015,6 +1066,11 @@ function confirmAddPackage(pkgId) {
 
   let compId = 1;
   const components = pkg.components.map(c => ({ ...c, id: 'c' + compId++ }));
+  // Custom packages: set facilitation qty from config totalHours
+  if (pkg.isCustom && cs.totalHours) {
+    const facComp = components.find(c => c.blockId === 'facilitation');
+    if (facComp) facComp.qty = cs.totalHours;
+  }
 
   const travelCounts = getDefaultTravelCounts(sessions);
   const qpkg = {
@@ -2008,6 +2064,7 @@ function renderAll() {
     renderLicenseList();
     renderQuote();
     renderTotals();
+    markDirty();
   } catch (err) {
     console.error('Render error:', err);
     showToast('Render error \u2014 try clearing your data');
@@ -2581,8 +2638,9 @@ function renderTabBar() {
     const isActive = tab.id === activeTabId;
     const displayName = tab.name || 'New Quote';
     const hasStuff = tabHasContent(tab);
-    const { isSaved, isShared, cls: dotClass, title: dotTitle } = getTabSaveInfo(tab);
-    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (!isSaved && !isShared && hasStuff ? ' (unsaved)' : '') + '">';
+    const { isSaved, isModified, isShared, cls: dotClass, title: dotTitle } = getTabSaveInfo(tab);
+    const showWarning = hasStuff && (!isSaved && !isShared || isModified);
+    html += '<button class="quote-tab' + (isActive ? ' active' : '') + '" onclick="switchQuoteTab(\'' + tab.id + '\')" title="' + escHtml(displayName) + (showWarning ? ' (' + (isModified ? 'modified' : 'unsaved') + ')' : '') + '">';
     if (hasStuff) html += '<span class="quote-tab-dot ' + dotClass + '" title="' + dotTitle + '"></span>';
     html += '<span class="quote-tab-name">' + escHtml(displayName) + '</span>';
     html += '<span class="quote-tab-close" onclick="event.stopPropagation(); deleteTab(\'' + tab.id + '\')">&times;</span>';
@@ -3190,13 +3248,24 @@ async function saveCurrentToLibrary() {
   btn.textContent = '\uD83D\uDCBE Save to Library';
 
   if (result) {
-    if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; delete activeTab._fromUrl; }
+    if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; delete activeTab._fromUrl; clearDirty(activeTab); }
     renderTabBar();
     if (!result.conflict) {
       showToast('Saved to library: ' + name);
       track('library_save', { partner: name, updated: !!existingFile });
     }
   }
+}
+
+// ─── Dirty State Tracking ───────────────────────────────────────────────────
+function markDirty() {
+  const tab = builderTabs.find(t => t.id === activeTabId);
+  if (tab && tab._libFile) { tab._dirty = true; }
+  updateSaveStatus();
+}
+
+function clearDirty(tab) {
+  if (tab) delete tab._dirty;
 }
 
 // ─── Unsaved Changes Detection ──────────────────────────────────────────────
@@ -3213,16 +3282,17 @@ function hasUnsavedTabs() {
   // Ensure active tab state is fresh
   const active = builderTabs.find(t => t.id === activeTabId);
   if (active) { active.state = getTabState(); active.name = document.getElementById('partnerName').value || 'New Quote'; }
-  return builderTabs.some(t => tabHasContent(t) && !t._libFile && !t._fromUrl);
+  return builderTabs.some(t => tabHasContent(t) && (!t._libFile && !t._fromUrl || t._dirty));
 }
 
 function getTabSaveInfo(tab) {
   const isSaved = !!tab._libFile;
+  const isModified = isSaved && !!tab._dirty;
   const isShared = !isSaved && !!tab._fromUrl;
-  const cls = isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
-  const label = isSaved ? 'Saved' : isShared ? 'Shared link' : 'Not saved';
-  const title = isSaved ? 'Saved to Library' : isShared ? 'Opened from shared link' : 'Not saved to Library';
-  return { isSaved, isShared, cls, label, title };
+  const cls = isModified ? 'modified' : isSaved ? 'saved' : isShared ? 'shared' : 'unsaved';
+  const label = isModified ? 'Modified' : isSaved ? 'Saved' : isShared ? 'Shared link' : 'Not saved';
+  const title = isModified ? 'Unsaved changes — save to Library to keep them' : isSaved ? 'Saved to Library' : isShared ? 'Opened from shared link' : 'Not saved to Library';
+  return { isSaved, isModified, isShared, cls, label, title };
 }
 
 function updateSaveStatus() {
