@@ -2638,11 +2638,15 @@ function switchQuoteTab(tabId) {
   } catch {}
   renderTabBar();
   // Update URL hash for the newly active tab
-  const state = getTabState();
-  try {
-    const hash = btoa(JSON.stringify(state));
-    history.replaceState(null, '', '#' + hash);
-  } catch {}
+  if (tab && tab._libFile) {
+    history.replaceState(null, '', '#lib/' + tab._libFile);
+  } else {
+    const state = getTabState();
+    try {
+      const hash = btoa(JSON.stringify(state));
+      history.replaceState(null, '', '#' + hash);
+    } catch {}
+  }
 }
 
 function createNewTab() {
@@ -3263,6 +3267,8 @@ async function loadFromLibrary(filename) {
     localStorage.setItem('playlab_builder_activeTabId', activeTabId);
   } catch {}
   renderTabBar();
+  // Update URL to library reference
+  history.replaceState(null, '', '#lib/' + filename);
   showToast('Loaded: ' + (data.partnerName || 'Quote'));
   track('library_load', { partner: data.partnerName });
 }
