@@ -3160,6 +3160,7 @@ function renderQuoteCards(quotes, mode) {
         </div>
         <div class="library-card-actions">
           <button class="library-card-btn" onclick="event.stopPropagation();loadFromLibrary('${ef}')">Load</button>
+          <button class="library-card-btn remix" onclick="event.stopPropagation();remixFromLibrary('${ef}')">Remix</button>
           <button class="library-card-btn danger" onclick="event.stopPropagation();archiveFromLibrary('${ef}','${en}')">Archive</button>
         </div>
       </div>`;
@@ -3197,6 +3198,28 @@ async function loadFromLibrary(filename) {
   renderTabBar();
   showToast('Loaded: ' + (data.partnerName || 'Quote'));
   track('library_load', { partner: data.partnerName });
+}
+
+async function remixFromLibrary(filename) {
+  const data = await loadQuoteFromLibrary(filename);
+  if (!data) return;
+  closeLibrary();
+  saveActiveTab();
+  const remixName = (data.partnerName || 'Quote') + ' (Copy)';
+  const newTab = { id: generateTabId(), name: remixName, state: data.quoteState };
+  // No _libFile or _libSha — this is a fresh unsaved quote
+  builderTabs.push(newTab);
+  activeTabId = newTab.id;
+  loadTabState(newTab.state);
+  // Update the partner name field to reflect the copy
+  document.getElementById('partnerName').value = remixName;
+  try {
+    localStorage.setItem('playlab_builder_tabs', JSON.stringify(builderTabs));
+    localStorage.setItem('playlab_builder_activeTabId', activeTabId);
+  } catch {}
+  renderTabBar();
+  showToast('Remixed: ' + (data.partnerName || 'Quote'));
+  track('library_remix', { partner: data.partnerName });
 }
 
 async function archiveFromLibrary(filename, name) {
