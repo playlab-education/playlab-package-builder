@@ -192,22 +192,51 @@ function getSchoolTierForEnrollment(count) {
 let quoteLicenses = [];
 let nextLicenseId = 1;
 
-function calcLicenseCost(lic) {
+// Multi-year software discount schedule
+const TERM_DISCOUNTS = { 1: 0, 2: 10, 3: 15 };
+const TERM_LABELS = { 1: '1 Year', 2: '2 Years', 3: '3 Years' };
+
+function calcLicenseAnnualCost(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
   if (!tier) return 0;
-  if (tier.isCustom) return 0; // Custom pricing — show as "Custom"
+  if (tier.isCustom) return 0;
   return tier.pricePerUnit * lic.count;
 }
 
+// Backward-compat alias
+function calcLicenseCost(lic) { return calcLicenseAnnualCost(lic); }
+
+function calcLicenseMultiYearTotal(lic) {
+  const annual = calcLicenseAnnualCost(lic);
+  const term = lic.term || 1;
+  const discPct = TERM_DISCOUNTS[term] || 0;
+  return annual * term * (1 - discPct / 100);
+}
+
+function calcLicenseMultiYearDiscount(lic) {
+  const annual = calcLicenseAnnualCost(lic);
+  const term = lic.term || 1;
+  const discPct = TERM_DISCOUNTS[term] || 0;
+  return annual * term * (discPct / 100);
+}
+
 function calcTotalSoftware() {
-  return quoteLicenses.reduce((sum, lic) => sum + calcLicenseCost(lic), 0);
+  return quoteLicenses.reduce((sum, lic) => sum + calcLicenseMultiYearTotal(lic), 0);
+}
+
+function calcTotalSoftwareAnnual() {
+  return quoteLicenses.reduce((sum, lic) => sum + calcLicenseAnnualCost(lic), 0);
+}
+
+function calcTotalSoftwareDiscount() {
+  return quoteLicenses.reduce((sum, lic) => sum + calcLicenseMultiYearDiscount(lic), 0);
 }
 
 function addLicense(tierId, count, students) {
   const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
   if (!tier) return;
   const c = count || tier.defaultCount;
-  const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '' };
+  const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '', term: 1 };
   if (tier.hasStudentInput) lic.students = students || tier.defaultStudents || 0;
   quoteLicenses.push(lic);
   track('add_license', { tier_name: tier.name, tier_id: tierId, count: c });
@@ -242,6 +271,15 @@ function updateLicenseCount(licenseId, input, clamp) {
     input.value = val;
   }
   if (!isNaN(val) && val >= 1) lic.count = Math.round(val);
+  renderLicenseList();
+  renderTotals();
+  saveToUrl();
+}
+
+function updateLicenseTerm(licenseId, term) {
+  const lic = quoteLicenses.find(l => l.licenseId === licenseId);
+  if (!lic) return;
+  lic.term = parseInt(term) || 1;
   renderLicenseList();
   renderTotals();
   saveToUrl();
@@ -1395,10 +1433,14 @@ function renderLicenseList() {
   for (const lic of quoteLicenses) {
     const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
     if (!tier) continue;
-    const cost = calcLicenseCost(lic);
-    const priceDisplay = tier.isCustom ? 'Custom' : `${fmt(cost)}/yr`;
+    const annualCost = calcLicenseAnnualCost(lic);
+    const term = lic.term || 1;
+    const discPct = TERM_DISCOUNTS[term] || 0;
+    const multiYearTotal = calcLicenseMultiYearTotal(lic);
+    const priceDisplay = tier.isCustom ? 'Custom' : (term > 1 ? `${fmt(multiYearTotal)} (${term}yr)` : `${fmt(annualCost)}/yr`);
     let detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
     if (lic.students) detailDisplay += ` · ${lic.students.toLocaleString()} students`;
+    if (term > 1 && !tier.isCustom) detailDisplay += ` · ${discPct}% multi-year discount`;
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
@@ -1408,6 +1450,9 @@ function renderLicenseList() {
     div.style.setProperty('--lic-color', licColor);
     div.style.setProperty('--lic-bg', licColorLight);
     div.style.setProperty('--lic-text', licColorText);
+    const termOptions = Object.entries(TERM_LABELS).map(([v, label]) =>
+      `<option value="${v}"${parseInt(v) === term ? ' selected' : ''}>${label}</option>`
+    ).join('');
     div.innerHTML = `
       <div class="comp-info">
         <div class="license-name">${tier.name}
@@ -1417,6 +1462,10 @@ function renderLicenseList() {
         </div>
         <div class="license-detail">${detailDisplay}</div>
       </div>
+      <select class="term-select" onchange="updateLicenseTerm(${lic.licenseId}, this.value)" title="Contract term"
+              style="font-size:11px;padding:2px 4px;border:1px solid var(--slate-200);border-radius:4px;background:#fff;color:var(--slate-600);cursor:pointer;min-width:64px">
+        ${termOptions}
+      </select>
       <div class="comp-qty">
         <input class="comp-qty-input" type="number" step="any" value="${lic.count}" style="width:60px"
                onchange="updateLicenseCount(${lic.licenseId}, this, true)"
@@ -1783,6 +1832,21 @@ function renderTotals() {
     pdRow.style.display = 'none';
   }
 
+  // Software multi-year discount rows
+  const swDisc = calcTotalSoftwareDiscount();
+  const swAnnualRow = document.getElementById('swAnnualRow');
+  const swDiscountRow = document.getElementById('swDiscountRow');
+  if (swDisc > 0 && has) {
+    const swAnnualTimesTerms = quoteLicenses.reduce((s, l) => s + calcLicenseAnnualCost(l) * (l.term || 1), 0);
+    swAnnualRow.style.display = '';
+    document.getElementById('swAnnualTotal').textContent = fmt(swAnnualTimesTerms);
+    swDiscountRow.style.display = '';
+    document.getElementById('swDiscountDisplay').textContent = '\u2212' + fmt(swDisc);
+  } else {
+    swAnnualRow.style.display = 'none';
+    swDiscountRow.style.display = 'none';
+  }
+
   document.getElementById('servicesTotal').textContent = has ? fmt(services) : '\u2014';
   document.getElementById('softwareTotal').textContent = has ? fmt(software) : '\u2014';
   document.getElementById('standardTotal').textContent = has ? fmt(std) : '\u2014';
@@ -1976,6 +2040,9 @@ function getTabState() {
     educators: document.getElementById('educatorCount').value,
     prices: {
       softwareTotal: calcTotalSoftware(),
+      softwareAnnual: calcTotalSoftwareAnnual(),
+      softwareDiscount: calcTotalSoftwareDiscount(),
+      softwareTerms: quoteLicenses.map(l => ({ term: l.term || 1, discountPct: TERM_DISCOUNTS[l.term || 1] || 0, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) })),
       packages: quotePackages.map(qp => ({
         gross: calcQuotePkgGross(qp),
         net: calcQuotePkgNet(qp),
@@ -1992,7 +2059,7 @@ function getTabState() {
       outOfPocket: oopTotal,
       grandTotal: funderAmt > 0 ? oopTotal : partnerTotal
     },
-    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, customName: l.customName || undefined, students: l.students || undefined })),
+    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, term: l.term || 1, customName: l.customName || undefined, students: l.students || undefined })),
     packages: quotePackages.map(qp => ({
       packageId: qp.packageId,
       customName: qp.customName || undefined,
@@ -2045,7 +2112,7 @@ function hydrateState(state) {
     for (const sl of state.licenses) {
       const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
       if (!tier) continue;
-      const lic = { licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '' };
+      const lic = { licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '', term: sl.term || 1 };
       if (sl.students) lic.students = sl.students;
       quoteLicenses.push(lic);
     }
@@ -2175,10 +2242,18 @@ function copyForProposal() {
     for (const lic of quoteLicenses) {
       const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
       if (!tier) continue;
-      const cost = calcLicenseCost(lic);
+      const annual = calcLicenseAnnualCost(lic);
+      const term = lic.term || 1;
+      const total = calcLicenseMultiYearTotal(lic);
+      const discPct = TERM_DISCOUNTS[term] || 0;
       const licLabel = lic.customName ? `Playlab ${tier.name} (${lic.customName})` : `Playlab ${tier.name}`;
       const studentNote = lic.students ? ` \u2014 ${lic.students.toLocaleString()} students` : '';
-      lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}`, fmt(cost)));
+      const termNote = term > 1 ? ` \u00D7 ${term} years` : '';
+      lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}${termNote}`, term > 1 ? fmt(annual * term) : fmt(annual)));
+      if (discPct > 0) {
+        lines.push(pad(`    Multi-Year Discount (${discPct}%)`, '\u2212' + fmt(calcLicenseMultiYearDiscount(lic))));
+        lines.push(pad(`    Net Software (${term}-Year)`, fmt(total)));
+      }
     }
     lines.push('');
   }
