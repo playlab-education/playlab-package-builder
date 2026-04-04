@@ -9,13 +9,14 @@ function copyResLink(btn, url) {
     btn.classList.add('copied');
     btn.innerHTML = '&#x2713;';
     setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg>'; }, 1500);
-  });
+  }).catch(() => showToast('Copy failed'));
 }
 
 // ─── Custom Confirm Modal ────────────────────────────────────────────────────
 let _confirmResolve = null;
 function appConfirm(message, { okLabel = 'OK', cancelLabel = 'Cancel', danger = false } = {}) {
   return new Promise(resolve => {
+    if (_confirmResolve) _confirmResolve(false);
     _confirmResolve = resolve;
     document.getElementById('confirmMessage').textContent = message;
     const okBtn = document.getElementById('confirmOk');
@@ -461,6 +462,7 @@ const ADDONS = [
 
 // ─── Session Helpers ──────────────────────────────────────────────────────────
 function distributeHours(totalHours, numSessions) {
+  if (numSessions < 1) numSessions = 1;
   // Distribute totalHours evenly, rounded to nearest 0.5
   const base = Math.round((totalHours / numSessions) * 2) / 2;
   const sessions = [];
@@ -1092,6 +1094,7 @@ function confirmAddPackage(pkgId) {
   }
 
   const travelCounts = getDefaultTravelCounts(sessions);
+  const supportDefaults = getSupportDefaults(pkg, sessions);
   const qpkg = {
     pkgId: nextPkgId++,
     packageId: pkgId,
@@ -1101,10 +1104,10 @@ function confirmAddPackage(pkgId) {
     sessions,
     travelLocalDays: travelCounts.localDays,
     travelFlightTrips: travelCounts.flightTrips,
-    launchMeetingQty: getSupportDefaults(pkg, sessions).launchMeetingQty,
-    officeHoursQty: getSupportDefaults(pkg, sessions).officeHoursQty,
-    checkInQty: getSupportDefaults(pkg, sessions).checkInQty,
-    reflectionMeetingQty: getSupportDefaults(pkg, sessions).reflectionMeetingQty,
+    launchMeetingQty: supportDefaults.launchMeetingQty,
+    officeHoursQty: supportDefaults.officeHoursQty,
+    checkInQty: supportDefaults.checkInQty,
+    reflectionMeetingQty: supportDefaults.reflectionMeetingQty,
     discount: (pkg.pathwayDiscount || 0) * 100,
     components
   };
@@ -1184,7 +1187,7 @@ function setParticipants(pkgId, input, commit) {
   if (!isNaN(val) && val >= 1) {
     qpkg.participants = val;
     if (!qpkg.facilitatorsManual) {
-      qpkg.facilitators = Math.max(1, Math.ceil(val / 30));
+      qpkg.facilitators = Math.max(1, Math.ceil(val / 40));
     }
   }
   renderTotals();
@@ -1291,7 +1294,7 @@ function setCompQty(pkgId, compId, input) {
 function changeAutoQty(pkgId, field, dir) {
   const qpkg = quotePackages.find(q => q.pkgId === pkgId);
   if (!qpkg) return;
-  const step = field === 'launchMeetingQty' ? 1 : 1;
+  const step = 1;
   const newVal = qpkg[field] + dir * step;
   if (newVal < 0) return;
   qpkg[field] = newVal;
@@ -2155,13 +2158,23 @@ function getTabState() {
   };
 }
 
+let _saveToUrlTimer = null;
 function saveToUrl() {
-  const state = getTabState();
-  try {
-    const hash = btoa(JSON.stringify(state));
-    history.replaceState(null, '', '#' + hash);
-  } catch {}
   saveActiveTab();
+  clearTimeout(_saveToUrlTimer);
+  _saveToUrlTimer = setTimeout(() => {
+    const activeTab = builderTabs.find(t => t.id === activeTabId);
+    // Library-saved tabs use #lib/<filename> for live references
+    if (activeTab && activeTab._libFile) {
+      history.replaceState(null, '', '#lib/' + activeTab._libFile);
+      return;
+    }
+    const state = getTabState();
+    try {
+      const hash = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+      history.replaceState(null, '', '#' + hash);
+    } catch {}
+  }, 500);
 }
 
 function hydrateState(state) {
@@ -2280,12 +2293,49 @@ function hydrateState(state) {
 function loadFromUrl() {
   const hash = location.hash.slice(1);
   if (!hash) return false;
+  // Library reference URL: #lib/<filename>
+  if (hash.startsWith('lib/')) {
+    return 'lib'; // signal async library load needed
+  }
   try {
-    const state = JSON.parse(atob(hash));
+    const state = JSON.parse(decodeURIComponent(escape(atob(hash))));
     hydrateState(state);
     track('open_shared_link', { partner: state.partner || '', packages: (state.pkgs || []).length, addons: (state.addons || []).length });
     return true;
   } catch { return false; }
+}
+
+async function loadFromLibraryUrl() {
+  const hash = location.hash.slice(1);
+  if (!hash.startsWith('lib/')) return false;
+  const filename = hash.slice(4); // strip 'lib/'
+  if (!filename) return false;
+  if (!getLibToken()) {
+    // Need auth — prompt and retry
+    promptLibToken(() => { location.reload(); });
+    return false;
+  }
+  try {
+    const data = await loadQuoteFromLibrary(filename);
+    if (!data) { showToast('Could not load quote from library — it may have been deleted'); return false; }
+    const activeTab = builderTabs.find(t => t.id === activeTabId);
+    if (activeTab) {
+      activeTab._libFile = data._filename;
+      activeTab._libSha = data._sha;
+      activeTab.name = data.partnerName || 'Loaded Quote';
+      activeTab.state = data.quoteState;
+    }
+    hydrateState(data.quoteState);
+    renderAll();
+    saveActiveTab();
+    renderTabBar();
+    track('open_library_link', { partner: data.partnerName || '', filename });
+    return true;
+  } catch (e) {
+    console.error('loadFromLibraryUrl error:', e);
+    showToast('Failed to load quote from library link');
+    return false;
+  }
 }
 
 // ─── Copy for Proposal ────────────────────────────────────────────────────────
@@ -2434,11 +2484,8 @@ function copyForProposal() {
   const output = lines.join('\n');
   navigator.clipboard.writeText(output).then(() => {
     track('copy_quote', { format: 'proposal', partner: partner, currency: selectedCurrency, total_usd: std, packages: quotePackages.length, addons: quoteAddons.length });
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = 'Copied!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy for Proposal'; btn.classList.remove('copied'); }, 2000);
-  });
+    showToast('Copied for proposal');
+  }).catch(() => showToast('Copy failed'));
 }
 
 // ─── Copy as Markdown ─────────────────────────────────────────────────────────
@@ -2503,23 +2550,30 @@ function copyAsMarkdown() {
 
   navigator.clipboard.writeText(md).then(() => {
     track('copy_quote', { format: 'markdown', partner: partner, currency: selectedCurrency, total_usd: std, packages: quotePackages.length, addons: quoteAddons.length });
-    const btn = document.getElementById('copyMdBtn');
-    btn.textContent = '\u2713';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'MD'; btn.classList.remove('copied'); }, 2000);
-  });
+    showToast('Copied as Markdown');
+  }).catch(() => showToast('Copy failed'));
 }
 
 // ─── Events ───────────────────────────────────────────────────────────────────
 document.getElementById('copyLinkBtn').addEventListener('click', () => {
-  saveToUrl();
-  navigator.clipboard.writeText(location.href).then(() => {
-    track('share_link', { packages: quotePackages.length, addons: quoteAddons.length });
+  const activeTab = builderTabs.find(t => t.id === activeTabId);
+  let url;
+  if (activeTab && activeTab._libFile) {
+    // Library-saved: share the live library link
+    url = location.origin + location.pathname + '#lib/' + activeTab._libFile;
+    history.replaceState(null, '', '#lib/' + activeTab._libFile);
+  } else {
+    // Not saved: share a static snapshot
+    saveToUrl();
+    url = location.href;
+  }
+  navigator.clipboard.writeText(url).then(() => {
+    track('share_link', { packages: quotePackages.length, addons: quoteAddons.length, isLibLink: !!(activeTab && activeTab._libFile) });
     const btn = document.getElementById('copyLinkBtn');
-    btn.textContent = 'Link Copied!';
+    btn.textContent = activeTab && activeTab._libFile ? 'Library Link Copied!' : 'Link Copied!';
     btn.style.background = 'var(--emerald-500)';
     setTimeout(() => { btn.textContent = 'Copy Shareable Link'; btn.style.background = 'var(--slate-700)'; }, 2000);
-  });
+  }).catch(() => showToast('Copy failed'));
 });
 document.getElementById('clearBtn').addEventListener('click', clearAll);
 document.getElementById('discountVal').addEventListener('input', renderTotals);
@@ -2881,24 +2935,18 @@ async function readIndex() {
 }
 
 async function patchIndex(patchFn) {
-  // Read-patch-write with 409 retry. patchFn mutates entries in place.
-  const idx = await readIndex();
-  if (!idx) return false;
-  patchFn(idx.entries);
-  const body = { message: '[auto] Update index', content: encodeJsonContent(idx.entries) };
-  if (idx.sha) body.sha = idx.sha;
-  const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, body);
-  if (resp && resp.ok) return true;
-  if (resp && resp.status === 409) {
-    // Re-read fresh, apply patch again, retry
-    const fresh = await readIndex();
-    if (!fresh) return false;
-    patchFn(fresh.entries);
-    const retryBody = { message: '[auto] Update index (retry)', content: encodeJsonContent(fresh.entries) };
-    if (fresh.sha) retryBody.sha = fresh.sha;
-    const retryResp = await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, retryBody);
-    return retryResp && retryResp.ok;
+  // Read-patch-write with 409 conflict retry (up to 3 attempts).
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const idx = await readIndex();
+    if (!idx) return false;
+    patchFn(idx.entries);
+    const body = { message: '[auto] Update index' + (attempt > 0 ? ` (retry ${attempt})` : ''), content: encodeJsonContent(idx.entries) };
+    if (idx.sha) body.sha = idx.sha;
+    const resp = await libApi('PUT', `${LIB_QUOTES_PATH}/index.json`, body);
+    if (resp && resp.ok) return true;
+    if (!resp || resp.status !== 409) return false;
   }
+  showToast('Index update failed — use Repair to fix');
   return false;
 }
 
@@ -3292,6 +3340,8 @@ async function saveCurrentToLibrary() {
   if (result) {
     if (activeTab) { activeTab._libFile = result.filename; activeTab._libSha = result.sha; delete activeTab._fromUrl; clearDirty(activeTab); }
     renderTabBar();
+    // Update URL to library reference (live link, always loads latest)
+    history.replaceState(null, '', '#lib/' + result.filename);
     if (!result.conflict) {
       showToast('Saved to library: ' + name);
       track('library_save', { partner: name, updated: !!existingFile });
@@ -3376,7 +3426,18 @@ document.addEventListener('keydown', e => {
 // ─── Init ──────────────────────────────────────────────────────────────────────
 initTabs();
 const urlLoaded = loadFromUrl();
-if (urlLoaded) {
+if (urlLoaded === 'lib') {
+  // Library reference URL — load async from library
+  renderAll(); // show empty builder while loading
+  loadFromLibraryUrl().then(loaded => {
+    if (!loaded) {
+      // Fallback: load from active tab's saved state
+      const activeTab = builderTabs.find(t => t.id === activeTabId);
+      if (activeTab && activeTab.state) loadTabState(activeTab.state);
+    }
+    renderTabBar();
+  });
+} else if (urlLoaded) {
   // URL hash takes priority — load into the active tab
   const urlTab = builderTabs.find(t => t.id === activeTabId);
   if (urlTab) urlTab._fromUrl = true;
