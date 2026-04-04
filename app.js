@@ -12,6 +12,25 @@ function copyResLink(btn, url) {
   });
 }
 
+// ─── Custom Confirm Modal ────────────────────────────────────────────────────
+let _confirmResolve = null;
+function appConfirm(message, { okLabel = 'OK', cancelLabel = 'Cancel', danger = false } = {}) {
+  return new Promise(resolve => {
+    _confirmResolve = resolve;
+    document.getElementById('confirmMessage').textContent = message;
+    const okBtn = document.getElementById('confirmOk');
+    okBtn.textContent = okLabel;
+    okBtn.className = 'confirm-btn ' + (danger ? 'danger' : 'ok');
+    document.getElementById('confirmCancel').textContent = cancelLabel;
+    document.getElementById('confirmOverlay').classList.add('open');
+    okBtn.focus();
+  });
+}
+function resolveConfirm(value) {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  if (_confirmResolve) { _confirmResolve(value); _confirmResolve = null; }
+}
+
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 window.onerror = (msg, src, line) => {
   console.error('Unhandled error:', msg, src, line);
@@ -2015,11 +2034,11 @@ function showToast(msg) {
 }
 
 // ─── Tab Switching ──────────────────────────────────────────────────────────
-function switchMainTab(tab) {
+async function switchMainTab(tab) {
   // Warn if leaving Builder with unsaved quotes
   const currentlyOnBuilder = document.querySelector('.builder')?.style.display === 'grid';
   if (currentlyOnBuilder && tab !== 'builder' && hasUnsavedTabs()) {
-    if (!confirm('You have unsaved quotes in the Builder. Switch away anyway?\n\nYour work is preserved locally, but save to the Library to keep it permanently.')) return;
+    if (!await appConfirm('You have unsaved quotes in the Builder. Switch away anyway?\n\nYour work is preserved locally, but save to the Library to keep it permanently.', { okLabel: 'Switch anyway' })) return;
   }
 
   const btns = document.querySelectorAll('.tab-bar > .tab-btn');
@@ -2587,7 +2606,7 @@ function createNewTab() {
   history.replaceState(null, '', location.pathname);
 }
 
-function deleteTab(tabId) {
+async function deleteTab(tabId) {
   const tab = builderTabs.find(t => t.id === tabId);
   if (!tab) return;
   // Check if tab has content
@@ -2598,8 +2617,8 @@ function deleteTab(tabId) {
     (tab.state.partner && tab.state.partner.trim())
   );
   const isSaved = !!tab._libFile;
-  if (hasContent && !isSaved && !confirm(`Close tab "${tab.name}"? This quote is NOT saved to the Library and will be lost.`)) return;
-  if (hasContent && isSaved && !confirm(`Close tab "${tab.name}"? You can reload it anytime from the Library.`)) return;
+  if (hasContent && !isSaved && !await appConfirm(`Close tab "${tab.name}"? This quote is NOT saved to the Library and will be lost.`, { okLabel: 'Close', danger: true })) return;
+  if (hasContent && isSaved && !await appConfirm(`Close tab "${tab.name}"? You can reload it anytime from the Library.`, { okLabel: 'Close' })) return;
 
   const idx = builderTabs.findIndex(t => t.id === tabId);
   builderTabs.splice(idx, 1);
@@ -3224,7 +3243,7 @@ async function remixFromLibrary(filename) {
 
 async function archiveFromLibrary(filename, name) {
   if (libBusy) return;
-  if (!confirm('Archive "' + name + '"? It will be moved to the Archived tab.')) return;
+  if (!await appConfirm('Archive "' + name + '"? It will be moved to the Archived tab.', { okLabel: 'Archive', danger: true })) return;
   libBusy = true;
   document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Archiving&hellip;</div>';
   try {
@@ -3237,7 +3256,7 @@ async function archiveFromLibrary(filename, name) {
 
 async function restoreFromArchive(filename, name) {
   if (libBusy) return;
-  if (!confirm('Restore "' + name + '" to the active library?')) return;
+  if (!await appConfirm('Restore "' + name + '" to the active library?', { okLabel: 'Restore' })) return;
   libBusy = true;
   document.getElementById('libraryBody').innerHTML = '<div class="library-loading">Restoring&hellip;</div>';
   try {
@@ -3262,7 +3281,7 @@ async function saveCurrentToLibrary() {
   let existingSha = activeTab?._libSha || null;
 
   if (existingFile) {
-    const doUpdate = confirm('Update the existing saved quote, or save as a new copy?\n\nOK = Update existing\nCancel = Save as new');
+    const doUpdate = await appConfirm('Update the existing saved quote, or save as a new copy?', { okLabel: 'Update existing', cancelLabel: 'Save as new' });
     if (!doUpdate) { existingFile = null; existingSha = null; }
   }
 
