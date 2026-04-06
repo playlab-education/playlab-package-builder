@@ -3184,7 +3184,7 @@ function filterQuotes(quotes) {
     filtered = filtered.filter(q => q.savedBy === me);
   }
   if (librarySearchQuery) {
-    filtered = filtered.filter(q => q.partnerName.toLowerCase().includes(librarySearchQuery));
+    filtered = filtered.filter(q => q.partnerName.toLowerCase().includes(librarySearchQuery) || (q.savedBy && q.savedBy.toLowerCase().includes(librarySearchQuery)));
   }
   return filtered;
 }
