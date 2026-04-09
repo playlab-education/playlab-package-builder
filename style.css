@@ -124,6 +124,9 @@
     .session-hours-input::-webkit-inner-spin-button, .session-hours-input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .session-hours-input:focus { outline: none; border-color: var(--sky-500); }
     .session-hours-unit { font-size: 9.5px; color: var(--slate-400); font-weight: 600; flex-shrink: 0; }
+    .config-total-hours { width: 52px; padding: 5px 8px; border: 1.5px solid var(--slate-200); border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--slate-800); text-align: center; -moz-appearance: textfield; }
+    .config-total-hours::-webkit-inner-spin-button, .config-total-hours::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .config-total-hours:focus { outline: none; border-color: var(--sky-500); }
     .num-sessions-input { width: 52px; padding: 5px 8px; border: 1.5px solid var(--slate-200); border-radius: 7px; font-family: 'Lexend', sans-serif; font-size: 11px; font-weight: 700; color: var(--slate-800); text-align: center; -moz-appearance: textfield; }
     .num-sessions-input::-webkit-inner-spin-button, .num-sessions-input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .num-sessions-input:focus { outline: none; border-color: var(--sky-500); }
