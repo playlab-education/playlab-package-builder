@@ -2064,14 +2064,35 @@ async function switchMainTab(tab) {
   }
 }
 
+// ─── Skills Subtab Switching ─────────────────────────────────────────────────
+let activeSkillsSubtab = 'skills';
+function switchSkillsSubtab(subtab) {
+  activeSkillsSubtab = subtab;
+  document.querySelectorAll('.skills-subtab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === { skills: 'Our Skills', 'getting-started': 'Getting Started', 'power-users': 'Power Users' }[subtab]);
+  });
+  document.querySelectorAll('.skills-subtab-content').forEach(el => {
+    el.classList.toggle('active', el.id === 'subtab-' + subtab);
+  });
+  // Clear search when switching subtabs
+  const searchInput = document.getElementById('skillSearch');
+  if (searchInput) { searchInput.value = ''; filterSkills(''); }
+  track('skills_subtab', { subtab_name: subtab });
+}
+
+// ─── Resource Section Toggle ─────────────────────────────────────────────────
+function toggleResourceSection(section) {
+  section.classList.toggle('collapsed');
+}
+
 // ─── Cowork Skills Search ────────────────────────────────────────────────────
 function filterSkills(query) {
   const q = query.toLowerCase().trim();
-  document.querySelectorAll('.skill-card').forEach(card => {
+  document.querySelectorAll('#subtab-skills .skill-card').forEach(card => {
     const text = card.textContent.toLowerCase();
     card.style.display = q && !text.includes(q) ? 'none' : '';
   });
-  document.querySelectorAll('.skills-category').forEach(cat => {
+  document.querySelectorAll('#subtab-skills .skills-category').forEach(cat => {
     const visible = cat.querySelectorAll('.skill-card:not([style*="display: none"])');
     cat.style.display = visible.length === 0 ? 'none' : '';
   });

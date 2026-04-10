@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260409a">
+  <link rel="stylesheet" href="style.css?v=20260410a">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -317,6 +317,16 @@
     <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">These are the Claude Cowork skills available to Playlab learning partners. Each skill is a slash command you can type in Claude Cowork tasks to automate a workflow. Skills can also be used without a slash command &mdash; Claude will use them based on the context of a prompt.</p>
     <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">Skills are organized by how your day flows &mdash; from planning your day, to meeting prep, to follow-up, to communication. Remember: you can run multiple Cowork tasks simultaneously. <a href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">Learn more</a>.</p>
     <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">To use Claude Cowork, you&rsquo;ll need to download the desktop app at <a href="https://claude.com/download" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">claude.com/download</a> and toggle from &ldquo;Chat&rdquo; to &ldquo;Cowork&rdquo; at the top of the app.</p>
+
+    <!-- Subtab Bar -->
+    <div class="skills-subtab-bar">
+      <button class="skills-subtab-btn active" onclick="switchSkillsSubtab('skills')">Our Skills</button>
+      <button class="skills-subtab-btn" onclick="switchSkillsSubtab('getting-started')">Getting Started</button>
+      <button class="skills-subtab-btn" onclick="switchSkillsSubtab('power-users')">Power Users</button>
+    </div>
+
+    <!-- Subtab: Our Skills (existing content) -->
+    <div class="skills-subtab-content active" id="subtab-skills">
     <input type="text" id="skillSearch" placeholder="Search skills..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterSkills(this.value)">
 
     <!-- Category: Planning & Big Picture -->
@@ -608,6 +618,456 @@
     </div>
 
     <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">To update this page, edit the Claude Cowork Skills section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
+    </div><!-- end subtab-skills -->
+
+    <!-- Subtab: Getting Started -->
+    <div class="skills-subtab-content" id="subtab-getting-started">
+
+      <div style="background:linear-gradient(135deg, var(--sky-50), var(--violet-50)); border:1.5px solid var(--sky-200); border-radius:12px; padding:20px 24px; margin-bottom:28px">
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">New to Claude Cowork?</h3>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0">Start here. These resources and examples will help you go from first login to daily use. Remember: you don&rsquo;t need to be technical &mdash; just persistent. Ask it to do things, tell it to do it better, and push it to improve.</p>
+      </div>
+
+      <!-- Guides & Courses -->
+      <div class="resource-section" data-resource-section="guides">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Guides &amp; Courses</h3>
+            <p>The best walkthroughs and training resources to get you up and running</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-source">Anthropic (Official)</div>
+              <div class="resource-card-title">Get Started with Cowork</div>
+              <div class="resource-card-desc">The definitive official guide. Covers requirements, setup, file access, sub-agent coordination, scheduling, and security.</div>
+              <a class="resource-card-link" href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank">Open guide &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-source">Anthropic (Official)</div>
+              <div class="resource-card-title">Introduction to Claude Cowork (Course)</div>
+              <div class="resource-card-desc">Free official training course. Covers the task loop, plugins/skills, file workflows, and responsible steering. Goes from first launch to daily use.</div>
+              <a class="resource-card-link" href="https://anthropic.skilljar.com/introduction-to-claude-cowork" target="_blank">Start course &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-source">Airtree Ventures</div>
+              <div class="resource-card-title">Claude Cowork Course (1 Hour)</div>
+              <div class="resource-card-desc">Free beginner course explicitly designed for non-technical users. 3 core lessons: reading &amp; organizing folders, describing outcomes not steps, and reusable workflows.</div>
+              <a class="resource-card-link" href="https://www.airtree.vc/open-source-vc/claude-cowork-course" target="_blank">Start course &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-source">Jeff Su</div>
+              <div class="resource-card-title">Learn 80% of Cowork in 20 Minutes</div>
+              <div class="resource-card-desc">Practical walkthrough covering the 7 key capabilities with real demos: expense management, meeting summaries, and inbox triage.</div>
+              <a class="resource-card-link" href="https://www.jeffsu.org/learn-80-of-claude-cowork-in-under-20-minutes/" target="_blank">Read guide &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Curated Example Collections -->
+      <div class="resource-section" data-resource-section="examples">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Example Collections</h3>
+            <p>Curated galleries of use cases, skills, and workflow ideas</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <span class="resource-card-tag">30 Examples</span>
+              <div class="resource-card-title">Cowork Starter Guide &mdash; 30 Examples</div>
+              <div class="resource-card-source">Claudia + AI</div>
+              <div class="resource-card-desc">The single best curated list for non-technical users. 30 use cases across 7 categories: file management, reporting, documents, research, automation, meetings, and knowledge management.</div>
+              <a class="resource-card-link" href="https://claudiaplusai.substack.com/p/claude-cowork-starter-guide-30-examples" target="_blank">Browse examples &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag">39 Skills</span>
+              <div class="resource-card-title">39 Claude Skills from 23 Creators</div>
+              <div class="resource-card-source">AIble w/ My Mind</div>
+              <div class="resource-card-desc">Best skills catalog available. 39 real skills organized into 5 categories (Writers, Marketers, Developers, Business Ops, Career) with links to actual skill files.</div>
+              <a class="resource-card-link" href="https://aiblewmymind.substack.com/p/claude-skills-36-examples" target="_blank">Browse skills &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag">1,000+ Skills</span>
+              <div class="resource-card-title">Official Claude Skills Directory</div>
+              <div class="resource-card-source">Anthropic</div>
+              <div class="resource-card-desc">The official skills marketplace with 1,000+ ready-made skills you can install and use immediately. The &ldquo;app store&rdquo; for Claude Cowork.</div>
+              <a class="resource-card-link" href="https://claude.com/skills" target="_blank">Browse directory &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag">67 by Role</span>
+              <div class="resource-card-title">10 Use Cases Tested + 67 by Profession</div>
+              <div class="resource-card-source">AIble w/ My Mind</div>
+              <div class="resource-card-desc">10 deeply tested use cases with results, plus 67 additional ideas organized by profession: marketing, sales, finance, legal, HR, and education.</div>
+              <a class="resource-card-link" href="https://aiblewmymind.substack.com/p/claude-cowork-use-cases-guide" target="_blank">Read guide &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases: Email & Calendar -->
+      <div class="resource-section" data-resource-section="email-cal">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Email &amp; Calendar</h3>
+            <p>Inbox management, follow-ups, scheduling, and meeting prep</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Morning Inbox Briefing</div>
+              <div class="resource-card-desc">Schedule a daily task that scans your unread emails, flags urgent ones, and delivers a 1-page summary before you start your day. Set it for 8 AM and it&rsquo;s waiting when you open your laptop.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Scheduled</span><span class="resource-card-tag purple">Gmail</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Draft Follow-Ups from Meeting Notes</div>
+              <div class="resource-card-desc">After a meeting, paste or connect your transcript. Cowork drafts a polished follow-up email with action items assigned to the right people &mdash; in your voice.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag purple">Gmail</span><span class="resource-card-tag amber">Granola</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Daily Schedule Briefing</div>
+              <div class="resource-card-desc">Combines your calendar, email, and Slack into a structured morning overview. Each meeting shows context: who you&rsquo;re meeting, what you last discussed, and what to bring up.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag purple">Calendar</span><span class="resource-card-tag purple">Gmail</span><span class="resource-card-tag purple">Slack</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Meeting Prep Packets</div>
+              <div class="resource-card-desc">Before a call, Cowork pulls prior emails, meeting notes, and CRM data into a 1-page briefing with talking points and open items. Never walk into a meeting cold again.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag purple">Calendar</span><span class="resource-card-tag purple">Gmail</span><span class="resource-card-tag amber">CRM</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases: Files & Documents -->
+      <div class="resource-section" data-resource-section="files-docs">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Files &amp; Documents</h3>
+            <p>Organize files, create reports, build presentations, process data</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Organize Your Downloads Folder</div>
+              <div class="resource-card-desc">Point Cowork at a messy folder with 200+ files. It sorts by type, renames descriptively, and archives old items. Works with any folder structure.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Create Formatted Reports from Raw Data</div>
+              <div class="resource-card-desc">Transform weekly analytics exports into formatted Excel reports with totals, trends, conditional formatting, and working formulas. From raw CSV to board-ready in minutes.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span><span class="resource-card-tag purple">Excel</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Generate Slide Decks from Notes</div>
+              <div class="resource-card-desc">Turn rough bullet points or meeting notes into a 10-slide PowerPoint with logical structure, clean formatting, and consistent styling.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span><span class="resource-card-tag purple">PowerPoint</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Process Expense Receipts</div>
+              <div class="resource-card-desc">Drop receipt photos and PDFs into a folder. Cowork extracts vendor, date, amount, and category into a formatted spreadsheet &mdash; ready for accounting.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span><span class="resource-card-tag purple">Excel</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases: Research & Analysis -->
+      <div class="resource-section" data-resource-section="research">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Research &amp; Analysis</h3>
+            <p>Synthesize documents, extract themes, build summaries</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Synthesize a Body of Research</div>
+              <div class="resource-card-desc">Point Cowork at 15+ PDFs, articles, or documents. Get a structured synthesis with key themes, contradictions, and citations &mdash; not just summaries, but actual analysis.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span><span class="resource-card-tag purple">Drive</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Customer Feedback Analysis</div>
+              <div class="resource-card-desc">Parse interview transcripts and survey responses to identify recurring themes, pain points, and frequency counts. Great for quarterly reviews or product planning.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Competitive Landscape Analysis</div>
+              <div class="resource-card-desc">Analyze competitor websites and produce a comparison matrix covering features, pricing, messaging, and gaps. Cowork browses the sites and builds the analysis for you.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Browser</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Executive Summaries</div>
+              <div class="resource-card-desc">Distill detailed reports into 1-page summaries with key metrics, narrative context, and recommended actions. Perfect for board decks, stakeholder updates, or grant reports.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Files</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases: Automation -->
+      <div class="resource-section" data-resource-section="automation">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Scheduled Automations</h3>
+            <p>Set it and forget it &mdash; recurring tasks that run on a cadence</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Daily File Cleanup</div>
+              <div class="resource-card-desc">Schedule a task that sorts new files in a working folder by project every evening. No more messy desktops or Downloads folders.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Scheduled</span><span class="resource-card-tag">Files</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Weekly Team Update Newsletter</div>
+              <div class="resource-card-desc">Every Friday, Cowork pulls from Slack channels and meeting notes to generate a formatted weekly update covering shipped work, blockers, and upcoming priorities.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Scheduled</span><span class="resource-card-tag purple">Slack</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Content Repurposing Pipeline</div>
+              <div class="resource-card-desc">Takes published blog posts and generates platform-specific versions for LinkedIn, newsletters, and social media. One piece of content, multiple formats.</div>
+              <div style="margin-top:8px"><span class="resource-card-tag">Scheduled</span><span class="resource-card-tag">Files</span></div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Morning Briefing (Petr Vojacek)</div>
+              <div class="resource-card-desc">A real-world walkthrough of setting up a daily briefing that scans emails, calendar, and Slack every morning at 8 AM. Step-by-step guide with results.</div>
+              <a class="resource-card-link" href="https://petrvojacek.cz/en/blog/claude-cowork-daily-briefing/" target="_blank" style="margin-top:6px">Read walkthrough &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Official Resources -->
+      <div class="resource-section" data-resource-section="official">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Official Anthropic Resources</h3>
+            <p>Documentation, product pages, and webinars from the source</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Cowork Product Page</div>
+              <div class="resource-card-desc">Official overview of what Cowork is, who it&rsquo;s for, and the core value proposition.</div>
+              <a class="resource-card-link" href="https://claude.com/product/cowork" target="_blank">Visit page &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Connectors Directory</div>
+              <div class="resource-card-desc">All 38+ integrations available in Cowork: Gmail, Calendar, Slack, Notion, HubSpot, and many more.</div>
+              <a class="resource-card-link" href="https://claude.com/connectors" target="_blank">Browse connectors &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Plugin Directory</div>
+              <div class="resource-card-desc">Browse and install from the official plugin marketplace. Top plugins include Frontend Design (455K installs), Superpowers, and Playwright.</div>
+              <a class="resource-card-link" href="https://claude.com/plugins" target="_blank">Browse plugins &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Webinar: The Future of AI at Work</div>
+              <div class="resource-card-desc">Boris Cherny (creator of Claude Code) and Mikaela Grace walk through Cowork capabilities, live demos, and the product vision.</div>
+              <a class="resource-card-link" href="https://www.anthropic.com/webinars/future-of-ai-at-work-introducing-cowork" target="_blank">Watch webinar &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Schedule Recurring Tasks</div>
+              <div class="resource-card-desc">Official guide on setting up scheduled and automated tasks in Claude Cowork.</div>
+              <a class="resource-card-link" href="https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork" target="_blank">Read guide &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">6 Scheduled Task Automations</div>
+              <div class="resource-card-source">AIble w/ My Mind</div>
+              <div class="resource-card-desc">6 tested scheduling examples: morning briefings, file cleanup, Stripe reporting, and invoice organizing.</div>
+              <a class="resource-card-link" href="https://aiblewmymind.substack.com/p/claude-cowork-scheduled-tasks-6-ways" target="_blank">Read guide &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end subtab-getting-started -->
+
+    <!-- Subtab: Power Users -->
+    <div class="skills-subtab-content" id="subtab-power-users">
+
+      <div style="background:linear-gradient(135deg, var(--violet-50), var(--rose-50)); border:1.5px solid var(--violet-200); border-radius:12px; padding:20px 24px; margin-bottom:28px">
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">Push Your Thinking</h3>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0">These examples are meant to challenge what you think is possible. If you&rsquo;re already using Cowork, this is where you find the next level &mdash; multi-agent patterns, overnight autonomous work, browser automation, and creative integrations nobody expected.</p>
+      </div>
+
+      <!-- Impressive Real-World Examples -->
+      <div class="resource-section" data-resource-section="wow">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>The &ldquo;Wow&rdquo; Examples</h3>
+            <p>Real-world feats that redefine what&rsquo;s possible</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <span class="resource-card-tag rose">Viral</span>
+              <div class="resource-card-title">Boris Cherny&rsquo;s Workflow</div>
+              <div class="resource-card-source">Creator of Claude Code</div>
+              <div class="resource-card-desc">Runs 5 local + 5&ndash;10 web sessions in parallel, each in its own git checkout. His CLAUDE.md is only 2,500 tokens. Teams add learnings from every PR. The gold standard for how to work with Claude.</div>
+              <a class="resource-card-link" href="https://howborisusesclaudecode.com" target="_blank">Read his workflow &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag rose">Viral</span>
+              <div class="resource-card-title">Ramp: 30% of All Production PRs</div>
+              <div class="resource-card-source">$32B Fintech</div>
+              <div class="resource-card-desc">Ramp built an internal Claude agent called Inspect with access to databases, CI/CD, monitoring, and feature flags. Within months, ~30% of all merged pull requests were generated by it &mdash; without mandating usage.</div>
+              <a class="resource-card-link" href="https://creatoreconomy.so/p/inside-ramp-the-32b-company-ai-agents-geoff-charles" target="_blank">Read the story &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag rose">Viral</span>
+              <div class="resource-card-title">16 Agents Build a C Compiler</div>
+              <div class="resource-card-source">Nicholas Carlini, Anthropic</div>
+              <div class="resource-card-desc">16 parallel Claude Code agents wrote a 100,000-line C compiler in Rust from scratch. It compiles the Linux kernel, FFmpeg, Redis, PostgreSQL, and runs Doom. The most viral technical demo in the ecosystem.</div>
+              <a class="resource-card-link" href="https://www.anthropic.com/engineering/building-c-compiler" target="_blank">Read deep dive &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <span class="resource-card-tag rose">Viral</span>
+              <div class="resource-card-title">Kevin Roose Builds a Full App from 12 Prompts</div>
+              <div class="resource-card-source">NYT Journalist</div>
+              <div class="resource-card-desc">Built a complete Pocket alternative over a holiday break, then kept adding features: TTS, video summaries, spaced repetition emails, Kindle sync. His tweet: &ldquo;How does any app developer survive this?&rdquo;</div>
+              <a class="resource-card-link" href="https://x.com/kevinroose/status/2009738622484754931" target="_blank">See the tweet &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Patterns -->
+      <div class="resource-section" data-resource-section="patterns">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Advanced Patterns</h3>
+            <p>Multi-agent orchestration, autonomous work, and creative integrations</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Ralph Loop: Overnight Autonomous Coding</div>
+              <div class="resource-card-desc">Give Claude a PRD at 6pm, close your laptop, wake up to completed work. Ralph iterates autonomously on a requirements doc until all items are complete, then stops. With safety guardrails against infinite loops.</div>
+              <a class="resource-card-link" href="https://github.com/snarktank/ralph" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Agent Teams That Argue</div>
+              <div class="resource-card-desc">Spawn 5 agents with competing hypotheses about a problem. Instruct them to &ldquo;actively try to disprove each other&rsquo;s theories, like a scientific debate.&rdquo; The theory that survives falsification is far more robust than any single investigation.</div>
+              <a class="resource-card-link" href="https://code.claude.com/docs/en/agent-teams" target="_blank">Read the docs &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">n8n + Claude Code via SSH</div>
+              <div class="resource-card-desc">NetworkChuck connected n8n (workflow automation) to Claude Code via SSH, giving it full terminal access to files, scripts, logs, and deployments. n8n orchestrates; Claude executes.</div>
+              <a class="resource-card-link" href="https://github.com/theNetworkChuck/n8n-claude-code-guide" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Playwright Browser Automation</div>
+              <div class="resource-card-desc">Claude drives a real browser through natural language. Clicks buttons, fills forms, tests layouts, takes screenshots, and writes standard Playwright test files. One skill lets Claude automate any web task.</div>
+              <a class="resource-card-link" href="https://claude.com/plugins/playwright" target="_blank">Install plugin &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Hooks: The Real Automation Layer</div>
+              <div class="resource-card-desc">Auto-format on every file edit, branch protection, Slack/Discord notifications when done, TypeScript checks before commit. Hooks run shell commands at specific lifecycle points &mdash; turning Claude into a self-enforcing environment.</div>
+              <a class="resource-card-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank">Read the guide &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Office Document Factory</div>
+              <div class="resource-card-desc">Native creation and editing of PowerPoint, Word, Excel, and PDF through natural language. Includes slide rearrangement, tracked changes, and formatting preservation. 498 stars on GitHub.</div>
+              <a class="resource-card-link" href="https://github.com/tfriedel/claude-office-skills" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creative Integrations -->
+      <div class="resource-section" data-resource-section="integrations">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Creative Integrations</h3>
+            <p>Unexpected ways people are connecting Claude to the world</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <div class="resource-card-title">Architecture Diagrams from Code</div>
+              <div class="resource-card-desc">An MCP server auto-generates Excalidraw architecture diagrams from your codebase. Claude reads the code, infers the architecture, and renders it with real-time canvas sync. Updates as code changes. 1,661 stars.</div>
+              <a class="resource-card-link" href="https://github.com/yctimlin/mcp_excalidraw" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Home Assistant Smart Home Control</div>
+              <div class="resource-card-desc">Manage your entire home automation setup through natural language. Claude accesses entity states, executes services, debugs configs, and modifies automations.</div>
+              <a class="resource-card-link" href="https://community.home-assistant.io/t/claude-code-plugin-for-home-assistant-ai-assisted-automation-management/977939" target="_blank">View on Community &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Agent-in-Agent MCP Pattern</div>
+              <div class="resource-card-desc">Peter Steinberger&rsquo;s claude-code-mcp wraps Claude Code as a one-shot MCP server. Any MCP client can spawn Claude Code as a tool &mdash; enabling recursive agent-in-agent architectures. 1,226 stars.</div>
+              <a class="resource-card-link" href="https://github.com/steipete/claude-code-mcp" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">TradingView Chart Analysis</div>
+              <div class="resource-card-desc">Connect Claude to your locally running TradingView Desktop. One command scans your watchlist, reads all indicators, and returns structured data for session bias and trading analysis. 1,562 stars.</div>
+              <a class="resource-card-link" href="https://github.com/tradesdontlie/tradingview-mcp" target="_blank">View on GitHub &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Hubs & Further Reading -->
+      <div class="resource-section" data-resource-section="community">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Community Hubs &amp; Further Reading</h3>
+            <p>Directories, blogs, and viral threads from the Claude community</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div class="resource-grid">
+            <div class="resource-card">
+              <span class="resource-card-tag">37,855 Stars</span>
+              <div class="resource-card-title">Awesome Claude Code</div>
+              <div class="resource-card-desc">The definitive community directory of Claude Code resources, plugins, skills, tips, and integrations. Start here for the full ecosystem.</div>
+              <a class="resource-card-link" href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank">Browse directory &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Agent Skills Open Standard</div>
+              <div class="resource-card-desc">The open specification for portable agent skills that work across Claude Code, Cowork, and any compatible platform. Build once, use everywhere.</div>
+              <a class="resource-card-link" href="https://agentskills.io" target="_blank">Visit site &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">Addy Osmani: The Code Agent Orchestra</div>
+              <div class="resource-card-desc">Deep analysis of what makes multi-agent coding work &mdash; patterns for splitting work, coordinating agents, and avoiding conflicts. From Google&rsquo;s Chrome team lead.</div>
+              <a class="resource-card-link" href="https://addyosmani.com/blog/code-agent-orchestra/" target="_blank">Read post &#x2197;</a>
+            </div>
+            <div class="resource-card">
+              <div class="resource-card-title">The Briefing: Enterprise Agents</div>
+              <div class="resource-card-source">Anthropic</div>
+              <div class="resource-card-desc">Four Anthropic functional leaders demo Cowork + plugins in Finance, Legal, Sales, and Product. Enterprise-focused live demos.</div>
+              <a class="resource-card-link" href="https://www.anthropic.com/events/the-briefing-enterprise-agents-virtual-event" target="_blank">Watch event &#x2197;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end subtab-power-users -->
+
   </div>
 </div>
 
@@ -988,7 +1448,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260409a"></script>
+<script src="app.js?v=20260410a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
