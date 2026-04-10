@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260410b">
+  <link rel="stylesheet" href="style.css?v=20260410c">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -320,13 +320,19 @@
 
     <!-- Subtab Bar -->
     <div class="skills-subtab-bar">
-      <button class="skills-subtab-btn active" onclick="switchSkillsSubtab('skills')">Our Skills</button>
+      <button class="skills-subtab-btn active" onclick="switchSkillsSubtab('skills')">Cowork Skills for Playlab</button>
       <button class="skills-subtab-btn" onclick="switchSkillsSubtab('getting-started')">Getting Started</button>
       <button class="skills-subtab-btn" onclick="switchSkillsSubtab('power-users')">Power Users</button>
     </div>
 
-    <!-- Subtab: Our Skills (existing content) -->
+    <!-- Subtab: Cowork Skills for Playlab -->
     <div class="skills-subtab-content active" id="subtab-skills">
+
+      <div style="background:linear-gradient(135deg, var(--sky-50), var(--emerald-50)); border:1.5px solid var(--sky-200); border-radius:12px; padding:20px 24px; margin-bottom:20px">
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">Claude Cowork Skills for Playlab</h3>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0">These are the Cowork skills built specifically for the Playlab team. Each skill is a slash command you can type in a Cowork task &mdash; or Claude will use them automatically based on context. Skills are organized by how your day flows.</p>
+      </div>
+
     <input type="text" id="skillSearch" placeholder="Search skills..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterSkills(this.value)">
 
     <!-- Category: Planning & Big Picture -->
@@ -623,9 +629,28 @@
     <!-- Subtab: Getting Started -->
     <div class="skills-subtab-content" id="subtab-getting-started">
 
-      <div style="background:linear-gradient(135deg, var(--sky-50), var(--violet-50)); border:1.5px solid var(--sky-200); border-radius:12px; padding:20px 24px; margin-bottom:28px">
+      <div style="background:linear-gradient(135deg, var(--sky-50), var(--violet-50)); border:1.5px solid var(--sky-200); border-radius:12px; padding:20px 24px; margin-bottom:20px">
         <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">New to Claude Cowork?</h3>
         <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0">Start here. These resources and examples will help you go from first login to daily use. Remember: you don&rsquo;t need to be technical &mdash; just persistent. Ask it to do things, tell it to do it better, and push it to improve.</p>
+      </div>
+
+      <input type="text" id="gettingStartedSearch" placeholder="Search getting started resources..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterResourceCards('subtab-getting-started', this.value)">
+
+      <!-- Setup Checklist -->
+      <div class="resource-section" data-resource-section="checklist">
+        <div class="resource-section-header" onclick="toggleResourceSection(this.parentElement)">
+          <span class="resource-section-chevron">&#x25BC;</span>
+          <div>
+            <h3>Setup Checklist</h3>
+            <p>Step-by-step guide to get Claude Cowork set up and running</p>
+          </div>
+        </div>
+        <div class="resource-section-body">
+          <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden;margin-bottom:8px">
+            <iframe src="https://docs.google.com/document/d/13SXodSkhcKDOKIdPvwHRHEda9ckTDYhFPAkQle2Q9Q8/preview" style="width:100%;height:600px;border:none"></iframe>
+          </div>
+          <a href="https://docs.google.com/document/d/13SXodSkhcKDOKIdPvwHRHEda9ckTDYhFPAkQle2Q9Q8/edit?tab=t.0#heading=h.7kg0yj361479" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--sky-600);text-decoration:none">Open full checklist &#x2197;</a>
+        </div>
       </div>
 
       <!-- Guides & Courses -->
@@ -903,8 +928,10 @@
 
       <div style="background:linear-gradient(135deg, var(--violet-50), var(--rose-50)); border:1.5px solid var(--violet-200); border-radius:12px; padding:20px 24px; margin-bottom:28px">
         <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">Push Your Thinking</h3>
-        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0 0 8px">These examples show what&rsquo;s possible at the frontier. Most are <span class="resource-card-tag code" style="display:inline;font-size:10px">Claude Code</span> (the developer terminal) &mdash; not things you&rsquo;d do day-to-day in Cowork, but they show where the technology is heading. Items tagged <span class="resource-card-tag both" style="display:inline;font-size:10px">Both</span> work in Cowork today.</p>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0 0 8px">These examples show what&rsquo;s possible at the frontier. Most are <span class="resource-card-tag code" style="display:inline;font-size:10px">Claude Code</span> (the developer terminal) &mdash; not things you&rsquo;d do day-to-day in Cowork, but they show where the technology is heading. Items tagged <span class="resource-card-tag cowork" style="display:inline;font-size:10px">Cowork</span> work in Cowork today.</p>
       </div>
+
+      <input type="text" id="powerUsersSearch" placeholder="Search power user resources..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterResourceCards('subtab-power-users', this.value)">
 
       <!-- Impressive Real-World Examples -->
       <div class="resource-section" data-resource-section="wow">
@@ -918,28 +945,28 @@
         <div class="resource-section-body">
           <div class="resource-grid">
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Boris Cherny&rsquo;s Workflow</div>
               <div class="resource-card-source">Creator of Claude Code</div>
               <div class="resource-card-desc">Runs 5 local + 5&ndash;10 web sessions in parallel, each in its own git checkout. His CLAUDE.md is only 2,500 tokens. Teams add learnings from every PR. The gold standard for how to work with Claude.</div>
               <a class="resource-card-link" href="https://howborisusesclaudecode.com" target="_blank">Read his workflow &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Ramp: 30% of All Production PRs</div>
               <div class="resource-card-source">$32B Fintech</div>
               <div class="resource-card-desc">Ramp built an internal Claude agent called Inspect with access to databases, CI/CD, monitoring, and feature flags. Within months, ~30% of all merged pull requests were generated by it &mdash; without mandating usage.</div>
               <a class="resource-card-link" href="https://creatoreconomy.so/p/inside-ramp-the-32b-company-ai-agents-geoff-charles" target="_blank">Read the story &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">16 Agents Build a C Compiler</div>
               <div class="resource-card-source">Nicholas Carlini, Anthropic</div>
               <div class="resource-card-desc">16 parallel Claude Code agents wrote a 100,000-line C compiler in Rust from scratch. It compiles the Linux kernel, FFmpeg, Redis, PostgreSQL, and runs Doom. The most viral technical demo in the ecosystem.</div>
               <a class="resource-card-link" href="https://www.anthropic.com/engineering/building-c-compiler" target="_blank">Read deep dive &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Kevin Roose Builds a Full App from 12 Prompts</div>
               <div class="resource-card-source">NYT Journalist</div>
               <div class="resource-card-desc">Built a complete Pocket alternative over a holiday break, then kept adding features: TTS, video summaries, spaced repetition emails, Kindle sync. His tweet: &ldquo;How does any app developer survive this?&rdquo;</div>
@@ -979,7 +1006,7 @@
               <a class="resource-card-link" href="https://github.com/theNetworkChuck/n8n-claude-code-guide" target="_blank">View on GitHub &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag both">Both</span>
+              <span class="resource-card-tag cowork">Cowork</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Playwright Browser Automation</div>
               <div class="resource-card-desc">Claude drives a real browser through natural language. Clicks buttons, fills forms, tests layouts, takes screenshots, and writes standard Playwright test files. Available as a plugin in both Cowork and Code.</div>
               <a class="resource-card-link" href="https://claude.com/plugins/playwright" target="_blank">Install plugin &#x2197;</a>
@@ -991,7 +1018,7 @@
               <a class="resource-card-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank">Read the guide &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag both">Both</span>
+              <span class="resource-card-tag cowork">Cowork</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Office Document Factory</div>
               <div class="resource-card-desc">Native creation and editing of PowerPoint, Word, Excel, and PDF through natural language. Includes slide rearrangement, tracked changes, and formatting preservation. Works in both Cowork and Code.</div>
               <a class="resource-card-link" href="https://github.com/tfriedel/claude-office-skills" target="_blank">View on GitHub &#x2197;</a>
@@ -1458,7 +1485,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260410b"></script>
+<script src="app.js?v=20260410c"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

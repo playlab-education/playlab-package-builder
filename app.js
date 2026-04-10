@@ -2069,7 +2069,7 @@ let activeSkillsSubtab = 'skills';
 function switchSkillsSubtab(subtab) {
   activeSkillsSubtab = subtab;
   document.querySelectorAll('.skills-subtab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim() === { skills: 'Our Skills', 'getting-started': 'Getting Started', 'power-users': 'Power Users' }[subtab]);
+    btn.classList.toggle('active', btn.textContent.trim() === { skills: 'Cowork Skills for Playlab', 'getting-started': 'Getting Started', 'power-users': 'Power Users' }[subtab]);
   });
   document.querySelectorAll('.skills-subtab-content').forEach(el => {
     el.classList.toggle('active', el.id === 'subtab-' + subtab);
@@ -2083,6 +2083,28 @@ function switchSkillsSubtab(subtab) {
 // ─── Resource Section Toggle ─────────────────────────────────────────────────
 function toggleResourceSection(section) {
   section.classList.toggle('collapsed');
+}
+
+// ─── Resource Card Search (Getting Started / Power Users) ────────────────────
+function filterResourceCards(containerId, query) {
+  const q = query.toLowerCase().trim();
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.resource-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = q && !text.includes(q) ? 'none' : '';
+  });
+  container.querySelectorAll('.resource-section').forEach(section => {
+    const body = section.querySelector('.resource-section-body');
+    if (!body) return;
+    const visible = body.querySelectorAll('.resource-card:not([style*="display: none"])');
+    section.style.display = visible.length === 0 && q ? 'none' : '';
+    // Auto-expand sections with matches, collapse sections without
+    if (q) {
+      if (visible.length > 0) section.classList.remove('collapsed');
+      else section.classList.add('collapsed');
+    }
+  });
 }
 
 // ─── Cowork Skills Search ────────────────────────────────────────────────────
