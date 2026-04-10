@@ -478,6 +478,9 @@
     .resource-card-tag.purple { color: var(--violet-600); background: var(--violet-50); }
     .resource-card-tag.amber { color: #92400e; background: #fffbeb; }
     .resource-card-tag.rose { color: #9f1239; background: #fff1f2; }
+    .resource-card-tag.code { color: #0e7490; background: #ecfeff; border: 1px solid #cffafe; }
+    .resource-card-tag.cowork { color: #7c3aed; background: #f5f3ff; border: 1px solid #ede9fe; }
+    .resource-card-tag.both { color: #4338ca; background: #eef2ff; border: 1px solid #e0e7ff; }
 
     @media (max-width: 768px) {
       .skills-grid { grid-template-columns: 1fr; }

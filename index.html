@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260410a">
+  <link rel="stylesheet" href="style.css?v=20260410b">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -59,7 +59,7 @@
   <button class="tab-btn" onclick="switchMainTab('builder')">Builder</button>
   <button class="tab-btn" onclick="switchMainTab('pricing')">Pricing Sheet</button>
   <button class="tab-btn" onclick="switchMainTab('resources')">Key Resources</button>
-  <button class="tab-btn" onclick="switchMainTab('skills')">Cowork Skills</button>
+  <button class="tab-btn" onclick="switchMainTab('skills')">Claude</button>
 </div>
 
 <!-- Welcome View -->
@@ -95,8 +95,8 @@
 
       <div onclick="switchMainTab('skills')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--amber-500)';this.style.boxShadow='0 4px 12px rgba(245,158,11,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
         <div style="font-size:32px;margin-bottom:12px">&#x1F916;</div>
-        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Cowork Skills</h3>
-        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Browse Claude Code slash commands and learn how to use them</p>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Claude</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Skills, resources, and examples for Claude Cowork and Claude Code</p>
       </div>
     </div>
 
@@ -278,9 +278,9 @@
       <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.n4egmpc6chn7#heading=h.127h6tnhlmup" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
         <span style="font-size:18px">&#x1F916;</span>
         <div style="min-width:0;flex:1">
-          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Claude Cowork Skills</h3>
-          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">AI-powered sales workflow skills</p>
-          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Cowork Skills tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.n4egmpc6chn7#heading=h.127h6tnhlmup')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Claude Skills &amp; Resources</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">Skills, getting started guides, and power user examples</p>
+          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Claude tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.n4egmpc6chn7#heading=h.127h6tnhlmup')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
         </div>
         <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
       </a>
@@ -313,10 +313,10 @@
 <!-- Cowork Skills View -->
 <div class="skills-view" id="skillsView" style="display:none">
   <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
-    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Claude Cowork Skills</h2>
-    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">These are the Claude Cowork skills available to Playlab learning partners. Each skill is a slash command you can type in Claude Cowork tasks to automate a workflow. Skills can also be used without a slash command &mdash; Claude will use them based on the context of a prompt.</p>
-    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">Skills are organized by how your day flows &mdash; from planning your day, to meeting prep, to follow-up, to communication. Remember: you can run multiple Cowork tasks simultaneously. <a href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">Learn more</a>.</p>
-    <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">To use Claude Cowork, you&rsquo;ll need to download the desktop app at <a href="https://claude.com/download" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">claude.com/download</a> and toggle from &ldquo;Chat&rdquo; to &ldquo;Cowork&rdquo; at the top of the app.</p>
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Claude</h2>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px"><strong style="color:var(--slate-700)">Claude Cowork</strong> is for everyone &mdash; it lets you delegate tasks to Claude using connected tools like Gmail, Calendar, and Drive. <strong style="color:var(--slate-700)">Claude Code</strong> is the developer-facing terminal tool that powers Cowork under the hood. Same engine, different interfaces. Most of you will use Cowork; the Power Users tab includes Claude Code examples to show what&rsquo;s possible at the edges.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">Skills are slash commands you can type in Cowork tasks, or Claude will use them automatically based on context. You can run multiple tasks simultaneously. <a href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">Learn more</a>.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">To get started, download the desktop app at <a href="https://claude.com/download" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">claude.com/download</a> and toggle from &ldquo;Chat&rdquo; to &ldquo;Cowork&rdquo; at the top of the app.</p>
 
     <!-- Subtab Bar -->
     <div class="skills-subtab-bar">
@@ -617,7 +617,7 @@
       </div>
     </div>
 
-    <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">To update this page, edit the Claude Cowork Skills section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
+    <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">To update this page, edit the Claude section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
     </div><!-- end subtab-skills -->
 
     <!-- Subtab: Getting Started -->
@@ -903,7 +903,7 @@
 
       <div style="background:linear-gradient(135deg, var(--violet-50), var(--rose-50)); border:1.5px solid var(--violet-200); border-radius:12px; padding:20px 24px; margin-bottom:28px">
         <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin:0 0 6px">Push Your Thinking</h3>
-        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0">These examples are meant to challenge what you think is possible. If you&rsquo;re already using Cowork, this is where you find the next level &mdash; multi-agent patterns, overnight autonomous work, browser automation, and creative integrations nobody expected.</p>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin:0 0 8px">These examples show what&rsquo;s possible at the frontier. Most are <span class="resource-card-tag code" style="display:inline;font-size:10px">Claude Code</span> (the developer terminal) &mdash; not things you&rsquo;d do day-to-day in Cowork, but they show where the technology is heading. Items tagged <span class="resource-card-tag both" style="display:inline;font-size:10px">Both</span> work in Cowork today.</p>
       </div>
 
       <!-- Impressive Real-World Examples -->
@@ -918,28 +918,28 @@
         <div class="resource-section-body">
           <div class="resource-grid">
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span>
+              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Boris Cherny&rsquo;s Workflow</div>
               <div class="resource-card-source">Creator of Claude Code</div>
               <div class="resource-card-desc">Runs 5 local + 5&ndash;10 web sessions in parallel, each in its own git checkout. His CLAUDE.md is only 2,500 tokens. Teams add learnings from every PR. The gold standard for how to work with Claude.</div>
               <a class="resource-card-link" href="https://howborisusesclaudecode.com" target="_blank">Read his workflow &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span>
+              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Ramp: 30% of All Production PRs</div>
               <div class="resource-card-source">$32B Fintech</div>
               <div class="resource-card-desc">Ramp built an internal Claude agent called Inspect with access to databases, CI/CD, monitoring, and feature flags. Within months, ~30% of all merged pull requests were generated by it &mdash; without mandating usage.</div>
               <a class="resource-card-link" href="https://creatoreconomy.so/p/inside-ramp-the-32b-company-ai-agents-geoff-charles" target="_blank">Read the story &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span>
+              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">16 Agents Build a C Compiler</div>
               <div class="resource-card-source">Nicholas Carlini, Anthropic</div>
               <div class="resource-card-desc">16 parallel Claude Code agents wrote a 100,000-line C compiler in Rust from scratch. It compiles the Linux kernel, FFmpeg, Redis, PostgreSQL, and runs Doom. The most viral technical demo in the ecosystem.</div>
               <a class="resource-card-link" href="https://www.anthropic.com/engineering/building-c-compiler" target="_blank">Read deep dive &#x2197;</a>
             </div>
             <div class="resource-card">
-              <span class="resource-card-tag rose">Viral</span>
+              <span class="resource-card-tag rose">Viral</span><span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Kevin Roose Builds a Full App from 12 Prompts</div>
               <div class="resource-card-source">NYT Journalist</div>
               <div class="resource-card-desc">Built a complete Pocket alternative over a holiday break, then kept adding features: TTS, video summaries, spaced repetition emails, Kindle sync. His tweet: &ldquo;How does any app developer survive this?&rdquo;</div>
@@ -961,33 +961,39 @@
         <div class="resource-section-body">
           <div class="resource-grid">
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Ralph Loop: Overnight Autonomous Coding</div>
               <div class="resource-card-desc">Give Claude a PRD at 6pm, close your laptop, wake up to completed work. Ralph iterates autonomously on a requirements doc until all items are complete, then stops. With safety guardrails against infinite loops.</div>
               <a class="resource-card-link" href="https://github.com/snarktank/ralph" target="_blank">View on GitHub &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Agent Teams That Argue</div>
               <div class="resource-card-desc">Spawn 5 agents with competing hypotheses about a problem. Instruct them to &ldquo;actively try to disprove each other&rsquo;s theories, like a scientific debate.&rdquo; The theory that survives falsification is far more robust than any single investigation.</div>
               <a class="resource-card-link" href="https://code.claude.com/docs/en/agent-teams" target="_blank">Read the docs &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">n8n + Claude Code via SSH</div>
               <div class="resource-card-desc">NetworkChuck connected n8n (workflow automation) to Claude Code via SSH, giving it full terminal access to files, scripts, logs, and deployments. n8n orchestrates; Claude executes.</div>
               <a class="resource-card-link" href="https://github.com/theNetworkChuck/n8n-claude-code-guide" target="_blank">View on GitHub &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag both">Both</span>
               <div class="resource-card-title">Playwright Browser Automation</div>
-              <div class="resource-card-desc">Claude drives a real browser through natural language. Clicks buttons, fills forms, tests layouts, takes screenshots, and writes standard Playwright test files. One skill lets Claude automate any web task.</div>
+              <div class="resource-card-desc">Claude drives a real browser through natural language. Clicks buttons, fills forms, tests layouts, takes screenshots, and writes standard Playwright test files. Available as a plugin in both Cowork and Code.</div>
               <a class="resource-card-link" href="https://claude.com/plugins/playwright" target="_blank">Install plugin &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Hooks: The Real Automation Layer</div>
               <div class="resource-card-desc">Auto-format on every file edit, branch protection, Slack/Discord notifications when done, TypeScript checks before commit. Hooks run shell commands at specific lifecycle points &mdash; turning Claude into a self-enforcing environment.</div>
               <a class="resource-card-link" href="https://code.claude.com/docs/en/hooks-guide" target="_blank">Read the guide &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag both">Both</span>
               <div class="resource-card-title">Office Document Factory</div>
-              <div class="resource-card-desc">Native creation and editing of PowerPoint, Word, Excel, and PDF through natural language. Includes slide rearrangement, tracked changes, and formatting preservation. 498 stars on GitHub.</div>
+              <div class="resource-card-desc">Native creation and editing of PowerPoint, Word, Excel, and PDF through natural language. Includes slide rearrangement, tracked changes, and formatting preservation. Works in both Cowork and Code.</div>
               <a class="resource-card-link" href="https://github.com/tfriedel/claude-office-skills" target="_blank">View on GitHub &#x2197;</a>
             </div>
           </div>
@@ -1006,21 +1012,25 @@
         <div class="resource-section-body">
           <div class="resource-grid">
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Architecture Diagrams from Code</div>
               <div class="resource-card-desc">An MCP server auto-generates Excalidraw architecture diagrams from your codebase. Claude reads the code, infers the architecture, and renders it with real-time canvas sync. Updates as code changes. 1,661 stars.</div>
               <a class="resource-card-link" href="https://github.com/yctimlin/mcp_excalidraw" target="_blank">View on GitHub &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Home Assistant Smart Home Control</div>
               <div class="resource-card-desc">Manage your entire home automation setup through natural language. Claude accesses entity states, executes services, debugs configs, and modifies automations.</div>
               <a class="resource-card-link" href="https://community.home-assistant.io/t/claude-code-plugin-for-home-assistant-ai-assisted-automation-management/977939" target="_blank">View on Community &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">Agent-in-Agent MCP Pattern</div>
               <div class="resource-card-desc">Peter Steinberger&rsquo;s claude-code-mcp wraps Claude Code as a one-shot MCP server. Any MCP client can spawn Claude Code as a tool &mdash; enabling recursive agent-in-agent architectures. 1,226 stars.</div>
               <a class="resource-card-link" href="https://github.com/steipete/claude-code-mcp" target="_blank">View on GitHub &#x2197;</a>
             </div>
             <div class="resource-card">
+              <span class="resource-card-tag code">Claude Code</span>
               <div class="resource-card-title">TradingView Chart Analysis</div>
               <div class="resource-card-desc">Connect Claude to your locally running TradingView Desktop. One command scans your watchlist, reads all indicators, and returns structured data for session bias and trading analysis. 1,562 stars.</div>
               <a class="resource-card-link" href="https://github.com/tradesdontlie/tradingview-mcp" target="_blank">View on GitHub &#x2197;</a>
@@ -1448,7 +1458,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260410a"></script>
+<script src="app.js?v=20260410b"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
