@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>Playlab — Learning Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sky-50: #f0f9ff; --sky-100: #e0f2fe; --sky-200: #bae6fd;
+      --sky-400: #38bdf8; --sky-500: #0EA5E9; --sky-600: #0284c7; --sky-700: #0369a1;
+      --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+      --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+      --emerald-50: #ecfdf5; --emerald-500: #10b981; --emerald-600: #059669;
+      --amber-50: #fffbeb; --amber-500: #f59e0b;
+      --rose-50: #fff1f2; --rose-500: #f43f5e;
+      --violet-50: #f5f3ff; --violet-500: #8b5cf6;
+      --orange-50: #fff7ed; --orange-500: #f97316;
+    }
+    body { font-family: 'Lexend', sans-serif; background: var(--slate-50); color: var(--slate-800); line-height: 1.5; }
+
+    .header {
+      background: white; border-bottom: 1px solid var(--slate-200);
+      padding: 16px 28px; display: flex; align-items: center; gap: 14px;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .logo { display: flex; gap: 1px; font-size: 19px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo span:nth-child(1){color:#0EA5E9} .logo span:nth-child(2){color:#f43f5e}
+    .logo span:nth-child(3){color:#f59e0b} .logo span:nth-child(4){color:#0EA5E9}
+    .logo span:nth-child(5){color:#10b981} .logo span:nth-child(6){color:#0EA5E9}
+    .logo span:nth-child(7){color:#f43f5e}
+    .header-sep { width: 1px; height: 18px; background: var(--slate-200); }
+    .header-title { font-size: 14px; font-weight: 600; color: var(--slate-600); }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; }
+
+    .page-intro { text-align: center; margin-bottom: 20px; }
+    .page-intro h1 { font-size: 26px; font-weight: 700; color: var(--slate-800); margin-bottom: 8px; }
+    .page-intro p { font-size: 14px; color: var(--slate-500); max-width: 580px; margin: 0 auto; line-height: 1.6; }
+
+    .context-bar {
+      display: flex; gap: 16px; justify-content: center; margin-bottom: 36px; flex-wrap: wrap;
+    }
+    .context-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--slate-600); font-weight: 500;
+      background: white; border: 1px solid var(--slate-200); border-radius: 20px;
+      padding: 6px 14px;
+    }
+    .context-pill .num { font-weight: 700; color: var(--sky-600); }
+
+    .how-it-works {
+      background: white; border: 1.5px solid var(--slate-200); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .how-it-works h2 { font-size: 15px; font-weight: 700; color: var(--slate-800); margin-bottom: 14px; }
+    .steps { display: flex; gap: 20px; }
+    .step {
+      flex: 1; display: flex; gap: 12px; align-items: flex-start;
+    }
+    .step-num {
+      width: 24px; height: 24px; border-radius: 50%; background: var(--sky-100); color: var(--sky-600);
+      font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .step-text { font-size: 12px; color: var(--slate-600); line-height: 1.5; }
+    .step-text strong { color: var(--slate-800); }
+
+    .category {
+      background: white; border: 1.5px solid var(--slate-200); border-radius: 12px;
+      margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .category-header {
+      padding: 20px 24px; display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+    .category-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .category-header h2 { font-size: 16px; font-weight: 700; color: var(--slate-800); }
+    .category-header p { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+
+    .popular-badge {
+      display: inline-block; font-size: 10px; font-weight: 600; color: var(--sky-600);
+      background: var(--sky-50); border: 1px solid var(--sky-200); border-radius: 4px;
+      padding: 1px 6px; margin-left: 8px; vertical-align: middle;
+    }
+
+    .offering-table { width: 100%; border-collapse: collapse; }
+    .offering-table th {
+      text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--slate-400); padding: 10px 24px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+    .offering-table td {
+      padding: 14px 24px; font-size: 13px; color: var(--slate-700);
+      border-bottom: 1px solid var(--slate-50);
+    }
+    .offering-table tr:last-child td { border-bottom: none; }
+    .offering-table .name { font-weight: 600; color: var(--slate-800); }
+    .offering-table .desc { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+    .offering-table .group { font-size: 11px; color: var(--slate-400); margin-top: 2px; }
+    .offering-table .price {
+      font-weight: 600; color: var(--sky-700); white-space: nowrap; text-align: right;
+    }
+
+    .note-bar {
+      padding: 12px 24px; background: var(--slate-50); font-size: 11px;
+      color: var(--slate-500); border-top: 1px solid var(--slate-100); line-height: 1.5;
+    }
+
+    .cta-section {
+      text-align: center; margin-top: 36px; padding: 32px 24px;
+      background: white; border: 1.5px solid var(--slate-200); border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .cta-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .cta-section p { font-size: 13px; color: var(--slate-500); margin-bottom: 20px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+    .cta-btn {
+      display: inline-block; padding: 12px 28px; background: var(--sky-500); color: white;
+      border-radius: 9px; font-family: 'Lexend', sans-serif; font-size: 13px;
+      font-weight: 600; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: var(--sky-600); }
+
+    .footer-note {
+      text-align: center; margin-top: 24px; font-size: 11px; color: var(--slate-400); line-height: 1.8;
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 48px; }
+      .category-header { padding: 16px 18px; }
+      .offering-table th, .offering-table td { padding: 12px 18px; }
+      .offering-table .price { font-size: 12px; }
+      .steps { flex-direction: column; gap: 12px; }
+      .context-bar { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
+  <div class="header-sep"></div>
+  <div class="header-title">Learning Services</div>
+</div>
+
+<div class="container">
+  <div class="page-intro">
+    <h1>Learning Services Pricing</h1>
+    <p>Playlab is a tech nonprofit building public AI infrastructure for education. Our learning services help educators and students develop AI agency &mdash; the ability to understand, evaluate, and shape AI by building with it.</p>
+  </div>
+
+  <div class="context-bar">
+    <div class="context-pill"><span class="num">100+</span> partners</div>
+    <div class="context-pill"><span class="num">7.3M</span> students reached</div>
+    <div class="context-pill"><span class="num">80,000+</span> apps built on Playlab</div>
+  </div>
+
+  <div class="how-it-works">
+    <h2>How partnerships typically start</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Start with a workshop or starter package</strong> to see how Playlab fits your context</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Expand to deeper programs</strong> like Core or Advanced as you build momentum</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Add tool builds and pilots</strong> to address specific organizational challenges with custom AI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Agency for Educators -->
+  <div class="category">
+    <div class="category-header">
+      <div class="category-dot" style="background: var(--sky-500);"></div>
+      <div>
+        <h2>AI Agency for Educators</h2>
+        <p>Hands-on professional learning where educators move from exploring AI to designing and building their own AI tools</p>
+      </div>
+    </div>
+    <table class="offering-table">
+      <thead><tr><th>Offering</th><th style="text-align:right">Typical Range</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="name">Intro Workshop</div>
+            <div class="desc">1.5-hour interactive session &mdash; great for kickoffs and awareness building</div>
+            <div class="group">Up to 50 participants per group</div>
+          </td>
+          <td class="price">$1,500 &ndash; $3,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Power-Up</div>
+            <div class="desc">3-hour deep dive on new features or targeted topics</div>
+            <div class="group">Up to 50 participants per group</div>
+          </td>
+          <td class="price">$2,500 &ndash; $5,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Starter</div>
+            <div class="desc">3 hours of facilitation across multiple sessions with launch, check-ins, and reflection</div>
+            <div class="group">Up to 30 participants per group</div>
+          </td>
+          <td class="price">$4,500 &ndash; $8,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Core <span class="popular-badge">Most Popular</span></div>
+            <div class="desc">6 hours of facilitation &mdash; educators build real AI tools for their classrooms and schools</div>
+            <div class="group">Up to 30 participants per group</div>
+          </td>
+          <td class="price">$8,000 &ndash; $15,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Advanced</div>
+            <div class="desc">9 hours of facilitation &mdash; comprehensive program with full design and support cycle</div>
+            <div class="group">Up to 30 participants per group</div>
+          </td>
+          <td class="price">$12,000 &ndash; $22,000</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-bar">Ranges reflect a single group. Multiple groups, in-person delivery, and travel increase cost. Additional facilitators are added automatically for larger groups (1 per 30 participants).</div>
+  </div>
+
+  <!-- AI Agency for Students -->
+  <div class="category">
+    <div class="category-header">
+      <div class="category-dot" style="background: var(--emerald-500);"></div>
+      <div>
+        <h2>AI Agency for Students</h2>
+        <p>Students explore how AI works and build their own AI applications to solve real problems in their communities</p>
+      </div>
+    </div>
+    <table class="offering-table">
+      <thead><tr><th>Offering</th><th style="text-align:right">Typical Range</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="name">Starter Sprint</div>
+            <div class="desc">3-hour student design experience with launch and reflection</div>
+            <div class="group">Up to 30 students per group</div>
+          </td>
+          <td class="price">$3,500 &ndash; $6,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Core Sprint</div>
+            <div class="desc">6-hour program &mdash; students design, build, and test AI applications</div>
+            <div class="group">Up to 30 students per group</div>
+          </td>
+          <td class="price">$6,000 &ndash; $11,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Full Sprint</div>
+            <div class="desc">9-hour comprehensive program with full design cycle</div>
+            <div class="group">Up to 30 students per group</div>
+          </td>
+          <td class="price">$9,000 &ndash; $16,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Educator PD for Student AI</div>
+            <div class="desc">6-hour training for educators to independently facilitate student AI learning</div>
+            <div class="group">Up to 30 educators per group</div>
+          </td>
+          <td class="price">$8,000 &ndash; $15,000</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-bar">Student programs can be delivered as design sprints, hackathons, integrated units, or independent units. Pricing varies by format, group size, and delivery mode.</div>
+  </div>
+
+  <!-- Solutions for AI Impact -->
+  <div class="category">
+    <div class="category-header">
+      <div class="category-dot" style="background: var(--amber-500);"></div>
+      <div>
+        <h2>Solutions for AI Impact</h2>
+        <p>Design and build custom AI tools that address your organization's highest-priority challenges</p>
+      </div>
+    </div>
+    <table class="offering-table">
+      <thead><tr><th>Offering</th><th style="text-align:right">Typical Range</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="name">Ideation</div>
+            <div class="desc">Facilitated sessions to identify high-impact AI use cases aligned to your priorities</div>
+          </td>
+          <td class="price">$2,500 &ndash; $4,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Tool Build</div>
+            <div class="desc">Design and develop custom AI applications for your organization</div>
+          </td>
+          <td class="price">$5,000 &ndash; $7,500</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Tool Pilot</div>
+            <div class="desc">Deploy, test, and iterate on AI tools with your team in a real setting</div>
+          </td>
+          <td class="price">$6,500 &ndash; $10,000</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Ongoing Support</div>
+            <div class="desc">Monthly tool revision, maintenance, and iteration</div>
+          </td>
+          <td class="price">$1,500 &ndash; $5,000/mo</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-bar">Components are often combined into a full pathway (Ideation &rarr; Build &rarr; Pilot &rarr; Support). Additional tool builds and custom knowledge graphs available as add-ons.</div>
+  </div>
+
+  <!-- Systems for AI Innovation -->
+  <div class="category">
+    <div class="category-header">
+      <div class="category-dot" style="background: var(--violet-500);"></div>
+      <div>
+        <h2>Systems for AI Innovation</h2>
+        <p>Partner with Playlab to prototype new models of teaching and learning for the age of AI</p>
+      </div>
+    </div>
+    <table class="offering-table">
+      <thead><tr><th>Offering</th><th style="text-align:right">Typical Range</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="name">AI Lab Schools</div>
+            <div class="desc">Long-term R&amp;D partnership to redesign learning with AI</div>
+          </td>
+          <td class="price">Custom</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">AI Design Fellowships</div>
+            <div class="desc">Cohort-based fellowship for educators leading AI innovation</div>
+          </td>
+          <td class="price">Custom</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="name">Communities of Practice</div>
+            <div class="desc">Facilitated learning communities for sustained AI adoption</div>
+          </td>
+          <td class="price">Custom</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-bar">Innovation engagements are scoped collaboratively based on your vision, timeline, and scale.</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Let's find the right fit</h2>
+    <p>Most partners combine services across categories. We'll help you design a package that matches your goals, timeline, and budget &mdash; whether you're starting with a single workshop or planning a multi-year initiative.</p>
+    <a class="cta-btn" href="https://nate.li/cal" target="_blank">Schedule a Conversation</a>
+  </div>
+
+  <p class="footer-note">
+    All prices in USD. Ranges reflect typical single-group engagements &mdash; final pricing depends on<br>
+    number of groups, sessions, delivery format (virtual vs. in-person), and travel requirements.<br>
+    Playlab platform access is priced separately. AI model usage costs are covered by Playlab.<br>
+    As a nonprofit, Playlab offers flexible pricing for Title I schools and grant-funded initiatives.
+  </p>
+</div>
+
+</body>
+</html>

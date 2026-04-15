@@ -193,7 +193,7 @@ function unitShort(unit) {
 
 // ─── Software Tiers (Enterprise only) ───────────────────────────────────────
 const SOFTWARE_TIERS = [
-  { id: 'play', name: 'Play', tagline: '6-mo or 12-mo for any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo or $3,000/12-mo per org', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00' },
+  { id: 'play', name: 'Play', tagline: 'For any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo · $3,000/12-mo', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00', noMultiYear: true },
   { id: 'impact', name: 'Impact', tagline: 'Best for small school deployments and non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
   { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1,000–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1,000–9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
@@ -220,6 +220,10 @@ function calcLicenseAnnualCost(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
   if (!tier) return 0;
   if (tier.isCustom) return 0;
+  if (tier.noMultiYear) {
+    const multiplier = (lic.period === 6) ? 1 : 2;
+    return tier.pricePerUnit * multiplier * lic.count;
+  }
   return tier.pricePerUnit * lic.count;
 }
 
@@ -227,6 +231,8 @@ function calcLicenseAnnualCost(lic) {
 function calcLicenseCost(lic) { return calcLicenseAnnualCost(lic); }
 
 function calcLicenseMultiYearTotal(lic) {
+  const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
+  if (tier?.noMultiYear) return calcLicenseAnnualCost(lic);
   const annual = calcLicenseAnnualCost(lic);
   const term = lic.term || 1;
   const discPct = TERM_DISCOUNTS[term] || 0;
@@ -234,6 +240,8 @@ function calcLicenseMultiYearTotal(lic) {
 }
 
 function calcLicenseMultiYearDiscount(lic) {
+  const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
+  if (tier?.noMultiYear) return 0;
   const annual = calcLicenseAnnualCost(lic);
   const term = lic.term || 1;
   const discPct = TERM_DISCOUNTS[term] || 0;
@@ -257,6 +265,7 @@ function addLicense(tierId, count, students) {
   if (!tier) return;
   const c = count || tier.defaultCount;
   const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '', term: 1 };
+  if (tier.noMultiYear) lic.period = 12;
   if (tier.hasStudentInput) lic.students = students || tier.defaultStudents || 0;
   quoteLicenses.push(lic);
   track('add_license', { tier_name: tier.name, tier_id: tierId, count: c });
@@ -305,6 +314,15 @@ function updateLicenseTerm(licenseId, term) {
   saveToUrl();
 }
 
+function updateLicensePeriod(licenseId, period) {
+  const lic = quoteLicenses.find(l => l.licenseId === licenseId);
+  if (!lic) return;
+  lic.period = parseInt(period) || 12;
+  renderLicenseList();
+  renderTotals();
+  saveToUrl();
+}
+
 // ─── Package Definitions ───────────────────────────────────────────────────────
 const PATHWAYS = [
   { id: 'educators', name: 'AI Agency for Educators', color: '#0EA5E9', desc: 'From AI Curious to AI Creator' },
@@ -327,7 +345,7 @@ const PACKAGES = [
     components: [
       { blockId: 'facilitation', qty: 6, label: 'Facilitation', scalable: true }
     ] },
-  { id: 'edu-full', pathway: 'educators', name: 'Full Agency Package', subtitle: '9 hrs + supports', badge: 'Gold Standard',
+  { id: 'edu-full', pathway: 'educators', name: 'Advanced Package', subtitle: '9 hrs + supports', badge: 'Gold Standard',
     desc: 'Our most comprehensive experience \u2014 from understanding AI to designing advanced tools, evaluating impact, and a final showcase.',
     facilitationHours: 9,
     components: [
@@ -1515,10 +1533,30 @@ function renderLicenseList() {
     const term = lic.term || 1;
     const discPct = TERM_DISCOUNTS[term] || 0;
     const multiYearTotal = calcLicenseMultiYearTotal(lic);
-    const priceDisplay = tier.isCustom ? 'Custom' : (term > 1 ? `${fmt(multiYearTotal)} (${term}yr)` : `${fmt(annualCost)}/yr`);
-    let detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
-    if (lic.students) detailDisplay += ` · ${lic.students.toLocaleString()} students`;
-    if (term > 1 && !tier.isCustom) detailDisplay += ` · ${discPct}% multi-year discount`;
+    let priceDisplay, detailDisplay, selectorHtml;
+    if (tier.noMultiYear) {
+      const period = lic.period || 12;
+      const periodLabel = period === 6 ? '6-mo' : '12-mo';
+      priceDisplay = `${fmt(annualCost)}/${periodLabel}`;
+      detailDisplay = `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${period === 6 ? tier.pricePerUnit.toLocaleString() : (tier.pricePerUnit * 2).toLocaleString()}/${tier.unitLabel}/${periodLabel}`;
+      selectorHtml = `<select class="term-select" onchange="updateLicensePeriod(${lic.licenseId}, this.value)" title="License period"
+              style="font-size:11px;padding:2px 4px;border:1px solid var(--slate-200);border-radius:4px;background:#fff;color:var(--slate-600);cursor:pointer;min-width:76px">
+        <option value="6"${period === 6 ? ' selected' : ''}>6 Months</option>
+        <option value="12"${period === 12 ? ' selected' : ''}>12 Months</option>
+      </select>`;
+    } else {
+      priceDisplay = tier.isCustom ? 'Custom' : (term > 1 ? `${fmt(multiYearTotal)} (${term}yr)` : `${fmt(annualCost)}/yr`);
+      detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
+      if (lic.students) detailDisplay += ` · ${lic.students.toLocaleString()} students`;
+      if (term > 1 && !tier.isCustom) detailDisplay += ` · ${discPct}% multi-year discount`;
+      const termOptions = Object.entries(TERM_LABELS).map(([v, label]) =>
+        `<option value="${v}"${parseInt(v) === term ? ' selected' : ''}>${label}</option>`
+      ).join('');
+      selectorHtml = `<select class="term-select" onchange="updateLicenseTerm(${lic.licenseId}, this.value)" title="Contract term"
+              style="font-size:11px;padding:2px 4px;border:1px solid var(--slate-200);border-radius:4px;background:#fff;color:var(--slate-600);cursor:pointer;min-width:64px">
+        ${termOptions}
+      </select>`;
+    }
     const div = document.createElement('div');
     div.className = 'license-line';
     div.style.marginBottom = '6px';
@@ -1528,9 +1566,6 @@ function renderLicenseList() {
     div.style.setProperty('--lic-color', licColor);
     div.style.setProperty('--lic-bg', licColorLight);
     div.style.setProperty('--lic-text', licColorText);
-    const termOptions = Object.entries(TERM_LABELS).map(([v, label]) =>
-      `<option value="${v}"${parseInt(v) === term ? ' selected' : ''}>${label}</option>`
-    ).join('');
     div.innerHTML = `
       <div class="comp-info">
         <div class="license-name">${tier.name}
@@ -1540,10 +1575,7 @@ function renderLicenseList() {
         </div>
         <div class="license-detail">${detailDisplay}</div>
       </div>
-      <select class="term-select" onchange="updateLicenseTerm(${lic.licenseId}, this.value)" title="Contract term"
-              style="font-size:11px;padding:2px 4px;border:1px solid var(--slate-200);border-radius:4px;background:#fff;color:var(--slate-600);cursor:pointer;min-width:64px">
-        ${termOptions}
-      </select>
+      ${selectorHtml}
       <div class="comp-qty">
         <input class="comp-qty-input" type="number" step="any" value="${lic.count}" style="width:60px"
                onchange="updateLicenseCount(${lic.licenseId}, this, true)"
@@ -2164,7 +2196,7 @@ function getTabState() {
       softwareTotal: calcTotalSoftware(),
       softwareAnnual: calcTotalSoftwareAnnual(),
       softwareDiscount: calcTotalSoftwareDiscount(),
-      softwareTerms: quoteLicenses.map(l => ({ term: l.term || 1, discountPct: TERM_DISCOUNTS[l.term || 1] || 0, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) })),
+      softwareTerms: quoteLicenses.map(l => { const t = SOFTWARE_TIERS.find(x => x.id === l.tierId); return t?.noMultiYear ? { period: l.period || 12, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) } : { term: l.term || 1, discountPct: TERM_DISCOUNTS[l.term || 1] || 0, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) }; }),
       packages: quotePackages.map(qp => ({
         gross: calcQuotePkgGross(qp),
         net: calcQuotePkgNet(qp),
@@ -2181,7 +2213,7 @@ function getTabState() {
       outOfPocket: oopTotal,
       grandTotal: funderAmt > 0 ? oopTotal : partnerTotal
     },
-    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, term: l.term || 1, customName: l.customName || undefined, students: l.students || undefined })),
+    licenses: quoteLicenses.map(l => ({ tierId: l.tierId, count: l.count, term: l.term || 1, period: l.period || undefined, customName: l.customName || undefined, students: l.students || undefined })),
     packages: quotePackages.map(qp => ({
       packageId: qp.packageId,
       customName: qp.customName || undefined,
@@ -2245,6 +2277,7 @@ function hydrateState(state) {
       const tier = SOFTWARE_TIERS.find(t => t.id === sl.tierId);
       if (!tier) continue;
       const lic = { licenseId: nextLicenseId++, tierId: sl.tierId, count: sl.count || tier.defaultCount, customName: sl.customName || '', term: sl.term || 1 };
+      if (tier.noMultiYear) lic.period = sl.period || 12;
       if (sl.students) lic.students = sl.students;
       quoteLicenses.push(lic);
     }
@@ -2412,16 +2445,23 @@ function copyForProposal() {
       const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
       if (!tier) continue;
       const annual = calcLicenseAnnualCost(lic);
-      const term = lic.term || 1;
-      const total = calcLicenseMultiYearTotal(lic);
-      const discPct = TERM_DISCOUNTS[term] || 0;
       const licLabel = lic.customName ? `Playlab ${tier.name} (${lic.customName})` : `Playlab ${tier.name}`;
-      const studentNote = lic.students ? ` \u2014 ${lic.students.toLocaleString()} students` : '';
-      const termNote = term > 1 ? ` \u00D7 ${term} years` : '';
-      lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}${termNote}`, term > 1 ? fmt(annual * term) : fmt(annual)));
-      if (discPct > 0) {
-        lines.push(pad(`    Multi-Year Discount (${discPct}%)`, '\u2212' + fmt(calcLicenseMultiYearDiscount(lic))));
-        lines.push(pad(`    Net Software (${term}-Year)`, fmt(total)));
+      if (tier.noMultiYear) {
+        const period = lic.period || 12;
+        const periodLabel = period === 6 ? '6-mo' : '12-mo';
+        const unitPrice = period === 6 ? tier.pricePerUnit : tier.pricePerUnit * 2;
+        lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${unitPrice.toLocaleString()}/${tier.unitLabel}/${periodLabel}`, fmt(annual)));
+      } else {
+        const term = lic.term || 1;
+        const total = calcLicenseMultiYearTotal(lic);
+        const discPct = TERM_DISCOUNTS[term] || 0;
+        const studentNote = lic.students ? ` \u2014 ${lic.students.toLocaleString()} students` : '';
+        const termNote = term > 1 ? ` \u00D7 ${term} years` : '';
+        lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}${termNote}`, term > 1 ? fmt(annual * term) : fmt(annual)));
+        if (discPct > 0) {
+          lines.push(pad(`    Multi-Year Discount (${discPct}%)`, '\u2212' + fmt(calcLicenseMultiYearDiscount(lic))));
+          lines.push(pad(`    Net Software (${term}-Year)`, fmt(total)));
+        }
       }
     }
     lines.push('');
