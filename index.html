@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260416b">
+  <link rel="stylesheet" href="style.css?v=20260416c">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -1386,10 +1386,10 @@
 
     <!-- Pipeline Progress Bar -->
     <div class="fg-pipeline">
-      <div class="fg-pipeline-step" onclick="toggleFGStage('handoff')">
-        <div class="fg-pipeline-node" id="fg-pip-handoff">
+      <div class="fg-pipeline-step" onclick="toggleFGStage('inquiry')">
+        <div class="fg-pipeline-node" id="fg-pip-inquiry">
           <div class="fg-pipeline-num">1</div>
-          <div class="fg-pipeline-label">Handoff</div>
+          <div class="fg-pipeline-label">Inquiry</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
@@ -1429,80 +1429,71 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 1: HANDOFF ═══ -->
-    <div class="fg-stage" id="fg-stage-handoff">
-      <div class="fg-stage-header" onclick="toggleFGStage('handoff')">
+    <!-- ═══ STAGE 1: INQUIRY ═══ -->
+    <div class="fg-stage" id="fg-stage-inquiry">
+      <div class="fg-stage-header" onclick="toggleFGStage('inquiry')">
         <div class="fg-stage-num">1</div>
         <div>
-          <div class="fg-stage-title">Handoff</div>
-          <div class="fg-stage-subtitle">A new partner is ready to engage. Here&rsquo;s how the relationship begins.</div>
+          <div class="fg-stage-title">Inquiry</div>
+          <div class="fg-stage-subtitle">A potential partner has reached out or been identified. First contact.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
       <div class="fg-stage-body">
 
         <div class="fg-section">
-          <div class="fg-section-title">How the Partner Gets Here</div>
-          <div class="fg-body-text">
-            <strong>Most common:</strong> Nate posts a partner summary in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> Slack with context from a successful discovery call, then tags a suggested LP (or @Mera to assign).<br>
-            <strong>Also possible:</strong> Inbound inquiry lands and Mera/Nate assigns you directly. Or an existing partner relationship triggers a new engagement.<br>
-            <strong>Key principle:</strong> From this point, Playlab owns the relationship. A clean handoff means the partner never has to repeat themselves.
-          </div>
+          <div class="fg-section-title">How Partners Come to Playlab</div>
+          <table class="fg-table">
+            <thead><tr><th>Source</th><th>What Happens</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Inbound &mdash; Website</strong></td><td>Partner fills out the <a href="https://share.hsforms.com/1RUfAsKkzSOW8wXYKphpKyw4gmdg" target="_blank" style="color:var(--sky-600);font-weight:600">inquiry form</a> (&ldquo;Partner with Us&rdquo; / &ldquo;Contact Playlab&rdquo;). Nate or Mera triages and assigns.</td></tr>
+              <tr><td><strong>Inbound &mdash; Referral</strong></td><td>An existing partner, colleague, or network contact introduces someone. Often arrives via email or Slack.</td></tr>
+              <tr><td><strong>Inbound &mdash; Conference</strong></td><td>Someone connects with Playlab at an event &mdash; business card, booth conversation, session follow-up.</td></tr>
+              <tr><td><strong>Outbound &mdash; Prospecting</strong></td><td>Playlab identifies a potential partner and reaches out directly via email or LinkedIn.</td></tr>
+              <tr><td><strong>Renewal / Expansion</strong></td><td>An existing partner is ready for a new engagement &mdash; either a renewal or expanded scope.</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <div class="fg-section">
-          <div class="fg-section-title">The Process</div>
+          <div class="fg-section-title">What Happens from Playlab&rsquo;s Side</div>
           <ol class="fg-checklist">
-            <li><span class="fg-checklist-num">1</span><span>Reply in the Slack thread: <em>&ldquo;On it! Scheduling for [date].&rdquo;</em></span></li>
-            <li><span class="fg-checklist-num">2</span><span>Read the full Slack summary &mdash; highlight anything unclear, ask in-thread before calling the partner</span></li>
-            <li><span class="fg-checklist-num">3</span><span>In HubSpot: Change deal owner to yourself. Confirm the stage is correct (Nate will specify Discovery or Scoping)</span></li>
-            <li><span class="fg-checklist-num">4</span><span>Research the partner &mdash; use Claude Cowork <code>/meeting-prep-briefing</code> or manually check their website, leadership, recent news</span></li>
-            <li><span class="fg-checklist-num">5</span><span>Send intro email within 24 hours &mdash; use <code>/email-draft</code> in Claude Cowork (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) to draft one that references context from the handoff</span></li>
-            <li><span class="fg-checklist-num">6</span><span>Schedule the first call (Discovery or Scoping depending on where they are)</span></li>
+            <li><span class="fg-checklist-num">1</span><span><strong>Inquiry is triaged</strong> &mdash; Nate or Mera reviews the inquiry and determines if it&rsquo;s a fit for Playlab</span></li>
+            <li><span class="fg-checklist-num">2</span><span><strong>Context is gathered</strong> &mdash; research the org (use <code>/research [org name]</code> in Claude Cowork), check HubSpot for prior history, review any materials they shared</span></li>
+            <li><span class="fg-checklist-num">3</span><span><strong>Playlab responds within 24 hours</strong> &mdash; use <code>/email-draft</code> in Claude Cowork (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) to draft a warm, personalized response that acknowledges their context</span></li>
+            <li><span class="fg-checklist-num">4</span><span><strong>Discovery call is scheduled</strong> &mdash; include a Calendly link or propose specific times</span></li>
+            <li><span class="fg-checklist-num">5</span><span><strong>Internal assignment</strong> &mdash; Nate posts in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> Slack with partner context, tags a suggested LP (or @Mera to assign). LP replies: <em>&ldquo;On it! Scheduling for [date].&rdquo;</em></span></li>
           </ol>
         </div>
 
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-          <div><strong>Manual &mdash; you do this:</strong> Change the deal owner in HubSpot to yourself. Add a note: &ldquo;LP handoff from [Sales]. First call scheduled [date].&rdquo; There is no automation for the ownership change &mdash; you must do it yourself so the deal shows on your board.</div>
+          <div><strong>Manual:</strong> If a deal doesn&rsquo;t exist yet, create one in HubSpot (or use <code>/opp</code> in Claude Cowork). If one already exists, change the deal owner to yourself and confirm the stage is &ldquo;Discovery.&rdquo; Add a note with how the partner came to us and any context from the inquiry.</div>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F3AF;</span>
+          <div><strong>The goal of this stage is simple:</strong> Respond quickly, make the partner feel heard, and get a discovery call on the calendar. Speed matters &mdash; inquiries go cold fast.</div>
         </div>
 
         <div class="fg-escalate">
           <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
           <ul>
-            <li>The summary is thin or confusing &mdash; ask in the Slack thread before calling the partner</li>
-            <li>You&rsquo;re not sure if this is a Discovery or Scoping conversation &mdash; ask Nate</li>
-            <li>The partner is a channel/intermediary org (they want to resell or bundle Playlab) &mdash; Nate handles these</li>
+            <li>The inquiry is from a channel/intermediary org (they want to resell or bundle Playlab) &mdash; Nate handles these</li>
+            <li>The inquiry mentions an RFP, grant, or formal procurement process &mdash; different pipeline, Nate handles</li>
+            <li>You&rsquo;re unsure if the inquiry is a fit for Playlab &mdash; check with Nate before responding</li>
+            <li>The partner is a high-profile org or &gt;$40K estimated value &mdash; flag Nate early</li>
           </ul>
         </div>
 
         <div class="fg-mistakes">
           <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
           <ul>
-            <li>Waiting more than 24 hours to reach out &mdash; momentum dies fast after a good discovery call</li>
-            <li>Not reading the full Slack summary and asking the partner to repeat context they already shared</li>
-            <li>Forgetting to change the deal owner in HubSpot &mdash; the deal won&rsquo;t show on your &ldquo;My 26-27 Opps&rdquo; board</li>
+            <li>Waiting more than 24 hours to respond &mdash; momentum dies fast</li>
+            <li>Sending a generic response instead of referencing something specific about the partner</li>
+            <li>Not creating or updating the HubSpot deal &mdash; if it&rsquo;s not in HubSpot, it doesn&rsquo;t exist</li>
+            <li>Jumping straight to a demo or pricing without scheduling a proper discovery conversation</li>
           </ul>
-        </div>
-
-        <div class="fg-section">
-          <div class="fg-section-title">At a Glance</div>
-          <table class="fg-table">
-            <thead><tr><th>Step</th><th>Who</th><th>What</th></tr></thead>
-            <tbody>
-              <tr><td>1. Summarize</td><td>Sales (Nate)</td><td>Posts call notes in #partnerships Slack</td></tr>
-              <tr><td>2. Suggest LP</td><td>Sales (Nate)</td><td>Tags recommended LP (or @Mera to assign)</td></tr>
-              <tr><td>3. Confirm</td><td>You (LP)</td><td>Reply in thread with meeting date</td></tr>
-              <tr><td>4. Update CRM</td><td>You (LP)</td><td>Change deal owner &amp; add notes in HubSpot</td></tr>
-              <tr><td>5. Reach out</td><td>You (LP)</td><td>Intro email within 24 hours</td></tr>
-              <tr><td>6. First call</td><td>You (LP)</td><td>Run Discovery or Scoping (see next stages)</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="fg-tip">
-          <span style="flex-shrink:0">&#x1F4A1;</span>
-          <div><strong>Note:</strong> Sometimes Sales and the LP do discovery together, or the LP handles the entire process end-to-end. The handoff isn&rsquo;t always a clean relay &mdash; when in doubt, coordinate in the Slack thread.</div>
         </div>
       </div>
     </div>
@@ -2380,7 +2371,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260416b"></script>
+<script src="app.js?v=20260416c"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
