@@ -2108,13 +2108,14 @@ async function switchMainTab(tab) {
   btns.forEach(b => b.classList.remove('active'));
   const views = {
     welcome: document.getElementById('welcomeView'),
+    fieldguide: document.getElementById('fieldguideView'),
     builder: document.querySelector('.builder'),
     pricing: document.getElementById('pricingView'),
     resources: document.getElementById('resourcesView'),
     skills: document.getElementById('skillsView')
   };
   Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
-  const tabIndex = { welcome: 0, builder: 1, pricing: 2, resources: 3, skills: 4 };
+  const tabIndex = { welcome: 0, fieldguide: 1, builder: 2, pricing: 3, resources: 4, skills: 5 };
   if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
   track('tab_view', { tab_name: tab });
   if (tab === 'builder') {
@@ -2138,6 +2139,24 @@ function switchSkillsSubtab(subtab) {
   const searchInput = document.getElementById('skillSearch');
   if (searchInput) { searchInput.value = ''; filterSkills(''); }
   track('skills_subtab', { subtab_name: subtab });
+}
+
+// ─── Field Guide Stage Accordion ─────────────────────────────────────────────
+function toggleFGStage(stage) {
+  const el = document.getElementById('fg-stage-' + stage);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+  // Close all stages
+  document.querySelectorAll('.fg-stage').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.fg-pipeline-node').forEach(n => n.classList.remove('active'));
+  // Toggle the clicked one (if it was closed, open it)
+  if (!wasOpen) {
+    el.classList.add('open');
+    const pip = document.getElementById('fg-pip-' + stage);
+    if (pip) pip.classList.add('active');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  track('fieldguide_stage', { stage_name: stage, action: wasOpen ? 'close' : 'open' });
 }
 
 // ─── Resource Section Toggle ─────────────────────────────────────────────────

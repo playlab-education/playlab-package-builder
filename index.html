@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260415b">
+  <link rel="stylesheet" href="style.css?v=20260416a">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -56,6 +56,7 @@
 
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchMainTab('welcome')">Welcome</button>
+  <button class="tab-btn" onclick="switchMainTab('fieldguide')">Field Guide</button>
   <button class="tab-btn" onclick="switchMainTab('builder')">Builder</button>
   <button class="tab-btn" onclick="switchMainTab('pricing')">Pricing Sheet</button>
   <button class="tab-btn" onclick="switchMainTab('resources')">Key Resources</button>
@@ -72,6 +73,16 @@
       <h1 style="font-size:28px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Sales Hub</h1>
       <p style="font-size:14px;color:var(--slate-500);max-width:500px;margin:0 auto">Welcome to the internal Playlab Sales Hub!</p>
       <p style="font-size:11px;color:var(--slate-400);margin-top:6px">This is an internal website for Playlab employees' eyes only.</p>
+    </div>
+
+    <!-- Field Guide Featured Card -->
+    <div onclick="switchMainTab('fieldguide')" style="cursor:pointer;background:linear-gradient(135deg, var(--sky-50), var(--emerald-50));border:1.5px solid var(--sky-200);border-radius:12px;padding:20px 28px;margin-bottom:20px;display:flex;align-items:center;gap:20px;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.12)'" onmouseout="this.style.borderColor='var(--sky-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+      <div style="font-size:36px">&#x1F9ED;</div>
+      <div>
+        <h3 style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:4px">LP Field Guide</h3>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.5">Your step-by-step playbook for managing partnerships &mdash; from handoff through close. Organized by pipeline stage with checklists, talk tracks, and escalation triggers.</p>
+      </div>
+      <div style="margin-left:auto;font-size:12px;font-weight:700;color:var(--sky-600);white-space:nowrap;padding:8px 16px;border:1.5px solid var(--sky-300);border-radius:8px;background:white">Open Guide &rarr;</div>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px">
@@ -1327,6 +1338,671 @@
   </div>
 </div>
 
+<!-- ─── Field Guide View ─────────────────────────────────────────────────── -->
+<div class="fieldguide-view" id="fieldguideView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">LP Field Guide</h2>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:20px">Where is the partner in the process? Click any stage to see what happens from Playlab&rsquo;s side.</p>
+
+    <!-- HubSpot Quick Reference (top) -->
+    <div class="fg-matrix" id="fg-hubspot-ref" style="margin-bottom:20px">
+      <div class="fg-matrix-header" onclick="document.getElementById('fg-hubspot-ref').classList.toggle('open')">
+        <span style="font-size:18px"><svg width="18" height="18" viewBox="0 0 512 512" fill="#FF7A59"><path d="M394.7 238.8V156.3c15.5-8.1 26.1-24.3 26.1-43.1v-1.3c0-26.8-21.7-48.5-48.5-48.5h-1.3c-18.8 0-35 10.6-43.1 26.1h-82.5c-8.1-15.5-24.3-26.1-43.1-26.1h-1.3c-26.8 0-48.5 21.7-48.5 48.5v1.3c0 18.8 10.6 35 26.1 43.1v82.5c-15.5 8.1-26.1 24.3-26.1 43.1v1.3c0 26.8 21.7 48.5 48.5 48.5h1.3c18.8 0 35-10.6 43.1-26.1h82.5c8.1 15.5 24.3 26.1 43.1 26.1h1.3c26.8 0 48.5-21.7 48.5-48.5v-1.3c0-18.8-10.6-35-26.1-43.1zM256 304c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/></svg></span>
+        <h3>HubSpot Quick Reference</h3>
+        <span class="fg-matrix-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-matrix-body">
+        <div class="fg-section" style="margin-top:12px">
+          <div class="fg-section-title">What&rsquo;s Automated vs. Manual</div>
+          <table class="fg-table">
+            <thead><tr><th>Action</th><th>Who / What</th><th>When</th></tr></thead>
+            <tbody>
+              <tr><td>Change deal owner</td><td><strong>Manual</strong></td><td>At handoff</td></tr>
+              <tr><td>Move deal to Scoping stage</td><td><strong>Manual</strong></td><td>After discovery, when ready to scope</td></tr>
+              <tr><td>Update deal amount</td><td><strong>Manual</strong> or proposal bot</td><td>During scoping; bot updates at proposal</td></tr>
+              <tr><td>Move deal to Proposal - Drafted</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
+              <tr><td>Attach proposal link to deal</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
+              <tr><td>Create/associate contacts</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
+              <tr><td>Sync meeting notes</td><td><strong>/granola-hubspot-sync (auto)</strong></td><td>When you run the command</td></tr>
+              <tr><td>Move deal through Contract stages</td><td><strong>Nate (manual)</strong></td><td>As contract milestones are hit</td></tr>
+              <tr><td>Add engagement notes</td><td><strong>Manual</strong></td><td>After every partner interaction</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Daily / Weekly Cadence</div>
+          <table class="fg-table">
+            <thead><tr><th>Frequency</th><th>What to Do</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Daily</strong></td><td>Keep opportunities up-to-date: pipeline stage, owner, amounts, proposal links</td></tr>
+              <tr><td><strong>Weekly</strong></td><td>Review your <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/61787425/list" target="_blank" style="color:var(--sky-600);font-weight:600">&ldquo;My 26-27 Opps&rdquo;</a> board for accuracy &middot; Sync meeting notes via <code>/granola-hubspot-sync</code></td></tr>
+              <tr><td><strong>As needed</strong></td><td>Add new opportunities &middot; Add notes to opportunities to capture updates</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline Progress Bar -->
+    <div class="fg-pipeline">
+      <div class="fg-pipeline-step" onclick="toggleFGStage('handoff')">
+        <div class="fg-pipeline-node" id="fg-pip-handoff">
+          <div class="fg-pipeline-num">1</div>
+          <div class="fg-pipeline-label">Handoff</div>
+        </div>
+      </div>
+      <div class="fg-pipeline-arrow"></div>
+      <div class="fg-pipeline-step" onclick="toggleFGStage('discovery')">
+        <div class="fg-pipeline-node" id="fg-pip-discovery">
+          <div class="fg-pipeline-num">2</div>
+          <div class="fg-pipeline-label">Discovery</div>
+        </div>
+      </div>
+      <div class="fg-pipeline-arrow"></div>
+      <div class="fg-pipeline-step" onclick="toggleFGStage('scoping')">
+        <div class="fg-pipeline-node" id="fg-pip-scoping">
+          <div class="fg-pipeline-num">3</div>
+          <div class="fg-pipeline-label">Scoping</div>
+        </div>
+      </div>
+      <div class="fg-pipeline-arrow"></div>
+      <div class="fg-pipeline-step" onclick="toggleFGStage('proposal')">
+        <div class="fg-pipeline-node" id="fg-pip-proposal">
+          <div class="fg-pipeline-num">4</div>
+          <div class="fg-pipeline-label">Proposal</div>
+        </div>
+      </div>
+      <div class="fg-pipeline-arrow"></div>
+      <div class="fg-pipeline-step" onclick="toggleFGStage('contract')">
+        <div class="fg-pipeline-node" id="fg-pip-contract">
+          <div class="fg-pipeline-num">5</div>
+          <div class="fg-pipeline-label">Contract &amp; Close</div>
+        </div>
+      </div>
+      <div class="fg-pipeline-arrow"></div>
+      <div class="fg-pipeline-step" onclick="toggleFGStage('kickoff')">
+        <div class="fg-pipeline-node" id="fg-pip-kickoff">
+          <div class="fg-pipeline-num">6</div>
+          <div class="fg-pipeline-label">Kickoff</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 1: HANDOFF ═══ -->
+    <div class="fg-stage" id="fg-stage-handoff">
+      <div class="fg-stage-header" onclick="toggleFGStage('handoff')">
+        <div class="fg-stage-num">1</div>
+        <div>
+          <div class="fg-stage-title">Handoff</div>
+          <div class="fg-stage-subtitle">A new partner is ready to engage. Here&rsquo;s how the relationship begins.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">How the Partner Gets Here</div>
+          <div class="fg-body-text">
+            <strong>Most common:</strong> Nate posts a partner summary in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> Slack with context from a successful discovery call, then tags a suggested LP (or @Mera to assign).<br>
+            <strong>Also possible:</strong> Inbound inquiry lands and Mera/Nate assigns you directly. Or an existing partner relationship triggers a new engagement.<br>
+            <strong>Key principle:</strong> From this point, Playlab owns the relationship. A clean handoff means the partner never has to repeat themselves.
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Process</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Reply in the Slack thread: <em>&ldquo;On it! Scheduling for [date].&rdquo;</em></span></li>
+            <li><span class="fg-checklist-num">2</span><span>Read the full Slack summary &mdash; highlight anything unclear, ask in-thread before calling the partner</span></li>
+            <li><span class="fg-checklist-num">3</span><span>In HubSpot: Change deal owner to yourself. Confirm the stage is correct (Nate will specify Discovery or Scoping)</span></li>
+            <li><span class="fg-checklist-num">4</span><span>Research the partner &mdash; use Claude Cowork <code>/meeting-prep-briefing</code> or manually check their website, leadership, recent news</span></li>
+            <li><span class="fg-checklist-num">5</span><span>Send intro email within 24 hours &mdash; use <code>/email-draft</code> in Claude Cowork (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) to draft one that references context from the handoff</span></li>
+            <li><span class="fg-checklist-num">6</span><span>Schedule the first call (Discovery or Scoping depending on where they are)</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual &mdash; you do this:</strong> Change the deal owner in HubSpot to yourself. Add a note: &ldquo;LP handoff from [Sales]. First call scheduled [date].&rdquo; There is no automation for the ownership change &mdash; you must do it yourself so the deal shows on your board.</div>
+        </div>
+
+        <div class="fg-escalate">
+          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+          <ul>
+            <li>The summary is thin or confusing &mdash; ask in the Slack thread before calling the partner</li>
+            <li>You&rsquo;re not sure if this is a Discovery or Scoping conversation &mdash; ask Nate</li>
+            <li>The partner is a channel/intermediary org (they want to resell or bundle Playlab) &mdash; Nate handles these</li>
+          </ul>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Waiting more than 24 hours to reach out &mdash; momentum dies fast after a good discovery call</li>
+            <li>Not reading the full Slack summary and asking the partner to repeat context they already shared</li>
+            <li>Forgetting to change the deal owner in HubSpot &mdash; the deal won&rsquo;t show on your &ldquo;My 26-27 Opps&rdquo; board</li>
+          </ul>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">At a Glance</div>
+          <table class="fg-table">
+            <thead><tr><th>Step</th><th>Who</th><th>What</th></tr></thead>
+            <tbody>
+              <tr><td>1. Summarize</td><td>Sales (Nate)</td><td>Posts call notes in #partnerships Slack</td></tr>
+              <tr><td>2. Suggest LP</td><td>Sales (Nate)</td><td>Tags recommended LP (or @Mera to assign)</td></tr>
+              <tr><td>3. Confirm</td><td>You (LP)</td><td>Reply in thread with meeting date</td></tr>
+              <tr><td>4. Update CRM</td><td>You (LP)</td><td>Change deal owner &amp; add notes in HubSpot</td></tr>
+              <tr><td>5. Reach out</td><td>You (LP)</td><td>Intro email within 24 hours</td></tr>
+              <tr><td>6. First call</td><td>You (LP)</td><td>Run Discovery or Scoping (see next stages)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F4A1;</span>
+          <div><strong>Note:</strong> Sometimes Sales and the LP do discovery together, or the LP handles the entire process end-to-end. The handoff isn&rsquo;t always a clean relay &mdash; when in doubt, coordinate in the Slack thread.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 2: DISCOVERY ═══ -->
+    <div class="fg-stage" id="fg-stage-discovery">
+      <div class="fg-stage-header" onclick="toggleFGStage('discovery')">
+        <div class="fg-stage-num">2</div>
+        <div>
+          <div class="fg-stage-title">Discovery</div>
+          <div class="fg-stage-subtitle">The partner is exploring. This is where Playlab learns what they need.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">What Is This Stage?</div>
+          <div class="fg-body-text">
+            The partner is curious about Playlab but hasn&rsquo;t committed to anything. This conversation is about <strong>them</strong> &mdash; their priorities, pain points, AI journey, and decision-making process. No packages, no pricing. <strong>Ask questions first. Demo second.</strong>
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Before the Call</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Research the org and person &mdash; use Claude Cowork <code>/meeting-prep-briefing</code> or check HubSpot, email, their website, and recent news</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Prep 2&ndash;3 example Playlab apps relevant to their context (from <a href="https://www.playlab.ai/gardens" target="_blank" style="color:var(--sky-600);font-weight:600">Playlab Gardens</a>)</span></li>
+            <li><span class="fg-checklist-num">3</span><span>Have an app idea ready to build live that relates to their role or priorities</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Call: 4 Steps</div>
+          <table class="fg-table">
+            <thead><tr><th style="width:30%">Step</th><th style="width:15%">Time</th><th>What Happens</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. ACE Opener</strong></td><td>5 min</td><td><strong>A</strong>ppreciate (&ldquo;Thanks for your time&rdquo;) &rarr; <strong>C</strong>heck time (&ldquo;We have 30 min, still work?&rdquo;) &rarr; <strong>E</strong>nd goal (&ldquo;I&rsquo;d love to learn about your priorities and see if Playlab could help&rdquo;)</td></tr>
+              <tr><td><strong>2. Ask Questions</strong></td><td>20 min</td><td>Use the questions below. The partner should be talking 60%+ of this time. <strong>One question at a time, then listen.</strong></td></tr>
+              <tr><td><strong>3. Demo Playlab</strong></td><td>10 min</td><td>Ask permission: &ldquo;Would it help to see Playlab in action?&rdquo; Build an app live or walk through examples. <strong>They must see a build and a demo app.</strong></td></tr>
+              <tr><td><strong>4. Close</strong></td><td>5 min</td><td>Confirm next steps. Schedule the follow-up. &ldquo;What questions do you have? What&rsquo;s resonating?&rdquo;</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Questions to Ask (Before Demoing)</div>
+          <table class="fg-table">
+            <thead><tr><th style="width:50%">Question</th><th>What You&rsquo;re Learning</th></tr></thead>
+            <tbody>
+              <tr><td>&ldquo;Tell me about where you all are on your AI journey?&rdquo;</td><td>Current state &mdash; tools, policies, adoption level</td></tr>
+              <tr><td>&ldquo;What&rsquo;s working and what&rsquo;s not with what you&rsquo;re doing now?&rdquo;</td><td>Pain points and gaps</td></tr>
+              <tr><td>&ldquo;What would make this a win for your team in 6 months?&rdquo;</td><td>Success criteria, what they actually care about</td></tr>
+              <tr><td>&ldquo;How quickly are you looking to move? Is this for next year, or this spring?&rdquo;</td><td>Timeline, urgency, budget cycle</td></tr>
+              <tr><td>&ldquo;Who else should be at the next meeting?&rdquo;</td><td>Decision-makers, stakeholders who need to be involved</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F3AF;</span>
+          <div><strong>The #1 Rule &mdash; Check Resonance:</strong> At least twice per call, pause and ask: <em>&ldquo;I&rsquo;m saying a lot here. What&rsquo;s resonating? What&rsquo;s not?&rdquo;</em> This pulls the partner back into the conversation and tells you what actually matters to them.</div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">After the Call</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Run <code>/debrief</code> in Claude Cowork &mdash; it summarizes the call, drafts a follow-up email, and updates HubSpot</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Send follow-up email within 24 hours &mdash; use <code>/meeting-follow-up-email</code> or <code>/email-draft</code> in Claude Cowork (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a> for all available skills)</span></li>
+            <li><span class="fg-checklist-num">3</span><span>Update HubSpot (see automation notes below)</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto auto">
+          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
+          <div><strong>Automated &mdash; <code>/debrief</code>:</strong> Drafts follow-up email, creates HubSpot meeting note with correct date/time and attendee associations, creates Notion action items. You review and approve before anything sends.</div>
+        </div>
+
+        <div class="fg-auto auto">
+          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
+          <div><strong>Automated &mdash; <code>/granola-hubspot-sync</code>:</strong> Syncs Granola meeting notes to HubSpot as formatted meeting engagements with attendee associations. Prevents duplicates.</div>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual:</strong> The deal stage stays at &ldquo;Discovery&rdquo; until you&rsquo;re ready to scope a package. Move it to &ldquo;Scoping&rdquo; yourself &mdash; stages never advance automatically.</div>
+        </div>
+
+        <div class="fg-escalate">
+          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+          <ul>
+            <li>Partner mentions an RFP, grant funding, or formal procurement &mdash; different pipeline, Nate handles</li>
+            <li>Partner is a channel/intermediary (wants to resell or bundle Playlab) &mdash; Nate handles</li>
+            <li>Partner mentions a competitor &mdash; check the <a href="https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit" target="_blank" style="color:#991b1b;font-weight:600">Competitive Comparison</a> doc first, then ask Nate</li>
+            <li>Deal is shaping up as &gt;$40K</li>
+          </ul>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Talking about Playlab for 30 minutes instead of asking questions</li>
+            <li>Demoing before understanding their problems &mdash; questions first, always</li>
+            <li>Question stacking &mdash; one question at a time, then listen</li>
+            <li>Not confirming next steps and a follow-up date before ending the call</li>
+          </ul>
+        </div>
+
+        <!-- Collapsible Appendix -->
+        <div class="fg-appendix" id="fg-disco-appendix">
+          <div class="fg-appendix-header" onclick="document.getElementById('fg-disco-appendix').classList.toggle('open')">
+            <h4>Discovery Deep Dive</h4>
+            <span class="fg-appendix-hint">&mdash; extended questions, listening techniques, objection handling</span>
+            <span class="fg-appendix-chevron">&#x25BC;</span>
+          </div>
+          <div class="fg-appendix-body">
+
+            <div class="fg-section">
+              <div class="fg-section-title">SPICED Framework</div>
+              <div class="fg-body-text">
+                A structured approach to discovery. Each letter maps to a type of question:
+              </div>
+              <table class="fg-table">
+                <thead><tr><th>Letter</th><th>Focus</th><th>Example</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>S</strong> &mdash; Situation</td><td>Current state &amp; context</td><td>&ldquo;Help me understand where you are in your AI journey&rdquo;</td></tr>
+                  <tr><td><strong>P</strong> &mdash; Pain</td><td>Problems with emotional weight</td><td>&ldquo;What frustrates you most?&rdquo;</td></tr>
+                  <tr><td><strong>I</strong> &mdash; Impact</td><td>Organizational consequences</td><td>&ldquo;How does this affect your ability to support students?&rdquo;</td></tr>
+                  <tr><td><strong>C</strong> &mdash; Critical Event</td><td>Timeline drivers</td><td>&ldquo;When does your budget get finalized?&rdquo;</td></tr>
+                  <tr><td><strong>E</strong> &mdash; Decision</td><td>Criteria and process</td><td>&ldquo;What factors influence your vendor selection?&rdquo;</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="fg-section">
+              <div class="fg-section-title">Extended Question Bank</div>
+              <table class="fg-table">
+                <thead><tr><th>Type</th><th>Question</th><th>What to Listen For</th></tr></thead>
+                <tbody>
+                  <tr><td>Context</td><td>&ldquo;Tell me about your role. What hats do you wear?&rdquo;</td><td>Decision-making power, demo interests</td></tr>
+                  <tr><td>Context</td><td>&ldquo;Do you have standardized curricula across your schools?&rdquo;</td><td>Knowledge graph opportunities</td></tr>
+                  <tr><td>Context</td><td>&ldquo;How did you find Playlab?&rdquo;</td><td>Channel, referral source</td></tr>
+                  <tr><td>Pain</td><td>&ldquo;Are you seeing ways people are using AI that excite you, or ways they&rsquo;re NOT yet using it?&rdquo;</td><td>Vision vs. reality gap</td></tr>
+                  <tr><td>Pain</td><td>&ldquo;Was there anything that stood out about [competitor] &mdash; things you liked or didn&rsquo;t?&rdquo;</td><td>Competitive positioning</td></tr>
+                  <tr><td>Impact</td><td>&ldquo;What happens if that stays unresolved? Who feels it most?&rdquo;</td><td>Urgency, stakeholder pain</td></tr>
+                  <tr><td>Impact</td><td>&ldquo;What&rsquo;s the risk if teachers keep using [existing tool]?&rdquo;</td><td>Cost of inaction</td></tr>
+                  <tr><td>Budget</td><td>&ldquo;Really the question is &mdash; do you have budget for it or not?&rdquo;</td><td>Direct budget signal</td></tr>
+                  <tr><td>Decision</td><td>&ldquo;Where does this go in terms of how the district works &mdash; board approval?&rdquo;</td><td>Procurement process, blockers</td></tr>
+                  <tr><td>Decision</td><td>&ldquo;Who are the people making big decisions who probably don&rsquo;t know enough about this?&rdquo;</td><td>Champions to activate</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="fg-section">
+              <div class="fg-section-title">Active Listening Techniques</div>
+              <table class="fg-table">
+                <thead><tr><th>Technique</th><th>How</th><th>Why</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Mirroring</strong></td><td>Repeat their last 1&ndash;3 words as a question. Them: &ldquo;Rollout has been spotty.&rdquo; You: &ldquo;&hellip;spotty?&rdquo;</td><td>Pulls out more detail</td></tr>
+                  <tr><td><strong>Labeling</strong></td><td>&ldquo;It sounds like&hellip;&rdquo; / &ldquo;It seems like&hellip;&rdquo;</td><td>Acknowledges emotions</td></tr>
+                  <tr><td><strong>Confirmation</strong></td><td>Repeat back, then: &ldquo;Did I get that right?&rdquo;</td><td>Ensures mutual understanding</td></tr>
+                  <tr><td><strong>Silence</strong></td><td>WAIT = Why Am I Talking?</td><td>Gives space for reflection</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="fg-section">
+              <div class="fg-section-title">Objection Handling</div>
+              <div class="fg-body-text"><strong>Feel, Felt, Found:</strong> &ldquo;I understand how you feel&hellip; Others have felt this way&hellip; But what they found is&hellip;&rdquo;</div>
+              <div class="fg-body-text"><strong>Confirm, Clarify, Continue:</strong> &ldquo;So you&rsquo;re saying [restate]&hellip; That&rsquo;s actually not the case, here&rsquo;s why&hellip; Does that address your concern?&rdquo;</div>
+              <div class="fg-body-text" style="margin-top:8px">The full Discovery &amp; Demo guide is on the <a href="javascript:switchMainTab('resources')" style="color:var(--sky-600);font-weight:600">Key Resources</a> tab.</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 3: SCOPING ═══ -->
+    <div class="fg-stage" id="fg-stage-scoping">
+      <div class="fg-stage-header" onclick="toggleFGStage('scoping')">
+        <div class="fg-stage-num">3</div>
+        <div>
+          <div class="fg-stage-title">Scoping</div>
+          <div class="fg-stage-subtitle">The partner&rsquo;s needs are clear. Now Playlab matches them to the right solution.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">What Is This Stage?</div>
+          <div class="fg-body-text">
+            You&rsquo;ve done discovery. You understand their priorities. Now you&rsquo;re matching needs to Playlab offerings and configuring a package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a>. This can happen on the same call as discovery (if things move fast) or as a separate follow-up.
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Process</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Review your discovery notes &mdash; what did they say matters most?</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Match to a partnership type using the decision tree below</span></li>
+            <li><span class="fg-checklist-num">3</span><span>Build the package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a> &mdash; ideally on the call with the partner</span></li>
+            <li><span class="fg-checklist-num">4</span><span>Discuss software licensing: which tier fits? (see table below)</span></li>
+            <li><span class="fg-checklist-num">5</span><span>Review the estimated cost together &mdash; don&rsquo;t delay the money conversation</span></li>
+            <li><span class="fg-checklist-num">6</span><span>If they can approve: start setting training dates right away. If not: schedule a follow-up to finalize.</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Partnership Type Decision Tree</div>
+          <table class="fg-table">
+            <thead><tr><th>They Want&hellip;</th><th>Recommend&hellip;</th></tr></thead>
+            <tbody>
+              <tr><td>Educators to build AI skills</td><td><strong>AI Agency for Educators</strong> (Starter 3hr / Core 6hr / Advanced 9hr)</td></tr>
+              <tr><td>Students creating with AI</td><td><strong>AI Agency for Students</strong> (Design Sprint / Unit / Integrated / Family Night)</td></tr>
+              <tr><td>A specific problem solved with AI tools</td><td><strong>Solutions for AI Impact</strong> (Ideation / Tool Build / Pilot / Scaling)</td></tr>
+              <tr><td>Strategic leadership guidance on AI</td><td><strong>AI Leadership Coaching</strong> (Essentials / Advisory / Strategic / Embedded)</td></tr>
+              <tr><td>To redesign learning for the AI era</td><td><strong>Systems for AI Innovation</strong> (custom R&amp;D &mdash; rare, check with Nate first)</td></tr>
+            </tbody>
+          </table>
+          <div class="fg-tip" style="margin-top:8px">
+            <span style="flex-shrink:0">&#x1F4A1;</span>
+            <div>Most partners start with <strong>AI Agency for Educators</strong> &mdash; recommend it as a foundation, even if they also want student programs or impact work.</div>
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Software Tier Decision Tree</div>
+          <table class="fg-table">
+            <thead><tr><th>Partner Profile</th><th>Recommended Tier</th></tr></thead>
+            <tbody>
+              <tr><td>New to Playlab, exploring, adult PD focus</td><td><strong>Play</strong> ($1,500/6-mo or $3,000/12-mo)</td></tr>
+              <tr><td>Non-school org (nonprofit, PD provider)</td><td><strong>Impact</strong> ($200/user/yr)</td></tr>
+              <tr><td>School with &lt;1,000 students</td><td>Play or Impact &mdash; <strong>compare both, recommend lowest cost</strong></td></tr>
+              <tr><td>School/district with 1,000+ students</td><td><strong>Enrollment-based</strong> ($3&ndash;$2/student/yr depending on size)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Pricing Rules of Thumb</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">&#x2713;</span><span>Always recommend first session in-person, rest virtual &mdash; price high first, offer virtual to reduce. It&rsquo;s easier to lower a price than raise one.</span></li>
+            <li><span class="fg-checklist-num">&#x2713;</span><span>Before confirming travel costs, check with Mera or Hilah on LP availability in the partner&rsquo;s region. Don&rsquo;t assume a local LP is available.</span></li>
+            <li><span class="fg-checklist-num">&#x2713;</span><span>Show Standard Rate alongside any adjusted price &mdash; never hide the value of what you&rsquo;re offering.</span></li>
+            <li><span class="fg-checklist-num">&#x2713;</span><span>When in doubt, build two options and let the partner choose.</span></li>
+            <li><span class="fg-checklist-num">&#x2713;</span><span>For Year 1 Play partners, include enrollment-based pricing as a reference for Year 2 budgeting.</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual &mdash; you do this:</strong> Move the deal to &ldquo;Scoping&rdquo; stage in HubSpot. Update the deal amount with your estimated value. There is no automation that moves stages &mdash; you control when a deal advances.</div>
+        </div>
+
+        <div class="fg-escalate">
+          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+          <ul>
+            <li><strong>Any discount request</strong> &mdash; all discounts go through Nate. Post in <a href="https://playlabai.slack.com/" target="_blank" style="color:#991b1b;font-weight:600">#approval</a></li>
+            <li>You&rsquo;re unsure which package fits &mdash; post your best guess in #partnerships, Nate will confirm</li>
+            <li>Deal value is shaping up as &gt;$40K</li>
+            <li>Partner wants something custom that doesn&rsquo;t map to existing packages</li>
+            <li>Partner asks about multi-year pricing</li>
+            <li>Partner mentions grant funding &mdash; grant-funded work is priced at Standard Rate (the grant is the subsidy &mdash; no discounts on top)</li>
+          </ul>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Building a package without referencing discovery notes &mdash; the package should obviously connect to what they told you</li>
+            <li>Not getting the price in front of the partner on the scoping call &mdash; don&rsquo;t delay the money conversation</li>
+            <li>Quoting a discount or adjusted price without checking with Nate first</li>
+            <li>Forgetting to check LP availability before promising in-person delivery in a specific region</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 4: PROPOSAL ═══ -->
+    <div class="fg-stage" id="fg-stage-proposal">
+      <div class="fg-stage-header" onclick="toggleFGStage('proposal')">
+        <div class="fg-stage-num">4</div>
+        <div>
+          <div class="fg-stage-title">Proposal</div>
+          <div class="fg-stage-subtitle">The solution is configured. The partner needs to see it within 24 hours.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Process</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Copy the SOW Builder link (the URL with your package configured)</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Go to <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#proposal-bot</a> in Slack and share: the package URL, context (Granola notes link, bullet points, or an email), and what language the proposal should be in</span></li>
+            <li><span class="fg-checklist-num">3</span><span><strong>Review the generated proposal for accuracy</strong> &mdash; always proofread before sending</span></li>
+            <li><span class="fg-checklist-num">4</span><span>Check the new HubSpot deal entry &mdash; the proposal bot creates or updates the deal automatically (see below). Verify it looks correct.</span></li>
+            <li><span class="fg-checklist-num">5</span><span>If unsure about anything, post in <a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a> before sending</span></li>
+            <li><span class="fg-checklist-num">6</span><span>Send the proposal to the partner within 24 hours &mdash; use <code>/email-draft</code> in Claude Cowork to draft the send email</span></li>
+            <li><span class="fg-checklist-num">7</span><span>Set a calendar reminder to follow up in 3 business days if no response</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto auto">
+          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
+          <div><strong>Automated &mdash; proposal bot does this:</strong> When you post in #proposal-bot, it generates a formatted Google Doc proposal AND creates/updates the HubSpot deal with the correct amount, pipeline stage, associated contacts, and a link to the proposal. <strong>You still need to review both outputs for accuracy.</strong></div>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual &mdash; you do this:</strong> After the proposal bot runs, verify the HubSpot deal: confirm stage is &ldquo;Proposal - Drafted,&rdquo; amount is correct, and the proposal link is attached. Fix any errors. The bot gets it right most of the time, but you own accuracy.</div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Proposal Framing</div>
+          <div class="fg-body-text">
+            Most early-stage proposals should be framed as a <strong>&ldquo;reaction document&rdquo;</strong> &mdash; a conversation starter, not a ready-to-sign offer. Use language like: <em>&ldquo;Here are a few options to work from given your priorities and capacity.&rdquo;</em> Only frame as a formal proposal when the partner has clear scope, budget, and timeline.
+          </div>
+        </div>
+
+        <div class="fg-escalate">
+          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+          <ul>
+            <li>Partner pushes back on pricing &mdash; <strong>don&rsquo;t negotiate.</strong> Say: &ldquo;Let me connect you with Nate to discuss options.&rdquo;</li>
+            <li>Partner wants to significantly change scope after seeing the proposal</li>
+            <li>Partner goes silent for 2+ weeks &mdash; send a nudge first (<code>/nudge</code> in Claude Cowork drafts a re-engagement email), then flag Nate if still no response</li>
+          </ul>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Not reviewing the proposal-bot output before sending &mdash; always proofread names, amounts, and package details</li>
+            <li>Letting the proposal sit in #proposal-bot without sending it &mdash; 24-hour rule</li>
+            <li>Not setting a follow-up reminder &mdash; proposals go cold fast</li>
+            <li>Negotiating pricing yourself instead of bringing Nate in</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 5: CONTRACT & CLOSE ═══ -->
+    <div class="fg-stage" id="fg-stage-contract">
+      <div class="fg-stage-header" onclick="toggleFGStage('contract')">
+        <div class="fg-stage-num">5</div>
+        <div>
+          <div class="fg-stage-title">Contract &amp; Close</div>
+          <div class="fg-stage-subtitle">The partner has approved. Now it&rsquo;s contracts, logistics, and keeping momentum.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">What Is This Stage?</div>
+          <div class="fg-body-text">
+            The partner has approved the proposal. Nate handles contract generation and negotiation. The rest of Playlab stays in touch with the partner, answers questions about the engagement (not the contract), and keeps momentum going.
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Process</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Confirm with Nate in Slack that the partner is ready for contract &mdash; share any nuances from your conversations</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Continue planning the engagement in parallel &mdash; discuss dates, logistics, and content with the partner</span></li>
+            <li><span class="fg-checklist-num">3</span><span>Respond to partner questions about what the engagement will look like (dates, format, participants)</span></li>
+            <li><span class="fg-checklist-num">4</span><span>If contract signing stalls, check with Nate on messaging before nudging the partner</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto auto">
+          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
+          <div><strong>Nate manages HubSpot stages here:</strong> Contract Sent &rarr; Contract Signed &rarr; Invoice Sent &rarr; Payment Received. You do NOT need to move these stages &mdash; Nate handles them as contract milestones are hit.</div>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual &mdash; you still do this:</strong> Keep adding notes to the HubSpot deal after every partner interaction. Even though Nate owns the contract stages, your engagement notes are critical for the full picture.</div>
+        </div>
+
+        <div class="fg-escalate">
+          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+          <ul>
+            <li>This entire stage is Nate-led &mdash; flag anything where the partner mentions concerns, cold feet, or competing options</li>
+            <li>Partner asks contract or legal questions &mdash; always route to Nate</li>
+            <li>Partner requests scope changes during contract negotiation &mdash; don&rsquo;t agree to changes, bring Nate in</li>
+          </ul>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Going dark during the contract phase &mdash; keep the relationship warm with planning conversations</li>
+            <li>Agreeing to scope changes or verbal commitments without checking with Nate</li>
+            <li>Assuming the contract is &ldquo;Nate&rsquo;s problem&rdquo; and disengaging &mdash; you still own the relationship</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 6: KICKOFF & DELIVERY ═══ -->
+    <div class="fg-stage" id="fg-stage-kickoff">
+      <div class="fg-stage-header" onclick="toggleFGStage('kickoff')">
+        <div class="fg-stage-num">6</div>
+        <div>
+          <div class="fg-stage-title">Kickoff &amp; Delivery</div>
+          <div class="fg-stage-subtitle">The partnership is live. Time to deliver and make the partner successful.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">What Is This Stage?</div>
+          <div class="fg-body-text">
+            The deal is closed. Playlab is now responsible for delivering the partnership and making the partner successful. This is where the real work begins.
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">The Process</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Schedule a kickoff meeting with the partner</span></li>
+            <li><span class="fg-checklist-num">2</span><span>For AI Impact or custom builds: submit a <a href="https://playlabai.notion.site/33ba9d3778c580f8a3cadd6af486fea7" target="_blank" style="color:var(--sky-600);font-weight:600">Learning Engineering Request</a> in Notion immediately &mdash; this gets engineering scoping started while you plan</span></li>
+            <li><span class="fg-checklist-num">3</span><span>Fill in training dates in the Partnership Tracker</span></li>
+            <li><span class="fg-checklist-num">4</span><span>Prep session materials, apps, and examples based on the partner&rsquo;s context</span></li>
+            <li><span class="fg-checklist-num">5</span><span>After every interaction: update HubSpot with meeting notes</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-auto auto">
+          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
+          <div><strong>Automated &mdash; if you use <code>/granola-hubspot-sync</code>:</strong> Your Granola meeting notes get synced to HubSpot automatically. Run this weekly to keep your deal records current.</div>
+        </div>
+
+        <div class="fg-auto manual">
+          <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+          <div><strong>Manual &mdash; you do this:</strong> The deal is now &ldquo;Closed Won&rdquo; in HubSpot. Keep logging engagement notes after every session and interaction. This history is critical for renewal conversations.</div>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F4C5;</span>
+          <div><strong>Get dates on the calendar ASAP.</strong> The sooner you lock in training dates, the more momentum you keep. Don&rsquo;t wait for a &ldquo;perfect&rdquo; time &mdash; get something scheduled.</div>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F527;</span>
+          <div><strong>Start Learning Engineering early.</strong> For AI Impact Pathway or custom builds, submit the Learning Engineering Request Form in Notion immediately. This gets the engineering team scoping while you&rsquo;re still planning with the partner.</div>
+        </div>
+
+        <div class="fg-mistakes">
+          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+          <ul>
+            <li>Not submitting the Learning Engineering request early enough &mdash; engineering needs lead time</li>
+            <li>Letting the partner go dark after contract signing &mdash; schedule kickoff immediately</li>
+            <li>Not updating HubSpot during delivery &mdash; renewal conversations rely on this history</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ESCALATION MATRIX ═══ -->
+    <div class="fg-matrix open" id="fg-matrix">
+      <div class="fg-matrix-header" onclick="document.getElementById('fg-matrix').classList.toggle('open')">
+        <span style="font-size:18px">&#x1F6A8;</span>
+        <h3>Escalation Matrix &mdash; When to Involve Nate</h3>
+        <span class="fg-matrix-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-matrix-body">
+        <table class="fg-table" style="margin-top:12px">
+          <thead><tr><th>Situation</th><th>Who Handles</th><th>How to Escalate</th></tr></thead>
+          <tbody>
+            <tr><td>Any discount request</td><td><strong>Nate</strong></td><td>Post in #approval Slack</td></tr>
+            <tr><td>Software pricing changes</td><td><strong>Nate only</strong></td><td>Post in #approval with justification</td></tr>
+            <tr><td>Deal &gt;$40K total value</td><td><strong>Co-manage with Nate</strong></td><td>Flag in #partnerships when you see it forming</td></tr>
+            <tr><td>Channel / intermediary partner</td><td><strong>Nate</strong></td><td>Flag at handoff</td></tr>
+            <tr><td>RFP or grant-funded deal</td><td><strong>Nate</strong></td><td>Flag at handoff &mdash; different pipeline</td></tr>
+            <tr><td>Multi-year commitment</td><td><strong>Nate</strong></td><td>Flag before discussing pricing with partner</td></tr>
+            <tr><td>Partner pushback on pricing</td><td><strong>Nate</strong></td><td>Don&rsquo;t negotiate &mdash; &ldquo;Let me connect you with Nate&rdquo;</td></tr>
+            <tr><td>Contract terms / legal questions</td><td><strong>Nate</strong></td><td>Always route to Nate</td></tr>
+            <tr><td>Partner mentions competitor</td><td><strong>You first</strong></td><td>Check <a href="https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit" target="_blank" style="color:var(--sky-600)">Competitive Comparison</a>, then ask Nate if unsure</td></tr>
+            <tr><td>Partner unresponsive 2+ weeks</td><td><strong>You first, then Nate</strong></td><td>Send nudge (<code>/nudge</code>); if no response, flag Nate</td></tr>
+            <tr><td>Unsure which package fits</td><td><strong>You propose, Nate confirms</strong></td><td>Post your best guess in #partnerships</td></tr>
+            <tr><td>Scope changes during contract</td><td><strong>Nate</strong></td><td>Don&rsquo;t agree &mdash; bring Nate in</td></tr>
+          </tbody>
+        </table>
+
+        <div class="fg-tip" style="margin-top:12px">
+          <span style="flex-shrink:0">&#x1F4A1;</span>
+          <div><strong>The $40K threshold:</strong> Your ~250-partner / $5M revenue target means ~$20K average deal. A $40K deal is 2x average &mdash; big enough to warrant Nate&rsquo;s direct involvement. When in doubt, flag early &mdash; it&rsquo;s always better to loop Nate in too early than too late.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div class="pricing-view" id="pricingView" style="display:none">
   <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
     <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Software Pricing</h2>
@@ -1704,7 +2380,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260415b"></script>
+<script src="app.js?v=20260416a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
