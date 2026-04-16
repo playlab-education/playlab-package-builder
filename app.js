@@ -194,11 +194,12 @@ function unitShort(unit) {
 // ─── Software Tiers (Enterprise only) ───────────────────────────────────────
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: 'For any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo · $3,000/12-mo', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00', noMultiYear: true },
-  { id: 'impact', name: 'Impact', tagline: 'Best for small school deployments and non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
-  { id: 'schools-t1', name: 'Schools — Tier 1', tagline: '1,000–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1,000–9,999', monthlyCredits: '2M Tokens', isSchool: true },
-  { id: 'schools-t2', name: 'Schools — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
-  { id: 'schools-t3', name: 'Schools — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
-  { id: 'schools-t4', name: 'Schools — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true, isSchool: true }
+  { id: 'impact', name: 'Impact: Per User', tagline: 'Best for small school deployments and non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
+  { id: 'schools-t1', name: 'Impact: Per Student — Tier 1', tagline: '1,000–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1,000–9,999', monthlyCredits: '2M Tokens', isSchool: true },
+  { id: 'schools-t2', name: 'Impact: Per Student — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
+  { id: 'schools-t3', name: 'Impact: Per Student — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
+  { id: 'schools-t4', name: 'Impact: Per Student — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true, isSchool: true },
+  { id: 'one-time-event', name: 'One-Time Event', tagline: 'Up to 100 people — 2 months of access', pricePerUnit: 500, unitLabel: 'event', unitLabelPlural: 'events', minCount: 1, defaultCount: 1, priceNote: '$500/event', color: '#e98ad1', colorLight: '#fdf0f8', colorText: '#5a1a4a', flatPricing: true }
 ];
 
 function getSchoolTierForEnrollment(count) {
@@ -220,6 +221,7 @@ function calcLicenseAnnualCost(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
   if (!tier) return 0;
   if (tier.isCustom) return 0;
+  if (tier.flatPricing) return tier.pricePerUnit * lic.count;
   if (tier.noMultiYear) {
     const multiplier = (lic.period === 6) ? 1 : 2;
     return tier.pricePerUnit * multiplier * lic.count;
@@ -232,6 +234,7 @@ function calcLicenseCost(lic) { return calcLicenseAnnualCost(lic); }
 
 function calcLicenseMultiYearTotal(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
+  if (tier?.flatPricing) return calcLicenseAnnualCost(lic);
   if (tier?.noMultiYear) return calcLicenseAnnualCost(lic);
   const annual = calcLicenseAnnualCost(lic);
   const term = lic.term || 1;
@@ -241,6 +244,7 @@ function calcLicenseMultiYearTotal(lic) {
 
 function calcLicenseMultiYearDiscount(lic) {
   const tier = SOFTWARE_TIERS.find(t => t.id === lic.tierId);
+  if (tier?.flatPricing) return 0;
   if (tier?.noMultiYear) return 0;
   const annual = calcLicenseAnnualCost(lic);
   const term = lic.term || 1;
@@ -474,8 +478,7 @@ const ADDONS = [
   { blockId: 'travel-addl-day', label: 'Travel \u2014 Addl Day', unit: 'day', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: 'Extra day on-site with hotel and per diem' },
   { blockId: 'site-visit-half', label: 'Site Visit \u2014 Half Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: '1\u20134 hour on-site observation or working session' },
   { blockId: 'site-visit-full', label: 'Site Visit \u2014 Full Day', unit: 'visit', defaultQty: 1, minQty: 1, step: 1, category: 'Travel', desc: '4\u20138 hour on-site observation or working session' },
-  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Monthly AI model usage for non-school partners' },
-  { blockId: 'one-time-event', label: 'One-Time Event', unit: 'flat', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Up to 100 people \u2014 2 months of access' }
+  { blockId: 'ai-usage-costs', label: 'AI Usage Costs', unit: 'mo', defaultQty: 1, minQty: 1, step: 1, category: 'Other', desc: 'Monthly AI model usage for non-school partners' }
 ];
 
 // ─── Session Helpers ──────────────────────────────────────────────────────────
@@ -1403,25 +1406,8 @@ function renderSwCards() {
   const grid = document.getElementById('swGrid');
   grid.innerHTML = '';
 
-  // One-Time Event card (top of section)
-  const otEvent = ADDONS.find(a => a.blockId === 'one-time-event');
-  if (otEvent) {
-    const otCard = document.createElement('div');
-    otCard.className = 'sw-card';
-    otCard.id = 'sw-one-time-event';
-    otCard.style.setProperty('--card-color', '#e98ad1');
-    otCard.style.setProperty('--card-color-light', '#fdf0f8');
-    otCard.style.setProperty('--card-btn-text', '#5a1a4a');
-    otCard.innerHTML = `
-      <div class="sw-card-name">${otEvent.label}</div>
-      <div class="sw-card-tagline">${otEvent.desc}</div>
-      <div class="sw-card-price" style="color:#5a1a4a;background:#fdf0f8">${fmt(getBlockPrice(otEvent.blockId))}/event</div>
-      <button class="sw-add-btn" onclick="addAddon('one-time-event')">+ Add</button>`;
-    grid.appendChild(otCard);
-  }
-
-  // Non-school tiers (Play, Impact)
-  for (const tier of SOFTWARE_TIERS.filter(t => !t.isSchool)) {
+  // Non-school, non-flat tiers (Play, Impact: Per User)
+  for (const tier of SOFTWARE_TIERS.filter(t => !t.isSchool && !t.flatPricing)) {
     const card = document.createElement('div');
     card.className = 'sw-card';
     card.id = 'sw-' + tier.id;
@@ -1502,10 +1488,10 @@ function renderSwCards() {
   schoolCard.style.setProperty('--card-color-light', '#edfdf5');
   schoolCard.style.setProperty('--card-btn-text', '#1a4a3a');
   schoolCard.innerHTML = `
-    <div class="sw-card-name">Schools</div>
+    <div class="sw-card-name">Impact: Per Student</div>
     <div class="sw-card-tagline">Enrollment-based pricing for K\u201312</div>
     <div class="sw-card-price" id="schools-price-badge" style="color:#1a6b4a;background:#edfdf5">${defaultTier.priceNote}</div>
-    <div id="schools-tier-detail" style="font-size:10px;color:var(--slate-400);margin-top:2px">${defaultTier.name} · ${defaultTier.monthlyCredits}</div>
+    <div id="schools-tier-detail" style="font-size:10px;color:var(--slate-400);margin-top:2px">${defaultTier.name.replace('Impact: Per Student — ', '')} · ${defaultTier.monthlyCredits}</div>
     <div class="sw-card-row">
       <label>Students:</label>
       <input class="sw-count-input" type="number" step="any" value="${defaultEnrollment}" id="sw-input-schools">
@@ -1527,11 +1513,38 @@ function renderSwCards() {
     const tier = getSchoolTierForEnrollment(raw);
     const v = Math.max(raw, tier.minCount);
     document.getElementById('schools-price-badge').textContent = tier.priceNote;
-    document.getElementById('schools-tier-detail').textContent = tier.name + ' · ' + tier.monthlyCredits;
+    document.getElementById('schools-tier-detail').textContent = tier.name.replace('Impact: Per Student — ', '') + ' · ' + tier.monthlyCredits;
     document.getElementById('schools-computed').textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + '/yr';
     const warn = document.getElementById('schools-min-warning');
     warn.style.display = (raw < tier.minCount) ? 'block' : 'none';
   });
+
+  // Flat-pricing tiers (One-Time Event) — rendered last
+  for (const tier of SOFTWARE_TIERS.filter(t => t.flatPricing)) {
+    const card = document.createElement('div');
+    card.className = 'sw-card';
+    card.id = 'sw-' + tier.id;
+    card.style.setProperty('--card-color', tier.color);
+    card.style.setProperty('--card-color-light', tier.colorLight);
+    card.style.setProperty('--card-btn-text', tier.colorText);
+    card.innerHTML = `
+      <div class="sw-card-name">${tier.name}</div>
+      <div class="sw-card-tagline">${tier.tagline}</div>
+      <div class="sw-card-price" style="color:${tier.colorText};background:${tier.colorLight}">${tier.priceNote}</div>
+      <div class="sw-card-row">
+        <label>Events:</label>
+        <input class="sw-count-input" type="number" step="1" min="1" value="${tier.defaultCount}" id="sw-input-${tier.id}">
+        <span class="sw-card-computed" id="sw-computed-${tier.id}">${fmt(tier.pricePerUnit * tier.defaultCount)}</span>
+      </div>
+      <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">+ Add License</button>`;
+    grid.appendChild(card);
+    const input = card.querySelector('.sw-count-input');
+    const computed = card.querySelector('.sw-card-computed');
+    input.addEventListener('input', () => {
+      const v = Math.max(1, Math.round(parseFloat(input.value)) || 1);
+      computed.textContent = fmt(tier.pricePerUnit * v);
+    });
+  }
 }
 
 function addSchoolLicense() {
@@ -1579,7 +1592,11 @@ function renderLicenseList() {
     const discPct = TERM_DISCOUNTS[term] || 0;
     const multiYearTotal = calcLicenseMultiYearTotal(lic);
     let priceDisplay, detailDisplay, selectorHtml;
-    if (tier.noMultiYear) {
+    if (tier.flatPricing) {
+      priceDisplay = fmt(annualCost);
+      detailDisplay = `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit.toLocaleString()}/${tier.unitLabel} · ${tier.tagline}`;
+      selectorHtml = '';
+    } else if (tier.noMultiYear) {
       const period = lic.period || 12;
       const periodLabel = period === 6 ? '6-mo' : '12-mo';
       priceDisplay = `${fmt(annualCost)}/${periodLabel}`;
@@ -1636,9 +1653,8 @@ function renderLicenseList() {
 function renderAddonGrid() {
   const grid = document.getElementById('addonGrid');
   grid.innerHTML = '';
-  const visibleAddons = ADDONS.filter(a => a.blockId !== 'one-time-event');
   const categories = [];
-  for (const addon of visibleAddons) {
+  for (const addon of ADDONS) {
     if (!categories.includes(addon.category)) categories.push(addon.category);
   }
   for (const cat of categories) {
@@ -1650,7 +1666,7 @@ function renderAddonGrid() {
     const subgrid = document.createElement('div');
     subgrid.className = 'addon-grid';
     grid.appendChild(subgrid);
-    for (const addon of visibleAddons.filter(a => a.category === cat)) {
+    for (const addon of ADDONS.filter(a => a.category === cat)) {
       const inQuote = isAddonInQuote(addon.blockId);
       const card = document.createElement('div');
       card.className = 'addon-card' + (inQuote ? ' in-quote' : '');
@@ -2261,7 +2277,7 @@ function getTabState() {
       softwareTotal: calcTotalSoftware(),
       softwareAnnual: calcTotalSoftwareAnnual(),
       softwareDiscount: calcTotalSoftwareDiscount(),
-      softwareTerms: quoteLicenses.map(l => { const t = SOFTWARE_TIERS.find(x => x.id === l.tierId); return t?.noMultiYear ? { period: l.period || 12, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) } : { term: l.term || 1, discountPct: TERM_DISCOUNTS[l.term || 1] || 0, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) }; }),
+      softwareTerms: quoteLicenses.map(l => { const t = SOFTWARE_TIERS.find(x => x.id === l.tierId); if (t?.flatPricing) return { flat: true, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) }; return t?.noMultiYear ? { period: l.period || 12, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) } : { term: l.term || 1, discountPct: TERM_DISCOUNTS[l.term || 1] || 0, annual: calcLicenseAnnualCost(l), total: calcLicenseMultiYearTotal(l) }; }),
       packages: quotePackages.map(qp => ({
         gross: calcQuotePkgGross(qp),
         net: calcQuotePkgNet(qp),
