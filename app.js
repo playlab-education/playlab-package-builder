@@ -260,12 +260,12 @@ function calcTotalSoftwareDiscount() {
   return quoteLicenses.reduce((sum, lic) => sum + calcLicenseMultiYearDiscount(lic), 0);
 }
 
-function addLicense(tierId, count, students) {
+function addLicense(tierId, count, students, period) {
   const tier = SOFTWARE_TIERS.find(t => t.id === tierId);
   if (!tier) return;
   const c = count || tier.defaultCount;
   const lic = { licenseId: nextLicenseId++, tierId, count: c, customName: '', term: 1 };
-  if (tier.noMultiYear) lic.period = 12;
+  if (tier.noMultiYear) lic.period = period || 12;
   if (tier.hasStudentInput) lic.students = students || tier.defaultStudents || 0;
   quoteLicenses.push(lic);
   track('add_license', { tier_name: tier.name, tier_id: tierId, count: c });
@@ -1409,11 +1409,11 @@ function renderSwCards() {
     card.className = 'sw-card';
     card.id = 'sw-' + tier.id;
     const defaultCount = tier.defaultCount;
-    const cost = tier.pricePerUnit * defaultCount;
+    const cost = tier.noMultiYear ? tier.pricePerUnit * 2 * defaultCount : tier.pricePerUnit * defaultCount;
     const priceLabel = tier.priceNote || `$${tier.pricePerUnit}/${tier.unitLabel}/year`;
     const countLabel = tier.unitLabel === 'user' ? 'Users' : 'Qty';
-    const period = tier.periodLabel || '/yr';
-    const computedText = tier.isCustom ? 'Custom' : `${fmt(cost)}${period}`;
+    const periodSuffix = tier.noMultiYear ? '/12-mo' : (tier.periodLabel || '/yr');
+    const computedText = tier.isCustom ? 'Custom' : `${fmt(cost)}${periodSuffix}`;
     const countRow = `<div class="sw-card-row">
         <label>${countLabel}:</label>
         <input class="sw-count-input" type="number" step="any" value="${defaultCount}" id="sw-input-${tier.id}">
@@ -1434,11 +1434,22 @@ function renderSwCards() {
     card.style.setProperty('--card-color', cardColor);
     card.style.setProperty('--card-color-light', cardColorLight);
     card.style.setProperty('--card-btn-text', tier.id === 'play' ? '#5a4000' : tier.id === 'impact' ? '#1a4a3a' : 'white');
+    let periodRow = '';
+    if (tier.noMultiYear) {
+      periodRow = `<div class="sw-card-row" style="margin-top:4px">
+        <label>Term:</label>
+        <select id="sw-period-${tier.id}" style="font-size:11px;padding:2px 6px;border:1px solid var(--slate-200);border-radius:4px;background:#fff;color:var(--slate-600);cursor:pointer;flex:1">
+          <option value="6">6 Months — $${tier.pricePerUnit.toLocaleString()}</option>
+          <option value="12" selected>12 Months — $${(tier.pricePerUnit * 2).toLocaleString()}</option>
+        </select>
+      </div>`;
+    }
     card.innerHTML = `
       <div class="sw-card-name">${tier.name}</div>
       <div class="sw-card-tagline">${tier.tagline}</div>
       <div class="sw-card-price" style="color:${cardColorText};background:${cardColorLight}">${priceLabel}</div>
       ${metaRow}
+      ${periodRow}
       ${countRow}
       ${studentRow}
       <button class="sw-add-btn" onclick="addLicenseFromCard('${tier.id}')">+ Add License</button>`;
@@ -1446,10 +1457,22 @@ function renderSwCards() {
 
     const input = card.querySelector('.sw-count-input');
     const computed = card.querySelector('.sw-card-computed');
-    input.addEventListener('input', () => {
-      const v = parseFloat(input.value) || tier.defaultCount;
-      computed.textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + (tier.periodLabel || '/yr');
-    });
+    if (tier.noMultiYear) {
+      const periodSelect = card.querySelector(`#sw-period-${tier.id}`);
+      const updateComputed = () => {
+        const v = parseFloat(input.value) || tier.defaultCount;
+        const mul = parseInt(periodSelect.value) === 6 ? 1 : 2;
+        const periodLabel = parseInt(periodSelect.value) === 6 ? '/6-mo' : '/12-mo';
+        computed.textContent = fmt(tier.pricePerUnit * mul * v) + periodLabel;
+      };
+      input.addEventListener('input', updateComputed);
+      periodSelect.addEventListener('change', updateComputed);
+    } else {
+      input.addEventListener('input', () => {
+        const v = parseFloat(input.value) || tier.defaultCount;
+        computed.textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + (tier.periodLabel || '/yr');
+      });
+    }
   }
 
   // Unified Schools card
@@ -1512,7 +1535,12 @@ function addLicenseFromCard(tierId) {
     const studentInput = document.getElementById('sw-students-' + tierId);
     students = Math.round(parseFloat(studentInput.value)) || tier.defaultStudents;
   }
-  addLicense(tierId, count, students);
+  let period;
+  if (tier.noMultiYear) {
+    const periodSelect = document.getElementById('sw-period-' + tierId);
+    period = parseInt(periodSelect.value) || 12;
+  }
+  addLicense(tierId, count, students, period);
 }
 
 // ─── Render: License List (Right Panel) ──────────────────────────────────────
