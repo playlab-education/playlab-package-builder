@@ -1403,6 +1403,23 @@ function renderSwCards() {
   const grid = document.getElementById('swGrid');
   grid.innerHTML = '';
 
+  // One-Time Event card (top of section)
+  const otEvent = ADDONS.find(a => a.blockId === 'one-time-event');
+  if (otEvent) {
+    const otCard = document.createElement('div');
+    otCard.className = 'sw-card';
+    otCard.id = 'sw-one-time-event';
+    otCard.style.setProperty('--card-color', '#e98ad1');
+    otCard.style.setProperty('--card-color-light', '#fdf0f8');
+    otCard.style.setProperty('--card-btn-text', '#5a1a4a');
+    otCard.innerHTML = `
+      <div class="sw-card-name">${otEvent.label}</div>
+      <div class="sw-card-tagline">${otEvent.desc}</div>
+      <div class="sw-card-price" style="color:#5a1a4a;background:#fdf0f8">${fmt(getBlockPrice(otEvent.blockId))}/event</div>
+      <button class="sw-add-btn" onclick="addAddon('one-time-event')">+ Add</button>`;
+    grid.appendChild(otCard);
+  }
+
   // Non-school tiers (Play, Impact)
   for (const tier of SOFTWARE_TIERS.filter(t => !t.isSchool)) {
     const card = document.createElement('div');
@@ -1619,8 +1636,9 @@ function renderLicenseList() {
 function renderAddonGrid() {
   const grid = document.getElementById('addonGrid');
   grid.innerHTML = '';
+  const visibleAddons = ADDONS.filter(a => a.blockId !== 'one-time-event');
   const categories = [];
-  for (const addon of ADDONS) {
+  for (const addon of visibleAddons) {
     if (!categories.includes(addon.category)) categories.push(addon.category);
   }
   for (const cat of categories) {
@@ -1632,7 +1650,7 @@ function renderAddonGrid() {
     const subgrid = document.createElement('div');
     subgrid.className = 'addon-grid';
     grid.appendChild(subgrid);
-    for (const addon of ADDONS.filter(a => a.category === cat)) {
+    for (const addon of visibleAddons.filter(a => a.category === cat)) {
       const inQuote = isAddonInQuote(addon.blockId);
       const card = document.createElement('div');
       card.className = 'addon-card' + (inQuote ? ' in-quote' : '');
