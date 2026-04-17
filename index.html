@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260416d">
+  <link rel="stylesheet" href="style.css?v=20260416e">
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -1441,6 +1441,11 @@
       </div>
       <div class="fg-stage-body">
 
+        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'inquiry'})">
+          <span style="flex-shrink:0">&#x1F504;</span>
+          <div><strong>Renewals:</strong> Renewals don&rsquo;t start here &mdash; they start 90 days before contract end. The trigger is a renewal date on the HubSpot deal, not an inbound inquiry. Check the <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/all/list" target="_blank" style="color:#0f766e;font-weight:600">Renewals pipeline</a> for your upcoming partners.</div>
+        </div>
+
         <div class="fg-section">
           <div class="fg-section-title">How Partners Come to Playlab</div>
           <table class="fg-table">
@@ -1509,6 +1514,11 @@
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
       <div class="fg-stage-body">
+
+        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'discovery'})">
+          <span style="flex-shrink:0">&#x1F504;</span>
+          <div><strong>Renewals:</strong> For renewals, discovery is a check-in, not a first conversation. You already know them. Focus on: What went well this year? What do they want more or less of? Has their budget changed? Any new priorities for next year? Skip the ACE opener and demo &mdash; go straight to the relationship.</div>
+        </div>
 
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
@@ -1685,10 +1695,15 @@
       </div>
       <div class="fg-stage-body">
 
+        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'scoping'})">
+          <span style="flex-shrink:0">&#x1F504;</span>
+          <div><strong>Renewals:</strong> Start with last year&rsquo;s package as the baseline. The conversation is: same scope, expand, or reduce? Renewal + expansion gets a <strong>10% &ldquo;Growth Rate&rdquo; discount on new services only</strong> &mdash; flag Nate in #approval. Straight renewals at the same scope keep the same rate, no increase.</div>
+        </div>
+
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
           <div class="fg-body-text">
-            You&rsquo;ve done discovery. You understand their priorities. Now you&rsquo;re matching needs to Playlab offerings and configuring a package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a>. This can happen on the same call as discovery (if things move fast) or as a separate follow-up.
+            Discovery is done. The partner&rsquo;s priorities are understood. Now it&rsquo;s about matching needs to Playlab offerings and configuring a package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a>. This can happen on the same call as discovery (if things move fast) or as a separate follow-up.
           </div>
         </div>
 
@@ -2381,7 +2396,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260416d"></script>
+<script src="app.js?v=20260416e"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

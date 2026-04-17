@@ -567,6 +567,10 @@
     /* Tip callout */
     .fg-tip { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--sky-50); border: 1px solid var(--sky-200); border-radius: 8px; margin-bottom: 12px; font-size: 12px; color: var(--sky-800); line-height: 1.6; }
 
+    /* Renewal callout */
+    .fg-renewal { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: #134e4a; line-height: 1.6; }
+    .fg-renewal strong { color: #0f766e; font-weight: 700; }
+
     /* Stage Appendix (collapsible deep-dive) */
     .fg-appendix { background: var(--slate-50); border: 1.5px solid var(--slate-200); border-radius: 10px; margin-top: 16px; overflow: hidden; }
     .fg-appendix-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; user-select: none; }

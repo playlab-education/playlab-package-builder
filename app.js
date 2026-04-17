@@ -2151,7 +2151,11 @@ async function switchMainTab(tab) {
   Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
   const tabIndex = { welcome: 0, fieldguide: 1, builder: 2, pricing: 3, resources: 4, skills: 5 };
   if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
-  track('tab_view', { tab_name: tab });
+  if (tab === 'fieldguide') {
+    fgTrack('tab_view', { tab_name: tab });
+  } else {
+    track('tab_view', { tab_name: tab });
+  }
   if (tab === 'builder') {
     views.builder.style.display = 'grid';
   } else if (views[tab]) {
@@ -2175,6 +2179,12 @@ function switchSkillsSubtab(subtab) {
   track('skills_subtab', { subtab_name: subtab });
 }
 
+// ─── Field Guide Analytics Helper ────────────────────────────────────────────
+function fgTrack(event, params) {
+  const user = (document.getElementById('userBadgeName')?.textContent || '').trim();
+  track(event, Object.assign({ fg_user: user || 'unknown' }, params));
+}
+
 // ─── Field Guide Stage Accordion ─────────────────────────────────────────────
 function toggleFGStage(stage) {
   const el = document.getElementById('fg-stage-' + stage);
@@ -2190,8 +2200,37 @@ function toggleFGStage(stage) {
     if (pip) pip.classList.add('active');
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
-  track('fieldguide_stage', { stage_name: stage, action: wasOpen ? 'close' : 'open' });
+  fgTrack('fieldguide_stage', { stage_name: stage, action: wasOpen ? 'close' : 'open' });
 }
+
+// ─── Field Guide Link & Section Tracking ─────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const fg = document.getElementById('fieldguideView');
+  if (!fg) return;
+  // Track outbound link clicks within Field Guide
+  fg.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if (a && a.href && !a.href.startsWith('javascript:')) {
+      fgTrack('fg_link_click', { url: a.href, text: (a.textContent || '').trim().slice(0, 60) });
+    }
+  });
+  // Track appendix opens
+  fg.querySelectorAll('.fg-appendix-header').forEach(h => {
+    h.addEventListener('click', () => {
+      const id = h.parentElement.id || 'unknown';
+      const opening = !h.parentElement.classList.contains('open');
+      fgTrack('fg_appendix', { section: id, action: opening ? 'open' : 'close' });
+    });
+  });
+  // Track escalation matrix and HubSpot reference opens
+  fg.querySelectorAll('.fg-matrix-header').forEach(h => {
+    h.addEventListener('click', () => {
+      const id = h.parentElement.id || 'unknown';
+      const opening = !h.parentElement.classList.contains('open');
+      fgTrack('fg_section', { section: id, action: opening ? 'open' : 'close' });
+    });
+  });
+});
 
 // ─── Resource Section Toggle ─────────────────────────────────────────────────
 function toggleResourceSection(section) {
