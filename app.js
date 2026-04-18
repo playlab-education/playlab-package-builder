@@ -1,6 +1,13 @@
-// ─── Analytics ────────────────────────────────────────────────────────────────
+// ─── Analytics (PostHog) ─────────────────────────────────────────────────────
 function track(event, params) {
-  if (typeof gtag === 'function') gtag('event', event, params);
+  if (typeof posthog !== 'undefined' && posthog.capture) {
+    posthog.capture(event, params || {});
+  }
+}
+function identifyUser(name) {
+  if (typeof posthog !== 'undefined' && posthog.identify && name && name !== 'Team') {
+    posthog.identify(name, { name: name });
+  }
 }
 
 // ─── Resource Link Copy ──────────────────────────────────────────────────────
@@ -3063,6 +3070,7 @@ function refreshUserDisplay() {
   if (badge) {
     const name = getLibUsername();
     badge.textContent = name === 'Team' ? '' : name;
+    identifyUser(name);
   }
   // Update save attribution
   const attr = document.getElementById('saveAttribution');
