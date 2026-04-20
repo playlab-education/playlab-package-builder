@@ -2210,6 +2210,82 @@ function toggleFGStage(stage) {
   fgTrack('fieldguide_stage', { stage_name: stage, action: wasOpen ? 'close' : 'open' });
 }
 
+// ─── This Week at Playlab (Win Wire) ─────────────────────────────────────────
+// Data source: wins.json in repo root. Updated by the /wins automation (handbook §5.9).
+// Renders LP-first celebrations + weekly/quarterly metrics. Hides celebrations row
+// in quiet weeks; hides full card only when BOTH celebrations and metrics are empty.
+function fmtMoney(n) {
+  if (n == null || isNaN(n)) return '';
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + 'M';
+  if (n >= 1000) return '$' + Math.round(n / 1000) + 'k';
+  return '$' + n;
+}
+function fmtRelative(iso) {
+  if (!iso) return '';
+  const then = new Date(iso); const now = new Date();
+  const diffMin = Math.round((now - then) / 60000);
+  if (diffMin < 60) return diffMin <= 1 ? 'just now' : diffMin + ' min ago';
+  const diffHr = Math.round(diffMin / 60);
+  if (diffHr < 24) return diffHr + 'h ago';
+  const diffDay = Math.round(diffHr / 24);
+  if (diffDay < 7) return diffDay + 'd ago';
+  return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+function renderThisWeek(data) {
+  const card = document.getElementById('thisWeekCard');
+  if (!card) return;
+  const celebs = Array.isArray(data.celebrations) ? data.celebrations : [];
+  const metrics = data.metrics || {};
+  const hasCelebs = celebs.length > 0;
+  const hasMetrics = metrics.weekDealsClosed > 0 || metrics.monthRevenue > 0 || metrics.quarterActual > 0;
+  if (!hasCelebs && !hasMetrics) { card.style.display = 'none'; return; }
+
+  document.getElementById('twUpdated').textContent = data.updated ? 'Updated ' + fmtRelative(data.updated) : '';
+
+  const celebsEl = document.getElementById('twCelebrations');
+  if (hasCelebs) {
+    celebsEl.style.display = '';
+    celebsEl.innerHTML = celebs.slice(0, 3).map(w => `
+      <div class="tw-win">
+        <div class="tw-win-lp">${w.lp || 'Playlab team'}</div>
+        <div class="tw-win-org">${w.org || ''}</div>
+        <div class="tw-win-work">${w.work || ''}</div>
+        ${w.amount ? `<div class="tw-win-amount">${w.amount}</div>` : ''}
+      </div>
+    `).join('');
+  } else {
+    celebsEl.style.display = 'none';
+  }
+
+  const metricsEl = document.getElementById('twMetrics');
+  if (hasMetrics) {
+    metricsEl.style.display = '';
+    metricsEl.classList.toggle('tw-metrics-only', !hasCelebs);
+    const parts = [];
+    if (metrics.weekDealsClosed) {
+      parts.push(`<span class="tw-metric"><span class="tw-metric-value">${metrics.weekDealsClosed}</span><span class="tw-metric-label">closed this week</span></span>`);
+    }
+    if (metrics.monthRevenue) {
+      parts.push(`<span class="tw-metric"><span class="tw-metric-value">${fmtMoney(metrics.monthRevenue)}</span><span class="tw-metric-label">this month</span></span>`);
+    }
+    if (metrics.quarterGoal && metrics.quarterActual != null) {
+      const pct = Math.round((metrics.quarterActual / metrics.quarterGoal) * 100);
+      const behind = pct < 65;
+      parts.push(`<span class="tw-metric"><span class="tw-metric-pct${behind ? ' behind' : ''}">${pct}%</span><span class="tw-metric-label">of quarterly goal (${fmtMoney(metrics.quarterActual)} / ${fmtMoney(metrics.quarterGoal)})</span></span>`);
+    }
+    metricsEl.innerHTML = parts.join('');
+  } else {
+    metricsEl.style.display = 'none';
+  }
+
+  card.style.display = '';
+}
+(function loadThisWeek() {
+  fetch('wins.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).then(d => {
+    if (d) renderThisWeek(d);
+  }).catch(() => {});
+})();
+
 // ─── Field Guide Link & Section Tracking ─────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const fg = document.getElementById('fieldguideView');

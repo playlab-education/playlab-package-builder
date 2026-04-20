@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260416f">
+  <link rel="stylesheet" href="style.css?v=20260418a">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -79,6 +79,16 @@
       <h1 style="font-size:28px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Sales Hub</h1>
       <p style="font-size:14px;color:var(--slate-500);max-width:500px;margin:0 auto">Welcome to the internal Playlab Sales Hub!</p>
       <p style="font-size:11px;color:var(--slate-400);margin-top:6px">This is an internal website for Playlab employees' eyes only.</p>
+    </div>
+
+    <!-- This Week at Playlab (Win Wire) -->
+    <div id="thisWeekCard" class="tw-card" style="display:none">
+      <div class="tw-head">
+        <span class="tw-title"><span class="tw-emoji">&#x1F389;</span> This Week at Playlab</span>
+        <span class="tw-updated" id="twUpdated"></span>
+      </div>
+      <div id="twCelebrations" class="tw-celebrations" style="display:none"></div>
+      <div id="twMetrics" class="tw-metrics" style="display:none"></div>
     </div>
 
     <!-- Field Guide Featured Card -->
@@ -2402,7 +2412,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260416f"></script>
+<script src="app.js?v=20260418a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

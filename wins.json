@@ -1,0 +1,15 @@
+{
+  "_note": "Win Wire data — updated by the /wins automation (handbook §5.9). Manual edits allowed; next /wins run may overwrite.",
+  "updated": "2026-04-17T17:00:00Z",
+  "celebrations": [],
+  "metrics": {
+    "weekDealsClosed": 0,
+    "weekRevenue": 0,
+    "monthDealsClosed": 0,
+    "monthRevenue": 0,
+    "quarterGoal": 625000,
+    "quarterActual": 0,
+    "fiscalYearGoal": 5000000,
+    "fiscalYearActual": 0
+  }
+}
