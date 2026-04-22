@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422b">
+  <link rel="stylesheet" href="style.css?v=20260422c">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1390,10 +1390,10 @@
 
     <!-- Pipeline Progress Bar -->
     <div class="fg-pipeline">
-      <div class="fg-pipeline-step" onclick="toggleFGStage('inquiry')">
-        <div class="fg-pipeline-node" id="fg-pip-inquiry">
+      <div class="fg-pipeline-step" onclick="toggleFGStage('outreach')">
+        <div class="fg-pipeline-node" id="fg-pip-outreach">
           <div class="fg-pipeline-num">1</div>
-          <div class="fg-pipeline-label">Inquiry</div>
+          <div class="fg-pipeline-label">Outreach</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
@@ -1433,65 +1433,74 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 1: INQUIRY ═══ -->
-    <div class="fg-stage" id="fg-stage-inquiry">
-      <div class="fg-stage-header" onclick="toggleFGStage('inquiry')">
+    <!-- ═══ STAGE 1: OUTREACH ═══ -->
+    <div class="fg-stage" id="fg-stage-outreach">
+      <div class="fg-stage-header" onclick="toggleFGStage('outreach')">
         <div class="fg-stage-num">1</div>
         <div>
-          <div class="fg-stage-title">Inquiry</div>
-          <div class="fg-stage-subtitle">A potential partner has reached out or been identified. First contact.</div>
+          <div class="fg-stage-title">Outreach</div>
+          <div class="fg-stage-subtitle">You&rsquo;re identifying and reaching out to potential partners &mdash; or getting assigned one that came in.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
       <div class="fg-stage-body">
 
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'inquiry'})">
+        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'outreach'})">
           <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Renewals don&rsquo;t start here &mdash; they start 90 days before contract end. The trigger is a renewal date on the HubSpot deal, not an inbound inquiry. Check the <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/all/list" target="_blank" style="color:#0f766e;font-weight:600">Renewals pipeline</a> for your upcoming partners.</div>
+          <div><strong>Renewals:</strong> Renewals don&rsquo;t start here &mdash; they start 90 days before contract end. The trigger is a renewal date on the HubSpot deal, not outreach. Check the <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/all/list" target="_blank" style="color:#0f766e;font-weight:600">Renewals pipeline</a> for your upcoming partners.</div>
+        </div>
+
+        <div class="fg-tip">
+          <span style="flex-shrink:0">&#x1F4EC;</span>
+          <div><strong>Inbound inquiries:</strong> When a partner fills out the website form or sends a cold email, Nate triages and assigns in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-700);font-weight:600">#partnerships</a>. You don&rsquo;t need to watch the inbox &mdash; you&rsquo;ll be tagged when one&rsquo;s yours. Treat assigned inbounds like hot outbounds: 24-hour response, personalized, reference their specific submission.</div>
         </div>
 
         <div class="fg-section">
-          <div class="fg-section-title">How Partners Come to Playlab</div>
+          <div class="fg-section-title">Where Your Outreach Comes From</div>
           <table class="fg-table">
-            <thead><tr><th>Source</th><th>What Happens</th></tr></thead>
+            <thead><tr><th>Source</th><th>What to Do</th></tr></thead>
             <tbody>
-              <tr><td><strong>Inbound &mdash; Website</strong></td><td>Partner fills out the <a href="https://share.hsforms.com/1RUfAsKkzSOW8wXYKphpKyw4gmdg" target="_blank" style="color:var(--sky-600);font-weight:600">inquiry form</a> (&ldquo;Partner with Us&rdquo; / &ldquo;Contact Playlab&rdquo;). Nate or Mera triages and assigns.</td></tr>
-              <tr><td><strong>Inbound &mdash; Referral</strong></td><td>An existing partner, colleague, or network contact introduces someone. Often arrives via email or Slack.</td></tr>
-              <tr><td><strong>Inbound &mdash; Conference</strong></td><td>Someone connects with Playlab at an event &mdash; business card, booth conversation, session follow-up.</td></tr>
-              <tr><td><strong>Outbound &mdash; Prospecting</strong></td><td>Playlab identifies a potential partner and reaches out directly via email or LinkedIn.</td></tr>
-              <tr><td><strong>Renewal / Expansion</strong></td><td>An existing partner is ready for a new engagement &mdash; either a renewal or expanded scope.</td></tr>
+              <tr><td><strong>Target-list prospecting</strong></td><td>Work your ICP list &mdash; districts, networks, and orgs that fit Playlab&rsquo;s sweet spot. Research, personalize, reach out.</td></tr>
+              <tr><td><strong>Conference follow-through</strong></td><td>Every booth conversation, session connection, or badge scan is a warm lead. Follow up within a week while it&rsquo;s fresh.</td></tr>
+              <tr><td><strong>Referral activation</strong></td><td>Your existing partners are your best source. Ask for intros to peers, colleagues, and adjacent orgs &mdash; most people will say yes if you make it easy.</td></tr>
+              <tr><td><strong>Network &amp; LinkedIn</strong></td><td>Warm contacts, second-degree intros, people engaging with Playlab content. Personal beats cold every time.</td></tr>
+              <tr><td><strong>Expansion within book</strong></td><td>Existing partners with adjacent teams, sites, or programs. Often the easiest next deal you&rsquo;ll close.</td></tr>
+              <tr><td><strong>Assigned inbound</strong></td><td>Nate/Mera triages website inquiries, cold referrals, and walk-ups. You&rsquo;ll get tagged in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> when one&rsquo;s assigned. No LP action needed until then.</td></tr>
             </tbody>
           </table>
         </div>
 
         <div class="fg-section">
-          <div class="fg-section-title">What Happens from Playlab&rsquo;s Side</div>
+          <div class="fg-section-title">Your Outreach Workflow</div>
           <ol class="fg-checklist">
-            <li><span class="fg-checklist-num">1</span><span><strong>Inquiry is triaged</strong> &mdash; Nate or Mera reviews the inquiry and determines if it&rsquo;s a fit for Playlab</span></li>
-            <li><span class="fg-checklist-num">2</span><span><strong>Context is gathered</strong> &mdash; research the org (use <code>/research [org name]</code> in Claude Cowork), check HubSpot for prior history, review any materials they shared</span></li>
-            <li><span class="fg-checklist-num">3</span><span><strong>Playlab responds within 24 hours</strong> &mdash; use <code>/email-draft</code> in Claude Cowork (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) to draft a warm, personalized response that acknowledges their context</span></li>
-            <li><span class="fg-checklist-num">4</span><span><strong>Discovery call is scheduled</strong> &mdash; include a Calendly link or propose specific times</span></li>
-            <li><span class="fg-checklist-num">5</span><span><strong>Internal assignment</strong> &mdash; Nate posts in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> Slack with partner context, tags a suggested LP (or @Mera to assign). LP replies: <em>&ldquo;On it! Scheduling for [date].&rdquo;</em></span></li>
+            <li><span class="fg-checklist-num">1</span><span><strong>Pick your targets</strong> &mdash; pull your ICP list, review conferences you&rsquo;ve attended, scan your warm network. Outreach is only as good as who you&rsquo;re reaching.</span></li>
+            <li><span class="fg-checklist-num">2</span><span><strong>Research before reaching out</strong> &mdash; run <code>/research [org name]</code> in Claude Cowork, check HubSpot for prior touches, note any shared context (mutual contacts, strategic plan, recent news)</span></li>
+            <li><span class="fg-checklist-num">3</span><span><strong>Personalize the first touch</strong> &mdash; reference something specific and real. Use <code>/email-draft</code> (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) as a starting point, not a template send</span></li>
+            <li><span class="fg-checklist-num">4</span><span><strong>Log it in HubSpot immediately</strong> &mdash; create the deal at &ldquo;Discovery&rdquo; stage with yourself as owner. Use <code>/opp</code> in Claude Cowork. If it&rsquo;s not in HubSpot, it doesn&rsquo;t exist.</span></li>
+            <li><span class="fg-checklist-num">5</span><span><strong>Run a real cadence</strong> &mdash; 3&ndash;5 touches over 2&ndash;3 weeks across channels (email + LinkedIn). One-and-done isn&rsquo;t outreach.</span></li>
+            <li><span class="fg-checklist-num">6</span><span><strong>Goal of every touch: book a discovery conversation.</strong> Don&rsquo;t pitch, don&rsquo;t quote, don&rsquo;t demo &mdash; earn the call.</span></li>
           </ol>
         </div>
 
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-          <div><strong>Manual:</strong> If a deal doesn&rsquo;t exist yet, create one in HubSpot (or use <code>/opp</code> in Claude Cowork). If one already exists, change the deal owner to yourself and confirm the stage is &ldquo;Discovery.&rdquo; Add a note with how the partner came to us and any context from the inquiry.</div>
+          <div><strong>Manual:</strong> Create the HubSpot deal <em>before</em> your first outreach touch, not after. Use <code>/opp</code> in Claude Cowork or create directly in HubSpot. Set yourself as owner, stage = &ldquo;Discovery,&rdquo; and add a note on source (list, conference, referral, etc.).</div>
         </div>
 
         <div class="fg-tip">
           <span style="flex-shrink:0">&#x1F3AF;</span>
-          <div><strong>The goal of this stage is simple:</strong> Respond quickly, make the partner feel heard, and get a discovery call on the calendar. Speed matters &mdash; inquiries go cold fast.</div>
+          <div><strong>The goal of outreach is qualified conversations, not volume.</strong> One well-researched, personalized touch beats ten templates. Get a discovery call on the calendar &mdash; that&rsquo;s the win.</div>
         </div>
 
         <div class="fg-practices">
           <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>Respond within 24 hours &mdash; inquiries go cold fast</li>
-            <li>Reference something specific about the partner in your first reply</li>
-            <li>Create or update the HubSpot deal before the discovery call &mdash; if it&rsquo;s not in HubSpot, it doesn&rsquo;t exist</li>
-            <li>Get a discovery conversation on the calendar before demoing or quoting pricing</li>
+            <li>Personalize every first touch &mdash; reference something real and specific</li>
+            <li>Run a cadence (3&ndash;5 touches, multi-channel) &mdash; not a single email</li>
+            <li>Create the HubSpot deal <em>before</em> the first outreach touch, not after</li>
+            <li>Don&rsquo;t pitch in the first email &mdash; earn the discovery call first</li>
+            <li>Track what&rsquo;s working &mdash; which lists, events, referral sources convert? Share in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a></li>
+            <li>Assigned an inbound? Treat it like a hot outbound &mdash; 24-hour response, reference their form submission specifically</li>
           </ul>
         </div>
       </div>
@@ -1503,7 +1512,7 @@
         <div class="fg-stage-num">2</div>
         <div>
           <div class="fg-stage-title">Discovery</div>
-          <div class="fg-stage-subtitle">The partner is exploring. This is where Playlab learns what they need.</div>
+          <div class="fg-stage-subtitle">Two parts: (1) disco &mdash; learn about the organization, then (2) demo &mdash; share Playlab with them.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
@@ -2313,7 +2322,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422b"></script>
+<script src="app.js?v=20260422c"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
