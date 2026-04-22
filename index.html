@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422a">
+  <link rel="stylesheet" href="style.css?v=20260422b">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1383,7 +1383,7 @@
         <div class="fg-section">
           <div class="fg-section-title">Keeping HubSpot Accurate</div>
           <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0 0 8px">We&rsquo;re all responsible for keeping HubSpot up to date so it reflects reality &mdash; pipeline stage, deal owner, amounts, contacts, and engagement notes. If something has changed with your partner, it should change in HubSpot.</p>
-          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0"><strong>Automations occur when the proposal bot is used.</strong> Everything else is on us to keep current.</p>
+          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0"><strong>Two automations touch HubSpot:</strong> the proposal bot (when you run it) and a nightly sync that refreshes deal fields from the proposal doc linked on the opportunity. Even so, focus on manually updating when possible &mdash; automations are a safety net, not the system of record.</p>
         </div>
       </div>
     </div>
@@ -2313,7 +2313,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422a"></script>
+<script src="app.js?v=20260422b"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
