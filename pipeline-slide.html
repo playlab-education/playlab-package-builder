@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlab — Sales Pipeline (Slide)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-dark: #122134;
+      --secondary-dark: #767D86;
+      --secondary-light: #EFF5F5;
+      --accent-blue: #01B1E2;
+      --accent-green: #00CD72;
+      --accent-red: #FF0C26;
+      --accent-pink: #F21DB7;
+      --accent-gold: #FFC600;
+      --accent-gold-light: #FFF6D9;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-500: #64748B;
+      --slate-700: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: 'Lexend', sans-serif;
+      color: var(--primary-dark);
+      background: var(--slate-50);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-chrome {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .chrome-note {
+      font-size: 12px;
+      color: var(--secondary-dark);
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .chrome-note strong { color: var(--primary-dark); }
+
+    /* 16:9 slide — renders at 1600x900 internally, scales to viewport */
+    .slide {
+      width: 1600px;
+      height: 900px;
+      margin: 0 auto;
+      background: white;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(18, 33, 52, 0.12);
+      border-radius: 12px;
+      padding: 64px 72px;
+      overflow: hidden;
+    }
+
+    /* Decorative brand bar at top */
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(
+        to right,
+        var(--accent-blue) 0%,
+        var(--accent-blue) 20%,
+        var(--accent-red) 20%,
+        var(--accent-red) 40%,
+        var(--accent-gold) 40%,
+        var(--accent-gold) 60%,
+        var(--accent-green) 60%,
+        var(--accent-green) 80%,
+        var(--accent-pink) 80%,
+        var(--accent-pink) 100%
+      );
+    }
+
+    /* Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 56px;
+    }
+
+    .title-block h1 {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--primary-dark);
+      line-height: 1.1;
+    }
+
+    .title-block .subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--secondary-dark);
+      margin-top: 10px;
+      max-width: 800px;
+      line-height: 1.4;
+    }
+
+    /* Playlab multicolor wordmark (recreated in HTML) */
+    .logo {
+      font-family: 'Lexend', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: baseline;
+    }
+    .logo span {
+      mix-blend-mode: multiply;
+    }
+    .logo .l1 { color: var(--accent-blue); }
+    .logo .l2 { color: var(--accent-red); margin-left: -3px; }
+    .logo .l3 { color: var(--accent-gold); margin-left: -2px; }
+    .logo .l4 { color: var(--accent-green); margin-left: -2px; }
+    .logo .l5 { color: var(--accent-blue); margin-left: -3px; }
+    .logo .l6 { color: var(--accent-red); margin-left: -2px; }
+    .logo .l7 { color: var(--accent-gold); margin-left: -2px; }
+
+    /* Flow chart wrapper */
+    .flow {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+
+    /* Node card */
+    .node {
+      flex-shrink: 0;
+      width: 200px;
+      min-height: 180px;
+      background: white;
+      border: 2.5px solid var(--accent-blue);
+      border-radius: 20px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 16px rgba(1, 177, 226, 0.08);
+      transition: transform 0.2s;
+    }
+
+    .node-badge {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(1, 177, 226, 0.3);
+      border: 3px solid white;
+    }
+
+    .node-title {
+      margin-top: 26px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+    }
+
+    .node-desc {
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--secondary-dark);
+      line-height: 1.4;
+    }
+
+    .node-resource {
+      margin-top: auto;
+      padding-top: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    /* Stage 5 — orange (ops-driven) */
+    .node.ops {
+      border-color: var(--accent-gold);
+      box-shadow: 0 4px 16px rgba(255, 198, 0, 0.15);
+    }
+    .node.ops .node-badge {
+      background: var(--accent-gold);
+      color: var(--primary-dark);
+      box-shadow: 0 3px 10px rgba(255, 198, 0, 0.35);
+    }
+    .node.ops .node-resource { color: #b17f00; }
+
+    /* Stage 6 — green (you-driven) */
+    .node.you {
+      border-color: var(--accent-green);
+      box-shadow: 0 4px 16px rgba(0, 205, 114, 0.12);
+    }
+    .node.you .node-badge {
+      background: var(--accent-green);
+      color: white;
+      box-shadow: 0 3px 10px rgba(0, 205, 114, 0.3);
+    }
+    .node.you .node-resource { color: #007c45; }
+
+    /* Horizontal arrow */
+    .arrow {
+      width: 48px;
+      height: 4px;
+      background: var(--slate-200);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid var(--slate-200);
+      transform: translateY(-50%);
+    }
+
+    /* Fork container (after stage 4) */
+    .fork-wrap {
+      position: relative;
+      width: 72px;
+      height: 400px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .fork-wrap svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Parallel column (stages 5 and 6) */
+    .parallel {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .parallel .track-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 12px;
+      top: -14px;
+      right: 12px;
+    }
+    .parallel .track-label.ops {
+      background: var(--accent-gold-light);
+      color: #8a6100;
+      border: 1px solid var(--accent-gold);
+    }
+    .parallel .track-label.you {
+      background: #d5fbe7;
+      color: #007c45;
+      border: 1px solid var(--accent-green);
+    }
+
+    /* Parallel callout (below or beside the parallel stages) */
+    .parallel-note {
+      font-size: 12px;
+      color: var(--secondary-dark);
+      font-style: italic;
+      margin-top: 12px;
+      text-align: center;
+      max-width: 200px;
+    }
+
+    /* Bottom bar — legend / footer */
+    .footer {
+      position: absolute;
+      bottom: 36px;
+      left: 72px;
+      right: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 18px;
+      border-top: 1px solid var(--slate-200);
+    }
+
+    .legend {
+      display: flex;
+      gap: 28px;
+      font-size: 12px;
+      color: var(--secondary-dark);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-dot.blue { background: var(--accent-blue); }
+    .legend-dot.gold { background: var(--accent-gold); }
+    .legend-dot.green { background: var(--accent-green); }
+
+    .footer-meta {
+      font-size: 11px;
+      color: var(--secondary-dark);
+      text-align: right;
+    }
+
+    /* "Parallel Tracks" label + bracket above stages 5 and 6 */
+    .parallel-bracket {
+      position: absolute;
+      top: -58px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    .parallel-bracket-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--primary-dark);
+      padding: 6px 14px;
+      background: linear-gradient(135deg, var(--accent-gold-light), #d5fbe7);
+      border-radius: 20px;
+      border: 1px solid var(--slate-200);
+    }
+
+    /* Responsive scaling for viewing at smaller sizes */
+    @media (max-width: 1700px) {
+      .slide {
+        transform-origin: top center;
+        transform: scale(calc((100vw - 48px) / 1600));
+        margin-bottom: calc(900px * (calc((100vw - 48px) / 1600) - 1));
+      }
+    }
+    @media (max-width: 900px) {
+      .page-chrome { padding: 12px; }
+    }
+
+    /* Print / PDF export — strip chrome */
+    @media print {
+      .page-chrome { padding: 0; max-width: none; }
+      .chrome-note { display: none; }
+      .slide {
+        box-shadow: none;
+        border-radius: 0;
+        transform: none;
+        margin: 0;
+      }
+      @page { size: 1600px 900px; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-chrome">
+    <div class="chrome-note">
+      <strong>How to use:</strong> This page renders at slide proportions (1600&times;900, 16:9). To export: right-click &rarr; <em>Print</em> &rarr; save as PDF, or take a screenshot of the slide area below and drop it into any deck. File lives at <code>/pipeline-slide.html</code> in the Sales Hub repo.
+    </div>
+
+    <div class="slide">
+
+      <!-- Header -->
+      <header class="slide-header">
+        <div class="title-block">
+          <h1>Sales Pipeline</h1>
+          <p class="subtitle">How a partnership moves from first contact to delivery &mdash; six stages, two parallel tracks at the finish.</p>
+        </div>
+        <div class="logo" aria-label="Playlab">
+          <span class="l1">P</span><span class="l2">l</span><span class="l3">a</span><span class="l4">y</span><span class="l5">l</span><span class="l6">a</span><span class="l7">b</span>
+        </div>
+      </header>
+
+      <!-- Flow chart -->
+      <div class="flow">
+
+        <!-- Stage 1 -->
+        <div class="node">
+          <div class="node-badge">1</div>
+          <div class="node-title">Inquiry &amp;<br>Outreach</div>
+          <div class="node-desc">Partner comes in or you reach out to grow your region.</div>
+          <div class="node-resource">Email Templates</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <!-- Stage 2 -->
+        <div class="node">
+          <div class="node-badge">2</div>
+          <div class="node-title">Discovery<br>&amp; Demo</div>
+          <div class="node-desc">Learn their needs, then show Playlab in alignment.</div>
+          <div class="node-resource">Pitch Deck · Demo Apps</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <!-- Stage 3 -->
+        <div class="node">
+          <div class="node-badge">3</div>
+          <div class="node-title">Scoping</div>
+          <div class="node-desc">Draft SOW + pricing. Iterate until YES or NO.</div>
+          <div class="node-resource">Builder · Proposal Bot</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <!-- Stage 4 -->
+        <div class="node">
+          <div class="node-badge">4</div>
+          <div class="node-title">Approvals</div>
+          <div class="node-desc">Partner&rsquo;s internal sign-off: board, procurement, legal.</div>
+          <div class="node-resource">Email Templates</div>
+        </div>
+
+        <!-- Fork SVG -->
+        <div class="fork-wrap" aria-hidden="true">
+          <svg viewBox="0 0 72 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+            <!-- Entry line from stage 4 (enters at midpoint) -->
+            <path d="M0 200 L30 200" stroke="#CBD5E1" stroke-width="4" fill="none" stroke-linecap="round" />
+            <!-- Vertical spine -->
+            <path d="M30 90 L30 310" stroke="#CBD5E1" stroke-width="4" fill="none" stroke-linecap="round" />
+            <!-- Top branch to stage 5 -->
+            <path d="M30 90 L60 90" stroke="#FFC600" stroke-width="4" fill="none" stroke-linecap="round" />
+            <!-- Bottom branch to stage 6 -->
+            <path d="M30 310 L60 310" stroke="#00CD72" stroke-width="4" fill="none" stroke-linecap="round" />
+            <!-- Top arrow head (gold) -->
+            <path d="M60 82 L72 90 L60 98 Z" fill="#FFC600" />
+            <!-- Bottom arrow head (green) -->
+            <path d="M60 302 L72 310 L60 318 Z" fill="#00CD72" />
+          </svg>
+        </div>
+
+        <!-- Parallel column -->
+        <div class="parallel">
+          <div class="parallel-bracket">
+            <span class="parallel-bracket-label">&#x21C9; Runs in parallel</span>
+          </div>
+
+          <!-- Stage 5 -->
+          <div class="node ops">
+            <div class="node-badge">5</div>
+            <span class="track-label ops">Ops-driven</span>
+            <div class="node-title">Contract</div>
+            <div class="node-desc">Hand off to Ops. Track through signing and payment.</div>
+            <div class="node-resource">HubSpot · Denise</div>
+          </div>
+
+          <!-- Stage 6 -->
+          <div class="node you">
+            <div class="node-badge">6</div>
+            <span class="track-label you">You-driven</span>
+            <div class="node-title">Kickoff &amp;<br>Delivery</div>
+            <div class="node-desc">Plan implementation and deliver the partnership.</div>
+            <div class="node-resource">Partnership Playbook</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot blue"></span>Stages 1&ndash;4: Sales-driven</div>
+          <div class="legend-item"><span class="legend-dot gold"></span>Stage 5: Ops-driven (Contract)</div>
+          <div class="legend-item"><span class="legend-dot green"></span>Stage 6: You-driven (Delivery)</div>
+        </div>
+        <div class="footer-meta">
+          Internal reference &middot; <span style="color:var(--primary-dark);font-weight:600">playlab.ai</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
