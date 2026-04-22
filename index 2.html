@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>Playlab — Sales Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260406e">
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+<body>
+
+<div class="auth-gate" id="authGate">
+  <div class="auth-logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
+  <div class="auth-subtitle">Sales Hub</div>
+  <form id="authForm" style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:8px">
+    <input class="auth-input" type="password" id="authPassInput" placeholder="Enter passphrase" autocomplete="off">
+    <button class="auth-btn" type="submit">Enter</button>
+  </form>
+  <div class="auth-error" id="authError">Incorrect passphrase.</div>
+</div>
+
+<header class="app-header">
+  <div class="logo"><span>P</span><span>l</span><span>a</span><span>y</span><span>l</span><span>a</span><span>b</span></div>
+  <div class="header-sep"></div>
+  <div class="header-title">Sales Hub</div>
+  <div class="header-spacer"></div>
+  <div class="currency-toggle">
+    <label id="currencyLabel">Currency</label>
+    <select class="currency-select" id="currencySelect">
+      <option value="USD">USD ($)</option>
+      <option value="EUR">EUR (&euro;)</option>
+      <option value="GBP">GBP (&pound;)</option>
+      <option value="CHF">CHF (Fr)</option>
+      <option value="SEK">SEK (kr)</option>
+      <option value="NOK">NOK (kr)</option>
+      <option value="DKK">DKK (kr)</option>
+      <option value="GHS">GHS (GH&#x20B5;)</option>
+      <option value="INR">INR (&#x20B9;)</option>
+    </select>
+  </div>
+  <div class="header-sep"></div>
+  <div class="user-badge" id="userBadge" onclick="startEditUserBadge()" title="Click to change your name">
+    <span class="user-badge-name" id="userBadgeName"></span>
+    <input class="user-badge-input" id="userBadgeInput" onblur="commitEditUserBadge()" onkeydown="if(event.key==='Enter'){commitEditUserBadge()}else if(event.key==='Escape'){cancelEditUserBadge()}" autocomplete="off">
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchMainTab('welcome')">Welcome</button>
+  <button class="tab-btn" onclick="switchMainTab('builder')">Builder</button>
+  <button class="tab-btn" onclick="switchMainTab('pricing')">Pricing Sheet</button>
+  <button class="tab-btn" onclick="switchMainTab('resources')">Key Resources</button>
+  <button class="tab-btn" onclick="switchMainTab('skills')">Cowork Skills</button>
+</div>
+
+<!-- Welcome View -->
+<div class="welcome-view" id="welcomeView">
+  <div style="max-width:800px;margin:0 auto;padding:48px 28px">
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="display:flex;gap:2px;font-size:36px;font-weight:700;letter-spacing:-0.5px;justify-content:center;margin-bottom:8px">
+        <span style="color:#0EA5E9">P</span><span style="color:#f43f5e">l</span><span style="color:#f59e0b">a</span><span style="color:#0EA5E9">y</span><span style="color:#10b981">l</span><span style="color:#0EA5E9">a</span><span style="color:#f43f5e">b</span>
+      </div>
+      <h1 style="font-size:28px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Sales Hub</h1>
+      <p style="font-size:14px;color:var(--slate-500);max-width:500px;margin:0 auto">Welcome to the internal Playlab Sales Hub!</p>
+      <p style="font-size:11px;color:var(--slate-400);margin-top:6px">This is an internal website for Playlab employees' eyes only.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px">
+      <div onclick="switchMainTab('builder')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4E6;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Package Builder</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Build and customize service packages and quotes for partners</p>
+      </div>
+
+      <div onclick="switchMainTab('pricing')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 4px 12px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4B0;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Pricing Sheet</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Reference software tiers, building block rates, and enrollment pricing</p>
+      </div>
+
+      <div onclick="switchMainTab('resources')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--violet-500)';this.style.boxShadow='0 4px 12px rgba(139,92,246,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F4C1;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Key Resources</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Access pitch deck, partnership offerings, and essential sales documents</p>
+      </div>
+
+      <div onclick="switchMainTab('skills')" style="cursor:pointer;background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:28px 24px;text-align:center;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)" onmouseover="this.style.borderColor='var(--amber-500)';this.style.boxShadow='0 4px 12px rgba(245,158,11,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='0 1px 3px rgba(0,0,0,.04)'">
+        <div style="font-size:32px;margin-bottom:12px">&#x1F916;</div>
+        <h3 style="font-size:15px;font-weight:700;color:var(--slate-800);margin-bottom:6px">Cowork Skills</h3>
+        <p style="font-size:12px;color:var(--slate-500);line-height:1.5">Browse Claude Code slash commands and learn how to use them</p>
+      </div>
+    </div>
+
+    <!-- Build a Proposal workflow -->
+    <div style="background:white;border:1.5px solid var(--slate-200);border-radius:12px;padding:24px 28px;margin-bottom:32px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+      <h2 style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:16px">Build a Proposal</h2>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)"><span>Get a package recommendation</span> <span style="font-size:11px;color:var(--slate-400);font-weight:400">(optional)</span></div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Use the <em>package recommender skill</em> in Claude Cowork &mdash; give your meeting notes to Claude, have it recommend pricing components</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Build a package</div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px">Go to the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);text-decoration:none;font-weight:600">Package Builder</a> tab to configure services and pricing</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sky-100);color:var(--sky-600);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--slate-700)">Generate the proposal</div>
+            <div style="font-size:12px;color:var(--slate-500);margin-top:2px;line-height:1.6">Go to <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">#proposal-bot in Slack</a>:<br>
+              &bull; Share your package (copy the URL)<br>
+              &bull; Share any context (e.g., link to Granola notes, a few bullet points, an email)<br>
+              &bull; Indicate what language you'd like the final proposal to be in</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HubSpot Expectations Callout -->
+    <div style="background:#FFF4F0;border:1.5px solid #FFB89A;border-radius:12px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+      <h3 style="font-size:13px;font-weight:700;color:#FF7A59;margin:0 0 10px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 512 512" fill="#FF7A59"><path d="M394.7 238.8V156.3c15.5-8.1 26.1-24.3 26.1-43.1v-1.3c0-26.8-21.7-48.5-48.5-48.5h-1.3c-18.8 0-35 10.6-43.1 26.1h-82.5c-8.1-15.5-24.3-26.1-43.1-26.1h-1.3c-26.8 0-48.5 21.7-48.5 48.5v1.3c0 18.8 10.6 35 26.1 43.1v82.5c-15.5 8.1-26.1 24.3-26.1 43.1v1.3c0 26.8 21.7 48.5 48.5 48.5h1.3c18.8 0 35-10.6 43.1-26.1h82.5c8.1 15.5 24.3 26.1 43.1 26.1h1.3c26.8 0 48.5-21.7 48.5-48.5v-1.3c0-18.8-10.6-35-26.1-43.1zM256 304c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/></svg>HubSpot Expectations</h3>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px;line-height:1.5">
+        <span style="font-weight:700;color:#FF7A59">Daily</span>
+        <span style="color:var(--slate-600)">Keep opportunities up-to-date (pipeline stage, owner, amounts, link to proposal)</span>
+        <span style="font-weight:700;color:#FF7A59">Weekly</span>
+        <span style="color:var(--slate-600)">Review your <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/61787425/list" target="_blank" style="color:#FF7A59;text-decoration:underline">&ldquo;My 26-27 Opps&rdquo;</a> board for accuracy/updates and metrics &middot; Sync meeting notes to HubSpot (use granola sync skill in Claude Cowork)</span>
+        <span style="font-weight:700;color:#FF7A59">As needed</span>
+        <span style="color:var(--slate-600)">Add new opportunities &middot; Add Notes to opportunities to capture updates</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Resources View -->
+<div class="resources-view" id="resourcesView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:8px">Key Resources</h2>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:16px">Essential documents and files for sales conversations. Click to open or use the embed to preview.</p>
+
+    <!-- HubSpot Expectations Callout -->
+    <div style="background:#FFF4F0;border:1.5px solid #FFB89A;border-radius:10px;padding:16px 20px;margin-bottom:20px">
+      <h3 style="font-size:13px;font-weight:700;color:#FF7A59;margin:0 0 10px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 512 512" fill="#FF7A59"><path d="M394.7 238.8V156.3c15.5-8.1 26.1-24.3 26.1-43.1v-1.3c0-26.8-21.7-48.5-48.5-48.5h-1.3c-18.8 0-35 10.6-43.1 26.1h-82.5c-8.1-15.5-24.3-26.1-43.1-26.1h-1.3c-26.8 0-48.5 21.7-48.5 48.5v1.3c0 18.8 10.6 35 26.1 43.1v82.5c-15.5 8.1-26.1 24.3-26.1 43.1v1.3c0 26.8 21.7 48.5 48.5 48.5h1.3c18.8 0 35-10.6 43.1-26.1h82.5c8.1 15.5 24.3 26.1 43.1 26.1h1.3c26.8 0 48.5-21.7 48.5-48.5v-1.3c0-18.8-10.6-35-26.1-43.1zM256 304c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/></svg>HubSpot Expectations</h3>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px;line-height:1.5">
+        <span style="font-weight:700;color:#FF7A59">Daily</span>
+        <span style="color:var(--slate-600)">Keep opportunities up-to-date (pipeline stage, owner, amounts, link to proposal)</span>
+        <span style="font-weight:700;color:#FF7A59">Weekly</span>
+        <span style="color:var(--slate-600)">Review your <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/61787425/list" target="_blank" style="color:#FF7A59;text-decoration:underline">&ldquo;My 26-27 Opps&rdquo;</a> board for accuracy/updates and metrics &middot; Sync meeting notes to HubSpot (use granola sync skill in Claude Cowork)</span>
+        <span style="font-weight:700;color:#FF7A59">As needed</span>
+        <span style="color:var(--slate-600)">Add new opportunities &middot; Add Notes to opportunities to capture updates</span>
+      </div>
+    </div>
+
+    <!-- Row 1: Pitch Deck + Partnership Offerings side-by-side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F3AC;</span>
+          <div style="flex:1;min-width:0">
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Pitch Deck</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Overview presentation for partner conversations</p>
+            <div class="res-link-row"><span class="res-link-url">https://bit.ly/PlaylabDeck26</span><button class="res-copy-btn" onclick="event.stopPropagation();copyResLink(this,'https://bit.ly/PlaylabDeck26')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+          </div>
+          <a href="https://docs.google.com/presentation/d/1nozF2k0Eh-1NVOpTnlQBlilFPA3cYfJPBgQsFhI5um4/edit" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50);align-self:flex-start">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/presentation/d/1nozF2k0Eh-1NVOpTnlQBlilFPA3cYfJPBgQsFhI5um4/embed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="340" allowfullscreen="true" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F4CA;</span>
+          <div style="flex:1;min-width:0">
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Partnership Offerings</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Playlab partnership packages and services</p>
+            <div class="res-link-row"><span class="res-link-url">http://bit.ly/PlaylabOfferings</span><button class="res-copy-btn" onclick="event.stopPropagation();copyResLink(this,'http://bit.ly/PlaylabOfferings')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+          </div>
+          <a href="https://docs.google.com/document/d/1sSbkiILWzPRO_HXH_6S62-44DG_HDvivS4Q7R9imVrM/edit?tab=t.7ks51gpaizjf" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50);align-self:flex-start">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/document/d/1sSbkiILWzPRO_HXH_6S62-44DG_HDvivS4Q7R9imVrM/preview" frameborder="0" width="100%" height="340" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+    </div>
+
+    <!-- Row 2: The Playlab Difference + Competitive Comparison side-by-side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x2728;</span>
+          <div style="flex:1;min-width:0">
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">The Playlab Difference</h3>
+            <p style="font-size:11px;color:var(--slate-500)">Why Playlab is fundamentally different &mdash; positioning and differentiators</p>
+            <div class="res-link-row"><span class="res-link-url">https://bit.ly/PlaylabDifference</span><button class="res-copy-btn" onclick="event.stopPropagation();copyResLink(this,'https://bit.ly/PlaylabDifference')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+          </div>
+          <a href="https://docs.google.com/document/d/18jmHuToJonXvNSGWSoU4WUSmbMRoHor3PIAN_E-oU8Q/edit?tab=t.0#heading=h.l60expp0ytfq" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50);align-self:flex-start">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/document/d/18jmHuToJonXvNSGWSoU4WUSmbMRoHor3PIAN_E-oU8Q/preview" frameborder="0" width="100%" height="340" allowfullscreen="true" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+
+      <div style="background:white;border:1.5px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--slate-100);display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">&#x1F3AF;</span>
+          <div style="flex:1;min-width:0">
+            <h3 style="font-size:14px;font-weight:700;color:var(--slate-800)">Discovery &amp; Demo</h3>
+            <p style="font-size:11px;color:var(--slate-500)">How we learn about organizations and introduce Playlab</p>
+            <div class="res-link-row"><span class="res-link-url">https://docs.google.com/document/d/1sN7pyhHUPfhXXq1pLJI4AdIzSnJDbUmW59YzmkaYc3U/edit?tab=t.0</span><button class="res-copy-btn" onclick="event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sN7pyhHUPfhXXq1pLJI4AdIzSnJDbUmW59YzmkaYc3U/edit?tab=t.0')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+          </div>
+          <a href="https://docs.google.com/document/d/1sN7pyhHUPfhXXq1pLJI4AdIzSnJDbUmW59YzmkaYc3U/edit?tab=t.0" target="_blank" style="margin-left:auto;font-size:11px;font-weight:600;color:var(--sky-600);text-decoration:none;padding:6px 12px;border:1.5px solid var(--sky-200);border-radius:6px;background:var(--sky-50);align-self:flex-start">Open &#x2197;</a>
+        </div>
+        <iframe src="https://docs.google.com/document/d/1sN7pyhHUPfhXXq1pLJI4AdIzSnJDbUmW59YzmkaYc3U/preview" frameborder="0" width="100%" height="340" allowfullscreen="true" style="display:block;background:var(--slate-50)"></iframe>
+      </div>
+    </div>
+
+    <!-- Row 3: Link-out buttons -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <a href="https://docs.google.com/spreadsheets/d/1npo03Oih0S9AEkoCW5baGDWIPQN3gKVIJS_02CSc5iU/edit?gid=1348894078#gid=1348894078" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4B5;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Pricing Building Blocks</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">FY 26-27 building block rates</p>
+          <div class="res-link-row"><span class="res-link-url">https://docs.google.com/spreadsheets/d/1npo03Oih0S9AEkoCW5baGDWIPQN3gKVIJS_02CSc5iU/</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/spreadsheets/d/1npo03Oih0S9AEkoCW5baGDWIPQN3gKVIJS_02CSc5iU/edit?gid=1348894078#gid=1348894078')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/edit" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4D6;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Rules &amp; Pricing</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">Source of truth for business rules</p>
+          <div class="res-link-row"><span class="res-link-url">https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1oNTf-jdb5tAlrg2kVbXAa5AJ0jrCKz3Hj3YQrNLjk-8/edit')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4E7;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Email Templates</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">Templates for partner communications</p>
+          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Email Templates tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.im8egwf8lfrs" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4CA;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Pipeline Stage Reference</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">HubSpot stage definitions &amp; guide</p>
+          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Pipeline Stages tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.im8egwf8lfrs')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.lg5q3sr42rll#heading=h.fh08gi8yazy0" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x2795;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Create New Opportunities</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">How to create HubSpot deals</p>
+          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Create Opportunities tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.lg5q3sr42rll#heading=h.fh08gi8yazy0')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.n4egmpc6chn7#heading=h.127h6tnhlmup" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F916;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Claude Cowork Skills</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">AI-powered sales workflow skills</p>
+          <div class="res-link-row"><span class="res-link-url">LP Playbook &rsaquo; Cowork Skills tab</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.n4egmpc6chn7#heading=h.127h6tnhlmup')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit?gid=0#gid=0" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4CA;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Competitive Comparison</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">Feature comparison across AI ed platforms</p>
+          <div class="res-link-row"><span class="res-link-url">https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit?gid=0#gid=0')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+
+      <a href="https://docs.google.com/document/d/1gkNEzxIb6cS6p8X4NcVp441bRG6PBlnfOUsx6li4Kf4/edit?tab=t.7ybwveahcmlo" target="_blank" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:white;border:1.5px solid var(--slate-200);border-radius:10px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 4px 12px rgba(14,165,233,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+        <span style="font-size:18px">&#x1F4B0;</span>
+        <div style="min-width:0;flex:1">
+          <h3 style="font-size:13px;font-weight:700;color:var(--slate-800);margin:0">Discount Policy</h3>
+          <p style="font-size:10px;color:var(--slate-500);margin:2px 0 0">Full discount policy document</p>
+          <div class="res-link-row"><span class="res-link-url">https://docs.google.com/document/d/1gkNEzxIb6cS6p8X4NcVp441bRG6PBlnfOUsx6li4Kf4/</span><button class="res-copy-btn" onclick="event.preventDefault();event.stopPropagation();copyResLink(this,'https://docs.google.com/document/d/1gkNEzxIb6cS6p8X4NcVp441bRG6PBlnfOUsx6li4Kf4/edit?tab=t.7ybwveahcmlo')" title="Copy link"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></button></div>
+        </div>
+        <span style="margin-left:auto;font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+      </a>
+    </div>
+
+    <p style="font-size:11px;color:var(--slate-400);margin-top:20px;text-align:center">To add resources, update the Key Resources section in the Rules & Pricing doc and run <code>/saleshub</code>.</p>
+  </div>
+</div>
+
+<!-- Cowork Skills View -->
+<div class="skills-view" id="skillsView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Claude Cowork Skills</h2>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">These are the Claude Cowork skills available to Playlab learning partners. Each skill is a slash command you can type in Claude Cowork tasks to automate a workflow. Skills can also be used without a slash command &mdash; Claude will use them based on the context of a prompt.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:4px">Skills are organized by how your day flows &mdash; from planning your day, to meeting prep, to follow-up, to communication. Remember: you can run multiple Cowork tasks simultaneously. <a href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">Learn more</a>.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:8px">To use Claude Cowork, you&rsquo;ll need to download the desktop app at <a href="https://claude.com/download" target="_blank" style="color:var(--sky-600);text-decoration:none;font-weight:600">claude.com/download</a> and toggle from &ldquo;Chat&rdquo; to &ldquo;Cowork&rdquo; at the top of the app.</p>
+    <input type="text" id="skillSearch" placeholder="Search skills..." style="width:100%;max-width:400px;padding:8px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-family:'Lexend',sans-serif;font-size:13px;color:var(--slate-700);margin-bottom:24px" oninput="filterSkills(this.value)">
+
+    <!-- Category: Planning & Big Picture -->
+    <div class="skills-category" data-category="planning">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--sky-200)">
+        <span style="font-size:20px"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11V2.5A1.5 1.5 0 0 1 4.5 1H11"/></svg></span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Planning &amp; Big Picture</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Start your day, end your week, stay on top of what matters</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/daily-briefing</span>
+            <span class="skill-oneliner">Morning Executive Briefing</span>
+          </div>
+          <p class="skill-desc">Generate a morning executive briefing &mdash; a concise, prioritized snapshot of your day. Pulls calendar, email, and messaging data to surface what matters before you start.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/daily-briefing</code>
+            <code>Give me my morning briefing</code>
+            <code>Briefing for tomorrow</code>
+            <code>What does my day look like Monday?</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/weekly-recap</span>
+            <span class="skill-oneliner">End-of-Week Summary</span>
+          </div>
+          <p class="skill-desc">Generate a concise end-of-week summary: meetings held, key emails sent, action items still open, and threads that have gone cold. Helps with Friday wrap-up or Monday planning.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/weekly-recap</code>
+            <code>Give me my weekly recap</code>
+            <code>Recap last week</code>
+            <code>What happened this week?</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Meeting Preparation -->
+    <div class="skills-category" data-category="prep">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--emerald-500)">
+        <span style="font-size:20px">&#x1F50D;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Meeting Preparation</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Show up informed and ready for every conversation</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/meeting-prep-briefing</span>
+            <span class="skill-oneliner">Pre-Meeting Briefing</span>
+          </div>
+          <p class="skill-desc">Generate a pre-meeting briefing for an upcoming call or meeting. Pulls context from calendar and email history to give you a clear picture before you walk in &mdash; attendee info, relationship history, open items, and talking points.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/meeting-prep-briefing</code>
+            <code>Prep my next meeting</code>
+            <code>Prep Sarah Chen from Acme</code>
+            <code>Meeting prep for tomorrow</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/meeting-scheduler</span>
+            <span class="skill-oneliner">Calendar Availability &amp; Scheduling</span>
+          </div>
+          <p class="skill-desc">Check your calendar availability and draft a scheduling email &mdash; with context pulled from prior conversations so the invite isn&rsquo;t cold. Handles new vs. existing contacts differently.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/meeting-scheduler</code>
+            <code>Schedule 30 min with Sarah next week</code>
+            <code>Find time for a call with the Acme team</code>
+            <code>Book a meeting with James &mdash; pilot kickoff</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: After Meetings -->
+    <div class="skills-category" data-category="followup">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--amber-500)">
+        <span style="font-size:20px">&#x1F91D;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">After Meetings</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Nothing falls through the cracks after a conversation</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/meeting-follow-up-email</span>
+            <span class="skill-oneliner">Follow-Up Email Drafter</span>
+          </div>
+          <p class="skill-desc">Draft follow-up emails after meetings. Pulls recent calendar events, enriches with context, then drafts a follow-up in your voice. Shows status and recommendations (needed / simple touch / already sent / skip).</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/meeting-follow-up-email</code>
+            <code>Follow up on my last meeting</code>
+            <code>Draft follow-ups for this week</code>
+            <code>Follow up with Sarah about next steps</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/meeting-action-items</span>
+            <span class="skill-oneliner">Action Item Extractor</span>
+          </div>
+          <p class="skill-desc">Pull today&rsquo;s meetings, extract all action items assigned to you, and present a clean summary. Gathers from meeting notes, sent emails, and calendar descriptions. Best run at end of day.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/meeting-action-items</code>
+            <code>What are my action items from today?</code>
+            <code>Pull action items from today&rsquo;s meetings</code>
+            <code>What did I commit to today?</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/granola-hubspot-sync</span>
+            <span class="skill-oneliner">Meeting Notes to CRM</span>
+          </div>
+          <p class="skill-desc">Sync your Granola meeting notes to HubSpot as properly formatted meeting engagements with correct date/time, attendee associations, and company links. Prevents duplicates.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/granola-hubspot-sync</code>
+            <code>Sync today&rsquo;s meetings to HubSpot</code>
+            <code>Sync Granola notes from yesterday</code>
+            <code>Sync this week&rsquo;s meetings</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/crm-update</span>
+            <span class="skill-oneliner">CRM Note Generator</span>
+          </div>
+          <p class="skill-desc">After a meeting or email exchange, generate a structured CRM-ready note summarizing what happened, decisions made, and next steps. Works with any CRM &mdash; outputs formatted text or sends to a CRM forwarding address.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/crm-update</code>
+            <code>CRM update for my call with Sarah today</code>
+            <code>CRM update for my thread with Acme</code>
+            <code>Log my last meeting to HubSpot</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Communication -->
+    <div class="skills-category" data-category="communication">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--violet-500)">
+        <span style="font-size:20px">&#x2709;&#xFE0F;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Communication</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Draft emails, manage your inbox, catch dropped threads</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/email-draft</span>
+            <span class="skill-oneliner">Email Drafting</span>
+          </div>
+          <p class="skill-desc">Draft and send professional emails matching your personal voice and writing style using Gmail. Handles new outreach, replies, and follow-ups with configurable voice and style.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/email-draft</code>
+            <code>Draft a follow-up to Sarah about the pilot</code>
+            <code>Write a warm intro to James at Acme</code>
+            <code>Reply to Maria&rsquo;s email about next steps</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/email-templates</span>
+            <span class="skill-oneliner">Quick Email Templates</span>
+          </div>
+          <p class="skill-desc">Generate common email types quickly &mdash; intro requests, reschedules, thank-yous, loop-ins, declines, nudges, and more. For when you know exactly what kind of email you need and just want it fast.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/email-templates</code>
+            <code>Template reschedule with Sarah</code>
+            <code>Template thank-you to Maria for the intro</code>
+            <code>Template nudge to Alex about the proposal</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/inbox-triage</span>
+            <span class="skill-oneliner">Inbox Triage</span>
+          </div>
+          <p class="skill-desc">Triage your email inbox &mdash; surface what needs action, categorize the rest, and suggest quick responses for the highest priority items. Categories: Reply Today, Reply Soon, Awaiting Reply, Action Needed, FYI, Can Archive.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/inbox-triage</code>
+            <code>Triage my inbox</code>
+            <code>Triage partnerships emails</code>
+            <code>What needs my attention in email?</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/stale-email-tracker</span>
+            <span class="skill-oneliner">Stale Email Tracker</span>
+          </div>
+          <p class="skill-desc">Surfaces sent emails that haven&rsquo;t received a reply &mdash; prioritized by age and relationship importance. Helps catch dropped threads before they go fully cold. Offers to draft re-engagement nudges.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/stale-email-tracker</code>
+            <code>Show me stale threads</code>
+            <code>What emails haven&rsquo;t gotten a reply?</code>
+            <code>Stale emails from Sarah</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Proposals & Pipeline -->
+    <div class="skills-category" data-category="proposals">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--rose-500)">
+        <span style="font-size:20px">&#x1F4DD;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Proposals &amp; Pipeline</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Recommend packages and manage opportunities</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/package-recommender</span>
+            <span class="skill-oneliner">Package Recommender</span>
+          </div>
+          <p class="skill-desc">Analyze everything known about a learning partner &mdash; meeting notes, CRM data, email history, and intake records &mdash; to recommend the best-fit Playlab package configuration and estimated pricing. The pre-proposal step.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/package-recommender</code>
+            <code>Recommend a package for Austin ISD</code>
+            <code>What should we propose for Hunter College?</code>
+            <code>Package rec from my last call</code>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/create-opportunity</span>
+            <span class="skill-oneliner">Create or Update CRM Deal</span>
+          </div>
+          <p class="skill-desc">Turn meeting notes, a Granola recording, or a Gmail thread into a HubSpot deal &mdash; with duplicate checking, contact/company association, and confirmation before anything is created.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/create-opportunity</code>
+            <code>Create opp from my last meeting</code>
+            <code>Log the deal from my call with Sarah</code>
+            <code>Create opp from email thread with James</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category: Miscellaneous -->
+    <div class="skills-category" data-category="misc">
+      <div class="skills-category-header" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--slate-300)">
+        <span style="font-size:20px">&#x1F3A8;</span>
+        <div>
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0">Miscellaneous</h3>
+          <p style="font-size:11px;color:var(--slate-500);margin:2px 0 0">Reference materials and brand guidelines</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-name">/brand</span>
+            <span class="skill-oneliner">Playlab Brand Reference</span>
+          </div>
+          <p class="skill-desc">Quick-reference brand guide for applying Playlab&rsquo;s visual identity to any output &mdash; documents, slides, images, proposals, or other creative assets. Covers colors, fonts, logo usage, tone, and templates.</p>
+          <div class="skill-examples">
+            <span class="skill-examples-label">Try it:</span>
+            <code>/brand</code>
+            <code>What are the Playlab brand colors?</code>
+            <code>What font does Playlab use?</code>
+            <code>Brand guidelines for a slide deck</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:var(--slate-400);margin-top:24px;text-align:center">To update this page, edit the Claude Cowork Skills section in the Rules &amp; Pricing doc and run <code>/saleshub</code>.</p>
+  </div>
+</div>
+
+<div class="pricing-view" id="pricingView" style="display:none">
+  <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Software Pricing</h2>
+
+    <div style="margin-bottom:12px">
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Software Tiers</h3>
+      <table class="pricing-table">
+        <thead><tr><th style="background:#b2e4f1;color:#1e3a5f">Free</th><th style="background:#e98ad1;color:#5a1a4a">Pro</th><th style="background:#ffc937;color:#5a4000">Play</th><th style="background:#7ee4bb;color:#1a4a3a">Impact</th></tr></thead>
+        <tbody><tr>
+          <td>Free<br>always</td>
+          <td>$100/year<br>or $10/month</td>
+          <td>$1,500/6-mo<br>or $3,000/12-mo<br>per organization</td>
+          <td>$200/year<br>per user</td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate-600);margin-bottom:8px">Enrollment-Based Pricing (Schools)</h3>
+      <table class="pricing-table">
+        <thead><tr><th>Tier</th><th>Student Enrollment</th><th>Price/Student/Year</th><th>Monthly Credits</th></tr></thead>
+        <tbody>
+          <tr><td>Tier 1</td><td>1,000–9,999</td><td>$3.00</td><td>2M Tokens</td></tr>
+          <tr><td>Tier 2</td><td>10,000–24,999</td><td>$2.50</td><td>4M Tokens</td></tr>
+          <tr><td>Tier 3</td><td>25,000–49,999</td><td>$2.00</td><td>6M Tokens</td></tr>
+          <tr><td>Tier 4</td><td>50,000+</td><td>Custom</td><td>Custom</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:20px">Building Blocks</h2>
+    <table class="pricing-table">
+      <thead><tr><th>Building Block</th><th>Cost</th><th>Unit</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr class="section-header"><td colspan="4">Base Rates</td></tr>
+        <tr><td>Learning Partner Hourly Rate</td><td>$250</td><td></td><td></td></tr>
+        <tr><td>Learning Engineer Hourly Rate</td><td>$200</td><td></td><td></td></tr>
+        <tr><td>Travel Hourly Rate</td><td>$125</td><td></td><td></td></tr>
+        <tr class="section-header"><td colspan="4">Learning Partner Blocks</td></tr>
+        <tr><td>Office Hours</td><td>$250</td><td>hour</td><td>Starting at 30 min</td></tr>
+        <tr><td>Admin Meetings</td><td>$300</td><td>hour</td><td>Starting at 30 min</td></tr>
+        <tr><td>Facilitation</td><td>$600</td><td>hour</td><td>Starting at 1.5 hrs; up to 40 participants</td></tr>
+        <tr class="section-header"><td colspan="4">Developer Blocks</td></tr>
+        <tr><td>Dev Hourly Rate</td><td>$200</td><td>hour</td><td></td></tr>
+        <tr><td>App Support — Light</td><td>$1,000</td><td>month</td><td>5 hrs support/month</td></tr>
+        <tr><td>App Support — Medium</td><td>$2,000</td><td>month</td><td>10 hrs support/month</td></tr>
+        <tr><td>App Support — Full</td><td>$4,000</td><td>month</td><td>20 hrs support/month</td></tr>
+        <tr class="section-header"><td colspan="4">Travel Blocks</td></tr>
+        <tr><td>Travel — Local</td><td>$250</td><td>day minimum</td><td>Mileage + per diem; add hotel as needed</td></tr>
+        <tr><td>Travel — Flight</td><td>$2,000</td><td>trip minimum</td><td>8 hrs travel + flight + ground + per diem</td></tr>
+        <tr><td>Travel — Additional Day</td><td>$600</td><td>day minimum</td><td>Hotel + ground + per diem</td></tr>
+        <tr><td>Site Visit — Half Day</td><td>$1,500</td><td>half day</td><td>1–4 hour visit</td></tr>
+        <tr><td>Site Visit — Full Day</td><td>$2,500</td><td>full day</td><td>4–8 hour visit</td></tr>
+        <tr class="section-header"><td colspan="4">Targeted AI Blocks</td></tr>
+        <tr><td>Ideation — w/LP only</td><td>$2,500</td><td></td><td>6 hrs facilitation + 2 hrs prep</td></tr>
+        <tr><td>Ideation — w/LP &amp; LE</td><td>$4,000</td><td></td><td>6 hrs LP + 6 hrs LE + 2 hrs prep</td></tr>
+        <tr><td>Tool Build — Initial</td><td>$5,000</td><td></td><td>10 hrs LP + 10 hrs LE</td></tr>
+        <tr><td>Tool Build — Additional</td><td>$2,500</td><td></td><td>2 hrs LP + 10 hrs LE</td></tr>
+        <tr><td>Tool Pilot</td><td>$6,500</td><td></td><td>16 hrs LP + 8 hrs LE</td></tr>
+        <tr><td>Tool Revision — Light</td><td>$1,500</td><td>monthly</td><td>6 hrs LE/month</td></tr>
+        <tr><td>Tool Revision — Medium</td><td>$2,800</td><td>monthly</td><td>12 hrs LE/month</td></tr>
+        <tr><td>Tool Revision — Full</td><td>$5,000</td><td>monthly</td><td>22 hrs LE/month</td></tr>
+        <tr class="section-header"><td colspan="4">AI Leadership Coaching (6-mo min, month-to-month after)</td></tr>
+        <tr><td>Essentials</td><td>$500</td><td>monthly</td><td>1 meeting/mo (30&ndash;60 min) &middot; 6-mo = $3,000 &middot; 12-mo = $4,800</td></tr>
+        <tr><td>Advisory</td><td>$1,000</td><td>monthly</td><td>1&ndash;2 meetings/mo (60 min) &middot; 6-mo = $6,000 &middot; 12-mo = $9,600</td></tr>
+        <tr><td>Strategic</td><td>$2,500</td><td>monthly</td><td>2&ndash;3 meetings/mo (60 min) &middot; 6-mo = $15,000 &middot; 12-mo = $24,000</td></tr>
+        <tr><td>Embedded</td><td>$5,000</td><td>monthly</td><td>Weekly touchpoints (30&ndash;60 min) &middot; 6-mo = $30,000 &middot; 12-mo = $48,000</td></tr>
+        <tr class="section-header"><td colspan="4">Other</td></tr>
+        <tr><td>AI Usage Costs</td><td>$300</td><td>monthly</td><td>For non-school partners</td></tr>
+        <tr><td>Knowledge Graph</td><td>$1,500</td><td>per curricula</td><td></td></tr>
+        <tr><td>One-Time Event</td><td>$500</td><td>per event</td><td>Up to 100 people &mdash; 2 months of access</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin:32px 0 20px">Discount Policy</h2>
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:16px;font-size:12px;line-height:1.7;color:#1e40af">
+      <strong style="color:#1e3a5f">Strategic Principle: Protect Software, Flex on Services</strong>
+      <ul style="margin:4px 0 0 16px;padding:0">
+        <li><strong>First lever:</strong> Reduce services pricing (facilitation, coaching, tool builds)</li>
+        <li><strong>Last lever:</strong> Reduce software/license pricing</li>
+        <li><strong>Never:</strong> Discount software to close a services-only deal</li>
+      </ul>
+      <div style="margin-top:6px;font-size:11px;color:#3b82f6">Software tier pricing is already volume-discounted by design. The tiers ARE the discount &mdash; don&rsquo;t layer additional reductions.</div>
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px;font-size:12px;line-height:1.7;color:#475569">
+      <strong style="color:#1e293b">Core Principles:</strong>
+      <ul style="margin:4px 0 0 16px;padding:0">
+        <li>Always show <strong>Standard Rate</strong> alongside the partner price</li>
+        <li><strong>Name every discount</strong> &mdash; use the category names below</li>
+        <li><strong>&ldquo;Included&rdquo; not &ldquo;$0&rdquo;</strong> &mdash; bundled services preserve perceived value</li>
+        <li>Services and software discount separately</li>
+        <li><strong>Hard floor: 70%</strong> of Standard Rate. Nothing below this.</li>
+        <li><strong>Discounts don&rsquo;t stack.</strong> Use whichever is most favorable to the partner</li>
+        <li><strong>Proposal pricing valid for 60 days</strong></li>
+        <li><strong>All discounts should be run through Nate</strong> before committing to the partner</li>
+      </ul>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th>Category</th><th>Discount</th><th>Applies To</th><th>Proposal Label</th></tr></thead>
+      <tbody>
+        <tr class="section-header"><td colspan="4">1. Multi-Year Commitment</td></tr>
+        <tr><td>2-year contract</td><td>10%</td><td>Services only</td><td>&ldquo;Multi-Year Partner Rate&rdquo;</td></tr>
+        <tr><td>3-year contract</td><td>15%</td><td>Services only</td><td>&ldquo;Multi-Year Partner Rate&rdquo;</td></tr>
+        <tr class="section-header"><td colspan="4">2. Referral &amp; Network Partners</td></tr>
+        <tr><td>Refers a new partner who closes</td><td>10% on next engagement</td><td>Services only</td><td>&ldquo;Network Partner Rate&rdquo;</td></tr>
+        <tr><td>Ongoing channel (membership org)</td><td>10&ndash;15%</td><td>Services only</td><td>&ldquo;Network Partner Rate&rdquo;</td></tr>
+        <tr><td>Research / co-development partner</td><td>15%</td><td>Services only</td><td>&ldquo;Research Partner Rate&rdquo;</td></tr>
+        <tr class="section-header"><td colspan="4">3. Renewal Partners</td></tr>
+        <tr><td>Straight renewal (same scope)</td><td>0% &mdash; price stability</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Renewal + expansion</td><td>10% on new services</td><td>New services only</td><td>&ldquo;Growth Rate&rdquo;</td></tr>
+        <tr><td>Renewal + multi-year upgrade</td><td>Use Multi-Year rate</td><td>Services only</td><td>&ldquo;Multi-Year Partner Rate&rdquo;</td></tr>
+        <tr class="section-header"><td colspan="4">4. Mission-Aligned Equity Pricing</td></tr>
+        <tr><td>Title I (&gt;50% FRL) / Rural / Underserved</td><td>10%</td><td>Services + Software</td><td>&ldquo;Equity Partner Rate&rdquo;</td></tr>
+      </tbody>
+    </table>
+
+    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-top:16px;font-size:12px;line-height:1.6;color:#991b1b">
+      <strong>Grant-Funded Work &mdash; No Discounts.</strong> The grant is the subsidy. Price at Standard Rate. If the budget can&rsquo;t cover it, reduce scope &mdash; don&rsquo;t discount the rate.
+    </div>
+
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:12px;line-height:1.6;color:#854d0e">
+      <strong>When NOT to Discount:</strong>
+      <ul style="margin:4px 0 0 16px;padding:0">
+        <li>Partner is grant-funded (the grant IS the subsidy)</li>
+        <li>Partner is asking for software discount on a services-heavy deal</li>
+        <li>Multiple discount categories would need to stack (pick one)</li>
+        <li>Partner needs below-floor pricing AND high-touch support</li>
+        <li>Partner wants perpetual pilot pricing beyond the first contract</li>
+      </ul>
+      <div style="margin-top:6px;font-style:italic">In all cases: reduce scope before reducing rate.</div>
+    </div>
+
+    <div style="margin-top:16px;font-size:11px;color:#64748b">
+      <strong>Approval:</strong> Any discount = Run through Nate &middot; Software discounts (except Equity) = Nate only &middot; 15%+ = Nate only (with HubSpot justification)<br>
+      <a href="https://docs.google.com/document/d/1gkNEzxIb6cS6p8X4NcVp441bRG6PBlnfOUsx6li4Kf4/edit?tab=t.7ybwveahcmlo" target="_blank" style="color:#0ea5e9">Full Discount Policy Document &rarr;</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="builder" style="display:none">
+  <!-- LEFT: Package Options -->
+  <div class="catalog-col">
+    <div class="section-title">Package Options</div>
+
+    <div class="pathway-section" id="softwareSection">
+      <div class="pathway-header" onclick="document.getElementById('softwareSection').classList.toggle('collapsed')">
+        <span class="pathway-chevron">&#x25BC;</span>
+        <div class="pathway-dot" style="background:linear-gradient(135deg, #ffc937, #7ee4bb)"></div>
+        <h2>Software Licenses</h2>
+        <span class="pathway-desc">Enterprise tiers &mdash; add multiple licenses</span>
+      </div>
+      <div class="pathway-body">
+        <div class="sw-grid" id="swGrid"></div>
+      </div>
+    </div>
+
+    <div id="catalogContainer"></div>
+
+    <div class="pathway-section" id="addonsSection">
+      <div class="pathway-header" onclick="document.getElementById('addonsSection').classList.toggle('collapsed')">
+        <span class="pathway-chevron">&#x25BC;</span>
+        <div class="pathway-dot" style="background:var(--slate-500)"></div>
+        <h2>Add-Ons</h2>
+        <span class="pathway-desc">Individual services to supplement packages</span>
+      </div>
+      <div class="pathway-body">
+        <div id="addonGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Package Builder -->
+  <div class="quote-col">
+  <div class="quote-tabs-wrap" id="quoteTabWrap">
+    <div class="quote-tabs" id="quoteTabBar"></div>
+  </div>
+  <div class="quote-col-inner">
+    <div style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:4px">Package Builder</div>
+
+    <div>
+      <div class="q-label">Partner / Organization</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="partner-input" id="partnerName" type="text" placeholder="e.g. Nampa School District" style="flex:1">
+        <button class="btn-save-inline" id="inlineSaveBtn" onclick="saveCurrentToLibrary()" title="Save to Library"><span class="save-status-dot unsaved" id="inlineSaveDot" style="display:none"></span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 15H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h7l4 4v9a1 1 0 0 1-1 1z"/><path d="M5 1v4h5V1"/><path d="M5 11h6"/></svg> Save</button>
+      </div>
+    </div>
+
+    <div id="licenseSummaryWrap">
+      <div class="q-label">Software Licenses</div>
+      <div id="licenseList"></div>
+    </div>
+
+    <div>
+      <div class="q-label">Services</div>
+      <div class="quote-packages" id="quotePackages"></div>
+    </div>
+
+    <div id="quoteAddonsWrap" style="display:none">
+      <div class="q-label">Add-Ons</div>
+      <div id="quoteAddonsList"></div>
+    </div>
+
+    <div>
+      <div class="q-label">Base Rates</div>
+      <div class="rate-editor" id="rateEditor">
+        <button class="rate-editor-toggle" onclick="document.getElementById('rateEditor').classList.toggle('open')">
+          <span class="rate-editor-label">Base Rates</span>
+          <span class="rate-editor-status" id="rateStatus">LP $250 &middot; Dev $200 &middot; Travel $125</span>
+        </button>
+        <div class="rate-editor-body">
+          <div class="rate-field"><label>LP $/hr</label><input class="rate-input" id="rateLp" type="number" step="any" value="250" onchange="updateRates()" oninput="updateRates()"></div>
+          <div class="rate-field"><label>Dev $/hr</label><input class="rate-input" id="rateDev" type="number" step="any" value="200" onchange="updateRates()" oninput="updateRates()"></div>
+          <div class="rate-field"><label>Travel $/hr</label><input class="rate-input" id="rateTravel" type="number" step="any" value="125" onchange="updateRates()" oninput="updateRates()"></div>
+          <button class="rate-reset" onclick="resetRates()">Reset to defaults</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="totals-section">
+      <div class="t-row" id="grossServicesRow" style="display:none">
+        <span class="t-label">Services (before discounts)</span>
+        <span class="t-value" id="grossServicesTotal">&mdash;</span>
+      </div>
+      <div class="t-row" id="pkgDiscountsRow" style="display:none;color:var(--emerald-600)">
+        <span class="t-label">Package Discounts</span>
+        <span class="t-value" id="pkgDiscountsDisplay"></span>
+      </div>
+      <div class="t-row">
+        <span class="t-label">Services Total</span>
+        <span class="t-value" id="servicesTotal">&mdash;</span>
+      </div>
+      <div class="t-row" id="swAnnualRow" style="display:none">
+        <span class="t-label">Software (before multi-year discount)</span>
+        <span class="t-value" id="swAnnualTotal">&mdash;</span>
+      </div>
+      <div class="t-row" id="swDiscountRow" style="display:none;color:var(--emerald-600)">
+        <span class="t-label">Multi-Year Software Discount</span>
+        <span class="t-value" id="swDiscountDisplay"></span>
+      </div>
+      <div class="t-row">
+        <span class="t-label">Software Total</span>
+        <span class="t-value" id="softwareTotal">&mdash;</span>
+      </div>
+      <div class="t-row" style="border-top:1px solid var(--slate-100);padding-top:8px">
+        <span class="t-label">Standard Total</span>
+        <span class="t-value" id="standardTotal">&mdash;</span>
+      </div>
+      <div class="discount-row">
+        <span class="disc-label">Discount</span>
+        <div class="disc-inputs">
+          <input class="disc-name" id="discountName" type="text" placeholder="e.g. Pilot Phase Incentive">
+          <input class="disc-num" id="discountVal" type="number" step="any" placeholder="0">
+          <select class="disc-type" id="discountType">
+            <option value="pct">%</option>
+            <option value="flat" id="discFlatLabel">$</option>
+          </select>
+        </div>
+        <span class="disc-amt" id="discountDisplay"></span>
+      </div>
+      <div class="total-final">
+        <span class="t-label">Custom Partner Price</span>
+        <span class="t-value" id="partnerPrice">&mdash;</span>
+      </div>
+      <div class="savings-note" id="savingsNote"></div>
+      <div class="funder-row">
+        <span class="disc-label">Funder</span>
+        <div class="disc-inputs">
+          <input class="disc-name" id="funderName" type="text" placeholder="e.g. Gates Foundation">
+          <input class="disc-num" id="funderVal" type="number" step="any" placeholder="0">
+          <select class="disc-type" id="funderType">
+            <option value="pct">%</option>
+            <option value="flat" id="funderFlatLabel">$</option>
+          </select>
+        </div>
+        <span class="disc-amt" id="funderDisplay" style="color:var(--sky-600)"></span>
+      </div>
+      <div class="total-final oop-final" id="oopRow" style="display:none">
+        <span class="t-label">Partner Out-of-Pocket</span>
+        <span class="t-value" id="oopPrice">&mdash;</span>
+      </div>
+    </div>
+
+    <div class="insights-section" id="insightsSection" style="display:none">
+      <div class="insight-row">
+        <span class="insight-label"><span>Students served</span>
+          <input class="insight-input" id="studentCount" type="number" step="any" placeholder="0">
+        </span>
+        <span class="insight-value" id="perStudentCost">&mdash;</span>
+      </div>
+      <div class="insight-row">
+        <span class="insight-label"><span>Educators served</span>
+          <input class="insight-input" id="educatorCount" type="number" step="any" placeholder="0">
+        </span>
+        <span class="insight-value" id="perEducatorCost">&mdash;</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-library-save" id="saveToLibraryBtn" onclick="saveCurrentToLibrary()">&#x1F4BE; Save to Library</button>
+      <span class="save-status-badge unsaved" id="saveStatusBadge" style="display:none"><span class="save-status-dot unsaved"></span> Not saved</span>
+      <span class="save-attribution" id="saveAttribution"></span>
+      <button class="btn-copy" id="copyLinkBtn">Copy Shareable Link</button>
+      <button class="btn-clear" id="clearBtn">Clear All</button>
+    </div>
+
+    <p class="footnote">* AI model usage costs are covered by Playlab and not passed on to partners.</p>
+  </div>
+  </div>
+</div>
+
+<!-- Library Modal -->
+<div class="library-overlay" id="libraryOverlay" onclick="if(event.target===this)closeLibrary()">
+  <div class="library-modal">
+    <div class="library-header">
+      <h2>Quote Library</h2>
+      <div class="library-tabs">
+        <button class="library-tab active" id="libTabActive" onclick="switchLibraryTab('active')">Active</button>
+        <button class="library-tab" id="libTabArchived" onclick="switchLibraryTab('archived')">Archived</button>
+      </div>
+      <button class="library-rebuild" onclick="rebuildIndex().then(()=>{if(libraryActiveTab==='active')renderLibraryList();else renderArchivedList();})" title="Rebuild index from files (use if quotes are missing)">&#x1F527; Repair</button>
+      <button class="library-close" onclick="closeLibrary()">&times;</button>
+    </div>
+    <div class="library-filter-bar" id="libraryFilterBar">
+      <div class="library-filter-toggle">
+        <button class="library-filter-btn" id="libFilterAll" onclick="toggleLibraryFilter(false)">All</button>
+        <button class="library-filter-btn active" id="libFilterMine" onclick="toggleLibraryFilter(true)">
+          <span class="lib-name-display" id="libNameDisplay" onclick="event.stopPropagation();startEditName()" title="Click to change your name"></span>
+          <input class="lib-name-input" id="libNameInput" onblur="commitEditName()" onkeydown="if(event.key==='Enter'){commitEditName()}else if(event.key==='Escape'){cancelEditName()}" autocomplete="off">
+        </button>
+      </div>
+      <input type="text" class="library-search" id="libSearchInput" placeholder="Search by org or team member&hellip;" oninput="onLibrarySearch(this.value)" autocomplete="off">
+    </div>
+    <div class="library-body" id="libraryBody">
+      <div class="library-loading">Loading saved quotes&hellip;</div>
+    </div>
+  </div>
+</div>
+
+<!-- Token Prompt Modal -->
+<div class="library-overlay" id="tokenOverlay" onclick="if(event.target===this)closeTokenPrompt()">
+  <div class="library-modal" style="max-width:440px">
+    <div class="library-header">
+      <h2>Connect to Quote Library</h2>
+      <button class="library-close" onclick="closeTokenPrompt()">&times;</button>
+    </div>
+    <div style="padding:20px 24px">
+      <p style="font-size:13px;color:var(--slate-600);line-height:1.6;margin-bottom:16px">Connect to the shared quote library. You only need to do this once per browser.</p>
+      <label style="font-size:11px;font-weight:600;color:var(--slate-500);display:block;margin-bottom:4px">Your name</label>
+      <input class="auth-input" type="text" id="displayNameInput" placeholder="e.g. Nate" style="width:100%;margin-bottom:12px" autocomplete="off">
+      <label style="font-size:11px;font-weight:600;color:var(--slate-500);display:block;margin-bottom:4px">GitHub token</label>
+      <input class="auth-input" type="password" id="githubTokenInput" placeholder="ghp_..." style="width:100%;margin-bottom:12px" autocomplete="off">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn-clear" onclick="closeTokenPrompt()">Cancel</button>
+        <button class="btn-library-save" onclick="submitGithubToken()">Connect</button>
+      </div>
+      <div class="auth-error" id="tokenError" style="margin-top:8px">Invalid token or no access to the quote library.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="confirm-overlay" id="confirmOverlay" onclick="if(event.target===this)resolveConfirm(false)">
+  <div class="confirm-modal">
+    <div class="confirm-message" id="confirmMessage"></div>
+    <div class="confirm-actions">
+      <button class="confirm-btn cancel" id="confirmCancel" onclick="resolveConfirm(false)">Cancel</button>
+      <button class="confirm-btn ok" id="confirmOk" onclick="resolveConfirm(true)">OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js?v=20260406e"></script>
+</body>
+</html>
+<!-- deployed 2026-04-02T01:14:45Z -->

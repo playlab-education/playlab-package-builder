@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260421a">
+  <link rel="stylesheet" href="style.css?v=20260421b">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1369,24 +1369,6 @@
       </div>
       <div class="fg-matrix-body">
         <div class="fg-section" style="margin-top:12px">
-          <div class="fg-section-title">What&rsquo;s Automated vs. Manual</div>
-          <table class="fg-table">
-            <thead><tr><th>Action</th><th>Who / What</th><th>When</th></tr></thead>
-            <tbody>
-              <tr><td>Change deal owner</td><td><strong>Manual</strong></td><td>At handoff</td></tr>
-              <tr><td>Move deal to Scoping stage</td><td><strong>Manual</strong></td><td>After discovery, when ready to scope</td></tr>
-              <tr><td>Update deal amount</td><td><strong>Manual</strong> or proposal bot</td><td>During scoping; bot updates at proposal</td></tr>
-              <tr><td>Move deal to Proposal - Drafted</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
-              <tr><td>Attach proposal link to deal</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
-              <tr><td>Create/associate contacts</td><td><strong>Proposal bot (auto)</strong></td><td>When proposal is generated</td></tr>
-              <tr><td>Sync meeting notes</td><td><strong>/granola-hubspot-sync (auto)</strong></td><td>When you run the command</td></tr>
-              <tr><td>Move deal through Contract stages</td><td><strong>Nate (manual)</strong></td><td>As contract milestones are hit</td></tr>
-              <tr><td>Add engagement notes</td><td><strong>Manual</strong></td><td>After every partner interaction</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="fg-section">
           <div class="fg-section-title">Daily / Weekly Cadence</div>
           <table class="fg-table">
             <thead><tr><th>Frequency</th><th>What to Do</th></tr></thead>
@@ -1396,6 +1378,12 @@
               <tr><td><strong>As needed</strong></td><td>Add new opportunities &middot; Add notes to opportunities to capture updates</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Keeping HubSpot Accurate</div>
+          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0 0 8px">We&rsquo;re all responsible for keeping HubSpot up to date so it reflects reality &mdash; pipeline stage, deal owner, amounts, contacts, and engagement notes. If something has changed with your partner, it should change in HubSpot.</p>
+          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0"><strong>Automations occur when the proposal bot is used.</strong> Everything else is on us to keep current.</p>
         </div>
       </div>
     </div>
@@ -2320,7 +2308,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260421a"></script>
+<script src="app.js?v=20260421b"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
