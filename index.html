@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422c">
+  <link rel="stylesheet" href="style.css?v=20260422d">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1492,6 +1492,20 @@
           <div><strong>The goal of outreach is qualified conversations, not volume.</strong> One well-researched, personalized touch beats ten templates. Get a discovery call on the calendar &mdash; that&rsquo;s the win.</div>
         </div>
 
+        <div class="fg-section">
+          <div class="fg-section-title">Key Resources for This Stage</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+            <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F4E7;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Email Templates</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Starting points for outbound, follow-ups, and nudges &mdash; personalize, don&rsquo;t send as-is</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+            </a>
+          </div>
+        </div>
+
         <div class="fg-practices">
           <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
@@ -1526,34 +1540,35 @@
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
           <div class="fg-body-text">
-            The partner is curious about Playlab but hasn&rsquo;t committed to anything. This conversation is about <strong>them</strong> &mdash; their priorities, pain points, AI journey, and decision-making process. No packages, no pricing. <strong>Ask questions first. Demo second.</strong>
+            Discovery happens in two parts, always in this order. <strong>Part 1: Disco</strong> &mdash; you learn about them. <strong>Part 2: Demo</strong> &mdash; you show them what Playlab can do. Ask questions first, demo second. A demo without context is a pitch, not a conversation.
           </div>
         </div>
 
-        <div class="fg-section">
+        <!-- ── PART 1: DISCO ─────────────────────────────────────────────── -->
+        <div style="margin:24px 0 12px;padding:12px 16px;background:linear-gradient(135deg, var(--sky-50), white);border-left:4px solid var(--sky-500);border-radius:6px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:white;background:var(--sky-500);padding:4px 10px;border-radius:12px">Part 1</span>
+          <span style="font-size:15px;font-weight:700;color:var(--slate-800)">Disco &mdash; Learn about the organization</span>
+        </div>
+
+        <div class="fg-section" style="margin-top:0">
           <div class="fg-section-title">Before the Call</div>
           <ol class="fg-checklist">
             <li><span class="fg-checklist-num">1</span><span>Research the org and person &mdash; use Claude Cowork <code>/meeting-prep-briefing</code> or check HubSpot, email, their website, and recent news</span></li>
-            <li><span class="fg-checklist-num">2</span><span>Prep 2&ndash;3 example Playlab apps relevant to their context (from <a href="https://www.playlab.ai/gardens" target="_blank" style="color:var(--sky-600);font-weight:600">Playlab Gardens</a>)</span></li>
-            <li><span class="fg-checklist-num">3</span><span>Have an app idea ready to build live that relates to their role or priorities</span></li>
           </ol>
         </div>
 
         <div class="fg-section">
-          <div class="fg-section-title">The Call: 4 Steps</div>
-          <table class="fg-table">
-            <thead><tr><th style="width:30%">Step</th><th style="width:15%">Time</th><th>What Happens</th></tr></thead>
-            <tbody>
-              <tr><td><strong>1. ACE Opener</strong></td><td>5 min</td><td><strong>A</strong>ppreciate (&ldquo;Thanks for your time&rdquo;) &rarr; <strong>C</strong>heck time (&ldquo;We have 30 min, still work?&rdquo;) &rarr; <strong>E</strong>nd goal (&ldquo;I&rsquo;d love to learn about your priorities and see if Playlab could help&rdquo;)</td></tr>
-              <tr><td><strong>2. Ask Questions</strong></td><td>20 min</td><td>Use the questions below. The partner should be talking 60%+ of this time. <strong>One question at a time, then listen.</strong></td></tr>
-              <tr><td><strong>3. Demo Playlab</strong></td><td>10 min</td><td>Ask permission: &ldquo;Would it help to see Playlab in action?&rdquo; Build an app live or walk through examples. <strong>Ideally they see a build and a demo app.</strong></td></tr>
-              <tr><td><strong>4. Close</strong></td><td>5 min</td><td>Confirm next steps. Schedule the follow-up. &ldquo;What questions do you have? What&rsquo;s resonating?&rdquo;</td></tr>
-            </tbody>
-          </table>
+          <div class="fg-section-title">On the Call: ACE Opener (5 min)</div>
+          <div class="fg-body-text">
+            <strong>A</strong>ppreciate (&ldquo;Thanks for your time&rdquo;) &rarr; <strong>C</strong>heck time (&ldquo;We have 30 min, still work?&rdquo;) &rarr; <strong>E</strong>nd goal (&ldquo;I&rsquo;d love to learn about your priorities and see if Playlab could help&rdquo;)
+          </div>
         </div>
 
         <div class="fg-section">
-          <div class="fg-section-title">The Questions to Ask (Before Demoing)</div>
+          <div class="fg-section-title">On the Call: Ask Questions (20 min)</div>
+          <div class="fg-body-text" style="margin-bottom:8px">
+            The partner should be talking 60%+ of this time. <strong>One question at a time, then listen.</strong> Mirror and label what you hear &mdash; techniques are in the Deep Dive below.
+          </div>
           <table class="fg-table">
             <thead><tr><th style="width:50%">Question</th><th>What You&rsquo;re Learning</th></tr></thead>
             <tbody>
@@ -1566,6 +1581,44 @@
           </table>
         </div>
 
+        <!-- ── PART 2: DEMO ──────────────────────────────────────────────── -->
+        <div style="margin:28px 0 12px;padding:12px 16px;background:linear-gradient(135deg, var(--emerald-50), white);border-left:4px solid var(--emerald-500);border-radius:6px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:white;background:var(--emerald-500);padding:4px 10px;border-radius:12px">Part 2</span>
+          <span style="font-size:15px;font-weight:700;color:var(--slate-800)">Demo &mdash; Share Playlab with them</span>
+        </div>
+
+        <div class="fg-section" style="margin-top:0">
+          <div class="fg-section-title">Before the Call</div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span>Prep 2&ndash;3 example Playlab apps relevant to their context (from <a href="https://www.playlab.ai/gardens" target="_blank" style="color:var(--sky-600);font-weight:600">Playlab Gardens</a>)</span></li>
+            <li><span class="fg-checklist-num">2</span><span>Have an app idea ready to build live that relates to their role or priorities &mdash; the live build is your strongest demo</span></li>
+          </ol>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">On the Call: Run the Demo (10 min)</div>
+          <div class="fg-body-text" style="margin-bottom:8px">
+            Ask permission first: &ldquo;Would it help to see Playlab in action?&rdquo; Then move through the flow.
+          </div>
+          <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">1</span><span><strong>Build live</strong> &mdash; start from a blank app and build something tied to what they just told you in disco. This is the moment Playlab clicks.</span></li>
+            <li><span class="fg-checklist-num">2</span><span><strong>Walk through 1&ndash;2 examples</strong> from Playlab Gardens that match their context &mdash; show what a finished app looks like in practice</span></li>
+            <li><span class="fg-checklist-num">3</span><span><strong>Tie it back</strong> &mdash; &ldquo;This is the kind of thing [their educators / their leaders] could build in 20 minutes.&rdquo;</span></li>
+          </ol>
+          <div class="fg-tip" style="margin-top:8px">
+            <span style="flex-shrink:0">&#x1F3AF;</span>
+            <div><strong>Ideally they see both a live build and an example app.</strong> The build shows how easy it is; the examples show what&rsquo;s possible.</div>
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">On the Call: Close (5 min)</div>
+          <div class="fg-body-text">
+            Confirm next steps out loud. &ldquo;What questions do you have? What&rsquo;s resonating? Who else should be in the next conversation?&rdquo; Schedule the follow-up before the call ends.
+          </div>
+        </div>
+
+        <!-- ── AFTER THE CALL ────────────────────────────────────────────── -->
         <div class="fg-section">
           <div class="fg-section-title">After the Call</div>
           <ol class="fg-checklist">
@@ -1583,6 +1636,28 @@
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
           <div><strong>Manual:</strong> The deal stage stays at &ldquo;Discovery&rdquo; until you&rsquo;re ready to scope a package. Move it to &ldquo;Scoping&rdquo; yourself &mdash; the only automatic stage change happens later, when the proposal bot moves the deal to &ldquo;Proposal - Drafted.&rdquo;</div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Key Resources for This Stage</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+            <a href="https://www.playlab.ai/gardens" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 2px 8px rgba(16,185,129,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F331;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Demo Apps (Playlab Gardens)</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Example apps to walk through during the demo</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+            </a>
+            <a href="https://bit.ly/PlaylabDeck26" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F3AC;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Pitch Deck</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Overview presentation for partner conversations</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+            </a>
+          </div>
         </div>
 
         <div class="fg-practices">
@@ -1753,6 +1828,28 @@
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
           <div><strong>Manual &mdash; you do this:</strong> Move the deal to &ldquo;Scoping&rdquo; stage in HubSpot. Update the deal amount with your estimated value. Stages don&rsquo;t advance on their own &mdash; you move them, except when the proposal bot runs and moves the deal to &ldquo;Proposal - Drafted.&rdquo;</div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Key Resources for This Stage</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+            <a href="javascript:switchMainTab('builder')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F9F0;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Package Builder</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Configure the SOW live on the call &mdash; shareable URL</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&rarr;</span>
+            </a>
+            <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--violet-500)';this.style.boxShadow='0 2px 8px rgba(139,92,246,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F916;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Proposal Bot (#proposal-bot)</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Post your package + context &mdash; generates proposal doc and updates HubSpot</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+            </a>
+          </div>
         </div>
 
         <div class="fg-practices">
@@ -2322,7 +2419,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422c"></script>
+<script src="app.js?v=20260422d"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
