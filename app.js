@@ -2150,14 +2150,13 @@ async function switchMainTab(tab) {
   const views = {
     welcome: document.getElementById('welcomeView'),
     builder: document.querySelector('.builder'),
-    pipeline: document.getElementById('pipelineView'),
     fieldguide: document.getElementById('fieldguideView'),
     resources: document.getElementById('resourcesView'),
     pricing: document.getElementById('pricingView'),
     skills: document.getElementById('skillsView')
   };
   Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
-  const tabIndex = { welcome: 0, builder: 1, pipeline: 2, fieldguide: 3, resources: 4, pricing: 5, skills: 6 };
+  const tabIndex = { welcome: 0, builder: 1, fieldguide: 2, resources: 3, pricing: 4, skills: 5 };
   if (btns[tabIndex[tab]]) btns[tabIndex[tab]].classList.add('active');
   if (tab === 'fieldguide') {
     fgTrack('tab_view', { tab_name: tab });
