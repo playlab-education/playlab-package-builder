@@ -510,6 +510,8 @@
     .fg-pipeline-arrow::after { content: ''; position: absolute; right: -1px; top: -3px; border: solid var(--slate-300); border-width: 0 2px 2px 0; padding: 3px; transform: rotate(-45deg); }
     .fg-pipeline-fork { width: 40px; height: 90px; flex-shrink: 0; }
     .fg-pipeline-parallel { display: flex; flex-direction: column; gap: 12px; }
+    .fg-parallel-stages { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; align-items: start; }
+    @media (max-width: 900px) { .fg-parallel-stages { grid-template-columns: 1fr; } }
 
     /* Stage Accordion */
     .fg-stage { background: white; border: 1.5px solid var(--slate-200); border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
