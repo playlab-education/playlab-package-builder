@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260421b">
+  <link rel="stylesheet" href="style.css?v=20260422a">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1511,7 +1511,7 @@
 
         <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'discovery'})">
           <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> For renewals, discovery is a check-in, not a first conversation. You already know them. Focus on: What went well this year? What do they want more or less of? Has their budget changed? Any new priorities for next year? Skip the ACE opener and demo &mdash; go straight to the relationship.</div>
+          <div><strong>Renewals:</strong> For renewals, discovery is a check-in, not a first conversation. You already know them. Focus on: What went well this year? What do they want more or less of? Has their budget changed? Any new priorities for next year? You can often skip the ACE opener and demo &mdash; go straight to the relationship.</div>
         </div>
 
         <div class="fg-section">
@@ -1537,7 +1537,7 @@
             <tbody>
               <tr><td><strong>1. ACE Opener</strong></td><td>5 min</td><td><strong>A</strong>ppreciate (&ldquo;Thanks for your time&rdquo;) &rarr; <strong>C</strong>heck time (&ldquo;We have 30 min, still work?&rdquo;) &rarr; <strong>E</strong>nd goal (&ldquo;I&rsquo;d love to learn about your priorities and see if Playlab could help&rdquo;)</td></tr>
               <tr><td><strong>2. Ask Questions</strong></td><td>20 min</td><td>Use the questions below. The partner should be talking 60%+ of this time. <strong>One question at a time, then listen.</strong></td></tr>
-              <tr><td><strong>3. Demo Playlab</strong></td><td>10 min</td><td>Ask permission: &ldquo;Would it help to see Playlab in action?&rdquo; Build an app live or walk through examples. <strong>They must see a build and a demo app.</strong></td></tr>
+              <tr><td><strong>3. Demo Playlab</strong></td><td>10 min</td><td>Ask permission: &ldquo;Would it help to see Playlab in action?&rdquo; Build an app live or walk through examples. <strong>Ideally they see a build and a demo app.</strong></td></tr>
               <tr><td><strong>4. Close</strong></td><td>5 min</td><td>Confirm next steps. Schedule the follow-up. &ldquo;What questions do you have? What&rsquo;s resonating?&rdquo;</td></tr>
             </tbody>
           </table>
@@ -1573,7 +1573,7 @@
 
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-          <div><strong>Manual:</strong> The deal stage stays at &ldquo;Discovery&rdquo; until you&rsquo;re ready to scope a package. Move it to &ldquo;Scoping&rdquo; yourself &mdash; stages never advance automatically.</div>
+          <div><strong>Manual:</strong> The deal stage stays at &ldquo;Discovery&rdquo; until you&rsquo;re ready to scope a package. Move it to &ldquo;Scoping&rdquo; yourself &mdash; the only automatic stage change happens later, when the proposal bot moves the deal to &ldquo;Proposal - Drafted.&rdquo;</div>
         </div>
 
         <div class="fg-practices">
@@ -1716,18 +1716,23 @@
           <table class="fg-table">
             <thead><tr><th>Partner Profile</th><th>Recommended Tier</th></tr></thead>
             <tbody>
-              <tr><td>New to Playlab, exploring, adult PD focus</td><td><strong>Play</strong> ($1,500/6-mo or $3,000/12-mo)</td></tr>
-              <tr><td>Non-school org (nonprofit, PD provider)</td><td><strong>Impact: Per User</strong> ($200/user/yr)</td></tr>
-              <tr><td>School with &lt;1,000 students</td><td>Play or Impact: Per User &mdash; <strong>compare both, recommend lowest cost</strong></td></tr>
-              <tr><td>School/district with 1,000+ students</td><td><strong>Impact: Per Student</strong> ($3&ndash;$2/student/yr depending on size)</td></tr>
-              <tr><td>One-off community event / conference session</td><td><strong>One-Time Event</strong> ($500/event &mdash; up to 100 people, 2 months access)</td></tr>
+              <tr><td>New to Playlab, exploring, adult PD focus</td><td><strong>Play</strong></td></tr>
+              <tr><td>Non-school org (nonprofit, PD provider)</td><td><strong>Impact: Per User</strong></td></tr>
+              <tr><td>School with &lt;1,000 students</td><td>Play or Impact: Per User &mdash; compare both in the Builder, recommend lowest cost</td></tr>
+              <tr><td>School/district with 1,000+ students</td><td><strong>Impact: Per Student</strong> (enrollment-tiered)</td></tr>
+              <tr><td>One-off community event / conference session</td><td><strong>One-Time Event</strong></td></tr>
             </tbody>
           </table>
+          <div class="fg-tip" style="margin-top:8px">
+            <span style="flex-shrink:0">&#x1F4B0;</span>
+            <div>Tier pricing lives on the <a href="javascript:switchMainTab('pricing')" style="color:var(--sky-600);font-weight:600">Pricing Sheet</a>. Build the actual quote in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">Builder</a> &mdash; don&rsquo;t quote from memory.</div>
+          </div>
         </div>
 
         <div class="fg-section">
           <div class="fg-section-title">Pricing Rules of Thumb</div>
           <ol class="fg-checklist">
+            <li><span class="fg-checklist-num">&#x2713;</span><span><strong>Protect software, flex on services.</strong> First lever is reducing services (facilitation, coaching, tool builds). Last lever is discounting software &mdash; the tiers are already volume-discounted. See the <a href="javascript:switchMainTab('pricing')" style="color:var(--sky-600);font-weight:600">Discount Policy</a> on the Pricing Sheet for categories, floors, and approvals.</span></li>
             <li><span class="fg-checklist-num">&#x2713;</span><span>Always recommend first session in-person, rest virtual &mdash; price high first, offer virtual to reduce. It&rsquo;s easier to lower a price than raise one.</span></li>
             <li><span class="fg-checklist-num">&#x2713;</span><span>Before confirming travel costs, check with Mera or Hilah on LP availability in the partner&rsquo;s region. Don&rsquo;t assume a local LP is available.</span></li>
             <li><span class="fg-checklist-num">&#x2713;</span><span>Show Standard Rate alongside any adjusted price &mdash; never hide the value of what you&rsquo;re offering.</span></li>
@@ -1738,7 +1743,7 @@
 
         <div class="fg-auto manual">
           <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-          <div><strong>Manual &mdash; you do this:</strong> Move the deal to &ldquo;Scoping&rdquo; stage in HubSpot. Update the deal amount with your estimated value. There is no automation that moves stages &mdash; you control when a deal advances.</div>
+          <div><strong>Manual &mdash; you do this:</strong> Move the deal to &ldquo;Scoping&rdquo; stage in HubSpot. Update the deal amount with your estimated value. Stages don&rsquo;t advance on their own &mdash; you move them, except when the proposal bot runs and moves the deal to &ldquo;Proposal - Drafted.&rdquo;</div>
         </div>
 
         <div class="fg-practices">
@@ -2308,7 +2313,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260421b"></script>
+<script src="app.js?v=20260422a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
