@@ -542,17 +542,11 @@
     .fg-auto-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
     .fg-auto strong { font-weight: 700; }
 
-    /* Escalation box */
-    .fg-escalate { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
-    .fg-escalate-title { font-size: 12px; font-weight: 700; color: #991b1b; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .fg-escalate ul { list-style: disc; padding-left: 18px; margin: 0; }
-    .fg-escalate li { font-size: 12px; color: #7f1d1d; line-height: 1.6; }
-
-    /* Common mistakes */
-    .fg-mistakes { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 14px; }
-    .fg-mistakes-title { font-size: 12px; font-weight: 700; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .fg-mistakes ul { list-style: disc; padding-left: 18px; margin: 0; }
-    .fg-mistakes li { font-size: 12px; color: #78350f; line-height: 1.6; }
+    /* Best practices */
+    .fg-practices { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 14px; }
+    .fg-practices-title { font-size: 12px; font-weight: 700; color: #166534; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .fg-practices ul { list-style: disc; padding-left: 18px; margin: 0; }
+    .fg-practices li { font-size: 12px; color: #14532d; line-height: 1.6; }
 
     /* HubSpot update box */
     .fg-hubspot { display: flex; align-items: flex-start; gap: 10px; background: #fff4f0; border: 1px solid #ffb89a; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; font-size: 12px; color: #9a3412; line-height: 1.6; }
@@ -582,7 +576,7 @@
     .fg-appendix-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--slate-200); }
     .fg-appendix.open .fg-appendix-body { display: block; }
 
-    /* Escalation Matrix (bottom) */
+    /* Collapsible reference box (HubSpot Quick Reference) */
     .fg-matrix { margin-top: 24px; background: white; border: 1.5px solid var(--slate-200); border-radius: 12px; overflow: hidden; }
     .fg-matrix-header { padding: 16px 20px; border-bottom: 1px solid var(--slate-200); cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none; }
     .fg-matrix-header:hover { background: var(--slate-50); }

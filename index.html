@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260418a">
+  <link rel="stylesheet" href="style.css?v=20260421a">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -96,7 +96,7 @@
       <div style="font-size:36px">&#x1F9ED;</div>
       <div>
         <h3 style="font-size:16px;font-weight:700;color:var(--slate-800);margin-bottom:4px">LP Field Guide</h3>
-        <p style="font-size:13px;color:var(--slate-600);line-height:1.5">Your step-by-step playbook for managing partnerships &mdash; from handoff through close. Organized by pipeline stage with checklists, talk tracks, and escalation triggers.</p>
+        <p style="font-size:13px;color:var(--slate-600);line-height:1.5">Your step-by-step playbook for managing partnerships &mdash; from handoff through close. Organized by pipeline stage with checklists, talk tracks, and best practices.</p>
       </div>
       <div style="margin-left:auto;font-size:12px;font-weight:700;color:var(--sky-600);white-space:nowrap;padding:8px 16px;border:1.5px solid var(--sky-300);border-radius:8px;background:white">Open Guide &rarr;</div>
     </div>
@@ -1497,23 +1497,13 @@
           <div><strong>The goal of this stage is simple:</strong> Respond quickly, make the partner feel heard, and get a discovery call on the calendar. Speed matters &mdash; inquiries go cold fast.</div>
         </div>
 
-        <div class="fg-escalate">
-          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>The inquiry is from a channel/intermediary org (they want to resell or bundle Playlab) &mdash; Nate handles these</li>
-            <li>The inquiry mentions an RFP, grant, or formal procurement process &mdash; different pipeline, Nate handles</li>
-            <li>You&rsquo;re unsure if the inquiry is a fit for Playlab &mdash; check with Nate before responding</li>
-            <li>The partner is a high-profile org or &gt;$40K estimated value &mdash; flag Nate early</li>
-          </ul>
-        </div>
-
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
-          <ul>
-            <li>Waiting more than 24 hours to respond &mdash; momentum dies fast</li>
-            <li>Sending a generic response instead of referencing something specific about the partner</li>
-            <li>Not creating or updating the HubSpot deal &mdash; if it&rsquo;s not in HubSpot, it doesn&rsquo;t exist</li>
-            <li>Jumping straight to a demo or pricing without scheduling a proper discovery conversation</li>
+            <li>Respond within 24 hours &mdash; inquiries go cold fast</li>
+            <li>Reference something specific about the partner in your first reply</li>
+            <li>Create or update the HubSpot deal before the discovery call &mdash; if it&rsquo;s not in HubSpot, it doesn&rsquo;t exist</li>
+            <li>Get a discovery conversation on the calendar before demoing or quoting pricing</li>
           </ul>
         </div>
       </div>
@@ -1579,11 +1569,6 @@
           </table>
         </div>
 
-        <div class="fg-tip">
-          <span style="flex-shrink:0">&#x1F3AF;</span>
-          <div><strong>The #1 Rule &mdash; Check Resonance:</strong> At least twice per call, pause and ask: <em>&ldquo;I&rsquo;m saying a lot here. What&rsquo;s resonating? What&rsquo;s not?&rdquo;</em> This pulls the partner back into the conversation and tells you what actually matters to them.</div>
-        </div>
-
         <div class="fg-section">
           <div class="fg-section-title">After the Call</div>
           <ol class="fg-checklist">
@@ -1595,12 +1580,7 @@
 
         <div class="fg-auto auto">
           <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
-          <div><strong>Automated &mdash; <code>/debrief</code>:</strong> Drafts follow-up email, creates HubSpot meeting note with correct date/time and attendee associations, creates Notion action items. You review and approve before anything sends.</div>
-        </div>
-
-        <div class="fg-auto auto">
-          <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
-          <div><strong>Automated &mdash; <code>/granola-hubspot-sync</code>:</strong> Syncs Granola meeting notes to HubSpot as formatted meeting engagements with attendee associations. Prevents duplicates.</div>
+          <div><strong>Automated:</strong> Run <code>/debrief</code> after the call to draft a follow-up email, log the meeting in HubSpot, and create Notion action items &mdash; you review and approve before anything sends. Run <code>/granola-hubspot-sync</code> weekly to sync Granola notes to HubSpot (prevents duplicates).</div>
         </div>
 
         <div class="fg-auto manual">
@@ -1608,23 +1588,13 @@
           <div><strong>Manual:</strong> The deal stage stays at &ldquo;Discovery&rdquo; until you&rsquo;re ready to scope a package. Move it to &ldquo;Scoping&rdquo; yourself &mdash; stages never advance automatically.</div>
         </div>
 
-        <div class="fg-escalate">
-          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>Partner mentions an RFP, grant funding, or formal procurement &mdash; different pipeline, Nate handles</li>
-            <li>Partner is a channel/intermediary (wants to resell or bundle Playlab) &mdash; Nate handles</li>
-            <li>Partner mentions a competitor &mdash; check the <a href="https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit" target="_blank" style="color:#991b1b;font-weight:600">Competitive Comparison</a> doc first, then ask Nate</li>
-            <li>Deal is shaping up as &gt;$40K</li>
-          </ul>
-        </div>
-
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
-          <ul>
-            <li>Talking about Playlab for 30 minutes instead of asking questions</li>
-            <li>Demoing before understanding their problems &mdash; questions first, always</li>
-            <li>Question stacking &mdash; one question at a time, then listen</li>
-            <li>Not confirming next steps and a follow-up date before ending the call</li>
+            <li>Schedule the follow-up meeting before ending the call</li>
+            <li>Let the partner talk 60%+ of the time &mdash; ask one question, then listen</li>
+            <li>Understand their priorities before demoing &mdash; questions first, always</li>
+            <li>Confirm next steps out loud before closing the call</li>
           </ul>
         </div>
 
@@ -1719,7 +1689,7 @@
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
           <div class="fg-body-text">
-            Discovery is done. The partner&rsquo;s priorities are understood. Now it&rsquo;s about matching needs to Playlab offerings and configuring a package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a>. This can happen on the same call as discovery (if things move fast) or as a separate follow-up.
+            Discovery is done. Now match their priorities to the right Playlab offering and configure a package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a> &mdash; on the discovery call if things move fast, or as a follow-up.
           </div>
         </div>
 
@@ -1783,25 +1753,13 @@
           <div><strong>Manual &mdash; you do this:</strong> Move the deal to &ldquo;Scoping&rdquo; stage in HubSpot. Update the deal amount with your estimated value. There is no automation that moves stages &mdash; you control when a deal advances.</div>
         </div>
 
-        <div class="fg-escalate">
-          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li><strong>Any discount request</strong> &mdash; all discounts go through Nate. Post in <a href="https://playlabai.slack.com/" target="_blank" style="color:#991b1b;font-weight:600">#approval</a></li>
-            <li>You&rsquo;re unsure which package fits &mdash; post your best guess in #partnerships, Nate will confirm</li>
-            <li>Deal value is shaping up as &gt;$40K</li>
-            <li>Partner wants something custom that doesn&rsquo;t map to existing packages</li>
-            <li>Partner asks about multi-year pricing</li>
-            <li>Partner mentions grant funding &mdash; grant-funded work is priced at Standard Rate (the grant is the subsidy &mdash; no discounts on top)</li>
-          </ul>
-        </div>
-
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
-          <ul>
-            <li>Building a package without referencing discovery notes &mdash; the package should obviously connect to what they told you</li>
-            <li>Not getting the price in front of the partner on the scoping call &mdash; don&rsquo;t delay the money conversation</li>
-            <li>Quoting a discount or adjusted price without checking with Nate first</li>
-            <li>Forgetting to check LP availability before promising in-person delivery in a specific region</li>
+            <li>Tie the package directly to what the partner said in discovery &mdash; the connection should be obvious</li>
+            <li>Put pricing in front of the partner on the scoping call &mdash; don&rsquo;t delay the money conversation</li>
+            <li>Check LP availability with Mera or Hilah before promising in-person delivery in a specific region</li>
+            <li>Route any discount request or custom/multi-year ask to Nate in <a href="https://playlabai.slack.com/" target="_blank" style="color:#166534;font-weight:600">#approval</a> before quoting</li>
           </ul>
         </div>
       </div>
@@ -1849,22 +1807,14 @@
           </div>
         </div>
 
-        <div class="fg-escalate">
-          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>Partner pushes back on pricing &mdash; <strong>don&rsquo;t negotiate.</strong> Say: &ldquo;Let me connect you with Nate to discuss options.&rdquo;</li>
-            <li>Partner wants to significantly change scope after seeing the proposal</li>
-            <li>Partner goes silent for 2+ weeks &mdash; send a nudge first (<code>/nudge</code> in Claude Cowork drafts a re-engagement email), then flag Nate if still no response</li>
-          </ul>
-        </div>
-
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
-          <ul>
-            <li>Not reviewing the proposal-bot output before sending &mdash; always proofread names, amounts, and package details</li>
-            <li>Letting the proposal sit in #proposal-bot without sending it &mdash; 24-hour rule</li>
-            <li>Not setting a follow-up reminder &mdash; proposals go cold fast</li>
-            <li>Negotiating pricing yourself instead of bringing Nate in</li>
+            <li>Proofread the proposal-bot output &mdash; check names, amounts, and package details before sending</li>
+            <li>Send within 24 hours of generation &mdash; proposals go cold fast</li>
+            <li>Set a 3-business-day reminder to follow up if you don&rsquo;t hear back</li>
+            <li>If the partner pushes back on pricing, route to Nate: <em>&ldquo;Let me connect you with Nate to discuss options.&rdquo;</em></li>
+            <li>If the partner goes silent for 2+ weeks, send a nudge with <code>/nudge</code> before flagging Nate</li>
           </ul>
         </div>
       </div>
@@ -1885,7 +1835,7 @@
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
           <div class="fg-body-text">
-            The partner has approved the proposal. Nate handles contract generation and negotiation. The rest of Playlab stays in touch with the partner, answers questions about the engagement (not the contract), and keeps momentum going.
+            The partner has approved the proposal. Nate handles contract generation and negotiation. You stay in touch with the partner, answer questions about the engagement (not the contract), and keep momentum going.
           </div>
         </div>
 
@@ -1909,21 +1859,12 @@
           <div><strong>Manual &mdash; you still do this:</strong> Keep adding notes to the HubSpot deal after every partner interaction. Even though Nate owns the contract stages, your engagement notes are critical for the full picture.</div>
         </div>
 
-        <div class="fg-escalate">
-          <div class="fg-escalate-title">&#x1F6A8; Escalate When</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>This entire stage is Nate-led &mdash; flag anything where the partner mentions concerns, cold feet, or competing options</li>
-            <li>Partner asks contract or legal questions &mdash; always route to Nate</li>
-            <li>Partner requests scope changes during contract negotiation &mdash; don&rsquo;t agree to changes, bring Nate in</li>
-          </ul>
-        </div>
-
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
-          <ul>
-            <li>Going dark during the contract phase &mdash; keep the relationship warm with planning conversations</li>
-            <li>Agreeing to scope changes or verbal commitments without checking with Nate</li>
-            <li>Assuming the contract is &ldquo;Nate&rsquo;s problem&rdquo; and disengaging &mdash; you still own the relationship</li>
+            <li>Keep the relationship warm with planning conversations while Nate handles the contract</li>
+            <li>Route all scope-change requests and legal questions to Nate before agreeing to anything</li>
+            <li>Flag any partner hesitation, cold feet, or mention of competing options to Nate early</li>
           </ul>
         </div>
       </div>
@@ -1944,7 +1885,7 @@
         <div class="fg-section">
           <div class="fg-section-title">What Is This Stage?</div>
           <div class="fg-body-text">
-            The deal is closed. Playlab is now responsible for delivering the partnership and making the partner successful. This is where the real work begins.
+            The deal is closed. Now Playlab delivers the partnership and makes the partner successful &mdash; this is where the real work begins.
           </div>
         </div>
 
@@ -1979,46 +1920,13 @@
           <div><strong>Start Learning Engineering early.</strong> For AI Impact Pathway or custom builds, submit the Learning Engineering Request Form in Notion immediately. This gets the engineering team scoping while you&rsquo;re still planning with the partner.</div>
         </div>
 
-        <div class="fg-mistakes">
-          <div class="fg-mistakes-title">&#x26A0;&#xFE0F; Common Mistakes</div>
+        <div class="fg-practices">
+          <div class="fg-practices-title">&#x2705; Best Practices</div>
           <ul>
-            <li>Not submitting the Learning Engineering request early enough &mdash; engineering needs lead time</li>
-            <li>Letting the partner go dark after contract signing &mdash; schedule kickoff immediately</li>
-            <li>Not updating HubSpot during delivery &mdash; renewal conversations rely on this history</li>
+            <li>Submit the Learning Engineering request as soon as the deal closes &mdash; engineering needs lead time</li>
+            <li>Schedule kickoff immediately after contract signing to keep momentum</li>
+            <li>Log engagement notes in HubSpot after every session &mdash; renewal conversations rely on this history</li>
           </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ ESCALATION MATRIX ═══ -->
-    <div class="fg-matrix open" id="fg-matrix">
-      <div class="fg-matrix-header" onclick="document.getElementById('fg-matrix').classList.toggle('open')">
-        <span style="font-size:18px">&#x1F6A8;</span>
-        <h3>Escalation Matrix &mdash; When to Involve Nate</h3>
-        <span class="fg-matrix-chevron">&#x25BC;</span>
-      </div>
-      <div class="fg-matrix-body">
-        <table class="fg-table" style="margin-top:12px">
-          <thead><tr><th>Situation</th><th>Who Handles</th><th>How to Escalate</th></tr></thead>
-          <tbody>
-            <tr><td>Any discount request</td><td><strong>Nate</strong></td><td>Post in #approval Slack</td></tr>
-            <tr><td>Software pricing changes</td><td><strong>Nate only</strong></td><td>Post in #approval with justification</td></tr>
-            <tr><td>Deal &gt;$40K total value</td><td><strong>Co-manage with Nate</strong></td><td>Flag in #partnerships when you see it forming</td></tr>
-            <tr><td>Channel / intermediary partner</td><td><strong>Nate</strong></td><td>Flag at handoff</td></tr>
-            <tr><td>RFP or grant-funded deal</td><td><strong>Nate</strong></td><td>Flag at handoff &mdash; different pipeline</td></tr>
-            <tr><td>Multi-year commitment</td><td><strong>Nate</strong></td><td>Flag before discussing pricing with partner</td></tr>
-            <tr><td>Partner pushback on pricing</td><td><strong>Nate</strong></td><td>Don&rsquo;t negotiate &mdash; &ldquo;Let me connect you with Nate&rdquo;</td></tr>
-            <tr><td>Contract terms / legal questions</td><td><strong>Nate</strong></td><td>Always route to Nate</td></tr>
-            <tr><td>Partner mentions competitor</td><td><strong>You first</strong></td><td>Check <a href="https://docs.google.com/spreadsheets/d/1W_cH3yFGH4-EjywLMlMF94WJYNU4XGGzLb_z66VuEww/edit" target="_blank" style="color:var(--sky-600)">Competitive Comparison</a>, then ask Nate if unsure</td></tr>
-            <tr><td>Partner unresponsive 2+ weeks</td><td><strong>You first, then Nate</strong></td><td>Send nudge (<code>/nudge</code>); if no response, flag Nate</td></tr>
-            <tr><td>Unsure which package fits</td><td><strong>You propose, Nate confirms</strong></td><td>Post your best guess in #partnerships</td></tr>
-            <tr><td>Scope changes during contract</td><td><strong>Nate</strong></td><td>Don&rsquo;t agree &mdash; bring Nate in</td></tr>
-          </tbody>
-        </table>
-
-        <div class="fg-tip" style="margin-top:12px">
-          <span style="flex-shrink:0">&#x1F4A1;</span>
-          <div><strong>The $40K threshold:</strong> Your ~250-partner / $5M revenue target means ~$20K average deal. A $40K deal is 2x average &mdash; big enough to warrant Nate&rsquo;s direct involvement. When in doubt, flag early &mdash; it&rsquo;s always better to loop Nate in too early than too late.</div>
         </div>
       </div>
     </div>
@@ -2412,7 +2320,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260418a"></script>
+<script src="app.js?v=20260421a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->

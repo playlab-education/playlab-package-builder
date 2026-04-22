@@ -2305,7 +2305,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fgTrack('fg_appendix', { section: id, action: opening ? 'open' : 'close' });
     });
   });
-  // Track escalation matrix and HubSpot reference opens
+  // Track HubSpot reference opens
   fg.querySelectorAll('.fg-matrix-header').forEach(h => {
     h.addEventListener('click', () => {
       const id = h.parentElement.id || 'unknown';
