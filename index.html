@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422e">
+  <link rel="stylesheet" href="style.css?v=20260422f">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1358,7 +1358,42 @@
 <div class="fieldguide-view" id="fieldguideView" style="display:none">
   <div style="max-width:1000px;margin:0 auto;padding:24px 28px 48px">
     <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">LP Field Guide</h2>
-    <p style="font-size:13px;color:var(--slate-500);margin-bottom:20px">Where is the partner in the process? Click any stage to see what happens from Playlab&rsquo;s side.</p>
+    <p style="font-size:13px;color:var(--slate-500);margin-bottom:16px">Where is the partner in the process? Click any stage to see what happens from your side.</p>
+
+    <!-- Overall Tracking Preamble -->
+    <div style="background:linear-gradient(135deg, var(--sky-50), var(--emerald-50));border:1.5px solid var(--sky-200);border-radius:12px;padding:16px 20px;margin-bottom:12px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+        <span style="font-size:18px;flex-shrink:0">&#x1F4CD;</span>
+        <div style="flex:1;min-width:0">
+          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0 0 4px">Overall Tracking <span style="font-size:11px;font-weight:500;color:var(--slate-500);font-style:italic">(whole journey)</span></h3>
+          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0"><em>I track my progress with potential and current partners in HubSpot to capture progress and show how I am growing my region.</em></p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+        <a href="javascript:switchMainTab('welcome')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+          <span style="font-size:18px;flex-shrink:0">&#x1F3E0;</span>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Sales Hub</div>
+            <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">This site &mdash; builder, pricing, field guide, resources</div>
+          </div>
+          <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&rarr;</span>
+        </a>
+        <a href="#" onclick="event.preventDefault();alert('The Partnership Playbook is in development &mdash; Mera is building it. Check back soon.')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:white;border:1.5px dashed var(--slate-300);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.background='var(--sky-50)'" onmouseout="this.style.borderColor='var(--slate-300)';this.style.background='white'">
+          <span style="font-size:18px;flex-shrink:0">&#x1F4D8;</span>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Partnership Playbook</div>
+            <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">In development &mdash; Mera is building it</div>
+          </div>
+          <span style="font-size:11px;color:var(--slate-400);flex-shrink:0;font-style:italic">soon</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- On Hold: Renewals -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#fefce8;border:1.5px solid #fde68a;border-radius:8px;margin-bottom:20px;font-size:12px;color:#713f12;line-height:1.5">
+      <span style="flex-shrink:0;font-size:14px">&#x23F8;&#xFE0F;</span>
+      <div><strong>On hold &mdash; Renewals guidance:</strong> The renewals-specific process (when to engage existing partners, timing, discounting, expansion playbook) is being finalized. Per-stage renewal notes are tucked into each stage&rsquo;s Deep Dive. Ping Nate with renewal questions in the meantime.</div>
+    </div>
 
     <!-- HubSpot Quick Reference (top) -->
     <div class="fg-matrix" id="fg-hubspot-ref" style="margin-bottom:20px">
@@ -1393,14 +1428,14 @@
       <div class="fg-pipeline-step" onclick="toggleFGStage('outreach')">
         <div class="fg-pipeline-node" id="fg-pip-outreach">
           <div class="fg-pipeline-num">1</div>
-          <div class="fg-pipeline-label">Outreach</div>
+          <div class="fg-pipeline-label">Inquiry &amp; Outreach</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
       <div class="fg-pipeline-step" onclick="toggleFGStage('discovery')">
         <div class="fg-pipeline-node" id="fg-pip-discovery">
           <div class="fg-pipeline-num">2</div>
-          <div class="fg-pipeline-label">Discovery</div>
+          <div class="fg-pipeline-label">Discovery &amp; Demo</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
@@ -1417,62 +1452,85 @@
           <div class="fg-pipeline-label">Approvals</div>
         </div>
       </div>
-      <div class="fg-pipeline-arrow"></div>
-      <div class="fg-pipeline-step" onclick="toggleFGStage('contract')">
-        <div class="fg-pipeline-node" id="fg-pip-contract">
-          <div class="fg-pipeline-num">5</div>
-          <div class="fg-pipeline-label">Contract &amp; Close</div>
+      <svg class="fg-pipeline-fork" viewBox="0 0 40 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 45 L18 45" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M18 18 L18 72" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M18 18 L34 18" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M18 72 L34 72" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M30 14 L34 18 L30 22" stroke="#94a3b8" stroke-width="2" fill="none" />
+        <path d="M30 68 L34 72 L30 76" stroke="#94a3b8" stroke-width="2" fill="none" />
+      </svg>
+      <div class="fg-pipeline-parallel">
+        <div class="fg-pipeline-step" onclick="toggleFGStage('contract')">
+          <div class="fg-pipeline-node" id="fg-pip-contract">
+            <div class="fg-pipeline-num">5</div>
+            <div class="fg-pipeline-label">Contract</div>
+          </div>
         </div>
-      </div>
-      <div class="fg-pipeline-arrow"></div>
-      <div class="fg-pipeline-step" onclick="toggleFGStage('kickoff')">
-        <div class="fg-pipeline-node" id="fg-pip-kickoff">
-          <div class="fg-pipeline-num">6</div>
-          <div class="fg-pipeline-label">Kickoff</div>
+        <div class="fg-pipeline-step" onclick="toggleFGStage('kickoff')">
+          <div class="fg-pipeline-node" id="fg-pip-kickoff">
+            <div class="fg-pipeline-num">6</div>
+            <div class="fg-pipeline-label">Kickoff &amp; Delivery</div>
+          </div>
         </div>
       </div>
     </div>
+    <p style="font-size:11px;color:var(--slate-500);text-align:center;margin:-12px 0 20px;font-style:italic">Stages 5 and 6 run in parallel after Approvals &mdash; Contract handoff (Ops owns) and Kickoff &amp; Delivery (you own) happen at the same time.</p>
 
-    <!-- ═══ STAGE 1: OUTREACH ═══ -->
+    <!-- ═══ STAGE 1: INQUIRY & OUTREACH ═══ -->
     <div class="fg-stage" id="fg-stage-outreach">
       <div class="fg-stage-header" onclick="toggleFGStage('outreach')">
         <div class="fg-stage-num">1</div>
         <div>
-          <div class="fg-stage-title">Outreach</div>
-          <div class="fg-stage-subtitle">You&rsquo;re identifying and reaching out to potential partners &mdash; or getting assigned one that came in.</div>
+          <div class="fg-stage-title">Inquiry &amp; Outreach</div>
+          <div class="fg-stage-subtitle">Two paths in: you follow up on an inquiry Nate routes to you, or you reach out to grow your region.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
       <div class="fg-stage-body">
 
         <div class="fg-section">
-          <div class="fg-section-title">Your Mission</div>
-          <div class="fg-body-text">
-            You can confidently reach out to new potential partners and book discovery calls. <strong>Inquiry is owned by Nate/Sales</strong> &mdash; if an inbound comes from your region, Nate will tag you in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a>. Otherwise, don&rsquo;t worry about inquiry.
-          </div>
-        </div>
-
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'outreach'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Renewals don&rsquo;t start here &mdash; they start 90 days before contract end. The trigger is a renewal date on the HubSpot deal, not outreach. Check the <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/all/list" target="_blank" style="color:#0f766e;font-weight:600">Renewals pipeline</a> for your upcoming partners.</div>
+          <div class="fg-section-title">Two Paths &mdash; Inquiry vs. Outreach</div>
+          <table class="fg-table">
+            <thead>
+              <tr>
+                <th style="width:50%;background:#f0f9ff;color:#0369a1">Inquiry</th>
+                <th style="width:50%;background:#ecfdf5;color:#047857">Outreach <span style="font-weight:500;font-style:italic;text-transform:none;letter-spacing:0">(new &amp; renewal partners)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="vertical-align:top">Organizations contact Playlab. Nate directs traffic according to region. <strong>You follow up with connections Nate makes</strong> via email.</td>
+                <td style="vertical-align:top"><strong>You reach out</strong> to new potential customers and existing renewal customers about partnering with Playlab to grow your region.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <div class="fg-section">
           <div class="fg-section-title">Key Resources for This Stage</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
-            <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+            <a href="javascript:switchMainTab('skills')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #bae6fd;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-500)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.12)'" onmouseout="this.style.borderColor='#bae6fd';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x1F91D;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Claude skill: <code style="font-size:12px">/nate-followup</code></div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Inquiry</strong> &mdash; drafts follow-up email from Nate&rsquo;s intro</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&rarr;</span>
+            </a>
+            <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #a7f3d0;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 2px 8px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='#a7f3d0';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F4E7;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Email Templates</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Starting points for outbound, follow-ups, and nudges &mdash; personalize, don&rsquo;t send as-is</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Outreach</strong> &mdash; starting points for outbound and follow-ups</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
-            <a href="http://bit.ly/PlaylabOfferings" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+            <a href="http://bit.ly/PlaylabOfferings" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #a7f3d0;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 2px 8px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='#a7f3d0';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F4CA;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Partnership Overview</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Share with partners to introduce Playlab offerings</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Outreach</strong> &mdash; share to introduce Playlab offerings</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
@@ -1482,38 +1540,47 @@
         <div class="fg-appendix" id="fg-outreach-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-outreach-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'outreach'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; outreach sources, workflow, inquiry handling, best practices</span>
+            <span class="fg-appendix-hint">&mdash; inquiry handling, outreach sources, workflow, renewals, best practices</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
 
-            <div class="fg-tip">
-              <span style="flex-shrink:0">&#x1F4EC;</span>
-              <div><strong>Inbound inquiries:</strong> When a partner fills out the website form or sends a cold email, Nate triages and assigns in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-700);font-weight:600">#partnerships</a>. You&rsquo;ll be tagged when one&rsquo;s yours. Treat assigned inbounds like hot outbounds: 24-hour response, personalized, reference their specific submission.</div>
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'outreach'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> Renewal-specific outreach is still being finalized. Until then: existing partners approaching contract end should hear from you via the Outreach path &mdash; treat it like a warm re-engagement, not a cold pitch.</div>
             </div>
 
             <div class="fg-section">
-              <div class="fg-section-title">Where Your Outreach Comes From</div>
+              <div class="fg-section-title">Inquiry &mdash; When Nate Routes One to You</div>
+              <ol class="fg-checklist">
+                <li><span class="fg-checklist-num">1</span><span>Nate tags you in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> with partner context</span></li>
+                <li><span class="fg-checklist-num">2</span><span>Run <code>/nate-followup</code> in Claude Cowork to draft a warm follow-up email from Nate&rsquo;s intro</span></li>
+                <li><span class="fg-checklist-num">3</span><span>Review, personalize, and send within 24 hours</span></li>
+                <li><span class="fg-checklist-num">4</span><span>The automation enters them into the opportunity pipeline under Discovery &mdash; confirm the deal looks right in HubSpot and add any context</span></li>
+              </ol>
+            </div>
+
+            <div class="fg-section">
+              <div class="fg-section-title">Outreach &mdash; Where Yours Comes From</div>
               <table class="fg-table">
                 <thead><tr><th>Source</th><th>What to Do</th></tr></thead>
                 <tbody>
                   <tr><td><strong>Target-list prospecting</strong></td><td>Work your ICP list &mdash; districts, networks, and orgs that fit Playlab&rsquo;s sweet spot. Research, personalize, reach out.</td></tr>
                   <tr><td><strong>Conference follow-through</strong></td><td>Every booth conversation, session connection, or badge scan is a warm lead. Follow up within a week while it&rsquo;s fresh.</td></tr>
-                  <tr><td><strong>Referral activation</strong></td><td>Your existing partners are your best source. Ask for intros to peers, colleagues, and adjacent orgs &mdash; most people will say yes if you make it easy.</td></tr>
+                  <tr><td><strong>Referral activation</strong></td><td>Your existing partners are your best source. Ask for intros to peers, colleagues, and adjacent orgs.</td></tr>
                   <tr><td><strong>Network &amp; LinkedIn</strong></td><td>Warm contacts, second-degree intros, people engaging with Playlab content. Personal beats cold every time.</td></tr>
-                  <tr><td><strong>Expansion within book</strong></td><td>Existing partners with adjacent teams, sites, or programs. Often the easiest next deal you&rsquo;ll close.</td></tr>
-                  <tr><td><strong>Assigned inbound</strong></td><td>Nate/Mera triages website inquiries, cold referrals, and walk-ups. You&rsquo;ll get tagged in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> when one&rsquo;s assigned. No LP action needed until then.</td></tr>
+                  <tr><td><strong>Renewal re-engagement</strong></td><td>Existing partners approaching contract end or ready for expansion. Your easiest next deal.</td></tr>
                 </tbody>
               </table>
             </div>
 
             <div class="fg-section">
-              <div class="fg-section-title">Your Outreach Workflow</div>
+              <div class="fg-section-title">Outreach Workflow</div>
               <ol class="fg-checklist">
                 <li><span class="fg-checklist-num">1</span><span><strong>Pick your targets</strong> &mdash; pull your ICP list, review conferences you&rsquo;ve attended, scan your warm network</span></li>
-                <li><span class="fg-checklist-num">2</span><span><strong>Research before reaching out</strong> &mdash; run <code>/research [org name]</code> in Claude Cowork, check HubSpot for prior touches, note shared context (mutual contacts, strategic plan, recent news)</span></li>
-                <li><span class="fg-checklist-num">3</span><span><strong>Personalize the first touch</strong> &mdash; reference something real. Use <code>/email-draft</code> (see <a href="javascript:switchMainTab('skills')" style="color:var(--sky-600);font-weight:600">Claude tab</a>) as a starting point, not a template send</span></li>
-                <li><span class="fg-checklist-num">4</span><span><strong>Log it in HubSpot immediately</strong> &mdash; create the deal at &ldquo;Discovery&rdquo; stage with yourself as owner. Use <code>/opp</code> in Claude Cowork.</span></li>
+                <li><span class="fg-checklist-num">2</span><span><strong>Research before reaching out</strong> &mdash; run <code>/research [org name]</code> in Claude Cowork, check HubSpot for prior touches</span></li>
+                <li><span class="fg-checklist-num">3</span><span><strong>Personalize the first touch</strong> &mdash; reference something real. Use <code>/email-draft</code> as a starting point, not a template send</span></li>
+                <li><span class="fg-checklist-num">4</span><span><strong>Log it in HubSpot immediately</strong> &mdash; create the deal at &ldquo;Discovery&rdquo; with yourself as owner. Use <code>/opp</code>.</span></li>
                 <li><span class="fg-checklist-num">5</span><span><strong>Run a real cadence</strong> &mdash; 3&ndash;5 touches over 2&ndash;3 weeks across channels (email + LinkedIn)</span></li>
                 <li><span class="fg-checklist-num">6</span><span><strong>Goal of every touch: book a discovery conversation.</strong> Don&rsquo;t pitch, don&rsquo;t quote, don&rsquo;t demo &mdash; earn the call.</span></li>
               </ol>
@@ -1521,23 +1588,18 @@
 
             <div class="fg-auto manual">
               <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-              <div><strong>Manual:</strong> Create the HubSpot deal <em>before</em> your first outreach touch, not after. Use <code>/opp</code> in Claude Cowork or create directly in HubSpot. Set yourself as owner, stage = &ldquo;Discovery,&rdquo; and add a note on source (list, conference, referral, etc.).</div>
-            </div>
-
-            <div class="fg-tip">
-              <span style="flex-shrink:0">&#x1F3AF;</span>
-              <div><strong>The goal of outreach is qualified conversations, not volume.</strong> One well-researched, personalized touch beats ten templates.</div>
+              <div><strong>Manual:</strong> For Outreach, create the HubSpot deal <em>before</em> your first touch. For Inquiry, confirm the auto-created deal looks right after Nate&rsquo;s routing.</div>
             </div>
 
             <div class="fg-practices">
               <div class="fg-practices-title">&#x2705; Best Practices</div>
               <ul>
+                <li>Inquiry assigned to you? Respond within 24 hours &mdash; Nate&rsquo;s warmth is your runway, don&rsquo;t waste it</li>
                 <li>Personalize every first touch &mdash; reference something real and specific</li>
-                <li>Run a cadence (3&ndash;5 touches, multi-channel) &mdash; not a single email</li>
-                <li>Create the HubSpot deal <em>before</em> the first outreach touch, not after</li>
+                <li>Run a cadence (3&ndash;5 touches, multi-channel) for outreach &mdash; not a single email</li>
+                <li>Create the HubSpot deal before the first outreach touch, not after</li>
                 <li>Don&rsquo;t pitch in the first email &mdash; earn the discovery call first</li>
                 <li>Track what&rsquo;s working &mdash; which lists, events, referral sources convert? Share in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a></li>
-                <li>Assigned an inbound? Treat it like a hot outbound &mdash; 24-hour response, reference their form submission specifically</li>
               </ul>
             </div>
 
@@ -1546,13 +1608,13 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 2: DISCOVERY ═══ -->
+    <!-- ═══ STAGE 2: DISCOVERY & DEMO ═══ -->
     <div class="fg-stage" id="fg-stage-discovery">
       <div class="fg-stage-header" onclick="toggleFGStage('discovery')">
         <div class="fg-stage-num">2</div>
         <div>
-          <div class="fg-stage-title">Discovery</div>
-          <div class="fg-stage-subtitle">Two parts: (1) disco &mdash; learn about the organization, then (2) demo &mdash; share Playlab with them.</div>
+          <div class="fg-stage-title">Discovery &amp; Demo</div>
+          <div class="fg-stage-subtitle">Learn about the partner first (discovery!), then share Playlab in alignment with what they just told you (demo!).</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
@@ -1561,18 +1623,21 @@
         <div class="fg-section">
           <div class="fg-section-title">Your Mission</div>
           <div class="fg-body-text">
-            You can confidently pitch and demo Playlab to new customers. Discovery happens in two parts, always in this order: <strong>Part 1: Disco</strong> &mdash; you learn about them. <strong>Part 2: Demo</strong> &mdash; you show them what Playlab can do.
+            <em>I learn about partners&rsquo; needs and priorities (discovery!), then share Playlab with them in alignment with their needs and priorities (demo!) to surface partnership opportunities and grow my region.</em>
           </div>
-        </div>
-
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'discovery'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> For renewals, discovery is a check-in, not a first conversation. You already know them. Focus on: What went well this year? What do they want more or less of? Has their budget changed? Any new priorities for next year? You can often skip the ACE opener and demo &mdash; go straight to the relationship.</div>
         </div>
 
         <div class="fg-section">
           <div class="fg-section-title">Key Resources for This Stage</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+            <a href="https://docs.google.com/document/d/1sN7pyhHUPfhXXq1pLJI4AdIzSnJDbUmW59YzmkaYc3U/edit?tab=t.0" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
+              <span style="font-size:18px;flex-shrink:0">&#x2753;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Discovery Questions</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Discovery &amp; Demo guide &mdash; what to ask and why</div>
+              </div>
+              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
+            </a>
             <a href="https://bit.ly/PlaylabDeck26" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F3AC;</span>
               <div style="min-width:0;flex:1">
@@ -1603,10 +1668,15 @@
         <div class="fg-appendix" id="fg-discovery-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-discovery-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'discovery'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; disco/demo flow, questions, SPICED, listening, objections</span>
+            <span class="fg-appendix-hint">&mdash; disco/demo flow, questions, SPICED, listening, objections, renewals</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
+
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'discovery'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> For renewals, discovery is a check-in, not a first conversation. Focus on: What went well? What do they want more or less of? Budget changed? New priorities? You can often skip the ACE opener and demo &mdash; go straight to the relationship.</div>
+            </div>
 
             <div class="fg-section">
               <div class="fg-body-text">
@@ -1788,13 +1858,10 @@
         <div class="fg-section">
           <div class="fg-section-title">Your Mission</div>
           <div class="fg-body-text">
-            You can confidently outline a clear scope of work and price to bring to partners for iteration and feedback. Build the package live on the call whenever possible &mdash; don&rsquo;t delay the money conversation.
+            <em>I draft and outline clear scopes of work with pricing for potential partners. I get internal approval on each SOW and collaborate iteratively with my customer to land on a clear scope aligned to the organization&rsquo;s goals and Playlab&rsquo;s capabilities.</em>
+            <br><br>
+            This process is iterative and can be messy. Keep working with your partner until they say <strong>&ldquo;YES!&rdquo;</strong> or <strong>&ldquo;No!&rdquo;</strong> &mdash; this can be the longest stage.
           </div>
-        </div>
-
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'scoping'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Start with last year&rsquo;s package as the baseline. The conversation is: same scope, expand, or reduce? Renewal + expansion gets a <strong>10% &ldquo;Growth Rate&rdquo; discount on new services only</strong> &mdash; flag Nate in #approval. Straight renewals at the same scope keep the same rate, no increase.</div>
         </div>
 
         <div class="fg-section">
@@ -1822,10 +1889,34 @@
         <div class="fg-appendix" id="fg-scoping-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-scoping-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'scoping'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; process, decision trees, pricing rules, proposal generation, best practices</span>
+            <span class="fg-appendix-hint">&mdash; process, decision trees, internal approvals, pricing rules, proposal gen, renewals</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
+
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'scoping'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> Start with last year&rsquo;s package as the baseline. The conversation is: same scope, expand, or reduce? Renewal + expansion gets a <strong>10% &ldquo;Growth Rate&rdquo; discount on new services only</strong> &mdash; flag Nate in <a href="https://playlabai.slack.com/" target="_blank" style="color:#0f766e;font-weight:600">#approval</a>. Straight renewals at the same scope keep the same rate.</div>
+            </div>
+
+            <div class="fg-section">
+              <div class="fg-section-title">Internal Playlab Approvals (Before the Partner Sees Final Pricing)</div>
+              <table class="fg-table">
+                <thead><tr><th>Ask</th><th>Who Approves</th><th>Where</th></tr></thead>
+                <tbody>
+                  <tr><td>Discount beyond standard tiers</td><td>Nate</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
+                  <tr><td>Custom scope / non-standard package</td><td>Nate</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
+                  <tr><td>Multi-year contract</td><td>Nate + Yusuf/Tim</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
+                  <tr><td>Systems for AI Innovation (R&amp;D)</td><td>Nate + Learning Eng lead</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
+                  <tr><td>Standard package at standard price</td><td>None &mdash; proceed</td><td>&mdash;</td></tr>
+                </tbody>
+              </table>
+              <div class="fg-tip" style="margin-top:8px">
+                <span style="flex-shrink:0">&#x26A0;&#xFE0F;</span>
+                <div>Route these <em>before</em> you quote the partner &mdash; easier to say &ldquo;let me confirm&rdquo; than walk back a commitment.</div>
+              </div>
+            </div>
+
 
             <div class="fg-section">
               <div class="fg-section-title">The Process</div>
@@ -1936,7 +2027,7 @@
         <div class="fg-stage-num">4</div>
         <div>
           <div class="fg-stage-title">Approvals</div>
-          <div class="fg-stage-subtitle">Partner agreed to scope. Now get internal sign-off and prep for contract.</div>
+          <div class="fg-stage-subtitle">Help your partner navigate their internal approval process &mdash; some partners will skip this entirely.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
@@ -1945,13 +2036,10 @@
         <div class="fg-section">
           <div class="fg-section-title">Your Mission</div>
           <div class="fg-body-text">
-            You know what to do after a partner agrees to a scope of work and feel confident about getting started. This stage is the bridge between a verbal yes and a signed contract &mdash; route the right questions to the right people, then hand off to Nate for contract.
+            <em>I work with my partner to navigate their internal approval processes until the final proposal is approved.</em>
+            <br><br>
+            <strong>This is about the partner&rsquo;s internal side</strong> &mdash; their board, procurement, legal, superintendent, business office, whoever. Needs vary greatly by partner. Some partners will bypass this stage entirely. <strong>Playlab-side approvals (discounts, custom scope, multi-year) all happen back in Scoping.</strong>
           </div>
-        </div>
-
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'approvals'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Straight renewals at the same scope don&rsquo;t need approval &mdash; flag Nate in Slack and he&rsquo;ll queue the contract. Expansions or discounts on renewals still need <a href="https://playlabai.slack.com/" target="_blank" style="color:#0f766e;font-weight:600">#approval</a>.</div>
         </div>
 
         <div class="fg-section">
@@ -1961,15 +2049,7 @@
               <span style="font-size:18px;flex-shrink:0">&#x1F4E7;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Email Templates</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Proposal-send, approval-request, and handoff templates</div>
-              </div>
-              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
-            </a>
-            <a href="https://playlabai.slack.com/" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='#10b981';this.style.boxShadow='0 2px 8px rgba(16,185,129,.1)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
-              <span style="font-size:18px;flex-shrink:0">&#x2705;</span>
-              <div style="min-width:0;flex:1">
-                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">#approval Slack channel</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Route discounts, custom scope, multi-year asks to Nate here</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Status checks, nudges, stakeholder intros, proposal-send templates</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
@@ -1979,48 +2059,56 @@
         <div class="fg-appendix" id="fg-approvals-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-approvals-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'approvals'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; approval routing, contract handoff, best practices</span>
+            <span class="fg-appendix-hint">&mdash; partner-side approval types, your role, best practices, renewals</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
 
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'approvals'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> Existing partners often have lighter approval requirements &mdash; procurement already has Playlab on file, legal already reviewed the MSA. Confirm what&rsquo;s actually needed before assuming they&rsquo;ll skip it.</div>
+            </div>
+
             <div class="fg-section">
-              <div class="fg-section-title">What Needs Approval</div>
+              <div class="fg-section-title">Common Partner-Side Approval Gates</div>
               <table class="fg-table">
-                <thead><tr><th>Ask</th><th>Who Approves</th><th>Where</th></tr></thead>
+                <thead><tr><th>Gate</th><th>What It Looks Like</th><th>Your Role</th></tr></thead>
                 <tbody>
-                  <tr><td>Discount beyond standard tiers</td><td>Nate</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
-                  <tr><td>Custom scope / non-standard package</td><td>Nate</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
-                  <tr><td>Multi-year contract</td><td>Nate + Yusuf/Tim</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
-                  <tr><td>Systems for AI Innovation (R&amp;D)</td><td>Nate + Learning Eng lead</td><td><a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a></td></tr>
-                  <tr><td>Standard package at standard price</td><td>None &mdash; proceed</td><td>&mdash;</td></tr>
+                  <tr><td><strong>Board approval</strong></td><td>Board meeting, board packet, often quarterly cadence</td><td>Provide the one-pager, answer questions, flex on timing</td></tr>
+                  <tr><td><strong>Procurement / purchasing</strong></td><td>Vendor forms, W-9, insurance certs, MSA review</td><td>Route requests to Nate/ops promptly; chase status</td></tr>
+                  <tr><td><strong>Legal review</strong></td><td>MSA or SOW redlines, data privacy review</td><td>Don&rsquo;t negotiate terms yourself &mdash; route to Nate</td></tr>
+                  <tr><td><strong>Superintendent / leadership sign-off</strong></td><td>Final go/no-go from the decision-maker</td><td>Help your champion build the case; offer to attend the meeting</td></tr>
+                  <tr><td><strong>Business office / finance</strong></td><td>Budget confirmation, PO generation, invoice routing</td><td>Provide invoice details via Nate/ops</td></tr>
+                  <tr><td><strong>None</strong></td><td>Partner is the decision-maker and budget holder</td><td>Skip this stage &mdash; move to Contract</td></tr>
                 </tbody>
               </table>
             </div>
 
             <div class="fg-section">
-              <div class="fg-section-title">The Process</div>
+              <div class="fg-section-title">Your Playbook</div>
               <ol class="fg-checklist">
-                <li><span class="fg-checklist-num">1</span><span>Confirm the partner has agreed to scope + price in writing (email trail or meeting recap)</span></li>
-                <li><span class="fg-checklist-num">2</span><span>If your package needs approval (table above), post in <a href="https://playlabai.slack.com/" target="_blank" style="color:var(--sky-600);font-weight:600">#approval</a> with: partner name, package summary, what you&rsquo;re asking for, and why</span></li>
-                <li><span class="fg-checklist-num">3</span><span>Wait for green light before sending the final proposal to sign &mdash; don&rsquo;t commit Playlab to something that hasn&rsquo;t been approved</span></li>
-                <li><span class="fg-checklist-num">4</span><span>Once approved, send the final proposal and confirm the partner&rsquo;s ready for contract</span></li>
-                <li><span class="fg-checklist-num">5</span><span>Hand off to Nate for contract: ping him in Slack with the deal link and a one-line context note</span></li>
+                <li><span class="fg-checklist-num">1</span><span><strong>Ask early:</strong> &ldquo;What does your internal approval process look like? Who needs to see this?&rdquo; &mdash; ideally during Discovery, definitely by Scoping</span></li>
+                <li><span class="fg-checklist-num">2</span><span><strong>Make your champion&rsquo;s job easy</strong> &mdash; give them the one-pager, the talking points, the budget case. They&rsquo;re selling Playlab internally, not you.</span></li>
+                <li><span class="fg-checklist-num">3</span><span><strong>Offer to attend stakeholder meetings</strong> &mdash; sometimes a live demo seals it</span></li>
+                <li><span class="fg-checklist-num">4</span><span><strong>Check in weekly</strong> &mdash; short, friendly status requests. Partners appreciate momentum.</span></li>
+                <li><span class="fg-checklist-num">5</span><span><strong>Route procurement/legal/MSA requests to Nate</strong> &mdash; don&rsquo;t negotiate terms yourself</span></li>
+                <li><span class="fg-checklist-num">6</span><span><strong>Once approved,</strong> confirm next steps with the partner and transition to Contract (Stage 5 &mdash; runs in parallel with Kickoff &amp; Delivery)</span></li>
               </ol>
             </div>
 
             <div class="fg-auto manual">
               <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-              <div><strong>Manual:</strong> When the partner says yes to scope, move the deal to &ldquo;Verbal Agreement&rdquo; or the equivalent pre-contract stage in HubSpot. Add a note with what was agreed.</div>
+              <div><strong>Manual:</strong> Update the HubSpot deal stage to reflect where they are in <em>their</em> approval process &mdash; use the notes field to capture what&rsquo;s blocking and who&rsquo;s deciding.</div>
             </div>
 
             <div class="fg-practices">
               <div class="fg-practices-title">&#x2705; Best Practices</div>
               <ul>
-                <li>Get the yes in writing before flagging approvals &mdash; &ldquo;I think they&rsquo;re ready&rdquo; isn&rsquo;t ready</li>
-                <li>Route discount / custom asks to <a href="https://playlabai.slack.com/" target="_blank" style="color:#166534;font-weight:600">#approval</a> <em>before</em> telling the partner yes &mdash; easier to say &ldquo;let me confirm&rdquo; than walk back a commitment</li>
-                <li>When handing off to Nate, include: partner name, deal link, package summary, any nuance from conversations</li>
-                <li>If the partner goes silent after agreeing, send a nudge with <code>/nudge</code> before flagging Nate</li>
+                <li>Ask the approval question in Discovery &mdash; knowing the gates up front saves months</li>
+                <li>Your champion is the hero, not you. Arm them, don&rsquo;t go around them.</li>
+                <li>If a partner goes silent in approvals, assume procedural friction, not lost interest &mdash; send a warm status check</li>
+                <li>Route MSA/legal/contract redlines to Nate immediately &mdash; don&rsquo;t commit to anything</li>
+                <li>If the process drags past 60 days, flag Nate to help unstick or assess the deal</li>
               </ul>
             </div>
 
@@ -2029,13 +2117,24 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 5: CONTRACT & CLOSE ═══ -->
-    <div class="fg-stage" id="fg-stage-contract">
+    <!-- ── PARALLEL TRACKS DIVIDER ─────────────────────────────────────── -->
+    <div style="position:relative;margin:28px 0 20px">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;background:linear-gradient(135deg, var(--violet-50), var(--sky-50));border:1.5px solid var(--violet-300);border-radius:12px">
+        <span style="font-size:22px;flex-shrink:0">&#x21C9;</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;color:var(--violet-600);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">After Approvals &mdash; Parallel Tracks</div>
+          <div style="font-size:12px;color:var(--slate-700);line-height:1.5">Stage 5 (Contract) and Stage 6 (Kickoff &amp; Delivery) happen <strong>at the same time</strong>. Operations owns the contract paperwork; you own the relationship and getting delivery started. Don&rsquo;t wait on contract signing to kick off planning.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 5: CONTRACT ═══ -->
+    <div class="fg-stage" id="fg-stage-contract" style="border-left:4px solid #f97316">
       <div class="fg-stage-header" onclick="toggleFGStage('contract')">
-        <div class="fg-stage-num">5</div>
+        <div class="fg-stage-num" style="background:#fff7ed;color:#c2410c">5</div>
         <div>
-          <div class="fg-stage-title">Contract &amp; Close</div>
-          <div class="fg-stage-subtitle">The partner has approved. Nate handles the contract; you keep momentum.</div>
+          <div class="fg-stage-title">Contract <span style="font-size:11px;font-weight:500;color:#c2410c;background:#ffedd5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">Ops owns</span></div>
+          <div class="fg-stage-subtitle">You hand off to the operations team and track progress in HubSpot. Your sales work is (almost!) done.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
@@ -2044,13 +2143,17 @@
         <div class="fg-section">
           <div class="fg-section-title">Your Mission</div>
           <div class="fg-body-text">
-            You know how to make partnerships official and track progress with the operations team. Nate handles contract generation, negotiation, and the HubSpot stages from here &mdash; you keep the relationship warm and the engagement planning moving in parallel.
+            <em>I connect my partner to the operations team. From here, my work on sales is (almost!) done. Operations carries my partner through contracting and invoicing. I track progress through the next stages and ping Operations as needed.</em>
           </div>
         </div>
 
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'contract'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Renewal contracts often move faster &mdash; Nate can reuse last year&rsquo;s template. Flag anything that changed materially (scope, term, pricing) so he can update accordingly.</div>
+        <div class="fg-section">
+          <div class="fg-section-title">What You Track</div>
+          <ul style="font-size:13px;color:var(--slate-700);line-height:1.8;padding-left:20px;margin:0">
+            <li>Contract signed</li>
+            <li>Invoice sent</li>
+            <li>Payment received</li>
+          </ul>
         </div>
 
         <div class="fg-section">
@@ -2059,48 +2162,61 @@
             <a href="https://app.hubspot.com/contacts/50680248/objects/0-3/views/all/list" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='#f97316';this.style.boxShadow='0 2px 8px rgba(249,115,22,.12)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F50D;</span>
               <div style="min-width:0;flex:1">
-                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">HubSpot Deals</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Track contract progress, check stage, view operations team notes</div>
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">HubSpot Deal</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Track contract signed &rarr; invoice sent &rarr; payment received</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px">
+              <span style="font-size:18px;flex-shrink:0">&#x1F64B;</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Denise</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Operations &mdash; ping her when you need a status or something is stuck</div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="fg-appendix" id="fg-contract-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-contract-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'contract'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; process, HubSpot stage ownership, best practices</span>
+            <span class="fg-appendix-hint">&mdash; handoff process, HubSpot ownership, renewals, best practices</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
 
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'contract'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> Renewal contracts often move faster &mdash; ops can reuse last year&rsquo;s template. Flag anything that changed materially (scope, term, pricing) so they can update accordingly.</div>
+            </div>
+
             <div class="fg-section">
-              <div class="fg-section-title">The Process</div>
+              <div class="fg-section-title">Handoff Checklist</div>
               <ol class="fg-checklist">
-                <li><span class="fg-checklist-num">1</span><span>Confirm with Nate in Slack that the partner is ready for contract &mdash; share any nuances</span></li>
-                <li><span class="fg-checklist-num">2</span><span>Continue planning the engagement in parallel &mdash; dates, logistics, content</span></li>
-                <li><span class="fg-checklist-num">3</span><span>Respond to partner questions about the engagement (not the contract &mdash; route those to Nate)</span></li>
-                <li><span class="fg-checklist-num">4</span><span>If contract signing stalls, check with Nate on messaging before nudging the partner</span></li>
+                <li><span class="fg-checklist-num">1</span><span>Ping Denise / ops team in Slack with: deal link, final SOW, partner contact for contract signer, invoice contact</span></li>
+                <li><span class="fg-checklist-num">2</span><span>Intro the partner to ops via email when appropriate</span></li>
+                <li><span class="fg-checklist-num">3</span><span>Watch the HubSpot deal stages: Contract Sent &rarr; Contract Signed &rarr; Invoice Sent &rarr; Payment Received</span></li>
+                <li><span class="fg-checklist-num">4</span><span>If anything stalls more than a week, ping ops for a status &mdash; don&rsquo;t assume the partner is stuck</span></li>
               </ol>
             </div>
 
             <div class="fg-auto auto">
               <span class="fg-auto-icon">&#x2699;&#xFE0F;</span>
-              <div><strong>Nate manages HubSpot stages here:</strong> Contract Sent &rarr; Contract Signed &rarr; Invoice Sent &rarr; Payment Received. You do NOT move these stages &mdash; Nate handles them as milestones are hit.</div>
+              <div><strong>Ops manages these HubSpot stages:</strong> Contract Sent &rarr; Contract Signed &rarr; Invoice Sent &rarr; Payment Received. You do NOT move these &mdash; ops handles them as milestones are hit.</div>
             </div>
 
             <div class="fg-auto manual">
               <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-              <div><strong>Manual &mdash; you still do this:</strong> Keep adding notes to the HubSpot deal after every partner interaction. Your engagement notes are critical for the full picture.</div>
+              <div><strong>Manual:</strong> Keep logging partner interactions in the deal notes. Even during contract, your engagement history matters for the relationship (and future renewal).</div>
             </div>
 
             <div class="fg-practices">
               <div class="fg-practices-title">&#x2705; Best Practices</div>
               <ul>
-                <li>Keep the relationship warm with planning conversations while Nate handles the contract</li>
-                <li>Route all scope-change requests and legal questions to Nate before agreeing to anything</li>
-                <li>Flag partner hesitation, cold feet, or mention of competing options to Nate early</li>
+                <li>Hand off cleanly &mdash; one message with everything ops needs beats five fragmented pings</li>
+                <li>Route scope-change requests and legal/MSA questions to Nate before agreeing</li>
+                <li>Don&rsquo;t wait on contract signing to kick off delivery planning &mdash; they run in parallel</li>
+                <li>Flag partner hesitation or cold feet to Nate early</li>
               </ul>
             </div>
 
@@ -2110,12 +2226,12 @@
     </div>
 
     <!-- ═══ STAGE 6: KICKOFF & DELIVERY ═══ -->
-    <div class="fg-stage" id="fg-stage-kickoff">
+    <div class="fg-stage" id="fg-stage-kickoff" style="border-left:4px solid var(--emerald-500)">
       <div class="fg-stage-header" onclick="toggleFGStage('kickoff')">
-        <div class="fg-stage-num">6</div>
+        <div class="fg-stage-num" style="background:var(--emerald-50);color:var(--emerald-600)">6</div>
         <div>
-          <div class="fg-stage-title">Kickoff &amp; Delivery</div>
-          <div class="fg-stage-subtitle">The partnership is live. Deliver and keep HubSpot current.</div>
+          <div class="fg-stage-title">Kickoff &amp; Delivery <span style="font-size:11px;font-weight:500;color:var(--emerald-600);background:#d1fae5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">You own</span></div>
+          <div class="fg-stage-subtitle">Plan implementation and execute. Runs in parallel with Contract &mdash; start now, don&rsquo;t wait for paperwork.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
@@ -2124,13 +2240,8 @@
         <div class="fg-section">
           <div class="fg-section-title">Your Mission</div>
           <div class="fg-body-text">
-            You can confidently track partner progress in HubSpot through the full journey. The deal is closed &mdash; now deliver, log everything, and build the history that renewal conversations will rely on.
+            <em>I create a plan for implementation and execute on it to deliver exceptional results with partners.</em>
           </div>
-        </div>
-
-        <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'kickoff'})">
-          <span style="flex-shrink:0">&#x1F504;</span>
-          <div><strong>Renewals:</strong> Every engagement note you log now is a renewal conversation in 6&ndash;12 months. Wins, struggles, what changed &mdash; all of it. Future-you will thank present-you.</div>
         </div>
 
         <div class="fg-section">
@@ -2158,10 +2269,15 @@
         <div class="fg-appendix" id="fg-kickoff-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-kickoff-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'kickoff'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; kickoff process, Learning Engineering, best practices</span>
+            <span class="fg-appendix-hint">&mdash; kickoff process, Learning Engineering, renewals, best practices</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
+
+            <div class="fg-renewal" onclick="fgTrack('fg_renewal_click',{stage:'kickoff'})">
+              <span style="flex-shrink:0">&#x1F504;</span>
+              <div><strong>Renewals <em>(on hold)</em>:</strong> Every engagement note you log now is a renewal conversation in 6&ndash;12 months. Wins, struggles, what changed &mdash; all of it. Future-you will thank present-you.</div>
+            </div>
 
             <div class="fg-section">
               <div class="fg-section-title">The Process</div>
@@ -2597,7 +2713,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422e"></script>
+<script src="app.js?v=20260422f"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
