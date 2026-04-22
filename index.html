@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422f">
+  <link rel="stylesheet" href="style.css?v=20260422g">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1360,39 +1360,12 @@
     <h2 style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px">LP Field Guide</h2>
     <p style="font-size:13px;color:var(--slate-500);margin-bottom:16px">Where is the partner in the process? Click any stage to see what happens from your side.</p>
 
-    <!-- Overall Tracking Preamble -->
-    <div style="background:linear-gradient(135deg, var(--sky-50), var(--emerald-50));border:1.5px solid var(--sky-200);border-radius:12px;padding:16px 20px;margin-bottom:12px">
-      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
-        <span style="font-size:18px;flex-shrink:0">&#x1F4CD;</span>
-        <div style="flex:1;min-width:0">
-          <h3 style="font-size:14px;font-weight:700;color:var(--slate-800);margin:0 0 4px">Overall Tracking <span style="font-size:11px;font-weight:500;color:var(--slate-500);font-style:italic">(whole journey)</span></h3>
-          <p style="font-size:13px;color:var(--slate-700);line-height:1.5;margin:0"><em>I track my progress with potential and current partners in HubSpot to capture progress and show how I am growing my region.</em></p>
-        </div>
+    <!-- Overall Tracking Note (applies to the whole journey) -->
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;margin-bottom:20px;font-size:12px;color:var(--slate-600);line-height:1.5">
+      <span style="flex-shrink:0;font-size:14px">&#x1F4CD;</span>
+      <div>
+        <strong style="color:var(--slate-700)">Across the whole journey:</strong> track your progress with potential and current partners in HubSpot so the team can see how you&rsquo;re growing your region. The <strong>Partnership Playbook</strong> (Mera&rsquo;s building it &mdash; coming soon) will be the deeper reference when it lands.
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
-        <a href="javascript:switchMainTab('welcome')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:white;border:1.5px solid var(--slate-200);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.08)'" onmouseout="this.style.borderColor='var(--slate-200)';this.style.boxShadow='none'">
-          <span style="font-size:18px;flex-shrink:0">&#x1F3E0;</span>
-          <div style="min-width:0;flex:1">
-            <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Sales Hub</div>
-            <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">This site &mdash; builder, pricing, field guide, resources</div>
-          </div>
-          <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&rarr;</span>
-        </a>
-        <a href="#" onclick="event.preventDefault();alert('The Partnership Playbook is in development &mdash; Mera is building it. Check back soon.')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:white;border:1.5px dashed var(--slate-300);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-400)';this.style.background='var(--sky-50)'" onmouseout="this.style.borderColor='var(--slate-300)';this.style.background='white'">
-          <span style="font-size:18px;flex-shrink:0">&#x1F4D8;</span>
-          <div style="min-width:0;flex:1">
-            <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Partnership Playbook</div>
-            <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">In development &mdash; Mera is building it</div>
-          </div>
-          <span style="font-size:11px;color:var(--slate-400);flex-shrink:0;font-style:italic">soon</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- On Hold: Renewals -->
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#fefce8;border:1.5px solid #fde68a;border-radius:8px;margin-bottom:20px;font-size:12px;color:#713f12;line-height:1.5">
-      <span style="flex-shrink:0;font-size:14px">&#x23F8;&#xFE0F;</span>
-      <div><strong>On hold &mdash; Renewals guidance:</strong> The renewals-specific process (when to engage existing partners, timing, discounting, expansion playbook) is being finalized. Per-stage renewal notes are tucked into each stage&rsquo;s Deep Dive. Ping Nate with renewal questions in the meantime.</div>
     </div>
 
     <!-- HubSpot Quick Reference (top) -->
@@ -1475,7 +1448,7 @@
         </div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--slate-500);text-align:center;margin:-12px 0 20px;font-style:italic">Stages 5 and 6 run in parallel after Approvals &mdash; Contract handoff (Ops owns) and Kickoff &amp; Delivery (you own) happen at the same time.</p>
+    <p style="font-size:11px;color:var(--slate-500);text-align:center;margin:-12px 0 20px;font-style:italic">Stages 5 and 6 run in parallel after Approvals &mdash; Contract (Ops-driven) and Kickoff &amp; Delivery (you-driven) happen at the same time.</p>
 
     <!-- ═══ STAGE 1: INQUIRY & OUTREACH ═══ -->
     <div class="fg-stage" id="fg-stage-outreach">
@@ -1510,13 +1483,13 @@
         <div class="fg-section">
           <div class="fg-section-title">Key Resources for This Stage</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
-            <a href="javascript:switchMainTab('skills')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #bae6fd;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-500)';this.style.boxShadow='0 2px 8px rgba(14,165,233,.12)'" onmouseout="this.style.borderColor='#bae6fd';this.style.boxShadow='none'">
+            <a href="#" onclick="event.preventDefault();alert('The /nate-followup Claude skill is being built. In the meantime, use /email-draft in Claude Cowork with the Nate-intro context pasted in.')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px dashed #bae6fd;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-500)';this.style.background='var(--sky-50)'" onmouseout="this.style.borderColor='#bae6fd';this.style.background='white'">
               <span style="font-size:18px;flex-shrink:0">&#x1F91D;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Claude skill: <code style="font-size:12px">/nate-followup</code></div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Inquiry</strong> &mdash; drafts follow-up email from Nate&rsquo;s intro</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Inquiry</strong> &mdash; drafts follow-up from Nate&rsquo;s intro. Use <code>/email-draft</code> for now.</div>
               </div>
-              <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&rarr;</span>
+              <span style="font-size:11px;color:var(--slate-400);flex-shrink:0;font-style:italic">soon</span>
             </a>
             <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #a7f3d0;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 2px 8px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='#a7f3d0';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F4E7;</span>
@@ -1554,7 +1527,7 @@
               <div class="fg-section-title">Inquiry &mdash; When Nate Routes One to You</div>
               <ol class="fg-checklist">
                 <li><span class="fg-checklist-num">1</span><span>Nate tags you in <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> with partner context</span></li>
-                <li><span class="fg-checklist-num">2</span><span>Run <code>/nate-followup</code> in Claude Cowork to draft a warm follow-up email from Nate&rsquo;s intro</span></li>
+                <li><span class="fg-checklist-num">2</span><span>Run <code>/nate-followup</code> in Claude Cowork <em>(skill coming soon &mdash; use <code>/email-draft</code> for now with the Nate-intro context)</em> to draft a warm follow-up email</span></li>
                 <li><span class="fg-checklist-num">3</span><span>Review, personalize, and send within 24 hours</span></li>
                 <li><span class="fg-checklist-num">4</span><span>The automation enters them into the opportunity pipeline under Discovery &mdash; confirm the deal looks right in HubSpot and add any context</span></li>
               </ol>
@@ -1569,7 +1542,6 @@
                   <tr><td><strong>Conference follow-through</strong></td><td>Every booth conversation, session connection, or badge scan is a warm lead. Follow up within a week while it&rsquo;s fresh.</td></tr>
                   <tr><td><strong>Referral activation</strong></td><td>Your existing partners are your best source. Ask for intros to peers, colleagues, and adjacent orgs.</td></tr>
                   <tr><td><strong>Network &amp; LinkedIn</strong></td><td>Warm contacts, second-degree intros, people engaging with Playlab content. Personal beats cold every time.</td></tr>
-                  <tr><td><strong>Renewal re-engagement</strong></td><td>Existing partners approaching contract end or ready for expansion. Your easiest next deal.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1634,7 +1606,7 @@
               <span style="font-size:18px;flex-shrink:0">&#x2753;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Discovery Questions</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Discovery &amp; Demo guide &mdash; what to ask and why</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Lives inside the Discovery &amp; Demo guide &mdash; what to ask and why</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
@@ -1918,17 +1890,24 @@
             </div>
 
 
-            <div class="fg-section">
-              <div class="fg-section-title">The Process</div>
+<div class="fg-section">
+              <div class="fg-section-title">The Iterative Loop</div>
+              <div class="fg-body-text" style="margin-bottom:8px">
+                Scoping is a cycle, not a checklist. You&rsquo;ll move through these steps <strong>multiple times</strong> with a partner until they say YES or NO. Each loop refines scope, price, or both.
+              </div>
               <ol class="fg-checklist">
-                <li><span class="fg-checklist-num">1</span><span>Review your discovery notes &mdash; what did they say matters most?</span></li>
+                <li><span class="fg-checklist-num">1</span><span>Review discovery notes &mdash; what do they care about most?</span></li>
                 <li><span class="fg-checklist-num">2</span><span>Match to a partnership type using the decision tree below</span></li>
-                <li><span class="fg-checklist-num">3</span><span>Build the package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a> &mdash; ideally on the call with the partner</span></li>
-                <li><span class="fg-checklist-num">4</span><span>Discuss software licensing: which tier fits? (see table below)</span></li>
-                <li><span class="fg-checklist-num">5</span><span>Review the estimated cost together &mdash; don&rsquo;t delay the money conversation</span></li>
-                <li><span class="fg-checklist-num">6</span><span>Generate the formal proposal via the Proposal Bot (see below)</span></li>
-                <li><span class="fg-checklist-num">7</span><span>Send to the partner within 24 hours; set a 3-business-day reminder to follow up</span></li>
+                <li><span class="fg-checklist-num">3</span><span>Build or update the package in the <a href="javascript:switchMainTab('builder')" style="color:var(--sky-600);font-weight:600">SOW Builder</a> &mdash; ideally on the call with the partner</span></li>
+                <li><span class="fg-checklist-num">4</span><span>Get internal Playlab approval if anything triggers the table below (discount, custom scope, multi-year, R&amp;D)</span></li>
+                <li><span class="fg-checklist-num">5</span><span>Generate the current proposal draft via the <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">Proposal Bot</a></span></li>
+                <li><span class="fg-checklist-num">6</span><span>Share with the partner, discuss pricing openly, gather feedback</span></li>
+                <li><span class="fg-checklist-num">7</span><span><strong>Iterate</strong> &mdash; if they want changes, go back to step 3. Keep looping until YES or NO.</span></li>
               </ol>
+              <div class="fg-tip" style="margin-top:8px">
+                <span style="flex-shrink:0">&#x1F504;</span>
+                <div>Each new draft is a new pass through the Proposal Bot. Don&rsquo;t hesitate to regenerate &mdash; it&rsquo;s fast, and a fresh draft beats a marked-up old one.</div>
+              </div>
             </div>
 
             <div class="fg-section">
@@ -1980,17 +1959,17 @@
             </div>
 
             <div class="fg-section">
-              <div class="fg-section-title">Generate the Proposal</div>
+              <div class="fg-section-title">Generating a Proposal Draft (Each Iteration)</div>
               <ol class="fg-checklist">
-                <li><span class="fg-checklist-num">1</span><span>Copy the SOW Builder link (the URL with your package configured)</span></li>
-                <li><span class="fg-checklist-num">2</span><span>Go to <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#proposal-bot</a> in Slack and share: the package URL, context (Granola notes link, bullet points, or email), and proposal language</span></li>
-                <li><span class="fg-checklist-num">3</span><span><strong>Proofread the generated proposal</strong> &mdash; names, amounts, package details</span></li>
-                <li><span class="fg-checklist-num">4</span><span>Verify the HubSpot deal entry &mdash; stage &ldquo;Proposal - Drafted,&rdquo; amount correct, proposal link attached</span></li>
-                <li><span class="fg-checklist-num">5</span><span>Send to the partner within 24 hours via <code>/email-draft</code></span></li>
+                <li><span class="fg-checklist-num">1</span><span>Copy the SOW Builder link (the URL with your current package configured)</span></li>
+                <li><span class="fg-checklist-num">2</span><span>Go to <a href="https://playlabai.slack.com/archives/C0AJ02AGH0C" target="_blank" style="color:var(--sky-600);font-weight:600">#proposal-bot</a> in Slack and share: the package URL, context (Granola notes, bullets, or email), and proposal language</span></li>
+                <li><span class="fg-checklist-num">3</span><span><strong>Proofread the draft</strong> &mdash; names, amounts, package details</span></li>
+                <li><span class="fg-checklist-num">4</span><span>Confirm the HubSpot deal reflects the current state (amount, proposal link)</span></li>
+                <li><span class="fg-checklist-num">5</span><span>Share with the partner within 24 hours of generating &mdash; momentum matters on each round</span></li>
               </ol>
               <div class="fg-tip" style="margin-top:8px">
                 <span style="flex-shrink:0">&#x1F4DD;</span>
-                <div><strong>Proposal framing:</strong> Most early-stage proposals are a &ldquo;reaction document,&rdquo; not a ready-to-sign offer. Try: <em>&ldquo;Here are a few options to work from given your priorities and capacity.&rdquo;</em></div>
+                <div><strong>Early-round framing:</strong> First few drafts are a <em>&ldquo;reaction document,&rdquo;</em> not a ready-to-sign offer. Try: <em>&ldquo;Here are a few options to work from given your priorities and capacity.&rdquo;</em> Only frame as a final proposal once scope is locked.</div>
               </div>
             </div>
 
@@ -2118,14 +2097,13 @@
     </div>
 
     <!-- ── PARALLEL TRACKS DIVIDER ─────────────────────────────────────── -->
-    <div style="position:relative;margin:28px 0 20px">
-      <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;background:linear-gradient(135deg, var(--violet-50), var(--sky-50));border:1.5px solid var(--violet-300);border-radius:12px">
-        <span style="font-size:22px;flex-shrink:0">&#x21C9;</span>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700;color:var(--violet-600);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px">After Approvals &mdash; Parallel Tracks</div>
-          <div style="font-size:12px;color:var(--slate-700);line-height:1.5">Stage 5 (Contract) and Stage 6 (Kickoff &amp; Delivery) happen <strong>at the same time</strong>. Operations owns the contract paperwork; you own the relationship and getting delivery started. Don&rsquo;t wait on contract signing to kick off planning.</div>
-        </div>
+    <div style="margin:32px 0 16px;padding:0 4px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <div style="flex:1;height:1px;background:var(--slate-300)"></div>
+        <div style="font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap">After Approvals &mdash; Parallel Tracks &#x21C9;</div>
+        <div style="flex:1;height:1px;background:var(--slate-300)"></div>
       </div>
+      <p style="font-size:12px;color:var(--slate-600);line-height:1.5;text-align:center;margin:0;padding:0 20px">Stage 5 (Contract) and Stage 6 (Kickoff &amp; Delivery) happen <strong>at the same time</strong>. Ops drives the contract paperwork; you drive the relationship and delivery planning. Don&rsquo;t wait on contract signing to kick off.</p>
     </div>
 
     <!-- ═══ STAGE 5: CONTRACT ═══ -->
@@ -2133,7 +2111,7 @@
       <div class="fg-stage-header" onclick="toggleFGStage('contract')">
         <div class="fg-stage-num" style="background:#fff7ed;color:#c2410c">5</div>
         <div>
-          <div class="fg-stage-title">Contract <span style="font-size:11px;font-weight:500;color:#c2410c;background:#ffedd5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">Ops owns</span></div>
+          <div class="fg-stage-title">Contract <span style="font-size:11px;font-weight:500;color:#c2410c;background:#ffedd5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">Ops-driven</span></div>
           <div class="fg-stage-subtitle">You hand off to the operations team and track progress in HubSpot. Your sales work is (almost!) done.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
@@ -2230,7 +2208,7 @@
       <div class="fg-stage-header" onclick="toggleFGStage('kickoff')">
         <div class="fg-stage-num" style="background:var(--emerald-50);color:var(--emerald-600)">6</div>
         <div>
-          <div class="fg-stage-title">Kickoff &amp; Delivery <span style="font-size:11px;font-weight:500;color:var(--emerald-600);background:#d1fae5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">You own</span></div>
+          <div class="fg-stage-title">Kickoff &amp; Delivery <span style="font-size:11px;font-weight:500;color:var(--emerald-600);background:#d1fae5;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">You-driven</span></div>
           <div class="fg-stage-subtitle">Plan implementation and execute. Runs in parallel with Contract &mdash; start now, don&rsquo;t wait for paperwork.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
@@ -2713,7 +2691,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422f"></script>
+<script src="app.js?v=20260422g"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
