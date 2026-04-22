@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playlab — Sales Pipeline (Slide)</title>
+  <title>Playlab — Sales Pipeline Guide (Slide)</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -394,9 +394,25 @@
       }
       @page { size: 1600px 900px; margin: 0; }
     }
+
+    /* Export mode — activated via ?export=1 query param for headless renders */
+    html.export .page-chrome { padding: 0 !important; max-width: none !important; }
+    html.export .chrome-note { display: none !important; }
+    html.export body { background: white !important; }
+    html.export .slide {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
   </style>
 </head>
 <body>
+  <script>
+    if (/[?&]export=1/.test(window.location.search)) {
+      document.documentElement.classList.add('export');
+    }
+  </script>
   <div class="page-chrome">
     <div class="chrome-note">
       <strong>How to use:</strong> This page renders at slide proportions (1600&times;900, 16:9). To export: right-click &rarr; <em>Print</em> &rarr; save as PDF, or take a screenshot of the slide area below and drop it into any deck. File lives at <code>/pipeline-slide.html</code> in the Sales Hub repo.
@@ -407,7 +423,7 @@
       <!-- Header -->
       <header class="slide-header">
         <div class="title-block">
-          <h1>Sales Pipeline</h1>
+          <h1>Sales Pipeline Guide</h1>
           <p class="subtitle">How a partnership moves from first contact to delivery &mdash; six stages, two parallel tracks at the finish.</p>
         </div>
         <div class="logo" aria-label="Playlab">
