@@ -495,21 +495,21 @@
     .fieldguide-view { background: var(--slate-50); min-height: calc(100vh - 95px); }
 
     /* Pipeline Progress Bar */
-    .fg-pipeline { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 28px; padding: 20px 0; background: white; border: 1.5px solid var(--slate-200); border-radius: 12px; }
+    .fg-pipeline { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 28px; padding: 20px 12px; background: white; border: 1.5px solid var(--slate-200); border-radius: 12px; }
     .fg-pipeline-step { display: flex; align-items: center; gap: 0; cursor: pointer; }
-    .fg-pipeline-node { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 10px; transition: all 0.15s; }
+    .fg-pipeline-node { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 10px; border-radius: 10px; transition: all 0.15s; min-width: 138px; box-sizing: border-box; }
     .fg-pipeline-node:hover { background: var(--sky-50); }
     .fg-pipeline-node.active { background: var(--sky-50); }
-    .fg-pipeline-num { width: 28px; height: 28px; border-radius: 50%; background: var(--slate-200); color: var(--slate-600); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .fg-pipeline-num { width: 32px; height: 32px; border-radius: 50%; background: var(--slate-100); color: var(--slate-600); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.15s; border: 2px solid var(--slate-300); }
     .fg-pipeline-node:hover .fg-pipeline-num,
-    .fg-pipeline-node.active .fg-pipeline-num { background: var(--sky-500); color: white; }
+    .fg-pipeline-node.active .fg-pipeline-num { background: var(--sky-500); color: white; border-color: var(--sky-500); }
     .fg-pipeline-label { font-size: 11px; font-weight: 600; color: var(--slate-500); white-space: nowrap; transition: color 0.15s; }
     .fg-pipeline-node:hover .fg-pipeline-label,
     .fg-pipeline-node.active .fg-pipeline-label { color: var(--sky-700); }
-    .fg-pipeline-arrow { width: 32px; height: 2px; background: var(--slate-200); position: relative; flex-shrink: 0; }
-    .fg-pipeline-arrow::after { content: ''; position: absolute; right: -1px; top: -3px; border: solid var(--slate-300); border-width: 0 2px 2px 0; padding: 3px; transform: rotate(-45deg); }
-    .fg-pipeline-fork { width: 40px; height: 90px; flex-shrink: 0; }
-    .fg-pipeline-parallel { display: flex; flex-direction: column; gap: 12px; }
+    .fg-pipeline-arrow { width: 28px; height: 2px; background: var(--slate-300); position: relative; flex-shrink: 0; }
+    .fg-pipeline-arrow::after { content: ''; position: absolute; right: -7px; top: 50%; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid var(--slate-400); transform: translateY(-50%); }
+    .fg-pipeline-fork { width: 40px; height: 152px; flex-shrink: 0; }
+    .fg-pipeline-parallel { display: flex; flex-direction: column; gap: 8px; }
     .fg-parallel-stages { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; align-items: start; }
     @media (max-width: 900px) { .fg-parallel-stages { grid-template-columns: 1fr; } }
 
@@ -593,8 +593,10 @@
     @media (max-width: 768px) {
       .fg-pipeline { flex-wrap: wrap; gap: 4px; padding: 12px; }
       .fg-pipeline-arrow { width: 16px; }
-      .fg-pipeline-node { padding: 6px 8px; }
+      .fg-pipeline-node { padding: 6px 8px; min-width: 96px; }
       .fg-pipeline-label { font-size: 10px; }
+      .fg-pipeline-num { width: 26px; height: 26px; font-size: 11px; border-width: 1.5px; }
+      .fg-pipeline-fork { height: 120px; }
     }
 
     /* Pricing Sheet */
