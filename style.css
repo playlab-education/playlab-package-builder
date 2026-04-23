@@ -512,6 +512,7 @@
     .fg-pipeline-parallel { display: flex; flex-direction: column; gap: 8px; }
 
     /* Brand-colored pipeline nodes in the Guide — match the Sales Pipeline slide visual */
+    #fg-pip-inquiry .fg-pipeline-num,
     #fg-pip-outreach .fg-pipeline-num,
     #fg-pip-discovery .fg-pipeline-num,
     #fg-pip-scoping .fg-pipeline-num,
@@ -525,6 +526,7 @@
       background: #00CD72; color: white; border-color: #00CD72;
     }
     /* Keep hover/active states consistent with each node's brand color */
+    #fg-pip-inquiry .fg-pipeline-node:hover .fg-pipeline-num,
     #fg-pip-outreach .fg-pipeline-node:hover .fg-pipeline-num,
     #fg-pip-discovery .fg-pipeline-node:hover .fg-pipeline-num,
     #fg-pip-scoping .fg-pipeline-node:hover .fg-pipeline-num,

@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Playlab — Sales Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260422o">
+  <link rel="stylesheet" href="style.css?v=20260423a">
   <!-- PostHog Analytics -->
   <!-- TODO: Replace POSTHOG_API_KEY_HERE and POSTHOG_HOST_HERE with real values from Playlab's PostHog project -->
   <script>
@@ -1370,30 +1370,44 @@
 
     <!-- Pipeline Progress Bar -->
     <div class="fg-pipeline">
-      <div class="fg-pipeline-step" onclick="toggleFGStage('outreach')">
-        <div class="fg-pipeline-node" id="fg-pip-outreach">
-          <div class="fg-pipeline-num">1</div>
-          <div class="fg-pipeline-label">Inquiry &amp; Outreach</div>
+      <div class="fg-pipeline-parallel">
+        <div class="fg-pipeline-step" onclick="toggleFGStage('inquiry')">
+          <div class="fg-pipeline-node" id="fg-pip-inquiry">
+            <div class="fg-pipeline-num">1</div>
+            <div class="fg-pipeline-label">Inquiry</div>
+          </div>
+        </div>
+        <div class="fg-pipeline-step" onclick="toggleFGStage('outreach')">
+          <div class="fg-pipeline-node" id="fg-pip-outreach">
+            <div class="fg-pipeline-num">2</div>
+            <div class="fg-pipeline-label">Outreach</div>
+          </div>
         </div>
       </div>
-      <div class="fg-pipeline-arrow"></div>
+      <svg class="fg-pipeline-fork fg-pipeline-merge" viewBox="0 0 40 152" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 38 L22 38" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M0 114 L22 114" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M22 38 L22 114" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M22 76 L33 76" stroke="#cbd5e1" stroke-width="2" fill="none" />
+        <path d="M33 71 L40 76 L33 81 Z" fill="#94a3b8" stroke="none" />
+      </svg>
       <div class="fg-pipeline-step" onclick="toggleFGStage('discovery')">
         <div class="fg-pipeline-node" id="fg-pip-discovery">
-          <div class="fg-pipeline-num">2</div>
+          <div class="fg-pipeline-num">3</div>
           <div class="fg-pipeline-label">Discovery &amp; Demo</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
       <div class="fg-pipeline-step" onclick="toggleFGStage('scoping')">
         <div class="fg-pipeline-node" id="fg-pip-scoping">
-          <div class="fg-pipeline-num">3</div>
+          <div class="fg-pipeline-num">4</div>
           <div class="fg-pipeline-label">Scoping</div>
         </div>
       </div>
       <div class="fg-pipeline-arrow"></div>
       <div class="fg-pipeline-step" onclick="toggleFGStage('approvals')">
         <div class="fg-pipeline-node" id="fg-pip-approvals">
-          <div class="fg-pipeline-num">4</div>
+          <div class="fg-pipeline-num">5</div>
           <div class="fg-pipeline-label">Approvals</div>
         </div>
       </div>
@@ -1408,66 +1422,130 @@
       <div class="fg-pipeline-parallel">
         <div class="fg-pipeline-step" onclick="toggleFGStage('contract')">
           <div class="fg-pipeline-node" id="fg-pip-contract">
-            <div class="fg-pipeline-num">5</div>
+            <div class="fg-pipeline-num">6</div>
             <div class="fg-pipeline-label">Contract</div>
           </div>
         </div>
         <div class="fg-pipeline-step" onclick="toggleFGStage('kickoff')">
           <div class="fg-pipeline-node" id="fg-pip-kickoff">
-            <div class="fg-pipeline-num">6</div>
+            <div class="fg-pipeline-num">7</div>
             <div class="fg-pipeline-label">Kickoff &amp; Delivery</div>
           </div>
         </div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--slate-500);text-align:center;margin:-12px 0 20px;font-style:italic">Stages 5 and 6 run in parallel after Approvals &mdash; Contract (Ops-driven) and Kickoff &amp; Delivery (you-driven) happen at the same time.</p>
+    <p style="font-size:11px;color:var(--slate-500);text-align:center;margin:-12px 0 20px;font-style:italic">Stages 1 and 2 are parallel entry paths (inquiry routed to you, or your outreach) &mdash; they merge into Discovery. Stages 6 and 7 run in parallel after Approvals &mdash; Contract (Ops-driven) and Kickoff &amp; Delivery (you-driven) happen at the same time.</p>
 
-    <!-- ═══ STAGE 1: INQUIRY & OUTREACH ═══ -->
-    <div class="fg-stage" id="fg-stage-outreach">
-      <div class="fg-stage-header" onclick="toggleFGStage('outreach')">
-        <div class="fg-stage-num">1</div>
+    <!-- ── TWO ENTRY PATHS DIVIDER ─────────────────────────────────────── -->
+    <div style="margin:8px 0 16px;padding:0 4px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <div style="flex:1;height:1px;background:var(--slate-300)"></div>
+        <div style="font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap">Two Entry Paths &#x21C9; Merge Into Discovery</div>
+        <div style="flex:1;height:1px;background:var(--slate-300)"></div>
+      </div>
+      <p style="font-size:12px;color:var(--slate-600);line-height:1.5;text-align:center;margin:0;padding:0 20px">Stage 1 (Inquiry) and Stage 2 (Outreach) are the <strong>two ways partners enter your pipeline</strong>. Nate routes warm inquiries to you; Outreach is where you reach out to grow your region. Both merge into Discovery.</p>
+    </div>
+
+    <!-- ═══ STAGES 1 & 2: PARALLEL (Inquiry || Outreach) ═══ -->
+    <div class="fg-parallel-stages">
+
+    <!-- ═══ STAGE 1: INQUIRY ═══ -->
+    <div class="fg-stage" id="fg-stage-inquiry" style="border-left:4px solid #01B1E2">
+      <div class="fg-stage-header" onclick="toggleFGStage('inquiry')">
+        <div class="fg-stage-num" style="background:#E0F4FA;color:#0369a1">1</div>
         <div>
-          <div class="fg-stage-title">Inquiry &amp; Outreach</div>
-          <div class="fg-stage-subtitle">Two paths in: you follow up on an inquiry Nate routes to you, or you reach out to grow your region.</div>
+          <div class="fg-stage-title">Inquiry <span style="font-size:11px;font-weight:500;color:#0369a1;background:#E0F4FA;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">Nate routes</span></div>
+          <div class="fg-stage-subtitle">Nate connects you with a warm inquiry. Follow up fast &mdash; his warmth is your runway.</div>
         </div>
         <span class="fg-stage-chevron">&#x25BC;</span>
       </div>
       <div class="fg-stage-body">
 
         <div class="fg-section">
-          <div class="fg-section-title">Two Paths &mdash; Inquiry vs. Outreach</div>
-          <table class="fg-table">
-            <thead>
-              <tr>
-                <th style="width:50%;background:#f0f9ff;color:#0369a1">Inquiry</th>
-                <th style="width:50%;background:#ecfdf5;color:#047857">Outreach <span style="font-weight:500;font-style:italic;text-transform:none;letter-spacing:0">(new &amp; renewal partners)</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="vertical-align:top"><em>Organizations contact Playlab. Nate directs traffic according to region. <strong>I follow-up with connections that Nate makes</strong> via email.</em></td>
-                <td style="vertical-align:top"><em><strong>I reach out</strong> to new potential customers and existing renewal customers about partnering with Playlab to grow my region.</em></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="fg-section-title">Your Mission</div>
+          <div class="fg-body-text">
+            <em>Organizations contact Playlab. Nate directs traffic according to region and connects me with potential partners. I follow up on those connections via email to grow my region.</em>
+          </div>
         </div>
 
         <div class="fg-section">
           <div class="fg-section-title">Key Resources for This Stage</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px">
+          <div style="display:grid;grid-template-columns:1fr;gap:10px">
             <a href="#" onclick="event.preventDefault();alert('The /nate-followup Claude skill is being built. In the meantime, use /email-draft in Claude Cowork with the Nate-intro context pasted in.')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px dashed #bae6fd;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--sky-500)';this.style.background='var(--sky-50)'" onmouseout="this.style.borderColor='#bae6fd';this.style.background='white'">
               <span style="font-size:18px;flex-shrink:0">&#x1F91D;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Claude skill: <code style="font-size:12px">/nate-followup</code></div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Inquiry</strong> &mdash; drafts follow-up from Nate&rsquo;s intro. Use <code>/email-draft</code> for now.</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Drafts follow-up from Nate&rsquo;s intro. Use <code>/email-draft</code> for now.</div>
               </div>
               <span style="font-size:11px;color:var(--slate-400);flex-shrink:0;font-style:italic">soon</span>
             </a>
+          </div>
+        </div>
+
+        <div class="fg-appendix" id="fg-inquiry-deep-dive">
+          <div class="fg-appendix-header" onclick="document.getElementById('fg-inquiry-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'inquiry'})">
+            <h4>Deep Dive</h4>
+            <span class="fg-appendix-hint">&mdash; workflow, best practices</span>
+            <span class="fg-appendix-chevron">&#x25BC;</span>
+          </div>
+          <div class="fg-appendix-body">
+
+            <div class="fg-section">
+              <div class="fg-section-title">When Nate Routes One to You</div>
+              <ol class="fg-checklist">
+                <li><span class="fg-checklist-num">1</span><span>Nate tags you in <a href="https://playlabai.slack.com/archives/C06RWALE02F" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> with partner context</span></li>
+                <li><span class="fg-checklist-num">2</span><span>Run <code>/nate-followup</code> in Claude Cowork <em>(skill coming soon &mdash; use <code>/email-draft</code> for now with the Nate-intro context)</em> to draft a warm follow-up email</span></li>
+                <li><span class="fg-checklist-num">3</span><span>Review, personalize, and send within 24 hours</span></li>
+                <li><span class="fg-checklist-num">4</span><span>The automation enters them into the opportunity pipeline under Discovery &mdash; confirm the deal looks right in HubSpot and add any context</span></li>
+              </ol>
+            </div>
+
+            <div class="fg-auto manual">
+              <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
+              <div><strong>Manual:</strong> Confirm the auto-created deal looks right in HubSpot after Nate&rsquo;s routing.</div>
+            </div>
+
+            <div class="fg-practices">
+              <div class="fg-practices-title">&#x2705; Best Practices</div>
+              <ul>
+                <li>Respond within 24 hours &mdash; Nate&rsquo;s warmth is your runway, don&rsquo;t waste it</li>
+                <li>Reference what Nate shared in his intro &mdash; shows you read carefully</li>
+                <li>Goal of the first reply: book a discovery conversation. Don&rsquo;t pitch, don&rsquo;t quote, don&rsquo;t demo &mdash; earn the call.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STAGE 2: OUTREACH ═══ -->
+    <div class="fg-stage" id="fg-stage-outreach" style="border-left:4px solid #01B1E2">
+      <div class="fg-stage-header" onclick="toggleFGStage('outreach')">
+        <div class="fg-stage-num" style="background:#E0F4FA;color:#0369a1">2</div>
+        <div>
+          <div class="fg-stage-title">Outreach <span style="font-size:11px;font-weight:500;color:#0369a1;background:#E0F4FA;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">You drive</span></div>
+          <div class="fg-stage-subtitle">You reach out &mdash; new partners and existing renewals &mdash; to grow your region.</div>
+        </div>
+        <span class="fg-stage-chevron">&#x25BC;</span>
+      </div>
+      <div class="fg-stage-body">
+
+        <div class="fg-section">
+          <div class="fg-section-title">Your Mission</div>
+          <div class="fg-body-text">
+            <em>I reach out to new potential customers and existing renewal customers about partnering with Playlab to grow my region.</em>
+          </div>
+        </div>
+
+        <div class="fg-section">
+          <div class="fg-section-title">Key Resources for This Stage</div>
+          <div style="display:grid;grid-template-columns:1fr;gap:10px">
             <a href="https://docs.google.com/document/d/1sokEMzdwrwp3z6GKXtCbZevZuuEuraqdhHtJQ0NyftY/edit?tab=t.d06ltqroin9p" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:white;border:1.5px solid #a7f3d0;border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--emerald-500)';this.style.boxShadow='0 2px 8px rgba(16,185,129,.12)'" onmouseout="this.style.borderColor='#a7f3d0';this.style.boxShadow='none'">
               <span style="font-size:18px;flex-shrink:0">&#x1F4E7;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Email Templates</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Outreach</strong> &mdash; starting points for outbound and follow-ups</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Starting points for outbound and follow-ups</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
@@ -1475,7 +1553,7 @@
               <span style="font-size:18px;flex-shrink:0">&#x1F4CA;</span>
               <div style="min-width:0;flex:1">
                 <div style="font-size:13px;font-weight:700;color:var(--slate-800);line-height:1.3">Partnership Overview</div>
-                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3"><strong>For Outreach</strong> &mdash; share to introduce Playlab offerings</div>
+                <div style="font-size:11px;color:var(--slate-500);margin-top:2px;line-height:1.3">Share to introduce Playlab offerings</div>
               </div>
               <span style="font-size:13px;color:var(--sky-500);flex-shrink:0">&#x2197;</span>
             </a>
@@ -1485,7 +1563,7 @@
         <div class="fg-appendix" id="fg-outreach-deep-dive">
           <div class="fg-appendix-header" onclick="document.getElementById('fg-outreach-deep-dive').classList.toggle('open');fgTrack('fg_deep_dive_toggle',{stage:'outreach'})">
             <h4>Deep Dive</h4>
-            <span class="fg-appendix-hint">&mdash; inquiry handling, outreach sources, workflow, renewals, best practices</span>
+            <span class="fg-appendix-hint">&mdash; sources, workflow, renewals, best practices</span>
             <span class="fg-appendix-chevron">&#x25BC;</span>
           </div>
           <div class="fg-appendix-body">
@@ -1496,17 +1574,7 @@
             </div>
 
             <div class="fg-section">
-              <div class="fg-section-title">Inquiry &mdash; When Nate Routes One to You</div>
-              <ol class="fg-checklist">
-                <li><span class="fg-checklist-num">1</span><span>Nate tags you in <a href="https://playlabai.slack.com/archives/C06RWALE02F" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a> with partner context</span></li>
-                <li><span class="fg-checklist-num">2</span><span>Run <code>/nate-followup</code> in Claude Cowork <em>(skill coming soon &mdash; use <code>/email-draft</code> for now with the Nate-intro context)</em> to draft a warm follow-up email</span></li>
-                <li><span class="fg-checklist-num">3</span><span>Review, personalize, and send within 24 hours</span></li>
-                <li><span class="fg-checklist-num">4</span><span>The automation enters them into the opportunity pipeline under Discovery &mdash; confirm the deal looks right in HubSpot and add any context</span></li>
-              </ol>
-            </div>
-
-            <div class="fg-section">
-              <div class="fg-section-title">Outreach &mdash; Where Yours Comes From</div>
+              <div class="fg-section-title">Where Yours Comes From</div>
               <table class="fg-table">
                 <thead><tr><th>Source</th><th>What to Do</th></tr></thead>
                 <tbody>
@@ -1532,16 +1600,15 @@
 
             <div class="fg-auto manual">
               <span class="fg-auto-icon">&#x270F;&#xFE0F;</span>
-              <div><strong>Manual:</strong> For Outreach, create the HubSpot deal <em>before</em> your first touch. For Inquiry, confirm the auto-created deal looks right after Nate&rsquo;s routing.</div>
+              <div><strong>Manual:</strong> Create the HubSpot deal <em>before</em> your first touch, not after.</div>
             </div>
 
             <div class="fg-practices">
               <div class="fg-practices-title">&#x2705; Best Practices</div>
               <ul>
-                <li>Inquiry assigned to you? Respond within 24 hours &mdash; Nate&rsquo;s warmth is your runway, don&rsquo;t waste it</li>
                 <li>Personalize every first touch &mdash; reference something real and specific</li>
-                <li>Run a cadence (3&ndash;5 touches, multi-channel) for outreach &mdash; not a single email</li>
-                <li>Create the HubSpot deal before the first outreach touch, not after</li>
+                <li>Run a cadence (3&ndash;5 touches, multi-channel) &mdash; not a single email</li>
+                <li>Create the HubSpot deal before the first touch, not after</li>
                 <li>Don&rsquo;t pitch in the first email &mdash; earn the discovery call first</li>
                 <li>Track what&rsquo;s working &mdash; which lists, events, referral sources convert? Share in <a href="https://playlabai.slack.com/archives/C06RWALE02F" target="_blank" style="color:var(--sky-600);font-weight:600">#partnerships</a></li>
               </ul>
@@ -1552,10 +1619,13 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 2: DISCOVERY & DEMO ═══ -->
+    </div>
+    <!-- ═══ END PARALLEL STAGES 1 & 2 ═══ -->
+
+    <!-- ═══ STAGE 3: DISCOVERY & DEMO ═══ -->
     <div class="fg-stage" id="fg-stage-discovery">
       <div class="fg-stage-header" onclick="toggleFGStage('discovery')">
-        <div class="fg-stage-num">2</div>
+        <div class="fg-stage-num">3</div>
         <div>
           <div class="fg-stage-title">Discovery &amp; Demo</div>
           <div class="fg-stage-subtitle">Learn about the partner first (discovery!), then share Playlab in alignment with what they just told you (demo!).</div>
@@ -1801,10 +1871,10 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 3: SCOPING ═══ -->
+    <!-- ═══ STAGE 4: SCOPING ═══ -->
     <div class="fg-stage" id="fg-stage-scoping">
       <div class="fg-stage-header" onclick="toggleFGStage('scoping')">
-        <div class="fg-stage-num">3</div>
+        <div class="fg-stage-num">4</div>
         <div>
           <div class="fg-stage-title">Scoping</div>
           <div class="fg-stage-subtitle">The partner&rsquo;s needs are clear. Now Playlab matches them to the right solution.</div>
@@ -1984,10 +2054,10 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 4: APPROVALS ═══ -->
+    <!-- ═══ STAGE 5: APPROVALS ═══ -->
     <div class="fg-stage" id="fg-stage-approvals">
       <div class="fg-stage-header" onclick="toggleFGStage('approvals')">
-        <div class="fg-stage-num">4</div>
+        <div class="fg-stage-num">5</div>
         <div>
           <div class="fg-stage-title">Approvals</div>
           <div class="fg-stage-subtitle">Help your partner navigate their internal approval process &mdash; some partners will skip this entirely.</div>
@@ -2057,7 +2127,7 @@
                 <li><span class="fg-checklist-num">3</span><span><strong>Offer to attend stakeholder meetings</strong> &mdash; sometimes a live demo seals it</span></li>
                 <li><span class="fg-checklist-num">4</span><span><strong>Check in weekly</strong> &mdash; short, friendly status requests. Partners appreciate momentum.</span></li>
                 <li><span class="fg-checklist-num">5</span><span><strong>Route procurement/legal/MSA requests to Nate</strong> &mdash; don&rsquo;t negotiate terms yourself</span></li>
-                <li><span class="fg-checklist-num">6</span><span><strong>Once approved,</strong> confirm next steps with the partner and transition to Contract (Stage 5 &mdash; runs in parallel with Kickoff &amp; Delivery)</span></li>
+                <li><span class="fg-checklist-num">6</span><span><strong>Once approved,</strong> confirm next steps with the partner and transition to Contract (Stage 6 &mdash; runs in parallel with Kickoff &amp; Delivery)</span></li>
               </ol>
             </div>
 
@@ -2089,16 +2159,16 @@
         <div style="font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap">After Approvals &mdash; Parallel Tracks &#x21C9;</div>
         <div style="flex:1;height:1px;background:var(--slate-300)"></div>
       </div>
-      <p style="font-size:12px;color:var(--slate-600);line-height:1.5;text-align:center;margin:0;padding:0 20px">Stage 5 (Contract) and Stage 6 (Kickoff &amp; Delivery) happen <strong>at the same time</strong>. Ops drives the contract paperwork; you drive the relationship and delivery planning. Don&rsquo;t wait on contract signing to kick off.</p>
+      <p style="font-size:12px;color:var(--slate-600);line-height:1.5;text-align:center;margin:0;padding:0 20px">Stage 6 (Contract) and Stage 7 (Kickoff &amp; Delivery) happen <strong>at the same time</strong>. Ops drives the contract paperwork; you drive the relationship and delivery planning. Don&rsquo;t wait on contract signing to kick off.</p>
     </div>
 
-    <!-- ═══ STAGES 5 & 6: PARALLEL (Contract || Kickoff & Delivery) ═══ -->
+    <!-- ═══ STAGES 6 & 7: PARALLEL (Contract || Kickoff & Delivery) ═══ -->
     <div class="fg-parallel-stages">
 
-    <!-- ═══ STAGE 5: CONTRACT ═══ -->
+    <!-- ═══ STAGE 6: CONTRACT ═══ -->
     <div class="fg-stage" id="fg-stage-contract" style="border-left:4px solid #FFC600">
       <div class="fg-stage-header" onclick="toggleFGStage('contract')">
-        <div class="fg-stage-num" style="background:#FFF6D9;color:#8a6100">5</div>
+        <div class="fg-stage-num" style="background:#FFF6D9;color:#8a6100">6</div>
         <div>
           <div class="fg-stage-title">Contract <span style="font-size:11px;font-weight:500;color:#8a6100;background:#FFF6D9;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">Ops-driven</span></div>
           <div class="fg-stage-subtitle">You hand off to the operations team and track progress in HubSpot. Your sales work is (almost!) done.</div>
@@ -2188,10 +2258,10 @@
       </div>
     </div>
 
-    <!-- ═══ STAGE 6: KICKOFF & DELIVERY ═══ -->
+    <!-- ═══ STAGE 7: KICKOFF & DELIVERY ═══ -->
     <div class="fg-stage" id="fg-stage-kickoff" style="border-left:4px solid #00CD72">
       <div class="fg-stage-header" onclick="toggleFGStage('kickoff')">
-        <div class="fg-stage-num" style="background:#D5FBE7;color:#007c45">6</div>
+        <div class="fg-stage-num" style="background:#D5FBE7;color:#007c45">7</div>
         <div>
           <div class="fg-stage-title">Kickoff &amp; Delivery <span style="font-size:11px;font-weight:500;color:#007c45;background:#D5FBE7;padding:2px 8px;border-radius:10px;margin-left:8px;text-transform:uppercase;letter-spacing:0.3px">You-driven</span></div>
           <div class="fg-stage-subtitle">Plan implementation and execute. Runs in parallel with Contract &mdash; start now, don&rsquo;t wait for paperwork.</div>
@@ -2707,7 +2777,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js?v=20260422o"></script>
+<script src="app.js?v=20260423a"></script>
 </body>
 </html>
 <!-- deployed 2026-04-02T01:14:45Z -->
