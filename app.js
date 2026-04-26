@@ -3048,7 +3048,7 @@ function initTabs() {
 
 // ─── Quote Library (GitHub Backend) ──────────────────────────────────────────
 // Single directory (quotes/) with status field in index. No file moves for archive/restore.
-const LIB_OWNER = 'nkelloggplaylab';
+const LIB_OWNER = 'playlab-education';
 const LIB_REPO = 'playlab-quotes';
 const LIB_QUOTES_PATH = 'quotes';
 const LIB_TOKEN_KEY = 'playlab_github_token';
