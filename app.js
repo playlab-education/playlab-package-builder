@@ -202,7 +202,7 @@ function unitShort(unit) {
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: 'For any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo · $3,000/12-mo', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00', noMultiYear: true },
   { id: 'impact', name: 'Impact: Per User', tagline: 'Best for small school deployments and non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
-  { id: 'schools-t1', name: 'Impact: Per Student — Tier 1', tagline: '1,000–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1000, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '1,000–9,999', monthlyCredits: '2M Tokens', isSchool: true },
+  { id: 'schools-t1', name: 'Impact: Per Student — Tier 1', tagline: '167–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 167, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '167–9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Impact: Per Student — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
   { id: 'schools-t3', name: 'Impact: Per Student — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
   { id: 'schools-t4', name: 'Impact: Per Student — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true, isSchool: true },
@@ -1505,18 +1505,18 @@ function renderSwCards() {
       <span class="sw-card-computed" id="schools-computed">${fmt(defaultTier.pricePerUnit * defaultEnrollment)}/yr</span>
     </div>
     <div id="schools-tier-table" style="margin-top:6px;font-size:9.5px;color:var(--slate-400);line-height:1.6">
-      <div style="display:flex;justify-content:space-between"><span>1,000–9,999</span><span>$3.00/student</span></div>
+      <div style="display:flex;justify-content:space-between"><span>167–9,999</span><span>$3.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>10,000–24,999</span><span>$2.50/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>25,000–49,999</span><span>$2.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>50,000+</span><span>Custom</span></div>
     </div>
-    <div id="schools-min-warning" style="display:none;font-size:10px;color:var(--rose-500,#f43f5e);margin-top:4px;line-height:1.4">Minimum 1,000 students — will be adjusted to 1,000 ($3,000/yr)</div>
+    <div id="schools-min-warning" style="display:none;font-size:10px;color:var(--rose-500,#f43f5e);margin-top:4px;line-height:1.4">Minimum 167 students — will be adjusted to 167 ($500/yr)</div>
     <button class="sw-add-btn" onclick="addSchoolLicense()">+ Add License</button>`;
   grid.appendChild(schoolCard);
 
   const schoolInput = schoolCard.querySelector('#sw-input-schools');
   schoolInput.addEventListener('input', () => {
-    const raw = Math.round(parseFloat(schoolInput.value)) || 1000;
+    const raw = Math.round(parseFloat(schoolInput.value)) || 167;
     const tier = getSchoolTierForEnrollment(raw);
     const v = Math.max(raw, tier.minCount);
     document.getElementById('schools-price-badge').textContent = tier.priceNote;
