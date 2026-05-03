@@ -202,7 +202,7 @@ function unitShort(unit) {
 const SOFTWARE_TIERS = [
   { id: 'play', name: 'Play', tagline: 'For any organization', pricePerUnit: 1500, unitLabel: 'org', unitLabelPlural: 'orgs', minCount: 1, defaultCount: 1, priceNote: '$1,500/6-mo · $3,000/12-mo', periodLabel: '/6-mo', educators: '100 educators', students: '1,000 students', color: '#ffc937', colorLight: '#fef9e7', colorText: '#8a6d00', noMultiYear: true },
   { id: 'impact', name: 'Impact: Per User', tagline: 'Best for small school deployments and non-school organizations', pricePerUnit: 200, unitLabel: 'user', unitLabelPlural: 'users', minCount: 1, defaultCount: 5, hasStudentInput: true, defaultStudents: 500, color: '#7ee4bb', colorLight: '#edfdf5', colorText: '#1a6b4a' },
-  { id: 'schools-t1', name: 'Impact: Per Student — Tier 1', tagline: '167–9,999 students', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 167, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: '167–9,999', monthlyCredits: '2M Tokens', isSchool: true },
+  { id: 'schools-t1', name: 'Impact: Per Student — Tier 1', tagline: 'Up to 9,999 students ($500/yr min)', pricePerUnit: 3, unitLabel: 'student', unitLabelPlural: 'students', minCount: 1, minCharge: 500, defaultCount: 5000, priceNote: '$3.00/student/year', enrollmentRange: 'Up to 9,999', monthlyCredits: '2M Tokens', isSchool: true },
   { id: 'schools-t2', name: 'Impact: Per Student — Tier 2', tagline: '10,000–24,999 students', pricePerUnit: 2.50, unitLabel: 'student', unitLabelPlural: 'students', minCount: 10000, defaultCount: 15000, priceNote: '$2.50/student/year', enrollmentRange: '10,000–24,999', monthlyCredits: '4M Tokens', isSchool: true },
   { id: 'schools-t3', name: 'Impact: Per Student — Tier 3', tagline: '25,000–49,999 students', pricePerUnit: 2, unitLabel: 'student', unitLabelPlural: 'students', minCount: 25000, defaultCount: 35000, priceNote: '$2.00/student/year', enrollmentRange: '25,000–49,999', monthlyCredits: '6M Tokens', isSchool: true },
   { id: 'schools-t4', name: 'Impact: Per Student — Tier 4', tagline: '50,000+ students', pricePerUnit: 0, unitLabel: 'student', unitLabelPlural: 'students', minCount: 50000, defaultCount: 50000, priceNote: 'Custom pricing', enrollmentRange: '50,000+', monthlyCredits: 'Custom', isCustom: true, isSchool: true },
@@ -233,7 +233,8 @@ function calcLicenseAnnualCost(lic) {
     const multiplier = (lic.period === 6) ? 1 : 2;
     return tier.pricePerUnit * multiplier * lic.count;
   }
-  return tier.pricePerUnit * lic.count;
+  const base = tier.pricePerUnit * lic.count;
+  return tier.minCharge ? Math.max(base, tier.minCharge) : base;
 }
 
 // Backward-compat alias
@@ -1502,28 +1503,29 @@ function renderSwCards() {
     <div class="sw-card-row">
       <label>Students:</label>
       <input class="sw-count-input" type="number" step="any" value="${defaultEnrollment}" id="sw-input-schools">
-      <span class="sw-card-computed" id="schools-computed">${fmt(defaultTier.pricePerUnit * defaultEnrollment)}/yr</span>
+      <span class="sw-card-computed" id="schools-computed">${fmt(defaultTier.minCharge ? Math.max(defaultTier.pricePerUnit * defaultEnrollment, defaultTier.minCharge) : defaultTier.pricePerUnit * defaultEnrollment)}/yr</span>
     </div>
     <div id="schools-tier-table" style="margin-top:6px;font-size:9.5px;color:var(--slate-400);line-height:1.6">
-      <div style="display:flex;justify-content:space-between"><span>167–9,999</span><span>$3.00/student</span></div>
+      <div style="display:flex;justify-content:space-between"><span>Up to 9,999</span><span>$3.00/student ($500/yr min)</span></div>
       <div style="display:flex;justify-content:space-between"><span>10,000–24,999</span><span>$2.50/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>25,000–49,999</span><span>$2.00/student</span></div>
       <div style="display:flex;justify-content:space-between"><span>50,000+</span><span>Custom</span></div>
     </div>
-    <div id="schools-min-warning" style="display:none;font-size:10px;color:var(--rose-500,#f43f5e);margin-top:4px;line-height:1.4">Minimum 167 students — will be adjusted to 167 ($500/yr)</div>
+    <div id="schools-min-warning" style="display:none;font-size:10px;color:var(--emerald-700,#047857);margin-top:4px;line-height:1.4">$500/yr minimum applied (Tier 1 floor)</div>
     <button class="sw-add-btn" onclick="addSchoolLicense()">+ Add License</button>`;
   grid.appendChild(schoolCard);
 
   const schoolInput = schoolCard.querySelector('#sw-input-schools');
   schoolInput.addEventListener('input', () => {
-    const raw = Math.round(parseFloat(schoolInput.value)) || 167;
+    const raw = Math.max(1, Math.round(parseFloat(schoolInput.value)) || 1);
     const tier = getSchoolTierForEnrollment(raw);
-    const v = Math.max(raw, tier.minCount);
     document.getElementById('schools-price-badge').textContent = tier.priceNote;
     document.getElementById('schools-tier-detail').textContent = tier.name.replace('Impact: Per Student — ', '') + ' · ' + tier.monthlyCredits;
-    document.getElementById('schools-computed').textContent = tier.isCustom ? 'Custom' : fmt(tier.pricePerUnit * v) + '/yr';
+    const base = tier.pricePerUnit * raw;
+    const annual = tier.minCharge ? Math.max(base, tier.minCharge) : base;
+    document.getElementById('schools-computed').textContent = tier.isCustom ? 'Custom' : fmt(annual) + '/yr';
     const warn = document.getElementById('schools-min-warning');
-    warn.style.display = (raw < tier.minCount) ? 'block' : 'none';
+    warn.style.display = (!tier.isCustom && tier.minCharge && base < tier.minCharge) ? 'block' : 'none';
   });
 
   // Flat-pricing tiers (One-Time Event) — rendered last
@@ -1616,6 +1618,7 @@ function renderLicenseList() {
     } else {
       priceDisplay = tier.isCustom ? 'Custom' : (term > 1 ? `${fmt(multiYearTotal)} (${term}yr)` : `${fmt(annualCost)}/yr`);
       detailDisplay = tier.isCustom ? `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} \u2014 Custom` : `${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr`;
+      if (!tier.isCustom && tier.minCharge && (tier.pricePerUnit * lic.count) < tier.minCharge) detailDisplay += ` · min $${tier.minCharge.toLocaleString()}/yr applied`;
       if (lic.students) detailDisplay += ` · ${lic.students.toLocaleString()} students`;
       if (term > 1 && !tier.isCustom) detailDisplay += ` · ${discPct}% multi-year discount`;
       const termOptions = Object.entries(TERM_LABELS).map(([v, label]) =>
@@ -2660,7 +2663,8 @@ function copyForProposal() {
         const discPct = TERM_DISCOUNTS[term] || 0;
         const studentNote = lic.students ? ` \u2014 ${lic.students.toLocaleString()} students` : '';
         const termNote = term > 1 ? ` \u00D7 ${term} years` : '';
-        lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${studentNote}${termNote}`, term > 1 ? fmt(annual * term) : fmt(annual)));
+        const minNote = (!tier.isCustom && tier.minCharge && (tier.pricePerUnit * lic.count) < tier.minCharge) ? ` (min $${tier.minCharge.toLocaleString()}/yr)` : '';
+        lines.push(pad(`  \u2022 ${licLabel} \u2014 ${lic.count.toLocaleString()} ${lic.count === 1 ? tier.unitLabel : tier.unitLabelPlural} @ $${tier.pricePerUnit}/${tier.unitLabel}/yr${minNote}${studentNote}${termNote}`, term > 1 ? fmt(annual * term) : fmt(annual)));
         if (discPct > 0) {
           lines.push(pad(`    Multi-Year Discount (${discPct}%)`, '\u2212' + fmt(calcLicenseMultiYearDiscount(lic))));
           lines.push(pad(`    Net Software (${term}-Year)`, fmt(total)));
